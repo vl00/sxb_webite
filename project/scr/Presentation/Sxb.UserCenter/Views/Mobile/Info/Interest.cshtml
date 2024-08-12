@@ -1,0 +1,84 @@
+﻿@model PMS.UserManage.Application.ModelDto.Info.Interest
+@{
+    ViewData["Title"] = "Interest";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/questionnaire.css" />
+    <style type="text/css">
+        .questionnaire-list input { position: absolute; left: -9999px; }
+    </style>
+}
+<header>
+    <h4 class="questionnaire-title">定制你的上学帮</h4>
+    <a href="//m.sxkid.com" class="skip">跳过</a>
+</header>
+
+<section>
+    <form id="interestForm">
+        <ul class="questionnaire-list">
+            <li>
+                <h5 class="questionnaire-title">你孩子所处的年龄段</h5>
+                <ul class="select flex text-center">
+                    @foreach (var grade in Model.grade)
+                    {
+                        <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                    }
+                </ul>
+            </li>
+            <li>
+                <h5 class="questionnaire-title">希望入读的学校类型</h5>
+                <ul class="select flex text-center">
+                    @foreach (var grade in Model.nature)
+                    {
+                        <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                    }
+                </ul>
+            </li>
+            <li>
+                <h5 class="questionnaire-title">住宿制度</h5>
+                <ul class="select flex text-center">
+                    @foreach (var grade in Model.lodging)
+                    {
+                        <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </form>
+</section>
+
+<a href="//m.sxkid.com" class="submit-btn text-center">生成我的首页</a>
+@section js{
+    <script type="text/javascript">
+$(function() {
+	//$('.select').on('click', 'li', function() {
+	//	if($(this).hasClass('active')) {
+	//		$(this).removeClass('active');
+	//	}
+	//	else {
+	//		$(this).addClass('active');
+	//	}
+	//});
+    var interestInit = false;
+    $('#interestForm input:checkbox').change(function () {
+        var li = $(this).parents('li').first();
+        li.toggleClass('active', $(this).is(':checked'));
+        if (interestInit) {
+            $.ajax({
+                url: '@Url.Action("SetUserInterest")',
+                type:'post',
+                data: $('#interestForm').serialize().replace(/\=on/g,'=true'),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status) {
+                        $.prompt(json.errorDescription);
+                    }
+                }
+            });
+        }
+    }).change();
+    interestInit = true;
+})
+    </script>
+}

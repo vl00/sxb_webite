@@ -1,0 +1,392 @@
+﻿
+@{
+    Layout = null;
+}
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Domain.Common;
+@model List<KeyValueDto<int, string, double, byte, Guid>>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <meta name="robots" content="noindex,nofollow">
+    <title>毕业去向</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/MultiPicker.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/achievement-msg.css" />
+</head>
+<body>
+    @*<header class="header flex justify-content-between">
+            <a class="arrow"></a>
+            <span class="header-title">毕业去向</span>
+            <span class=""></span>
+        </header>*@
+
+    @if ((byte)ViewBag.Grade == (byte)SchoolGrade.SeniorMiddleSchool && ViewBag.Type == (byte)SchoolType.International)
+    {
+
+        <!-- 国内高中不显示tab，国际高中显示 -->
+        <section class="tab">
+            <ul class="flex text-center">
+                <li class="active">国际</li>
+                <li>国内</li>
+            </ul>
+        </section>
+        <!-- 国内高中增加class domestic-school -->
+        <section class="school-list mt">
+            <!-- 国际高中的国内毕业去向不显示 -->
+            @{
+                var interData = (List
+                <AchievementInfos>
+                    )ViewBag.InterData;
+            }
+            <div class="screen-list">
+                <ul class="flex text-center">
+                    @{
+                        var rankYears = (from inter in interData
+                                         from items in inter.List
+                                         from item in items.Items
+                                         where item.Count > 0
+                                         select items.Year).ToList();
+                        rankYears = rankYears.Distinct().ToList();
+                        rankYears.Sort((x, y) => -x.CompareTo(y));
+
+                    }
+                    @for (int i = 0; i < interData.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            <li class="active" data-year="@(string.Join(",", rankYears))" data-alias="@interData[i].Alias">@interData[i].RankName</li>
+                        }
+                        else
+                        {
+                            <li data-year="@(string.Join(",", rankYears))" data-alias="@interData[i].Alias">@interData[i].RankName</li>
+                        }
+                    }
+                </ul>
+            </div>
+            <!-- 国际高中的国内毕业去向不显示 -->
+            <p class="rank-title text-center">@interData[0].Alias</p>
+            <!-- 国外 -->
+            <div class="abroad-list">
+                @if (@rankYears.Count() > 0)
+                {
+                    <div class="flex justify-content-between">
+                        <div class="not-data flex">
+                            <span class="checked"></span>
+                            <span>屏蔽无数据项</span>
+                        </div>
+                        <a class="screen" id="abroad-year" data-year="@rankYears[0]">@(rankYears[0])年<i class="arrow"></i></a>
+                    </div>
+                    <div class="abroad-data">
+                        <ul>
+                            @{
+                                var list = (from inter in interData
+                                            from items in inter.List
+                                            from item in items.Items
+                                            where item.Count > 0 && items.Year == @rankYears[0]
+                                            select (item.SchoolId, item.Sort, item.SchoolName, item.Count)).GroupBy(g => g.SchoolId).Select(s => s.First()).ToList();
+                            }
+                            @foreach (var item in list)
+                            {
+                                <li>
+                                    <i class="num">@item.Sort</i>
+                                    @item.SchoolName
+                                    <span>@(item.Count)人</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+            </div>
+            <!-- 国内 -->
+            <div class="domestic-list" style="display: none;">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="not-data text-center">
+                        <div><i class="achievement-icon"></i></div>
+                        <p>暂未上榜</p>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" value="@(string.Join(",",((List<int>)ViewBag.Year)))">
+                    <div class="flex justify-content-between">
+                        <div class="sort-type">
+                            <span class="active">录取排序</span>
+                            <span>拼音排序</span>
+                        </div>
+                        <a class="screen" id="domestic-year" data-year="@(((List<int>)ViewBag.Year).FirstOrDefault())">@(((List<int>)ViewBag.Year).FirstOrDefault())年<i class="arrow"></i></a>
+                    </div>
+                    <div class="domestic-data">
+                        <ul>
+                            @foreach (var item in Model.Where(p => p.Key == ((List<int>)ViewBag.Year).FirstOrDefault()).OrderByDescending(p => p.Message))
+                            {
+                                <li>@item.Value<span>@(item.Message)人</span></li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="school-list">
+            <!--国内初高中学校-->
+            <div class="domestic-list">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="not-data text-center">
+                        <div><i class="achievement-icon"></i></div>
+                        <p>暂未上榜</p>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" value="@(string.Join(",",((List<int>)ViewBag.Year)))">
+                    <div class="flex justify-content-between">
+                        <div class="sort-type">
+                            <span class="active">录取排序</span>
+                            <span>拼音排序</span>
+                        </div>
+                        <a class="screen" id="domestic-year" data-year="@(((List<int>)ViewBag.Year).FirstOrDefault())">@(((List<int>)ViewBag.Year).FirstOrDefault())年<i class="arrow"></i></a>
+                    </div>
+                    <div class="domestic-data">
+                        <ul>
+                            @foreach (var item in Model.Where(p => p.Key == ((List<int>)ViewBag.Year).FirstOrDefault()).OrderByDescending(p => p.Message))
+                            {
+                                <li>@item.Value<span>@(item.Message)人</span></li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <div id="attend-targetContainer"></div>
+    <div id="attend-targetContainer2"></div>
+    <input type="hidden" id="datajson" value="@ViewBag.DataJson" />
+    <input type="hidden" id="interjson" value="@ViewBag.InterJson">
+
+</body>
+
+</html>
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="https://cdn.bootcss.com/linq.js/2.2.0.2/jquery.linq.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+<script src="@ViewBag.StaticFile/js/MultiPicker.js"></script>
+@*<script src="@ViewBag.StaticFile/js/achievement-msg.js"></script>*@
+<script type="text/javascript">
+    $(function () {
+
+        // 切换国内/国外排名
+        $('.tab ul').on('click', 'li', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            if ($(this).index() == 1) {
+                $('.screen-list').css('display', 'none');
+                $('.abroad, .abroad-list, .rank-title, .abroad-year').css('display', 'none');
+                $('.domestic, .domestic-list, .domestic-year').css('display', 'block');
+                var rankname = $('.screen-list .active').html();
+                var interjson = JSON.parse($('#interjson').val());
+                var year = parseInt(jQuery("#abroad-year").attr("data-year"));
+                var state = $('.not-data span').hasClass('checked') ? 0 : 1;
+                var rank = getinterdata(interjson, year, rankname);
+                newList(rank, 0, state);
+            }
+            else {
+                $('.screen-list').css('display', 'block');
+                $('.abroad, .abroad-list, .rank-title, .abroad-year').css('display', 'block');
+                $('.domestic, .domestic-list, .domestic-year').css('display', 'none');
+                getdomesticYear = $('#domestic-year').attr('data-year');
+                var json = JSON.parse(jQuery("#datajson").val());
+                var year = parseInt(getdomesticYear);
+                var state = $('.sort-type .active').index();
+                var list = getdomesticdata(json, year, state);
+                newList(list, 1);
+            }
+        });
+
+        // 国外-分类选择
+        $('.screen-list').on('click', 'li', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            var screenList = $(this).attr('data-year').split(',');
+            yearList = [];
+            for (var i = 0; i < screenList.length; i++) {
+                yearList.push({ id: screenList[i], value: screenList[i] + '年' });
+            }
+            $('.abroad-list .screen').html('' + screenList[0] + '年<i class="arrow"></i>').attr('data-year', screenList[0]);
+            abroad(yearList);
+            var state = $('.not-data span').hasClass('checked') ? 0 : 1;
+            var rankname = $(this).html();
+            var year = parseInt(screenList[0]);
+            var interjson = JSON.parse($('#interjson').val());
+            var rank = getinterdata(interjson, year, rankname);
+            newList(rank, 0, state);
+            //获取国外榜单中文名字
+            var alias = $(this).attr('data-alias');
+            $(".rank-title").html(alias);
+        });
+
+        // 国外 选择是否屏蔽无数据项
+        $('.not-data').on('click', function () {
+            var rankname = $('.screen-list .active').html();
+            var interjson = JSON.parse($('#interjson').val());
+            var year = parseInt(jQuery("#abroad-year").attr("data-year"));
+            if ($(this).children().hasClass('checked')) {
+                $(this).children().removeClass('checked');
+                var rank = getinterdata(interjson, year, rankname);
+                newList(rank, 0, 1);
+            }
+            else {
+                $(this).children().eq(0).addClass('checked');
+                var rank = getinterdata(interjson, year, rankname);
+                newList(rank, 0, 0);
+
+            }
+        });
+
+        var getdomesticYear;
+        // 国内 选择排序方式
+        $('.sort-type').on('click', 'span', function () {
+            $(this).addClass('active').siblings().removeClass('active');
+            getdomesticYear = $('#domestic-year').attr('data-year');
+            var json = JSON.parse(jQuery("#datajson").val());
+            var year = parseInt(getdomesticYear);
+            var state = $('.sort-type .active').index();
+            var list = getdomesticdata(json, year, state);
+            newList(list, 1);
+
+        });
+
+
+
+
+        // 弹窗选择年份 国际
+        function abroad(list) {
+            debugger;
+            new MultiPicker({
+                input: 'abroad-year', //点击触发插件的input框的id
+                container: 'attend-targetContainer', //插件插入的容器id
+                jsonData: list,
+                success: function (arr) {
+                    var select = arr[0];
+                    $('.abroad-list .screen').html('' + select.value + '<i class="arrow"></i>').attr('data-year', select.id);
+                    // 用户是否屏蔽无数据项，0：是 1：否
+                    var state = $('.not-data span').hasClass('checked') ? 0 : 1;
+                    debugger;
+                    var interjson = JSON.parse($('#interjson').val());
+                    var year = parseInt(select.value);
+                    var rankname = $('.screen-list .active').html();
+                    var rank = getinterdata(interjson, year, rankname);
+                    newList(rank, 0, state);
+                    //var stateList = jQuery.Enumerable.From(rankItem[0].List[0].Items)
+                    //    .Where(function (x) {
+                    //        return x.Count === 0;
+                    //    }).ToArray();
+
+                }
+            });
+        }
+
+        if ($('.screen-list .active').length != 0) {
+            var abroadYear = $('.screen-list .active').attr('data-year').split(',');
+            var yearList = [];
+            for (var i = 0; i < abroadYear.length; i++) {
+                yearList.push({ id: abroadYear[i], value: abroadYear[i] + '年' });
+            }
+            abroad(yearList);
+        }
+
+        // 弹窗选择年份 国内
+        if ($('.domestic-list input').length != 0) {
+            var domesticYear = $('.domestic-list input').val().split(',');
+            var yearList2 = [];
+            for (var i = 0; i < domesticYear.length; i++) {
+                yearList2.push({ id: domesticYear[i], value: domesticYear[i] + '年' });
+            }
+            new MultiPicker({
+                input: 'domestic-year', //点击触发插件的input框的id
+                container: 'attend-targetContainer2', //插件插入的容器id
+                jsonData: yearList2,
+                success: function (arr) {
+                    var select = arr[0];
+                    $('.domestic-list .screen').html('' + select.value + '<i class="arrow"></i>').attr('data-year', select.id);
+                    // 0：录取排序 1：拼音排序
+                    var state = $('.sort-type .active').index();
+                    var year = parseInt(select.value);
+                    var json = JSON.parse(jQuery("#datajson").val());
+                    var list = getdomesticdata(json, year, state);
+                    newList(list, 1);
+                }
+            });
+        }
+
+        // 重新渲染列表
+        function newList(data, type, state = 0) {
+            //var target = $('.abroad').is(":hidden") ? $('.domestic-list') : $('.abroad-list');
+            var html = '';
+            if (type == 0) {
+                //国外榜单
+                html += '<ul>';
+                for (var j = 0; j < data.Items.length; j++) {
+                    if (!(state == 0 && data.Items[j].Count == 0)) {
+                        html += '<li><i class="num">' + data.Items[j].Sort + '</i>' + data.Items[j].SchoolName + '<span>' + data.Items[j].Count + '人</span></li>'
+                    }
+                }
+                html += '</ul>';
+                $(".abroad-data").html(html);
+            } else {
+                //国内成绩
+                html += '<ul>';
+                for (var i = 0; i < data.length; i++) {
+                    html += "<li>" + data[i].Value + "<span>" + data[i].Message + "人</span></li>";
+                }
+                html += '</ul>';
+                $(".domestic-data").html(html);
+            }
+        }
+
+        function getinterdata(data, year, rankname) {
+            var rankItem = jQuery.Enumerable.From(data)
+                .Where(function (x) {
+                    return x.RankName === rankname;
+                })
+                .ToArray();
+            var list = jQuery.Enumerable.From(rankItem[0].List)
+                .Where(function (x) {
+                    return x.Year === year;
+                })
+                .ToArray();
+            return list[0];
+        };
+
+        function getdomesticdata(json, year, state) {
+            //0：录取排序 1：拼音排序
+            if (state === 0) {
+                var list = jQuery.Enumerable.From(json)
+                    .Where(function (x) { return x.Key === year; })
+                    .OrderByDescending(function (x) { return x.Message; })
+                    .ToArray();
+                return list;
+            }
+            else {
+                var list = jQuery.Enumerable.From(json)
+                    .Where(function (x) { return x.Key === year; })
+                    .ToArray();
+                var data = list.sort(
+                    function compareFunction(param1, param2) {
+                        return param1.Value.localeCompare(param2.Value, "zh");
+                    }
+                );
+                return data;
+            }
+
+        }
+    })
+</script>

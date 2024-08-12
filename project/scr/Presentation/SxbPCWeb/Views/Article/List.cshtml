@@ -1,0 +1,252 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>
+@{
+    string search = ViewBag.Search;
+
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>幼儿园,小学,中学,国际,民办,公办学校升学攻略锦集-上学帮</title>
+    <meta name="keywords" content="攻略锦集">
+    <meta name="description" content="上学帮升学攻略频道给家长提供孩子上幼儿园,小学,中学,国际,民办,公办学校升学攻略锦集，选择优秀学校，赢在起跑线">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.css">
+    @*<link rel="stylesheet" href="@ViewBag.StaticFile/css/home/home.css">
+        <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-detail/school-detail-profile.css">
+        <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-detail/school-detail-comments.css">*@
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/strategy/strategy.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/article-common.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 5)
+        </div>
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" class="d-block">上学帮</a></h1>
+                <div class="select font-14" id="select-city">
+                    <i class="header-icon">@ViewBag.CityName</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("List","Article",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li>
+                                    <a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a>
+                                </li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                </ul>
+                <form action="/article/@ViewBag.LocalCityCode-1" method="get">
+                    <div class="search-bar d-flex position-relative">
+                        <div class="search-div">
+                            <input id="search-input" type="text" placeholder="请输入关键词检索攻略" class="input-keyword font-12" data-channel='4' name="search" value="@ViewBag.Search" autocomplete="off">
+                            <a></a>
+                        </div>
+                        <input type="submit" value="搜索" class="btn-search font-14" id="serchBtn">
+                    </div>
+
+                    @*<div class="search-bar d-flex position-relative">
+                            <input id="search-input" type="text" autocomplete="off" placeholder="请输入关键词检索攻略" name="search" value="@ViewBag.Search" class="input-keyword font-12" data-channel='4'>
+                            <input type="submit" value="搜索" class="btn-search font-14" onclick="onclickButton()">
+                        </div>*@
+                </form>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0 hot-search d-flex font-12">
+                        <span style="display:none">搜索词：</span>
+                        <ul class="keyword clearfix" id="keyword-box">
+                            @*<li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                                <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                                <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="strategy-list">
+        <div class="container">
+            <div class="d-flex strategy-content clearfix">
+                <!-- 左侧内容 -->
+                <div class="left-content">
+                    <div class="school-dynamic">
+                        <!--                    屏蔽这段是有更多的按钮-->
+                        <!--                    <h2 class="font-20 font-weight-bold color-333 school-atlas-title">学校动态 <a class="more-dynamic font-12 color-333 font-weight-normal float-right" href="#" title="更多&gt;">更多&gt;</a></h2>-->
+                        <!--                    <h2 class="font-20 font-weight-bold color-333 school-atlas-title">学校动态</h2>-->
+                        <!--                    如果没有数据删掉下面d-none-->
+                        @if (!string.IsNullOrEmpty(ViewBag.Search))
+                        {
+                            <div class="click-button-search">
+                                <span class="search-value">@ViewBag.Search</span><span>共@(ViewBag.Total)篇相关攻略文章</span>
+                            </div>
+                        }
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="strategy-search-list">
+
+                                <div class="rank-navigation">
+                                    <a href="/">首页</a>
+                                    <span class="rank-navigation-span">&gt;</span>
+                                    <a href="/article/">攻略</a>
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.TagName))
+                                    {
+                                        <span class="rank-navigation-span">&gt;</span>
+                                        <a href="/article/@ViewBag.TagName/1.html">标签 : @ViewBag.TagName</a>
+                                    }
+                                </div>
+                                <ul class="article-list">
+                                    @await Html.PartialAsync("./ListItems.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)Model)
+                                </ul>
+                                <nav class="page d-flex justify-content-end">
+                                    @{
+
+                                        var search_urlencode = search;//System.Web.HttpUtility.UrlEncode(search);
+                                    }
+                                    @(await Html.PartialAsync("PaginationEx", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                    "",
+                                    "ArticleTag",
+                                    (int)ViewBag.TotalPage,
+                                    (int)ViewBag.Limit,
+                                    (int)((ViewBag.Offset / ViewBag.Limit) + 1),
+                                    (int)ViewBag.LocalCityCode,
+                                    (string)ViewBag.TagName,
+                                    (_this) => { return new { search = search_urlencode, offset = (_this.CurrentPage - 2) * _this.PageCount, limit = _this.PageCount }; },
+                                    (_pageItem, _this) => { return new { search = search_urlencode, offset = (_pageItem - 1) * _this.PageCount, limit = _this.PageCount }; },
+                                    (_this) => { return new { search = search_urlencode, offset = (_this.CurrentPage) * _this.PageCount, limit = _this.PageCount }; }
+                                    )))
+                                </nav>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="dynamic-not-data font-14">抱歉，没有找到相关的攻略文章！如果您想找的学校<br>我们还未收录，您可以提交给我们</div>
+
+                        }
+                    </div>
+                    <div class="school-policy">
+                        <!--                    屏蔽这段是有更多的按钮-->
+                        <!--                    <h2 class="font-20 font-weight-bold color-333 school-atlas-title">升学政策<a class="more-dynamic font-12 color-333 font-weight-normal float-right" href="#" title="更多&gt;">更多&gt;</a></h2>-->
+                        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">猜你喜欢</h2>
+                        <!--                    如果没有数据删掉下面d-none-->
+                        <div class="dynamic-not-data font-14 d-none">暂未收录当前学校的相关动态</div>
+                        <ul class="article-list" id="ithinkyoulikebox">
+                            @if (ViewBag.IThinkYouLike != null)
+                            {
+                                @await Html.PartialAsync("./ListItems.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.IThinkYouLike)
+
+                            }
+                        </ul>
+                        @*给蜘蛛看的*@
+                        <a href="@Url.Action("loadmoreithinkyoulike","article",new {offset = 5,limit = 10 })" style="display:none;">welcome spider!</a>
+                        <a href="javascript:void(0);" id="loadmoreithinkyoulikebtn" data-offset="0" data-limit="10" title="加载更多" class="font-12 load-more d-block">加载更多</a>
+                    </div>
+                    @await Html.PartialAsync("QuickNavigation")
+                </div>
+                <!-- 右侧内容 -->
+                <div class="right-list">
+
+                    <div class="hot-article">
+                        <h2 class="font-18 font-weight-bold">热门攻略</h2>
+                        <ul class="article-list">
+                            @await Html.PartialAsync("./hotpointlistitem.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.HotPoint)
+                        </ul>
+                    </div>
+
+                    @*热门标签*@
+                    @if (((IEnumerable<dynamic>)ViewBag.HotTags)?.Any() == true)
+                    {
+                        @await Html.PartialAsync("./hottagitem.cshtml", (IEnumerable<PMS.OperationPlateform.Domain.DTOs.TagDto>)ViewBag.HotTags)
+                    }
+                    @*@await Component.InvokeAsync("HotComment", new { cityCode = ViewBag.LocalCityCode, userId = ViewBag.CQUserId })
+                        @await Component.InvokeAsync("HotQuestion")*@
+                </div>
+            </div>
+        </div>
+    </section>
+    @await Html.PartialAsync("Right_bar")
+    @await Html.PartialAsync("Footer")
+
+    <script src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+    <script src="@ViewBag.StaticFile/js/home/home.js"></script>
+    <script src="@ViewBag.StaticFile/js/search.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script>
+        var $loadmoreithinkyoulikebtn = $('#loadmoreithinkyoulikebtn'); //加载更多猜你喜欢按钮
+        var $ithinkyoulikebox = $('#ithinkyoulikebox'); //承放猜你喜欢容器
+        var $searchInput = $('#search-input'); //搜索输入框
+        var $keywordBox = $('#keyword-box'); // 关键词的盒子
+        $(function () {
+            LoadKeyWords();
+            $loadmoreithinkyoulikebtn.on('click', function () {
+                var _this = $(this);
+                var limit = _this.data('limit') || 10;
+                var offset = (_this.data('offset')) + limit;
+                $.ajax({
+                    url: '@Url.Action("LoadMoreIThinkYouLike","Article")',
+                    type: 'get',
+                    data: {
+                        offset: offset,
+                        limit: limit,
+                    },
+                    success: function (res) {
+                        if (res.statu && res.statu == -1) {
+                            _this.text("无更多数据");
+                            return;
+                        }
+                        _this.data('offset', offset);
+                        _this.data('limit', limit);
+                        $ithinkyoulikebox.append(res);
+                    }
+                });
+
+            });
+            $keywordBox.on('click', 'li', function() {
+                var _this = $(this);
+                var name = _this.find('a').text();
+                window.location = '/article/@ViewBag.LocalCityCode-1?search=' + name;
+            });
+        })
+
+        function LoadKeyWords() {
+            $.ajax({
+                url: '@Url.Action("GetHotwordList","Search")',
+                type: 'get',
+                data: { channel: 4, pageSize: 3 },
+                success: function (res) {
+                    $keywordBox.empty();
+                    if (res.status == 200) {
+                        if (!res.data || res.data.length <= 0) {
+                            $keywordBox.parent().find("span").hide();
+                        } else {
+                            $keywordBox.parent().find("span").show();
+                            $.each(res.data, function(index, value) {
+                                $keywordBox.append('<li><a href="javascript:void(0);" rel="nofollow">' + value.name + '</a></li>')
+                            });
+                        }
+
+                    } else {
+                        console.log(res);
+
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

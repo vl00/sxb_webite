@@ -1,0 +1,151 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <title>地图寻校-上学帮</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/MultiPicker.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/jquery.range.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/map.css" />
+</head>
+<body>
+	<header class="header flex justify-content-between">
+		<a class="arrow"></a>
+		<ul class="flex header-title">
+			
+		</ul>
+		<span class=""></span>
+		<span class="btn-list flex">
+			<a class="header-icon search"></a>
+			<a class="header-icon filter"></a>
+		</span>
+	</header>
+
+	<div class="msg text-center">可视范围内共678所学校，共3000所学校</div>
+	
+	<!-- 地图 -->
+	<div id="container" class="map"></div>
+
+	<div class="map-tab">
+		<i></i>
+		<ul class="flex text-center">
+			<li class="active"><i class="icon"></i>地图寻校</li>
+			<li id="metro"><i class="icon"></i>地铁寻校</li>
+		</ul>
+	</div>
+
+	<div class="map-content" id="content">
+        <div>
+            <!-- 测试地图 -->
+            <ul class="content-list">
+            </ul>
+            <div class="not-more-data">没有更多数据</div>
+        </div>
+    </div>
+
+    <div class="search-address">
+        <div class="search-input flex justify-content-between">
+            <div>
+                <i class="search-icon"></i>
+                <form action=""><input type="search" placeholder="请输入你关心的地点"></form>
+            </div>
+            <a href="javascript:;" class="search-cancel">取消</a>
+        </div>
+        <ul class="history-address-list">
+            
+        </ul>
+    </div>
+
+	<div id="attend-targetContainer"></div>
+
+    <div class="screen mt">
+        <div class="list-overflow authentications">
+            <h5 class="screen-title">学校认证</h5>
+            <ul class="screen-list flex text-center">
+                
+            </ul>
+            <div class="text-center button-arrow"><i></i></div>
+            <form>
+                <input type="hidden" name="authentications">
+            </form>
+        </div>
+        <div class="list-overflow abroads">
+            <h5 class="screen-title">出国方向</h5>
+            <ul class="screen-list flex text-center">
+                
+            </ul>
+            <div class="text-center button-arrow"><i></i></div>
+            <form>
+                <input type="hidden" name="abroads">
+            </form>
+        </div>
+        <div class="list-overflow courses">
+            <h5 class="screen-title">课程设置</h5>
+            <ul class="screen-list flex text-center">
+                
+            </ul>
+            <div class="text-center button-arrow"><i></i></div>
+            <form>
+                <input type="hidden" name="courses">
+            </form>
+        </div>
+        <div class="list-overflow characteristics">
+            <h5 class="screen-title">特色课程或项目</h5>
+            <ul class="screen-list flex text-center">
+                
+            </ul>
+            <div class="text-center button-arrow"><i></i></div>
+            <form>
+                <input type="hidden" name="characteristics">
+            </form>
+        </div>
+        <div>
+            <h5 class="screen-title">学校评分</h5>
+            <ul class="flex text-center justify-content-between school-score">
+                <li class="active">
+                    <div>毕业成绩</div>
+                    <div class="num"><span>0-700</span><i>分</i></div>
+                </li>
+                <li>
+                    <div>口碑评价</div>
+                    <div class="num"><span>0-100</span><i>分</i></div>
+                </li>
+                <li>
+                    <div>师资力量</div>
+                    <div class="num"><span>30-75</span><i>分</i></div>
+                </li>
+                <li>
+                    <div>硬件设施</div>
+                    <div class="num"><span>30-75</span><i>分</i></div>
+                </li>
+                <li>
+                    <div>交通配置</div>
+                    <div class="num"><span>30-75</span><i>分</i></div>
+                </li>
+                <li>
+                    <div>学生生源</div>
+                    <div class="num"><span>30-75</span><i>分</i></div>
+                </li>
+            </ul>
+            <div class="slider">
+                <input type="hidden" id="screen-slider" value="130, 628" />
+            </div>
+        </div>
+        <div class="flex text-center screen-btn">
+            <a class="reset">重置</a>
+            <a class="confirm">确定</a>
+        </div>
+    </div>
+
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=61ce686ba30069e6801cda4be2f719a2&plugin=AMap.Geocoder"></script>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.range-min.js"></script>
+    <script src="@ViewBag.StaticFile/js/MultiPicker.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/map.js?20200818"></script>
+</body>
+</html>

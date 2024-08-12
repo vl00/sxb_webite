@@ -1,0 +1,87 @@
+﻿@model PMS.UserManage.Application.ModelDto.VoBase
+@{
+    Layout = null;
+    var data = new List<PMS.UserManage.Application.ModelDto.ModelVo.QuestionModelVo.QuestionAnswerAndAnswerReplyModel>();
+    if (Model != null && Model.data != null) {
+        data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PMS.UserManage.Application.ModelDto.ModelVo.QuestionModelVo.QuestionAnswerAndAnswerReplyModel>>(Model.data.ToString());
+    }
+}
+@if (data != null && data.Count > 0)
+{
+    <ul class="reply-list">
+        @foreach (var qa in data)
+        {
+            if (qa.Type == 0)
+            {
+                <li>
+                    <a href="https://m.sxkid.com/Question/QuestionDetail_QuestionId-@qa.Id.ToString("N")~">
+                        <div class="flex justify-content-between">
+                            <div class="user-msg flex">
+                                <div class="img-box"><img src="@qa.answerUserInfoVo.HeadImager" alt="@qa.answerUserInfoVo.NickName" /></div>
+                                <div>
+                                    <h5 class="user-name">@qa.answerUserInfoVo.NickName</h5>
+                                    <span class="time-ago">@qa.AddTime</span>
+                                </div>
+                            </div>
+                            <div class="like-num">
+                                <i class="comment-icon"></i>
+                                <span>@qa.LikeCount</span>
+                            </div>
+                        </div>
+                        <p class="reply-content">@qa.AnswerContent</p>
+                        <div class="reply-num">共@(qa.AnswerCount)条回复&gt;</div>
+                        <div class="target flex">
+                            <div><span class="question">问</span></div>
+                            <div class="question-target-content">
+                                <h5 class="question-title">@qa.Content</h5>
+                                <div class="question-msg flex justify-content-between">
+                                    <span class="department">@qa.SchoolName</span>
+                                    <span class="time">@qa.AddTime</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="https://m.sxkid.com/ReplyDetail/Index_type-2_DatascoureId-@qa.Id.ToString("N")~">
+                        <div class="flex justify-content-between">
+                            <div class="user-msg flex">
+                                <div class="img-box"><img src="@qa.userInfoVo.HeadImager" alt="@qa.userInfoVo.NickName" /></div>
+                                <div>
+                                    <h5 class="user-name">@qa.userInfoVo.NickName</h5>
+                                    <span class="time-ago">@qa.AddTime</span>
+                                </div>
+                            </div>
+                            <div class="like-num">
+                                <i class="comment-icon"></i>
+                                <span>@qa.LikeCount</span>
+                            </div>
+                        </div>
+                        <p class="reply-content"><span class="reply-target">回复<i>@qa.answerUserInfoVo.NickName：</i></span>@qa.Content</p>
+                        <!-- <div class="reply-num">共86条回复></div> -->
+                        <div class="target flex">
+                            <div><span class="question">问</span></div>
+                            <div class="question-target-content">
+                                <h5 class="question-title">@qa.AnswerContent</h5>
+                                <div class="question-msg flex justify-content-between">
+                                    <span class="department">@qa.SchoolName</span>
+                                    <span class="time">@qa.AnswerAddTime</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

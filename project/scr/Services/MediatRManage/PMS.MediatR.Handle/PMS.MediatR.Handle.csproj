@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.API.SMS\ProductManagement.API.SMS.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Tool.Email\ProductManagement.Tool.Email.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Tool.WeChat\ProductManagement.Tool.WeChat.csproj" />
+    <ProjectReference Include="..\..\PaidQA\PMS.PaidQA.Application\PMS.PaidQA.Application.csproj" />
+    <ProjectReference Include="..\..\SignalR\PMS.SignalR\PMS.SignalR.csproj" />
+    <ProjectReference Include="..\PMS.MediatR.Events\PMS.MediatR.Events.csproj" />
+    <ProjectReference Include="..\PMS.MediatR.Request\PMS.MediatR.Request.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewData["Title"] = "CommentInfo";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_LayoutLayer.cshtml";
+}
+@section styles{
+    <style>
+        .tag {
+            flex-wrap: wrap;
+               display: flex !important;
+        }
+
+         .tag li {
+                
+                list-style: none;
+                padding: 3pt 2.7%;
+                border: 1px solid rgb(219, 219, 219);
+                border-radius: 4pt;
+                margin-right: 1.2%;
+                margin-bottom: 5pt;
+            }
+
+        .title{
+            width:150px;
+        }
+        .commentImg{
+            width:150px;
+        }
+
+        .score li{
+            list-style:none;
+            float:left;
+        }
+
+        .contnet{
+            width:80%;
+                word-wrap: break-word;
+        }
+
+        .scoreConten {
+            padding:0px 10px;
+        }
+    </style>
+ }
+
+
+<div class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table"  style="table-layout:fixed" >
+                                    <tr>
+                                        <td class="title">昵称：</td>
+                                        <td>@ViewBag.CommentDetail.commentUser</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">是否入读：</td>
+                                        <td>@(ViewBag.CommentDetail.schoolComment.Score.IsAttend == true ? "是" : "否")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">打分：</td>
+                                        <td>
+                                            @if (ViewBag.CommentDetail.schoolComment.Score.IsAttend)
+                                            {
+                                                <ul class="score">
+                                                    <li>师资@(ViewBag.CommentDetail.teach)</li>
+                                                    <li class="scoreConten">硬件@(ViewBag.CommentDetail.hard)</li>
+                                                    <li class="scoreConten">环境@(ViewBag.CommentDetail.envir)</li>
+                                                    <li class="scoreConten">校风@(ViewBag.CommentDetail.manage)</li>
+                                                    <li class="scoreConten">活动@(ViewBag.CommentDetail.life)</li>
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span>对该校的评价@(ViewBag.CommentDetail.population)</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">标签：</td>
+                                        <td>
+                                            <ul class="tag">
+                                                @foreach (var item in ViewBag.CommentDetail.tags)
+                                                {
+                                                    <li>@item.Tag.Content</li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">评论正文：</td>
+                                        <td class="contnet">@ViewBag.CommentDetail.schoolComment.Content</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">图片：</td>
+                                        <td>
+                                            @foreach (var item in ViewBag.CommentDetail.schoolImages)
+                                            {
+                                                <img class="commentImg" src="@item.ImageUrl" />
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

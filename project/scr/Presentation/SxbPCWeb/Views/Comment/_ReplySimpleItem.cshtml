@@ -1,0 +1,50 @@
+﻿@model Sxb.PCWeb.ViewModels.Comment.CommentReplyViewModel
+<li class="d-flex">
+    <div class="client-data">
+        <div class='photo'>
+            <img src="@Model.UserInfoVo.HeadImager" alt="头像">
+        </div>
+        @if (Model.UserInfoVo?.IsSchool == true && Model.UserInfoVo?.IsTalent == true)
+        {
+            <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+                 class="icon-certification">
+            <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+                 class="icon-certification">
+        }
+        else if (Model.UserInfoVo?.IsSchool == true)
+        {
+            <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+                 class="icon-certification">
+        }
+        else if (Model.UserInfoVo?.IsTalent == true)
+        {
+            <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+                 class="icon-certification">
+        }
+    </div>
+    <div class="list-right  no-img">
+        <span class='client-name font-13'>@Model.UserInfoVo.NickName</span>
+        <div>
+            <a href="@Url.Action("Reply","Comment",new {Id = Model.Id.ToString("N")})"  class="comments-content font-15 have-show-all no-img">
+            @Model.Content
+            </a>
+        </div>
+        <div class="d-flex  justify-content-end">
+            <a href="javascript:;" class='show-all-comments font-12'>显示全部</a>
+        </div>
+        <div class='clearfix'></div>
+        <div class="like">
+            <span class='font-13'>@Model.AddTime</span>
+            <a href="javascript:;" class='collection float-right iconReport'  data-reportType="5" data-reportId="@Model.Id"  title="举报">举报</a>
+            <a href="#" class="icon-like font-12 float-right  @(Model.IsLike?"selected":"")"   data-Id="@Model.Id" data-Type="3"  title="点赞">@Model.LikeTotal</a>
+            <a href="javascript:;" class="icon-comments font-12 float-right">@Model.ReplyTotal</a>
+        </div>
+        <div class="textarea">
+            <textarea name="reply-comment" cols="30" rows="10" maxlength="300"
+                class="reply-textarea"></textarea>
+            <a href="javascript:;" title="发表" class="release-comments"  data-Id="@Model.CommentId" data-Type="1" data-ReplyId="@Model.Id"  >发表</a>
+            <a href="javascript:;" title="匿名" class="comments-way">匿名</a>
+            <a href="javascript:;" title="在读" class="comments-way">在读</a>
+        </div>
+    </div>
+</li>

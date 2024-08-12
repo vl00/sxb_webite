@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.API.SMS\ProductManagement.API.SMS.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Tool.WeChat\ProductManagement.Tool.WeChat.csproj" />
+    <ProjectReference Include="..\..\Search\PMS.Search.Application\PMS.Search.Application.csproj" />
+    <ProjectReference Include="..\PMS.Infrastructure.Domain\PMS.Infrastructure.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.API.Amap\ProductManagement.API.Amap.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.API.Aliyun\ProductManagement.API.Aliyun.csproj" />
+  </ItemGroup>
+
+</Project>

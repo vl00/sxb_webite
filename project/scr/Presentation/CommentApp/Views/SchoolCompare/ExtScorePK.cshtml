@@ -1,0 +1,149 @@
+﻿@using PMS.School.Domain.Dtos;
+@{
+    var fscore = (List<SchoolExtScore>)ViewBag.fScore;
+    var findex = (List<SchoolExtScoreIndex>)ViewBag.fScoreIndex;
+    var lscore = (List<SchoolExtScore>)ViewBag.lScore;
+    var lindex = (List<SchoolExtScoreIndex>)ViewBag.lScoreIndex;
+
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>学校总评PK</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/school-score.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">学校总评PK</span>
+        <span class=""></span>
+    </header>
+
+    <section class="mt">
+        @if (fscore != null && fscore.Count > 0 && lscore != null && lscore.Count > 0)
+        {
+            <div class="school-score text-center">
+                <input type="hidden" data-grade='[{"name":"综合","score":@(fscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)},{"name":"师资","score":@(fscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)},{"name":"硬件","score":@(fscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)},{"name":"课程","score":@(fscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)},{"name":"学术","score":@(fscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)},{"name":"费用","score":@(fscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)},{"name":"周边","score":@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)}]' class="grade-1">
+                <input type="hidden" data-grade='[{"name":"综合","score":@(lscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)},{"name":"师资","score":@(lscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)},{"name":"硬件","score":@(lscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)},{"name":"课程","score":@(lscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)},{"name":"学术","score":@(lscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)},{"name":"费用","score":@(lscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)},{"name":"周边","score":@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)}]' class="grade-2">
+                <div class="flex score-contrast">
+                    @if (fscore != null && fscore.Count > 0)
+                    {
+                        <span>@(fscore.FirstOrDefault(p => p.IndexId == 22)?.Score ?? 0)</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未评分</span>
+                    }
+                    <i>总评</i>
+                    <!-- <span>75</span> -->
+                    @if (lscore != null && lscore.Count > 0)
+                    {
+                        <span>@(lscore.FirstOrDefault(p => p.IndexId == 22)?.Score ?? 0)</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未评分</span>
+                    }
+                </div>
+                <div id="echearts" style="height: 5rem; margin-top: .3rem;"></div>
+            </div>
+
+            <div class="school-score-detail text-center">
+                <h5>学校总评</h5>
+                <ul class="list">
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>综合</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>师资</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>硬件</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>课程</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>学术</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>费用</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <div class="left flex">
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                            <progress value=@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0) max='100'></progress>
+                        </div>
+                        <i>周边</i>
+                        <div class="right flex">
+                            <progress value=@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0) max='100'></progress>
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="flex bottom-btn">
+                    <a href="@Url.Action("ExtFraction","School",new { sid=ViewBag.fSid,extId=ViewBag.fExtId,SchoolName=ViewBag.fSchoolName,ExtName=ViewBag.fExtName})">评分细则&gt;</a>
+                    <a href="@Url.Action("ExtFraction","School",new { sid=ViewBag.lSid,extId=ViewBag.lExtId,SchoolName=ViewBag.lSchoolName,ExtName=ViewBag.lExtName})">评分细则&gt;</a>
+                </div>
+            </div>
+        }
+    </section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/echarts.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pk-list/school-score.js"></script>
+</body>
+</html>

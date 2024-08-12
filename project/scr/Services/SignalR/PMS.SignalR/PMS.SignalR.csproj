@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.AspNetCoreHelper\ProductManagement.Framework.AspNetCoreHelper.csproj" />
+    <ProjectReference Include="..\..\MediatRManage\PMS.MediatR.Events\PMS.MediatR.Events.csproj" />
+    <ProjectReference Include="..\PMS.AspNetCoreHelper\PMS.AspNetCoreHelper.csproj" />
+    <ProjectReference Include="..\..\PaidQA\PMS.PaidQA.Application\PMS.PaidQA.Application.csproj" />
+    <ProjectReference Include="..\..\PaidQA\PMS.PaidQA.Domain\PMS.PaidQA.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

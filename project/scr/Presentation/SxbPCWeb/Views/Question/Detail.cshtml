@@ -1,0 +1,245 @@
+﻿@using Sxb.PCWeb.ViewModels.Question;
+@using Sxb.PCWeb.ViewModels
+<html lang="zh">
+@{
+    QuestionInfoViewModel question = (QuestionInfoViewModel)ViewBag.QuestionDetail;
+    var questionTitle = @ViewBag.QuestionDetail.Content;
+
+    var keywords = $"{question.School?.SchoolName},上学帮";
+    var description = $"提问{question.School?.SchoolName}:{questionTitle}";
+    var title = questionTitle;
+
+    string schoolName = question.School?.SchoolName;
+    string shortSchoolNo = question.School?.ShortSchoolNo;
+    var headerBreadcrumb = HeaderBreadcrumb.Instance
+            .SetChild("问答", "/question")
+            .SetChild(schoolName, $"/question/school-{shortSchoolNo}")
+            .SetChild("问题详情", "#")
+            .Head;
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/question/question-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-details.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+</head>
+
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderPartial", 3)
+        </div>
+    </header>
+
+    <!-- 面包屑导航 - S -->
+    @await Html.PartialAsync("HeaderBreadcrumb", headerBreadcrumb)
+    <!-- 面包屑导航 - E -->
+
+    <section class="school-detail question-list-details">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                <div class="left-content d-block" id="searchQuestion">
+                    @*<div class="search-question-list question-details">
+                            <ul class="comments-list">
+                                @await Html.PartialAsync("_QuestionItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)ViewBag.QuestionDetail)
+                            </ul>
+                        </div>*@
+
+                    <div class="search-question-list question-details comments-list">
+                        <div class="d-flex justify-content-between ">
+                            <i>问</i>
+                            <div class="question-right">
+                                <span class="theme">@question.Content</span>
+                                @if (question.Images != null && question.Images.Count > 0)
+                                {
+                                    <div class="swiper-container answer-question-swiper swiper-container-initialized swiper-container-horizontal">
+                                        <div class="swiper-wrapper">
+                                            @foreach (var img in question.Images)
+                                            {
+                                                <div class="swiper-slide"><img src="@img" alt="" data-img-url="@img"></div>
+                                            }
+                                        </div>
+                                        @if (question.Images.Count > 6)
+                                        {
+                                            <div class="swiper-button-prev swiper-button-black"></div>
+                                            <div class="swiper-button-next"></div>
+                                        }
+                                    </div>
+                                }
+                                <div class="like">
+                                    <span class="font-13">@question.AddTime</span>
+                                    <a href="javascript:;" class="collection float-right iconReport selected" data-reportType="2" data-reportId="@question.Id" title="举报">举报</a>
+                                    <a href="javascript:;" class="collection float-right collect @(question.IsCollection?"selected":"")" data-Type="2" data-Id="@question.Id" title="收藏">收藏</a>
+                                    @*<a href="javascript:;" class="icon-like font-12 float-right @(Model.IsLike?"selected":"")"  data-Id="@Model.Id" data-Type="2"  title="点赞">@Model.LikeCount</a>*@
+                                    <a href="javascript:;" class="icon-comments font-12 float-right" title="回答">@question.AnswerCount</a>
+                                </div>
+                                <div class="question-school-tab">
+                                    <a href="/question/school-@question.School.ShortSchoolNo/" title="@question.School?.SchoolName" class="d-flex justify-content-between ">
+                                        <div class="question-school-name">
+                                            <p class="font-16 color-333">@question.School?.SchoolName</p>
+                                            @if (question.School?.Type == 3)
+                                            {
+                                                <span class="international font-12">国际</span>
+                                            }
+                                            else if (question.School?.Type == 4)
+                                            {
+                                                <span class="international font-12">外籍</span>
+                                            }
+                                            else if (question.School?.Type == 2)
+                                            {
+                                                <span class="international font-12">民办</span>
+                                            }
+                                            else if (question.School?.Type == 1)
+                                            {
+                                                <span class="international font-12">公办</span>
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(question.School.LodgingReason))
+                                            {
+                                                <span class="boarding font-12">@question.School.LodgingReason</span>
+                                            }
+                                            @if (question.School?.Auth ?? false)
+                                            {
+                                                <img src="@ViewBag.StaticFile/imgs/detail/authentication.png" alt="学校认证"
+                                                     class="school-certification">
+                                            }
+                                        </div>
+                                        <div class="font-12 have-question">
+                                            共@(question.School?.QuestionTotal)个问题
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <p class="font-15 color-333 my-reply">我要回复</p>
+                            <textarea name="reply-comment" cols="30" rows="10" maxlength="300" class="reply-textarea"></textarea>
+                            <a href="javascript:;" data-Id="@question.Id" data-Type="2" data-ReplyId="" class="release-comments release bgc-blue">发布</a>
+                            <a href="javascript:;" title="匿名" class="comments-way">匿名</a>
+                            <a href="javascript:;" title="在读" class="comments-way selected">在读</a>
+                        </div>
+
+                    </div>
+
+                    @if (ViewBag.HotAnswers != null && ViewBag.HotAnswers.Count > 0)
+                    {
+                        <div class="hot-reply">
+                            <h2 class="font-20 color-333 font-weight-bold">热门回答</h2>
+                            <ul class='comments-list'>
+                                @foreach (var reply in ViewBag.HotAnswers)
+                                {
+                                    @await Html.PartialAsync("_ReplySimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionAnswerViewModel)reply)}
+                            </ul>
+                        </div>
+                    }
+                    <div class="hot-reply">
+                        <h2 class="font-20 color-333 font-weight-bold">最近回答</h2>
+                        @if (ViewBag.NewAnswers.Count > 0)
+                        {
+                            <ul class='comments-list'>
+                                @foreach (var reply in ViewBag.NewAnswers)
+                                {
+                                    @await Html.PartialAsync("_ReplySimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionAnswerViewModel)reply)
+                                }
+                            </ul>
+                            @if ((ViewBag.TotalPage / 10) > 1)
+                            {
+                                <nav class="page d-flex justify-content-end">
+                                    @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                    "Detail",
+                                    "Question",
+                                    (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                    (int)ViewBag.PageSize,
+                                    (int)ViewBag.PageIndex,
+                                    (_this) => { return new { No = ViewBag.No, page = _this.CurrentPage - 1 }; },
+                                    (_pageItem, _this) => { return new { No = ViewBag.No, page = _pageItem }; },
+                                    (_this) => { return new { No = ViewBag.No, page = _this.CurrentPage + 1 }; }
+                                    )))
+                                </nav>
+                            }
+                        }
+                        else
+                        {
+                            <div class='school-review-list-no-comment-div'>
+                                <div class="text-center no-comment have-icon">
+                                    <p class="font-14"><i></i><span class="font-14 d-block">暂无回复，快来抢沙发！</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box" id="rightBanner">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="27" id="swiperSchoolAd-27" style="height: 205px;overflow:hidden!important;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 广告结束 -->
+                    <div class="hot-question">
+                        <h2 class="font-18 font-weight-bold">热门问答</h2>
+                        <ul>
+                            @foreach (var item in ViewBag.HottestSchoolQuesitonView)
+                            {
+                                @await Html.PartialAsync("_HottestQuestion.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热问学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolQuestion = (List<Sxb.PCWeb.ViewModels.School.SchoolQuestionCardViewModel>)ViewBag.HottestSchoolView;
+                                for (int i = 0; i < HotSchoolQuestion.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("_HotSchoolQuestion.cshtml", HotSchoolQuestion[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="https://cdn.sxkid.com/v4source/statistics.js?appid=1"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+</body>
+
+</html>

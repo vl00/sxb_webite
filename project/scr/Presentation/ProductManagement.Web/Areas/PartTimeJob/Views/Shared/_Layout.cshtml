@@ -1,0 +1,184 @@
+﻿<!-- 系统布局页  -->
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Sufee Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>_Layout</title>
+
+
+    <link rel="stylesheet" href="/Content/vendors/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/vendors/themify-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/Content/vendors/selectFX/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="/Content/vendors/jqvmap/dist/jqvmap.min.css">
+    <link rel="stylesheet" href="/Content/assets/css/style.css">
+    <link rel="stylesheet" href="~/Bootstrap/bootstrap-table.min.css" />
+    <link rel="stylesheet" href="~/lib/layer-v3.1.1/layer/theme/default/layer.css" />
+
+    <style>
+        .navbar .navbar-nav li.menu-item-has-children a:before {
+            content: "";
+        }
+
+        .layui-layer-btn .layui-layer-btn0 {
+            border-color: none;
+            background-color: none;
+        }
+    </style>
+    @RenderSection("styles", false)
+</head>
+<body>
+    <!-- Left Panel -->
+    <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
+
+            <div class="navbar-header">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/PartTimeJob/Home/Welcome">兼职管理平台</a>
+            </div>
+
+            <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/PartTimeJob/Home/Welcome"> <i id="home" class="menu-icon fa fa-dashboard"></i>首页 </a>
+                    </li>
+                    @* 1：兼职，2：兼职领队，3：供应商，4：审核，5：管理员 *@
+
+                    @if (int.Parse(ViewBag._admin.Role) == 5 || int.Parse(ViewBag._admin.Role) == 3 || int.Parse(ViewBag._admin.Role) == 2)
+                    {
+                        <li class="menu-item-has-children">
+                            <a href="/PartTimeJob/Statistics/Index" aria-expanded="false"> <i id="statistics" class="menu-icon fa fa-bar-chart-o"></i>统计</a>
+                            @if (int.Parse(ViewBag._admin.Role) == 5)
+                            {
+                                <ul style="padding-left: 50px;">
+                                    <li class="menu-item-has-children">
+                                        <a href="/PartTimeJob/AdminExaminer/Index" aria-expanded="false"> <i id="examinerTitle" class="menu-icon fa fa-legal"></i>审核</a>
+                                    </li>
+                                </ul>
+                            }
+                        </li>
+                    }
+
+                    @if (int.Parse(ViewBag._admin.Role) == 4)
+                    {
+                        <li class="menu-item-has-children">
+                               <a href="/PartTimeJob/AdminExaminer/Index" aria-expanded="false"> <i id="examinerTitle" class="menu-icon fa fa-legal"></i>审核</a>
+                        </li>
+                    }
+
+                        @if (int.Parse(ViewBag._admin.Role) == 5)
+                        {
+                            <li class="menu-item-has-children">
+                                <a href="/PartTimeJob/Settlement/Index" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>结算</a>
+                            </li>
+
+                            <li class="menu-item-has-children">
+                                <a href="/PartTimeJob/Manage/Home" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>账号</a>
+                            </li>
+                        }
+
+                        <li class="menu-item-has-children">
+                            <a href="/PartTimeJob/Home/Self?isFirst=false" aria-expanded="false"> <i id="MySelf" class="menu-icon fa fa-user"></i>我的</a>
+                        </li>
+
+                    </ul>
+            </div>
+
+        </nav>
+    </aside><!-- /#left-panel -->
+    <!-- Left Panel -->
+    <!-- Right Panel -->
+
+    <div id="right-panel" class="right-panel">
+
+        <!-- Header-->
+        <header id="header" class="header">
+            <div class="header-menu">
+
+                <div class="col-sm-7">
+
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="user-area dropdown float-right">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-angle-double-down"></i>  @ViewBag._admin.Name
+                        </a>
+
+                        <div class="user-menu dropdown-menu">
+                            <a class="nav-link" href="/PartTimeJob/Home/Self"><i class="fa fa-user"></i>  我的账号</a>
+                            <a class="nav-link" href="/PartTimeJob/Home/Logout"><i class="fa fa-power-off"></i>  退出登录</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </header><!-- /header -->
+        <!-- Header-->
+
+        <div class="content mt-3">
+            <!-- 内容存放 -->
+            @RenderBody()
+        </div>
+    </div><!-- /#right-panel -->
+
+
+    <script src="~/Content/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/Content/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/Content/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/Content/assets/js/main.js"></script>
+
+    <script src="/Content/vendors/jqvmap/dist/jquery.vmap.min.js"></script>
+    <script src="/Content/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+
+    <!-- bootstra-table 分页插件 -->
+   
+    <script src="/Content/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Bootstrap/bootstrap-table.min.js"></script>
+    <script src="~/Bootstrap/bootstrap-table-zh-CN.min.js"></script>
+
+
+    <!-- layer 弹出框 -->
+    <script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+
+    <!-- 日期插件 -->
+    <script src="~/lib/laydate/laydate.js"></script>
+
+    <script type="text/javascript">
+        var $ = jQuery;
+        var ii;
+        /*
+         *  邀请码
+            layer.alert('内容', {
+                skin: 'layer-ext-moon',
+                title:"邀请码"
+            })
+        */
+        function member_add(title, url, w, h) {
+            ii = layer.open({
+                type: 2,
+                area: [w + 'px', h + 'px'],
+                fix: false, //不固定
+                title: title,
+                content: url,
+                btn:["确定"]
+            });
+            return ii;
+        }
+    </script>
+
+    <!--请在下方写此页面业务相关的脚本-->
+    @RenderSection("scripts", false)
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "点评成功-上学帮";
+    Layout = "/Views/Layout/_layout.cshtml";
+}
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-success.css" />
+}
+
+<header class="header flex justify-content-between">
+    @*<a href="/CommentWriter/CommitCommentView?currentId=@(ViewBag.SchoolId)&SchoolId=@(ViewBag.School)"><i class="arrow"></i></a>*@
+    <a class="arrow"></a>
+    <span class="success"><a href=""><span class="success">完成</span></a></span>
+</header>
+
+<section class="comment-success mt text-center">
+    <h5>感谢您的点评!</h5>
+    <div class="share CommentSuccessShare">
+        <span><a class="header-icon share checkLogin" data-title="@ViewBag.Titel" data-content="@ViewBag.Content" data-url="@(ViewBag.ShareLink)" data-logo="@(ViewBag.ShareImgLink)">分享我的点评</a></span>
+    </div>
+</section>
+<section class="content">
+    <div class="title">您可能还想点评</div>
+    <ul class="comment-list">
+        @*
+                <li>
+                <div class="flex justify-content-between">
+                    <div>
+                        <h5 class="school-name">广东实验中学 - 国际部</h5>
+                        <ul class="tag flex">
+                            <li>国际</li>
+                            <li>寄宿</li>
+                            <li class="bcg-none"><i class="icon"></i></li>
+                        </ul>
+                    </div>
+                    <div class="text-center">
+                        <div class="score">
+                            97<span>分</span>
+                            <!--<span class="not-data">暂无数据</span>-->
+                        </div>
+                        <ul class="star flex justify-content-between">
+                            <li class="score-star"><i class="icon"></i></li>
+                            <li class="score-star"><i class="icon"></i></li>
+                            <li class="score-star"><i class="icon"></i></li>
+                            <li class="score-star"><i class="icon"></i></li>
+                            <li><i class="icon"></i></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        *@
+    </ul>
+</section>
+@section script
+{
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script>
+        var SchoolId = '@ViewBag.SchoolId'
+        if (!$.isAPP) {
+            $(".success a").attr("href", localStorage.getItem("CommentEntrance"))
+        }
+        else
+        {
+            $(".success a").removeAttr("href")
+        }
+
+        $(".success a").click(function () {
+            if ($.isAPP)
+            {
+                location.href='ischool://goback';
+            }
+        })
+    </script>
+    <script src="@ViewBag.StaticFile/js/comment-success.js"></script>
+}

@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "补充基本信息";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/replenish-msg.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">补充基本信息</span>
+    <span class=""></span>
+</header>
+
+<section class="mt">
+    <form id="form">
+        <ul class="list">
+            <li class="flex user-name">
+                <span>用户昵称：<i>用户名</i></span>
+            </li>
+            <li class="flex name">
+                <span>真实姓名：</span>
+                <input type="text" name="realName" placeholder="请输入你的真实姓名">
+            </li>
+            <li class="flex justify-content-between ID-type">
+                <span>选择证件类型：</span>
+                <span>二代身份证<i class="arrow"></i></span>
+                <input type="hidden" name="idType" value="0" />
+            </li>
+            <li class="flex ID-num">
+                <span>身份证号：</span>
+                <input type="number" name="idNumber" placeholder="请输入你的身份证号">
+            </li>
+        </ul>
+        <p class="tips">*通过认证后，您发布的言论将具有一定的权威性，故需要收集您的身份信息</p>
+        <a class="submit-btn text-center">提交</a>
+        <input type="hidden" name="verifyType" value="1" />
+    </form>
+</section>
+
+<!-- 提交成功 -->
+<section class="success text-center" style="display: none;">
+    <h5><span><i></i></span>提交成功</h5>
+    <p class="tips">*我们将在三个工作日内完成认证审核</p>
+    <a class="confirm text-center">确认</a>
+</section>
+
+<div class="popup text-center">
+    <ul>
+        <li data-type="0">二代身份证</li>
+        <li data-type="1">港澳身份证</li>
+        <li data-type="2">台湾身份证</li>
+    </ul>
+    <div class="cancel">取消</div>
+</div>
+
+<div class="curtain"></div>
+
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/replenish-msg.js"></script>
+}

@@ -1,0 +1,49 @@
+﻿<div class="hot-article">
+    <h2 class="font-18 font-weight-bold">热门攻略</h2>
+    <ul class="article-list">
+        @foreach (var item in (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.HotPoint)
+        {
+            switch (item.Layout)
+            {
+                case 0:
+                    <li>
+                        <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title" class="d-flex justify-content-between">
+                            <div class="not-img">
+                                <h2 class="font-15">@item.Title</h2>
+                                <div class="article-msg font-12">
+                                    <span>@item.Time</span>
+                                    <span>
+                                        <img src="@ViewBag.StaticFile/imgs/detail/check-num.png" alt="观看数量">
+                                        <span>@item.ViewCount</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    break;
+                default:
+                    <li>
+                        <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title" class="d-flex justify-content-between">
+                            @if (item.Covers?.FirstOrDefault() != null)
+                            {
+                            <div class="img-box">
+                                <img src="@item.Covers?.FirstOrDefault()" alt="@item.Title">
+                            </div>
+                            }
+                            <div class="@(item.Covers?.FirstOrDefault() == null ? "not-img" : "")" style="flex:1;">
+                                <h2 class="font-15">@item.Title</h2>
+                                <div class="article-msg font-12">
+                                    <span>@item.Time</span>
+                                    <span>
+                                        <img src="@ViewBag.StaticFile/imgs/detail/check-num.png" alt="观看数量">
+                                        <span>@item.ViewCount</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    break;
+            }
+        }
+    </ul>
+</div>

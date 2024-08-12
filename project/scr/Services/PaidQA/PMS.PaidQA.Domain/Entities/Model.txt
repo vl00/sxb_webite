@@ -1,0 +1,164 @@
+﻿
+ 
+表的数量：23
+
+-生成CommonSetting表
+	|_生成ID字段 类型Guid
+	|_生成Key字段 类型string
+	|_生成Value字段 类型string
+-生成CouponActivity表
+	|_生成Id字段 类型Guid
+	|_生成Title字段 类型string
+	|_生成StartTime字段 类型DateTime?
+	|_生成OverTime字段 类型DateTime?
+	|_生成Creator字段 类型string
+	|_生成CouponId字段 类型Guid?
+	|_生成ShareTitle字段 类型string
+	|_生成ShareContent字段 类型string
+	|_生成ShareImg字段 类型string
+-生成CouponQAExample表
+	|_生成Id字段 类型Guid
+	|_生成Question字段 类型string
+	|_生成Anwser字段 类型string
+	|_生成TalentUserId字段 类型Guid?
+	|_生成Sort字段 类型decimal
+	|_生成QAImgUrl字段 类型string
+	|_生成ActivityId字段 类型Guid?
+-生成CouponSpecialTalent表
+	|_生成Id字段 类型Guid
+	|_生成TalentUserId字段 类型Guid?
+	|_生成ActivityId字段 类型Guid?
+-生成Evaluate表
+	|_生成ID字段 类型Guid
+	|_生成Content字段 类型string
+	|_生成OrderID字段 类型Guid?
+	|_生成Score字段 类型int?
+	|_生成CreateTime字段 类型DateTime?
+	|_生成IsAuto字段 类型bool?
+	|_生成IsValid字段 类型bool?
+-生成EvaluateTagRelation表
+	|_生成ID字段 类型Guid
+	|_生成EvaluateID字段 类型Guid?
+	|_生成TagID字段 类型Guid?
+-生成EvaluateTags表
+	|_生成ID字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成IsValid字段 类型bool?
+-生成Grade表
+	|_生成ID字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成Sort字段 类型int
+	|_生成IsValid字段 类型bool
+-生成HotQuestion表
+	|_生成ID字段 类型Guid
+	|_生成Sort字段 类型int
+	|_生成HotTypeID字段 类型Guid
+	|_生成OrderID字段 类型Guid
+	|_生成ViewCount字段 类型int
+-生成HotType表
+	|_生成ID字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成Sort字段 类型int?
+	|_生成LogoImage字段 类型string
+	|_生成IsValid字段 类型bool
+	|_生成Type字段 类型int
+-生成LevelType表
+	|_生成ID字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成Sort字段 类型int
+-生成Message表
+	|_生成ID字段 类型Guid
+	|_生成OrderID字段 类型Guid?
+	|_生成SenderID字段 类型Guid?
+	|_生成Content字段 类型string
+	|_生成MediaType字段 类型int
+	|_生成MsgType字段 类型int?
+	|_生成ReceiveID字段 类型Guid?
+	|_生成CreateTime字段 类型DateTime?
+	|_生成IsValid字段 类型bool
+	|_生成ReadTime字段 类型DateTime?
+-生成Order表
+	|_生成ID字段 类型Guid
+	|_生成NO字段 类型string
+	|_生成Status字段 类型int
+	|_生成AskRemainCount字段 类型int
+	|_生成Amount字段 类型decimal
+	|_生成IsEvaluate字段 类型bool
+	|_生成CreatorID字段 类型Guid
+	|_生成AnswerID字段 类型Guid
+	|_生成OrginAskID字段 类型Guid?
+	|_生成CreateTime字段 类型DateTime
+	|_生成UpdateTime字段 类型DateTime
+	|_生成FirstReplyTimespan字段 类型int?
+	|_生成IsBlocked字段 类型bool
+	|_生成FinishTime字段 类型DateTime?
+	|_生成IsAnonymous字段 类型bool
+	|_生成AnonyName字段 类型string
+	|_生成IsReply字段 类型bool
+	|_生成IsRefusTransiting字段 类型bool
+	|_生成IsSendTransitingMsg 字段 类型bool
+	|_生成IsPublic字段 类型bool
+	|_生成QuestionID字段 类型Guid?
+	|_生成Remark字段 类型string
+	|_生成PayAmount字段 类型decimal
+	|_生成OriginType字段 类型string
+-生成OrderOpreateLog表
+	|_生成Id字段 类型Guid
+	|_生成OrderId字段 类型Guid?
+	|_生成Remark字段 类型string
+	|_生成CreateTime字段 类型DateTime?
+	|_生成UserId字段 类型Guid?
+	|_生成UpdateStatus字段 类型int?
+	|_生成PayStatus字段 类型int?
+-生成OrderTag表
+	|_生成ID字段 类型Guid
+	|_生成OrderID字段 类型Guid
+	|_生成TagID字段 类型Guid
+	|_生成TagType字段 类型int
+-生成PayWalletLog表
+	|_生成Id字段 类型Guid
+	|_生成UserId字段 类型Guid?
+	|_生成Amount字段 类型decimal
+	|_生成StatementType字段 类型byte[]
+	|_生成IO字段 类型byte[]
+	|_生成OrderId字段 类型Guid?
+	|_生成OrderType字段 类型byte[]
+	|_生成Remark字段 类型string
+	|_生成CreatetTime字段 类型DateTime?
+-生成RecommentTalent表
+	|_生成ID字段 类型Guid
+	|_生成UserID字段 类型Guid
+	|_生成RegionTypeID字段 类型Guid
+	|_生成Sort字段 类型int
+-生成RegionType表
+	|_生成ID字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成PID字段 类型Guid?
+	|_生成Sort字段 类型int?
+	|_生成IsValid字段 类型bool?
+-生成SxbDarenEmail表
+	|_生成Id字段 类型Guid
+	|_生成UserId字段 类型Guid?
+	|_生成Email字段 类型string
+-生成sysdiagrams表
+	|_生成name字段 类型object
+	|_生成principal_id字段 类型int
+	|_生成diagram_id字段 类型int
+	|_生成version字段 类型int?
+	|_生成definition字段 类型byte[]
+-生成TalentGrade表
+	|_生成ID字段 类型Guid
+	|_生成GradeID字段 类型Guid?
+	|_生成TalentUserID字段 类型Guid?
+-生成TalentRegion表
+	|_生成ID字段 类型Guid
+	|_生成UserID字段 类型Guid?
+	|_生成RegionTypeID字段 类型Guid?
+-生成TalentSetting表
+	|_生成IsEnable字段 类型bool?
+	|_生成Price字段 类型decimal
+	|_生成TalentUserID字段 类型Guid
+	|_生成TalentLevelTypeID字段 类型Guid?
+
+
+EndBlock（）是生成的文本模板

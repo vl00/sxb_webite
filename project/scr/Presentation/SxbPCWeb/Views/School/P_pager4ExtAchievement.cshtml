@@ -1,0 +1,64 @@
+﻿@model Dictionary<string, object>
+@{
+    var maxPage = Model.TryGetValue("MaxPage", out var _o) && _o is int _maxp ? _maxp : 7;
+    maxPage = maxPage < 4 ? 4 : maxPage;
+    dynamic pageIndex = Model["PageIndex"];
+    dynamic pageSize = Model["PageSize"];
+    dynamic total = Model["Total"];
+    dynamic totalPageCount = (pageSize > 0 ? (int)Math.Ceiling(total / (double)pageSize) : 0);
+    dynamic getpHref = Model["GetpHref"]; // string getpHref(int gotoIndex)
+}
+
+@if (total > pageSize)
+{
+    <nav class="page d-flex justify-content-end">
+        <ul class=" font-14 d-flex">
+            @if (pageIndex > 1)
+            {
+                <li class="prev position-relative"><a href="@(getpHref(pageIndex - 1))" title="上一页">上一页</a></li>
+            }
+            @if (totalPageCount <= maxPage)
+            {
+                @for (var i = 1; i <= totalPageCount; i++)
+                {
+                    <li class="@((pageIndex == i) ? "active" : "")"><a href="@(getpHref(i))" title="@i">@i</a></li>
+                }
+            }
+            else if (pageIndex < maxPage - 2)
+            {
+                // 后省略
+
+                @for (var i = 1; i <= maxPage - 1; i++)
+                {
+                    <li class="@((pageIndex == i) ? "active" : "")"><a href="@(getpHref(i))" title="@i">@i</a></li>
+                }
+                <li><span>...</span></li>
+            }
+            else if (pageIndex > totalPageCount - maxPage + 2)
+            {
+                // 前省略
+
+                <li><span>...</span></li>
+                @for (var i = totalPageCount - maxPage + 2; i <= totalPageCount; i++)
+                {
+                    <li class="@((pageIndex == i) ? "active" : "")"><a href="@(getpHref(i))" title="@i">@i</a></li>
+                }
+            }
+            else
+            {
+                // 前后都省略，中间当前页
+
+                <li><span>...</span></li>
+                @for (int i = pageIndex - ((int)Math.Floor(maxPage / 2.0) - (maxPage % 2 == 0 ? 2 : 1)), j = i + maxPage - 3; i <= j; i++)
+                {
+                    <li class="@((pageIndex == i) ? "active" : "")"><a href="@(getpHref(i))" title="@i">@i</a></li>
+                }
+                <li><span>...</span></li>
+            }
+            @if (pageIndex < totalPageCount)
+            {
+                <li class="next position-relative"><a href="@(getpHref(pageIndex + 1))" title="下一页">下一页</a></li>
+            }
+        </ul>
+    </nav>
+}

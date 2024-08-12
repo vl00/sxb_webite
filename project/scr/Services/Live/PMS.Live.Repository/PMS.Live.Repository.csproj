@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.EntityFramework\ProductManagement.Framework.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\PMS.Live.Domain\PMS.Live.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "回复推送";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/push-record-list.css" />
+}
+
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">回复推送</span>
+    <span class="btn">编辑</span>
+</header>
+
+@if (false)
+{
+    <section class="push-content">
+        <ul class="invite-list reply">
+            <li>
+                <a href="../comment-and-qa/qa-detail.html" class="flex">
+                    <div class="head-box">
+                        <div><img src="../../imgs/head-1.jpg" alt=""></div>
+                        <i class="comment-icon"></i>
+                    </div>
+                    <div>
+                        <div class="user-msg flex justify-content-between">
+                            <div>
+                                <span class="user-name">小明</span>
+                                <span class="invite">回复了你：</span>
+                            </div>
+                            <span class="time-ago">6小时前</span>
+                        </div>
+                        <p class="content">学校的师资力量在全市能排到第几呀？</p>
+                    </div>
+                </a>
+            </li>
+            <li class="invite-comment">
+                <a href="../comment-and-qa/qa-detail.html" class="flex">
+                    <div class="head-box">
+                        <div><img src="../../imgs/head-1.jpg" alt=""></div>
+                    </div>
+                    <div>
+                        <div class="user-msg flex justify-content-between">
+                            <div>
+                                <span class="user-name">小明</span>
+                                <span class="invite">回复了你：</span>
+                            </div>
+                            <span class="time-ago">6小时前</span>
+                        </div>
+                        <p class="content">细节描写突出人物品质，令人感动。 叙事中夹写景，拟人化语言使文章更显得生动活泼。外形描写十分有趣。有感染力。</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="bottom-btn text-center">
+        <ul class="flex">
+            <li class="all-select">一键清空</li>
+            <li class="delete">删除</li>
+        </ul>
+    </section>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}
+
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/push-record.js"></script>
+}

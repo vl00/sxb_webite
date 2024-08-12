@@ -1,0 +1,62 @@
+﻿@using iSchool;
+@using Microsoft.AspNetCore.Routing;
+@using PMS.School.Domain.Dtos;
+@using System.Web;
+@{ 
+    var routes = Context.GetRouteData().Values;
+    var controller = routes["controller"]?.ToString();
+    var action = routes["action"]?.ToString(); 
+
+    var recommendSchools = ViewBag.RecommendSchools is Lazy<List<KeyValueDto<Guid, Guid, string, string>>> lzy1 ? lzy1.Value : new List<KeyValueDto<Guid, Guid, string, string>>();
+    //var nearSchools = ViewBag.NearSchools is Lazy<SchExtDto0[]> lzy2 ? lzy2.Value : new SchExtDto0[0];
+    var searchSchoolKeywords = ViewBag.SearchSchoolKeywords is Lazy<IEnumerable<string>> lzy3 ? lzy3.Value : new string[0];
+
+    string Url_schoolDetail(object eid)
+    {
+        var id = eid is Guid g ? g.ToString("n") :
+            Guid.TryParse(eid?.ToString(), out g) ? g.ToString("n") :
+            throw new ArgumentException($"{eid} is not guid");
+        return Url.Action("detail", "school", new { id }).ToLower();
+    }
+}
+
+<div class="you-like">
+    <div class='you-like-top-btn'>
+        @if (!controller.EqualsIgnCase("article"))
+        {
+        <a class="selected" data-tab='0'>推荐学校</a>@*猜你喜欢*@
+        }
+        <a class="@(controller.EqualsIgnCase("article") ? "selected" : "")" data-tab='1'>选校关键词</a>
+        @*<a data-tab='2'>附近学校</a>*@
+    </div>
+    <div class='select-tab clearfix'>
+        @if (!controller.EqualsIgnCase("article"))
+        {
+        <div class="campus campus-0">
+            @foreach (var school in recommendSchools)
+            {
+            <a class="font-14" href="@Url_schoolDetail(school.Value)">@($"{school.Message}-{school.Data}")</a>
+            }
+        </div>
+        }
+        <div class="campus campus-1">
+            @foreach (var keyword in searchSchoolKeywords)
+            {
+                @if (controller.EqualsIgnCase("school"))
+                {
+            <a class="font-14" href="@("/school/listextschool?KeyWords=" + HttpUtility.UrlEncode(keyword))">@keyword</a>
+                }
+                else if (controller.EqualsIgnCase("Article"))
+                {
+            <a class="font-14" href="@("/article/list?search=" + HttpUtility.UrlEncode(keyword))">@keyword</a>                  
+                }
+            }
+        </div>
+        @*<div class="campus campus-2">
+            @foreach (var school in nearSchools)
+            {
+            <a class="font-14" href="@Url.Action("detail", "school", new { sid = school.Sid, extId = school.Eid })">@($"{school.SchName}-{school.ExtName}")</a>
+            }
+        </div>*@
+    </div>
+</div>

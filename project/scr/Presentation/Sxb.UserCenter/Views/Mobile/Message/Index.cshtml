@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "我的消息";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/mine-news.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">我的消息</span>
+    <span class="btn">编辑</span>
+</header>
+
+<section>
+    <ul class="tab flex justify-content-between text-center">
+        @*<li data-url="@Url.Action("Private")">私信<i class="new-msg"></i></li>*@
+        <li data-url="@Url.Action("Private")">私信<i></i></li>
+        <li data-url="@Url.Action("Follow")">关注<i></i></li>
+        <li data-url="@Url.Action("System")">系统<i></i></li>
+    </ul>
+</section>
+
+<section>
+    <div class="content"></div>
+</section>
+
+<section class="bottom-btn text-center">
+    <ul class="flex">
+        <li class="all-select">全选</li>
+        <li id="delete" class="delete">删除</li>
+    </ul>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/mine-list.js"></script>
+    <script type="text/javascript">
+        $('#delete').click(function () {
+            $('.delete-select.select').each(function (i, e) {
+                var li = $(this).parent();
+                var id = li.data('id');
+                $.ajax({
+                    url: '@Url.Action("Remove")',
+                    data: 'msgID=' + id,
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            li.remove();
+                            var sellen = $('.delete-select.select').length
+                            if (sellen > 0) {
+                                $('#delete').text('删除(' + sellen + ')');
+                            } else {
+                                $('#delete').removeClass('selected').text('删除');
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

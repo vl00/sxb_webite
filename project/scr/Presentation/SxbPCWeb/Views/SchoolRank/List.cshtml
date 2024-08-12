@@ -1,0 +1,251 @@
+﻿@using PMS.OperationPlateform.Domain.Enums
+@using Sxb.PCWeb.ViewModels.SchoolRank
+@{
+    var targets = ViewBag.Targets as IEnumerable<SchoolRankViewModel>;
+
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>上学帮排行榜</title>
+    <meta name="keywords" content="胡润学校区域排名分类,国际学校,民办学校,公办学校,排行榜,@(ViewBag.LocalCity)排名分类-上学帮">
+    <meta name="description" content="上学帮排行榜频道提供@(ViewBag.LocalCity)胡润学校_国际学校_民办学校_公办学校_排行榜_排名分类信息，方便家长为孩子选择优秀的名校。">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/rank/rank.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 4)
+        </div>
+
+        @*<div class="container d-flex justify-content-start header-content">
+                <div class="sxb-icon d-flex">
+                    <h1 class="font-weight-bold"><a href="@Url.Action("index","home")" title="上学帮" class="d-block">上学帮</a></h1>
+                    <div class="select font-14">
+                        <i class="header-icon">@ViewBag.LocalCity</i>
+                        <div class="city-list position-absolute">
+                            <ul class="d-flex font-12 flex-wrap clearfix">
+                                @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                                {
+                                    <li><a href="@Url.Action("List","SchoolRank",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>
+                                }
+                            </ul>
+                            <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0' data-path="rank">
+                        <a></a>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" class="d-block">上学帮</a></h1>
+                <div class="select font-14" id="select-city">
+                    <i class="header-icon">@ViewBag.LocalCity</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("Index","Home",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li><a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a></li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                    @*<li data-channel="0"><a title="找学校">找学校</a></li>
+                        <li data-channel="1"><a title="看点评">看点评</a></li>
+                        <li data-channel="2"><a title="搜问答">搜问答</a></li>
+                        <li data-channel="3"><a title="排行榜">排行榜</a></li>
+                        <li data-channel="4"><a title="查攻略">查攻略</a></li>*@
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0' data-path="rank">
+                        <a></a>
+                    </div>
+                </div>
+                <div class="recommend-search d-flex font-12">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="rank" style="">
+        <div class="container">
+            <div class="rank-classify">
+                <div class="rank-navigation">
+                    <a href="/">首页</a>
+                    <span class="rank-navigation-span">&gt;</span>
+                    <a href="/schoolrank/list/">排行榜</a>
+                </div>
+                <h2 class="title font-20 font-weight-bold">榜单分类</h2>
+                <ul class="rank-classify-list text-center clearfix">
+                    <li class="position-relative">
+                        <img src="@ViewBag.StaticFile/imgs/rank/kindergarten.png" alt="">
+                        <a href="@Url.Action(SchoolGradePY.YouErYuan.ToString(), "schoolrank")/" class="font-18 font-weight-bold position-absolute">幼儿园</a>
+                    </li>
+                    <li class="position-relative">
+                        <img src="@ViewBag.StaticFile/imgs/rank/primarySchool.png" alt="">
+                        <a href="@Url.Action(SchoolGradePY.XiaoXue.ToString(), "schoolrank")/" class="font-18 font-weight-bold position-absolute">小学</a>
+                    </li>
+                    <li class="position-relative">
+                        <img src="@ViewBag.StaticFile/imgs/rank/juniorHighSchool.png" alt="">
+                        <a href="@Url.Action(SchoolGradePY.ChuZhong.ToString(), "schoolrank")/" class="font-18 font-weight-bold position-absolute">初中</a>
+                    </li>
+                    <li class="position-relative">
+                        <img src="@ViewBag.StaticFile/imgs/rank/highSchool.png" alt="">
+                        <a href="@Url.Action(SchoolGradePY.GaoZhong.ToString(), "schoolrank")/" class="font-18 font-weight-bold position-absolute">高中</a>
+                    </li>
+                </ul>
+            </div>
+
+
+            @if (targets != null)
+            {
+                <div class="rank-recommend">
+                    @if (!targets.Any())
+                    {
+                        <!-- 新增内容 -->
+                        <div class="not-in-rank text-center">
+                            <h3 class="font-14">该学校暂未上榜</h3>
+                            <p class="font-12">查查其它学校试试呗~~</p>
+                        </div>
+                        <!--  -->
+                    }
+                    else
+                    {
+                        <h2 class="title font-20 font-weight-bold">上榜榜单</h2>
+                        <ul class="rank-recommend-list">
+                            @foreach (var schoolRank in targets)
+                            {
+                                <li class="d-flex">
+                                    <div class="img-box"><img src="@schoolRank.RankCoverUrl" alt=""></div>
+                                    <div class="position-relative content-box">
+                                        <h3 class="rank-name font-18 font-weight-bold">@schoolRank.RankName</h3>
+                                        <a href="/schoolrank/detail/@(schoolRank.Base32No).html" class="check-more position-absolute font-12">查看更多&gt;</a>
+                                        <div class="d-flex font-15">
+
+                                            @for (int i = 0; i < 3; i++)
+                                            {
+                                                <ul class="rank-school-list">
+                                                    @{
+                                                        int max = 3;
+                                                        int initIndex = i * max;
+                                                        int remainCont = (schoolRank.Schools.Count - initIndex);
+                                                        int @for = remainCont >= max ? max : remainCont;
+                                                    }
+
+
+                                                    @for (int j = 0; j < @for; j++)
+                                                    {
+
+                                                        var item = schoolRank.Schools[j + initIndex];
+
+                                                        if (item.ExtId == ViewBag.TargetId)
+                                                        {
+                                                            <li class="active"><a href="@Url.Action("detail","school",new { id=item.ExtId})"><em>@(item.Sort).</em><span>@item.Name</span></a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="@Url.Action("detail","school",new { id=item.ExtId})"><em>@(item.Sort).</em><span>@item.Name</span></a></li>
+                                                        }
+
+                                                    }
+                                                </ul>
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+
+                    }
+                </div>
+             }
+
+            <div class="rank-recommend">
+                <h2 class="title font-20 font-weight-bold">推荐榜单</h2>
+                <ul class="rank-recommend-list">
+                    @foreach (Sxb.PCWeb.ViewModels.SchoolRank.SchoolRankViewModel schoolRank in ViewBag.Recommeds)
+                    {
+                        <li class="d-flex">
+                            <div class="img-box"><img src="@schoolRank.RankCoverUrl" alt=""></div>
+                            <div class="position-relative content-box">
+                                <h3 class="rank-name font-18 font-weight-bold">@schoolRank.RankName</h3>
+                                <a href="@Url.Action("detail","schoolrank",new { Base32No = schoolRank.Base32No })" class="check-more position-absolute font-12">查看更多&gt;</a>
+                                <div class="d-flex font-15">
+
+                                    @for (int i = 0; i < 3; i++)
+                                    {
+                                        int max = 3;
+                                        int initIndex = i * max;
+                                        int remainCont = (schoolRank.Schools.Count - initIndex);
+                                        int @for = remainCont >= max ? max : remainCont;
+                                        if (remainCont > 0)
+                                        {
+                                            <ul class="rank-school-list">
+
+                                                @for (int j = 0; j < @for; j++)
+                                                {
+
+                                                    var item = schoolRank.Schools[j + initIndex];
+
+                                                    <li><a href="/school-@ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(item.SchoolNo).ToLower()/"><em>@(item.Sort).</em><span>@item.Name</span></a></li>
+
+                                                }
+                                            </ul>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+
+            <div class="rank-more position-relative">
+                <h2 class="title font-20 font-weight-bold">更多榜单</h2>
+                <a href="@Url.Action("listall","schoolrank")" class="check-all position-absolute font-12">查看全部></a>
+                <ul class="rank-more-list clearfix text-center">
+                    @foreach (Sxb.PCWeb.ViewModels.SchoolRank.SchoolRankDetailViewModel schoolRank in ViewBag.MoreRanks)
+                    {
+                        <li>
+                            <a href="@Url.Action("detail","schoolrank",new { Base32No = schoolRank.Base32No })" class="d-block">
+                                <div><img src="@schoolRank.Cover" alt=""></div>
+                                <p>@schoolRank.Title </p>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </section>
+    @await Html.PartialAsync("Right_bar")
+    @await Html.PartialAsync("Footer")
+    <script src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+
+</body>
+</html>

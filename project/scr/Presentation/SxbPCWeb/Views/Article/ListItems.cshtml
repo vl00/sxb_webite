@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>
+
+@foreach (var item in Model)
+{
+    switch (item.Layout)
+    {
+        case 0:
+            <li>
+                @*<a href="@Url.Action("detail","article",new { no = item.No})" title="@(item.Type==1?"升学政策":"学校动态")">*@
+                <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title">
+                    <div class="school-dynamic-list font-12 clearfix">
+                        <p class="font-17">@item.Title</p>
+                        <span class="">@item.CNTime</span><span class="see">@item.ViewCount</span>
+                    </div>
+                </a>
+            </li>
+            break;
+        default:
+            <li>
+                @*<a href="@Url.Action("detail","article",new { no = item.No})" title="@(item.Type==1 ?"升学政策":"学校动态")">*@
+                <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title">
+                    <div class="school-dynamic-list font-12 clearfix">
+                        <img src="@item.Covers?.FirstOrDefault()?.Replace("file.","cdn.")" alt="">
+                        <p class="font-17">@item.Title</p>
+                        <span class="">@item.CNTime</span><span class="see">@item.ViewCount</span>
+                    </div>
+                </a>
+            </li>
+            break;
+    }
+}

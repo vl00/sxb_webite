@@ -1,0 +1,84 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+	<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+	<title>搜索建议</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/search-propose.css">
+</head>
+<body>
+	<header class="header flex justify-content-between">
+		<a class="arrow"></a>
+		<span class="header-title">搜索建议</span>
+		<span></span>
+	</header>
+	
+	<section class="mt">
+        @if (ViewBag.Channel == 0)
+        {
+		<div>
+			<!-- 学校 -->
+			<h2 class="title">学校搜索建议</h2>
+			<div class="text">
+				<p>若您没能利用搜索功能找到目标学校，可以再次尝试输入<span>学校所在市区+学校的全称</span>，以便更加精准的定位目标学校。</p>
+				<p>如：<br>将关键词“德意幼儿园”<br>替换为“广州白云区德意幼儿园”</p>
+				<p>若以上方法仍未能找到您的目标学校或满足您的需求，请通过联系客服中心获取帮助。</p>
+			</div>
+		</div>
+        }
+        else if (ViewBag.Channel == 1)
+        {
+		<div>
+			<!-- 点评 -->
+			<h2 class="title">点评搜索建议</h2>
+			<div class="text">
+				<p>上学帮的点评搜索方式是将您所输入的<span>关键词与点评内容</span>进行匹配所得的。请尽量将您所关注的核心内容以关键词形式输入。</p>
+				<p>若以上方法仍未能找到您的目标内容或满足您的需求，请通过联系客服中心获取帮助。</p>
+			</div>
+		</div>
+        }
+        else if (ViewBag.Channel == 2)
+        {
+		<div>
+			<!-- 问答 -->
+			<h2 class="title">问答搜索建议</h2>
+			<div class="text">
+				<p>上学帮的问答搜索方式是将您所输入的<span>关键词与问答问题</span>进行匹配所得的。请尽量将您所关注的核心内容以关键词形式输入。</p>
+				<p>若以上方法仍未能找到您的目标内容或满足您的需求，请通过联系客服中心获取帮助。</p>
+			</div>
+		</div>
+        }
+        else if (ViewBag.Channel == 3)
+        {
+		<div>
+			<!-- 排行榜 -->
+			<h2 class="title">排行榜搜索建议</h2>
+			<div class="text">
+				<p>上学帮的排行榜搜索方式是将您所输入的<span>关键词与排行榜名称以及排行榜上的学校名称</span>进行匹配所得的。请尽量将您所关注的核心内容以关键词形式输入。</p>
+				<p>若以上方法仍未能找到您的目标内容或满足您的需求，请通过联系客服中心获取帮助。</p>
+			</div>
+		</div>
+        }
+        else if (ViewBag.Channel == 4)
+        {
+		<div>
+			<!-- 攻略 -->
+			<h2 class="title">攻略搜索建议</h2>
+			<div class="text">
+				<p>上学帮的攻略搜索方式是将您所输入的<span>关键词与攻略标题</span>进行匹配所得的。请尽量将您所关注的核心内容以关键词形式输入。</p>
+				<p>若以上方法仍未能找到您的目标内容或满足您的需求，请通过联系客服中心获取帮助。</p>
+			</div>
+		</div>
+        }
+	</section>
+	
+	<div class="message text-center"><a href="@ViewBag.UserServiceUrl/Contact/Form">联系客服</a></div>
+
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+</body>
+</html>

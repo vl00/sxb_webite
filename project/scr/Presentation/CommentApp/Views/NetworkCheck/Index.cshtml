@@ -1,0 +1,104 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    
+    <title>上学帮_网络检测</title>
+</head>
+<body>
+    @*<iframe src="https://pv.sohu.com/cityjson?ie=utf8" id="ipAddr"></iframe>*@
+    <div class="main-content">
+        <p>当前公网IP:</p>
+        <span id="cip"></span>
+        <span id="cname"></span>
+        <p>连接主网速度(<a href="https://www.sxkid.com">https://www.sxkid.com</a>):</p>
+        <span id="ping"></span>
+        <p>请求Vue.js耗时:</p>
+        <span id="vue"></span>
+        <p>请求测试接口:</p>
+        <span id="checkApi"></span>
+        <p>请求我的动态接口:</p>
+        <span id="checkMyDynamicApi"></span>
+        <p>请求JSDK接口:</p>
+        <textarea id="checkJsdkApi" rows="20" cols="40" style="border:0px;"></textarea>
+    </div>
+
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/ping.js"></script>
+    <script src="@ViewBag.StaticFile/js/wxApis.js"></script>
+    <script src="https://pv.sohu.com/cityjson?ie=utf8"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#cip').html(returnCitySN.cip);
+            $('#cname').html(returnCitySN.cname);
+
+            var settings = {
+                timeout: 2000, // Optional.
+                logError: true // Optional.
+            }
+            var p = new Ping(settings);
+            p.ping("https://www.sxkid.com", function (err, data) {
+                if (err) {
+                    console.log("error loading resource")
+                    data = data + " " + err;
+                }
+                document.getElementById("ping").innerHTML = data + 'ms';
+            });
+
+            var currentTime = new Date();
+            $.get('@ViewBag.StaticFile/js/vue.js', function (e) {
+                var endTime = new Date();
+                var timeSpan = endTime - currentTime;
+                $('#vue').html(timeSpan + ' ms');
+            });
+
+            $.post('/NetworkCheck/CheckApi', {}, function (e) {
+                $('#checkApi').css("color", "green").html("Pass");
+            });
+
+            $.get('/apiUser/GetMydynamic', {}, function (e) {
+                $('#checkMyDynamicApi').css("color", "green").html("Pass");
+            });
+
+            $.post('/Common/GetJsdk', { url: location.href }, function (e) {
+
+                $('#checkJsdkApi').css("color", "green").html('请求JDK成功 , 验证中....');
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: e.data.weixin_AppID, // 必填，公众号的唯一标识
+                    timestamp: e.data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: e.data.nonceStr, // 必填，生成签名的随机串
+                    signature: e.data.signature,// 必填，签名
+                    jsApiList: list_WechatApis // 必填，需要使用的JS接口列表
+                });
+                wx.ready(function (e) {
+                    $('#checkJsdkApi').css("color", "green").html('验证成功 , 检测接口可用性 ...');
+                    wx.checkJsApi({
+                        jsApiList: list_WechatApis, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function (res) {
+                            $('#checkJsdkApi').append(JSON.stringify(res, null, '\t'));
+                            // 以键值对的形式返回，可用的api值true，不可用为false
+                            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                        }
+                    });
+
+
+                    $('#checkJsdkApi').css("color", "green").html('Pass');
+                });
+                wx.error(function (e) {
+                    $('#checkJsdkApi').css("color", "red").html('验证失败 : ' + e);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

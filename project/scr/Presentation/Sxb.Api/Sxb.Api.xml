@@ -1,0 +1,657 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sxb.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Sxb.Api.Controllers.AdvController">
+            <summary>
+            广告数据接口
+            </summary>
+        </member>
+        <member name="M:Sxb.Api.Controllers.AdvController.#ctor(PMS.OperationPlateform.Application.IServices.IAdvertisingBaseService)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="advertisingOptionService"></param>
+            <param name="advertisingBaseService"></param>
+        </member>
+        <member name="M:Sxb.Api.Controllers.AdvController.GetAdvs(System.Int32[],System.String)">
+            <summary>
+            获取指定广告位置的配置信息
+            </summary>
+            <param name="location">广告位</param>
+            <param name="callBack">回调函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.ArticleController.GetShortLink(System.Int32)">
+            <summary>
+            获取当前规则生成的文章短链接
+            </summary>
+            <param name="no"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sxb.Api.Controllers.SchoolCommentController">
+            <summary>
+            点评接口
+            </summary>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolCommentController.GetCommentInfoById(System.Guid)">
+            <summary>
+            根据点评id获取点评详情
+            </summary>
+            <param name="CommentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolCommentController.GetCommentInfoByIds(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            根据点评id列表获取点评详情列表
+            </summary>
+            <param name="CommentIds">点评id列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolCommentController.GetCommentInfoBySchoolSectionIdOrConente(System.Guid,System.String)">
+            <summary>
+            根据分部id，获取该分部下最新的前20条点数据，且可以模糊指定匹配
+            </summary>
+            <param name="SchoolSectionId">学校分部Id</param>
+            <param name="Conente">点评内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolCommentController.GetCommentsByIds(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            根据点评id列表创建点评实体
+            </summary>
+            <param name="Ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolQuestionController.GetQuestionAnswerBySchoolIdOrConente(System.Guid,System.String,System.Int32,System.Int32)">
+            <summary>
+            根据【学校id | 点评内容】获取该学校下的问题列表，return：rows：数据集合，total：总页数
+            </summary>
+            <param name="SchoolId">学校分部id</param>
+            <param name="Content">问题内容</param>
+            <param name="PageIndex"></param>
+            <param name="PageSize">默认值20条</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolQuestionController.GetQuestionInfoById(System.Guid)">
+            <summary>
+            根据问题id获取该问题详情，以及该问题下的两条最新回复数据 return：rows：数据集合，total：该学校下总问题数量
+            </summary>
+            <param name="QuestionId">问题id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Controllers.SchoolQuestionController.GetQuestionsByIds(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            根据问题id列表创建点评问题
+            </summary>
+            <param name="Ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sxb.Api.Model.AdvResponseResult">
+            <summary>
+            广告模块接口响应结果
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Model.AdvResponseResult.Advs">
+            <summary>
+            广告列表
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.Model.AdvResponseResult.AdvOption">
+            <summary>
+            广告的参数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Model.AdvResponseResult.AdvOption.Place">
+            <summary>
+            广告位置
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Model.AdvResponseResult.AdvOption.Items">
+            <summary>
+            广告位的广告项
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.Model.ResponseModel`1">
+            <summary>
+            响应模型
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Sxb.Api.RequestModel.RequestEnum.dataIdType">
+            <summary>
+            请求id类型标识
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.RequestModel.RequestEnum.dataIdType.SchooComment">
+            <summary>
+            点评
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.RequestModel.RequestEnum.dataIdType.Question">
+            <summary>
+            问题
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.RequestModel.RequestEnum.dataIdType.CommentReply">
+            <summary>
+            点评回复
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.RequestModel.RequestEnum.dataIdType.Answer">
+            <summary>
+            回答
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.RequestModel.RequestEnum.dataIdType.AnswerReply">
+            <summary>
+            回答回复
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.RequestModel.RequestOption.RequestOption">
+            <summary>
+            请求结构体
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.RequestModel.RequestOption.RequestOption.dataId">
+            <summary>
+            数据id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.RequestModel.RequestOption.RequestOption.dataIdType">
+            <summary>
+            数据id类型
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.Response.AppResponseResult">
+            <summary>
+            APP响应结果模板
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.AppResponseResult.Status">
+            <summary>
+            状态码
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.AppResponseResult.ErrorMsg">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.ResponseResult.Succeed">
+            <summary>
+            是否成功
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.ResponseResult.MsgTime">
+            <summary>
+            返回时间
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.ResponseResult.status">
+            <summary>
+            返回错误码
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.ResponseResult.Msg">
+            <summary>
+            返回信息
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.Response.ResponseResult.Data">
+            <summary>
+            返回Model
+            </summary>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Success">
+            <summary>
+            返回一个成功的返回值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Success(System.String)">
+            <summary>
+            返回一个成功的返回值
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Success``1(``0)">
+            <summary>
+            返回一个成功的返回值
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Failed">
+            <summary>
+            返回一个操作失败的值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Failed(System.String)">
+            <summary>
+            返回一个操作失败的值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Failed``1(``0)">
+            <summary>
+            返回一个操作失败的值
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Failed(System.String,System.Object)">
+            <summary>
+            返回一个操作失败的值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Response.ResponseResult.Success(System.Object,System.String)">
+            <summary>
+            返回成功的返回值
+            </summary>
+            <param name="data"></param>
+            <param name="msg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetLatitude(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取精度
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetLongitude(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取维度
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetProvince(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取省份code
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetCity(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取城市code
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetAvaliableCity(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            换取用户城市
+            根据GetCity, GetLocalCity判断
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetArea(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取区域code
+            </summary>
+            <param name="request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetDevice(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取设备id
+            </summary>
+            <param name="request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.SetProvince(Microsoft.AspNetCore.Http.HttpResponse,System.String,System.String)">
+            <summary>
+            设置省的值
+            </summary>
+            <param name="response"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.SetCity(Microsoft.AspNetCore.Http.HttpResponse,System.String,System.String)">
+            <summary>
+            设置城市的值
+            </summary>
+            <param name="response"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.SetArea(Microsoft.AspNetCore.Http.HttpResponse,System.String,System.String)">
+            <summary>
+            设置城市的值
+            </summary>
+            <param name="response"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetLocalCity(Microsoft.AspNetCore.Http.HttpRequest,System.String)">
+            <summary>
+            获取当前城市code
+            </summary>
+            <param name="Request"></param>
+            <param name="def"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.SetLocalCity(Microsoft.AspNetCore.Http.HttpResponse,System.String,System.String)">
+            <summary>
+            设置城市的值
+            </summary>
+            <param name="response"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sxb.Api.Common.CookieDataHelper.GetAllCookies(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获取页面中所有的cookie值
+            </summary>
+            <param name="httpRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sxb.Api.Utils.PrivateSetterContractResolver">
+            <summary>
+            json反序列化可以序列化私有方法
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.Utils.UA.PC">
+            <summary>
+            电脑网页
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.Utils.UA.Mobile">
+            <summary>
+            手机网页
+            </summary>
+        </member>
+        <member name="F:Sxb.Api.Utils.UA.WeChat">
+            <summary>
+            微信
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.CommentVo.CommentAndCommentReply">
+            <summary>
+            点评和回复
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentAndCommentReply.commentModels">
+            <summary>
+            点评实体集合
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentAndCommentReply.commentReplyModels">
+            <summary>
+            点评回复集合
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.CommentVo.CommentModel">
+            <summary>
+            点评详情
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.Id">
+            <summary>
+            点评id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.SchoolId">
+            <summary>
+            学校ID
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.SchoolSectionId">
+            <summary>
+            学校学部ID
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.UserId">
+            <summary>
+            评论者ID
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.Content">
+            <summary>
+            点评内容
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.ReplyCount">
+            <summary>
+            回复数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.LikeCount">
+            <summary>
+            点赞数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.IsAnony">
+            <summary>
+            是否匿名
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.RumorRefuting">
+            <summary>
+            是否辟谣
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.AddTime">
+            <summary>
+            写入日期
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.IsAttend">
+            <summary>
+            是否为过来人
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.IsEssence">
+            <summary>
+            是否为精华
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.CommentImagerCount">
+            <summary>
+            图片数量
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.UserInfoModel">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.CommentReplyModel">
+            <summary>
+            点评回复
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentModel.SchoolModel">
+            <summary>
+            学校信息
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.CommentVo.CommentReplyModel">
+            <summary>
+            点评回复
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.Id">
+            <summary>
+            回复id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.SchoolCommentId">
+            <summary>
+            点评id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.ReplyId">
+            <summary>
+            回复子级id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.IsSchoolPublish">
+            <summary>
+            是否学校发布
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.IsAttend">
+            <summary>
+            是否就读
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.IsAnony">
+            <summary>
+            是否匿名
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.RumorRefuting">
+            <summary>
+            是否辟谣
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.Content">
+            <summary>
+            回复内容
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.IsTop">
+            <summary>
+            是否置顶
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.ReplyCount">
+            <summary>
+            回复总数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.LikeCount">
+            <summary>
+            点赞数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.CreateTime">
+            <summary>
+            写入时间 
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.CommentVo.CommentReplyModel.UserInfoModel">
+            <summary>
+            写回复用户
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.QuestionVo.AnswerModel">
+            <summary>
+            问答实体
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.AnswerModel.Id">
+            <summary>
+            问答id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.AnswerModel.AnswerContent">
+            <summary>
+            问答详情
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.AnswerModel.UserName">
+            <summary>
+            用户昵称
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.AnswerModel.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.QuestionVo.QuestionAndAnswer">
+            <summary>
+            问题与回答
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionAndAnswer.questionModels">
+            <summary>
+            问题列表
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionAndAnswer.answerModels">
+            <summary>
+            回答列表
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.QuestionVo.QuestionModel">
+            <summary>
+            问题实体
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.QuestionId">
+            <summary>
+            问题id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.SchoolSectionId">
+            <summary>
+            学校分部id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.QuestionContent">
+            <summary>
+            问题内容
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.CurrentQuestionAnswerTotal">
+            <summary>
+            问题回答总数
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.SectionQuestionTotal">
+            <summary>
+            分部下总数量
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.CreateTime">
+            <summary>
+            问题写入时间
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.QuestionVo.QuestionModel.AnswerModels">
+            <summary>
+            回答列表
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.SchoolVo.SchoolModel">
+            <summary>
+            学校信息实体
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.SchoolVo.SchoolModel.SchoolId">
+            <summary>
+            学校id
+            </summary>
+        </member>
+        <member name="P:Sxb.Api.ViewDto.SchoolVo.SchoolModel.SchoolName">
+            <summary>
+            学校名称
+            </summary>
+        </member>
+        <member name="T:Sxb.Api.ViewDto.UserInfoVo.UserInfoModel">
+            <summary>
+            用户信息
+            </summary>
+        </member>
+    </members>
+</doc>

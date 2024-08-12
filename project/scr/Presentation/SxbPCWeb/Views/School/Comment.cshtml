@@ -1,0 +1,218 @@
+﻿@{
+    Layout = "layout_school";
+
+    var schoolName = ViewBag.SchoolCard.SchoolName;
+    ViewBag.Title = $"{schoolName}评价_怎么样_评分";
+    ViewBag.Page_keywords = $"{schoolName}评价,{schoolName}怎么样,{schoolName}评分";
+    ViewBag.Page_Description = string.IsNullOrWhiteSpace(ViewBag.Page_Description) ? ViewBag.Page_keywords : ViewBag.Page_Description;
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-details.css">
+}
+
+
+<div class="left-content d-block">
+
+    @if (ViewBag.CommentTotal[0].Total > 0)
+    {
+        int SelectedTab = ViewBag.SelectedTab;
+
+        @if (ViewBag.CommentTotal[SelectedTab - 1].Total > 0)
+        {
+            <!-- 有评论 -->
+            <div class="comprehensive">
+                <a href="@Url.Action("Write", "Comment", new { eid = @ViewBag.SchoolCard.ExtId })" class="ask-questions font-14" title="马上点评，分享心得" rel="nofollow">马上点评，分享心得</a>
+                <h2 class="font-weight-bold big-star-@(ViewBag.SchoolCard.Stars)">综合评价：</h2>
+                <ul class='comprehensive-list font-15 float-left'>
+                    @if ((ViewBag.SchoolScore?.TeachStar + ViewBag.SchoolScore?.HardStar + ViewBag.SchoolScore?.EnvirStar + ViewBag.SchoolScore?.ManageStar + ViewBag.SchoolScore?.LifeStar) > 0)
+                    {
+                        <li>师资 <span>@(ViewBag.SchoolScore.TeachStar)星</span></li>
+                        <li>硬件 <span>@(ViewBag.SchoolScore.HardStar)星</span></li>
+                        <li>环境 <span>@(ViewBag.SchoolScore.EnvirStar)星</span></li>
+                        <li>校风 <span>@(ViewBag.SchoolScore.ManageStar)星</span></li>
+                        <li>生活 <span>@(ViewBag.SchoolScore.LifeStar)星</span></li>
+                    }
+                    else
+                    {
+                        <li>师资 <span>--</span></li>
+                        <li>硬件 <span>--</span></li>
+                        <li>环境 <span>--</span></li>
+                        <li>校风 <span>--</span></li>
+                        <li>生活 <span>--</span></li>
+                    }
+                </ul>
+            </div>
+            <div class="parents-comments-list school-review-list-content">
+                @*<div class="comments-tab">
+                        @foreach (var item in ViewBag.CommentTotal)
+                        {
+                            if (item.SchoolSectionId != default(Guid))
+                            {
+                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="@Url.Action("Comment", "School", new { tab = item.TotalTypeNumber })">@item.Name@("(" + item.Total + ")")</a>
+                            }
+                            else
+                            {
+                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="@Url.Action("Comment", "School", new { tab = item.TotalTypeNumber })">@item.TotalType@("(" + item.Total + ")")</a>
+                            }
+                        }
+                        <div class='clearfix'></div>
+                    </div>*@
+                @if (ViewBag.HotCommentList != null && ViewBag.HotCommentList.Count > 0)
+                {
+                    <h2 class="font-20 color-333 font-weight-bold school-review-list-hot">热门点评</h2>
+                    <ul class='comments-list school-review-list-comments'>
+                        @foreach (var comment in ViewBag.HotCommentList)
+                        {
+                            @await Html.PartialAsync("../Comment/_CommentSimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)comment)
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="guess-you-like">
+                @*<h2 class="font-20 color-333 font-weight-bold school-review-list-hot">最新点评</h2>*@
+                <h2 class="font-20 font-weight-bold color-333 school-atlas-title">
+                    最新点评
+                    <a href="/comment/school-@ViewBag.SchoolNo/" title="更多>">更多&gt;</a>
+                </h2>
+                <ul class='comments-list school-review-list-comments'>
+                    @foreach (var comment in ViewBag.NewCommentList)
+                    {
+                        @await Html.PartialAsync("../Comment/_CommentSimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)comment)
+                    }
+                </ul>
+                @if ((ViewBag.TotalPage / 10 + 1) > 1)
+                {
+                    <!--                    分页-->
+                    @*<nav class="page d-flex justify-content-end">
+                            @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                            "comment",
+                            "school",
+                            (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                            (int)ViewBag.PageSize,
+                            (int)ViewBag.PageIndex,
+                            (_this) => { return new { search = @ViewBag.KeyWords, id = ViewBag.ExtId.ToString("N"), tab = ViewBag.SelectedTab, page = _this.CurrentPage - 1 }; },
+                            (_pageItem, _this) => { return new { search = @ViewBag.KeyWords, id = ViewBag.ExtId.ToString("N"), tab = ViewBag.SelectedTab, page = _pageItem }; },
+                            (_this) => { return new { search = @ViewBag.KeyWords, id = ViewBag.ExtId.ToString("N"), tab = ViewBag.SelectedTab, page = _this.CurrentPage + 1 }; }
+                            )))
+                        </nav>*@
+                }
+            </div>
+        }
+        else
+        {
+            <!-- 无评论 -->
+            <div class="comprehensive">
+                <a href="@Url.Action("Write", "Comment", new { eid = @ViewBag.SchoolCard.ExtId })" class="ask-questions font-14" title="马上点评，分享心得">马上点评，分享心得</a>
+                <h2 class="font-weight-bold big-star-0">综合评价：</h2>
+                <ul class='comprehensive-list font-15 float-left'>
+                    <li>师资 <span>--</span></li>
+                    <li>硬件 <span>--</span></li>
+                    <li>环境 <span>--</span></li>
+                    <li>校风 <span>--</span></li>
+                    <li>生活 <span>--</span></li>
+                </ul>
+            </div>
+            <div class="parents-comments-list school-review-list-content">
+                <h3 class="font-16">
+                    共0条点评符合搜索条件
+                </h3>
+                <div class="text-center no-comment">
+                    <p class="font-14">暂无点评 <span class="font-12 d-block">换个筛选条件试试~</span></p>
+                </div>
+                @*<h3 class="font-16">
+                        其他点评
+                    </h3>*@
+                <div class="comments-tab">
+                    @foreach (var item in ViewBag.CommentTotal)
+                    {
+                        if (item.SchoolSectionId != default(Guid))
+                        {
+                            <a class="@(SelectedTab==item.TotalTypeNumber?"selected":"")" href="@Url.Action("Comment","School",new { SelectedTab = item.TotalTypeNumber})">@item.Name@("(" + item.Total + ")")</a>
+                        }
+                        else
+                        {
+                            <a class="@(SelectedTab==item.TotalTypeNumber?"selected":"")" href="@Url.Action("Comment","School",new { SelectedTab = item.TotalTypeNumber})">@item.TotalType@("(" + item.Total + ")")</a>
+                        }
+                    }
+                    <div class='clearfix'></div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+
+        <!-- 无评论 -->
+        <div class="comprehensive">
+            <a href="@Url.Action("Write", "Comment", new { eid = @ViewBag.SchoolCard.ExtId })" class="ask-questions font-14" title="马上点评，分享心得">马上点评，分享心得</a>
+            <h2 class="font-weight-bold big-star-0">综合评价：</h2>
+            <ul class='comprehensive-list font-15 float-left'>
+                <li>师资 <span>--</span></li>
+                <li>硬件 <span>--</span></li>
+                <li>环境 <span>--</span></li>
+                <li>校风 <span>--</span></li>
+                <li>生活 <span>--</span></li>
+            </ul>
+        </div>
+
+        <div class="parents-comments-list school-review-list-content">
+            <h3 class="font-16">
+                全部点评0条
+            </h3>
+            <div class="text-center no-comment have-icon">
+                <p class="font-14"><i></i><span class="font-12 d-block">马上来分享您的心得呗~</span></p>
+            </div>
+            <!--<h3 class="font-16">
+                其他点评
+            </h3>-->
+        </div>
+    }
+    @await Component.InvokeAsync("OtherSchoolExts", ViewBag.ExtId)
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+</div>
+<div class="right-list">
+    <!-- 课程卡片广告 start -->
+    <div class="course-adv-wrapper"></div>
+    <!-- 课程卡片广告 end -->
+    <!-- 广告开始 -->
+    <div class="mkt-box" id="rightBanner">
+        <div class="swiper-container swiper-mkt swiperSchoolAd" data-id="@ViewBag.SchoolCard.ExtId" alt="24" data-autos="24" id="swiperSchoolAd-24" style="height: 205px;">
+            <div class="swiper-wrapper">
+            </div>
+            <div class="swiper-pagination mkt-pagination"></div>
+        </div>
+    </div>
+    <!-- 广告结束 -->
+    <!-- 这是预约探校表单部分的开始 -->
+    @await Component.InvokeAsync("SchoolActivity", ViewBag.ExtId)
+    <!-- 这是预约探校表单部分的结束 -->
+    <div class="hot-goods"></div>
+    @await Component.InvokeAsync("OrgLesson", ViewBag.Grade)
+    @await Component.InvokeAsync("PaidQA", ViewBag.Grade)
+    @await Component.InvokeAsync("RelatedSchool", ViewBag.ExtId)
+</div>
+<!-- 举报框 -->
+@await Html.PartialAsync("Report")
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    @*<script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>*@
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+}

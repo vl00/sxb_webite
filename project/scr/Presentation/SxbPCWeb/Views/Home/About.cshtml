@@ -1,0 +1,68 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>关于我们</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/principle/principle.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>帮助中心</span>
+            </div>
+        </div>
+    </header>
+    <section class="principle-content">
+        <div class="container d-flex clearfix">
+            <div class="left-content">
+                <h4 class="font-16 ">关于我们</h4>
+                <ul>
+                    <li><a class="selecter" title="公司介绍" data-classname="introduction">公司介绍</a></li>
+                </ul>
+            </div>
+            <div class="right-content">
+                <div class="introduction">
+                    <h2 class="font-20 font-weight-bold color-333">公司介绍</h2>
+                    <p>
+                        上学帮（sxkid.com）隶属于广州市藏星网络科技有限公司，是中国学校大数据应用服务商，从学校数据到家长数据，实现了教育行业大数据闭环构建。
+                    </p>
+                    <p>
+                        作为中国教育大数据应用服务商，上学帮在大数据应用上，同时具备深度与广度的特色，在学校大数据领域深耕五年，数据覆盖中国120+个城市，50万+所学校，贯穿幼儿园、小学、初中、高中四大核心学段，涵盖公办、民办、国际学校。同时基于海量学校数据与家长需求，打造了院校库、家长口碑系统、择校评分模型、学校对比等众多产品模块，并且基于海量标签与算法精准推送给每一个用户。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @*<section class="right-bar position-fixed">
+            <ul class="font-12">
+                <li><a href="" title="工具" class="d-block">工具</a></li>
+                <li><a href="" title="客服" class="d-block">客服</a></li>
+                <li><a href="" title="反馈" class="d-block">反馈</a></li>
+                <li><a href="" title="微信" class="d-block">微信</a></li>
+            </ul>
+            <div class="back-top position-absolute font-12 font-weight-bold">TOP</div>
+        </section>*@
+
+
+    @{await Html.RenderPartialAsync("Right_bar");}
+
+    @{await Html.RenderPartialAsync("Footer"); }
+
+<script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+<script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+<script src="@(ViewBag.StaticFile)/js/common.js"></script>
+<script src="@(ViewBag.StaticFile)/js/principle/principle.js"></script>
+</body>
+
+</html>

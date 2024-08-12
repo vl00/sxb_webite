@@ -1,0 +1,52 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.ModelVo.QuestionVo>
+@{
+    Layout = null;
+}
+@if (Model.Count > 0)
+{
+    <ul class="qa-list">
+        @foreach (var qa in Model)
+        {
+            if (string.IsNullOrEmpty(qa.QuestionContent))
+            {
+                <li data-id="@qa.Id">
+                    <div class="question flex">
+                        <div class="q-icon"><span>问</span></div>
+                        <a>
+                            <h5 class="question-title">该问答内容已删除</h5>
+                        </a>
+                        <span class="flex round">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li data-id="@qa.Id">
+                    <div class="question flex">
+                        <div class="q-icon"><span>问</span></div>
+                        <a href="https://m.sxkid.com/question/questiondetail_questionid-@qa.Id.ToString("N")~">
+                            <h5 class="question-title">@qa.QuestionContent</h5>
+                            <span class="time">@qa.QuestionCreateTime</span>
+                        </a>
+                        <span class="flex round">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

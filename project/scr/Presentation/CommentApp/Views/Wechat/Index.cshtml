@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewData["Title"] = "邀请" + ViewBag.isComment + "-上学帮";
+    ViewBag.ShareTimeLineTitle = ViewBag.ShareTimeLineTitle;
+    ViewBag.ShareTitle = ViewBag.ShareTitle;
+    ViewBag.ShareDesc = ViewBag.ShareDesc;
+    ViewBag.ShareLink = ViewBag.ShareLink;
+
+    Layout = "~/Views/Layout/_layout.cshtml";
+}
+
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-success.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-success.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/invite.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment/invite.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+}
+
+<header class="header flex justify-content-between">
+    @*@if (ViewBag.isQuestion)
+        {
+            <a href="/Question/Index?SchoolId=@(ViewBag.SchoolId)" class="arrow"></a>
+        }
+        else
+        {
+            <a href="/SchoolComment/Index?SchoolId=@(ViewBag.SchoolId)" class="arrow"></a>
+        }*@
+    <a class="arrow"></a>
+    <span class="header-title">邀请@(ViewBag.isComment)-上学帮</span>
+    <span></span>
+    <span class="btn-list flex">
+        @*<i class="header-icon @(ViewBag.isCollected ? "collection" : "")"></i>
+            <a href="/SchoolSearch/Index?isComment=true&BackSchoolId=@ViewBag.SchoolId.Id" class="header-icon search"></a>
+            <a href="/Wechat?type=1&SchoolId=@ViewBag.SchoolId.Id" class="header-icon share"></a>*@
+    </span>
+</header>
+
+<div class="mt">
+    <section class="invite-user-list" style="display:@(ViewBag.InviteSuccess.Count > 0 ? "block" : "none")">
+        <div class="flex justify-content-between text-center">
+            <div data-inviteTotal="@ViewBag.InviteSuccess.Count" class="user-num">已成功邀请<span></span>人</div>
+            <ul class="user-list flex">
+                @if (ViewBag.InviteSuccess.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.InviteSuccess.Count; i++)
+                    {
+                        if (i < 5)
+                        {
+                            <li><img src="@ViewBag.InviteSuccess[i]" /></li>
+                        }
+                    }
+
+                    if (ViewBag.InviteSuccess.Count > 5)
+                    {
+                        <li class="moreUser exceed">+<span>@(ViewBag.InviteSuccess.Count - 5)</span></li>
+                    }
+                    else
+                    {
+                        <li style="display:none;" class="moreUser exceed">+<span></span></li>
+                    }
+                }
+                else
+                {
+                    <li style="display:none;" class="moreUser exceed">+<span></span></li>
+                }
+            </ul>
+        </div>
+    </section>
+</div>
+
+
+@if (ViewBag.isQuestion && ViewBag.isQuestionAnswer)
+{
+    <section class="qa-success text-center">
+        <div>
+            <h5><span class="round"><i></i></span>成功提问</h5>
+            <div class="share-tips">你可以邀请下面的达人来更快获得回答</div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="invite text-center">
+        <div>
+            <h5 class="title">- 邀请好友来<span>@(ViewBag.isComment)</span>-</h5><!-- 点评、回复、提问、回答 -->
+            <ul class="icon-list flex justify-content-around">
+                <!--<a class="header-icon share" data-title="青花瓷【测试】" data-content="一曲青花瓷送给大家" data-url="/Article/Detail/e8a879f0-c6bb-4325-a739-625fa590c5c6" data-logo="https%3A%2F%2Fcdn.sxkid.com%2Fimages%2Flogo_share_v4.png"></a>-->
+                <li class="wechat"><a class="icon header-icon share" data-sharetype="0" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                <li class="friends-circle"><a class="icon header-icon share" data-sharetype="1" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                <li class="qq"><a class="icon header-icon share" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                <li class="weibo"><a class="icon header-icon share" data-sharetype="2" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+            </ul>
+        </div>
+    </section>
+}
+
+@if (ViewBag.isQuestion)
+{
+    @if (!ViewBag.isQuestionAnswer)
+    {
+        <section>
+            <h5 class="content-title">推荐</h5>
+            <ul class="quesionlist invite-list"></ul>
+            <div class="check-more text-center">
+                <a>查看更多></a>
+            </div>
+        </section>
+    }
+
+    <!-- 如果是提问/回答 就显示 -->
+    <section class="other-recommend">
+        <h5 class="title">猜你想答</h5>
+        <ul class="question-list"></ul>
+    </section>
+
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="/Report">举报</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </section>
+    <section class="reply-box">
+        <div class="flex justify-content-between btn-list">
+            <span id="reply-close" class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>
+                }
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+}
+else
+{
+    <section>
+        <h5 class="content-title">推荐</h5>
+        <ul class="commentlist invite-list"></ul>
+    </section>
+}
+
+<div class="curtain"></div>
+<div class="mask">
+    <div class="parentBox">
+        <div style="height:260px"><img class="share_image" src="~/imgs/share/shareIndex.png" /></div>
+        <div class="share_content">请马上点击右上角分享给朋友</div>
+    </div>
+</div>
+
+
+@section script
+{
+    <script>
+        var currentSchoolSectionId = '@ViewBag.SchoolId'
+        var isQuestion = @(ViewBag.isQuestion == true ? 1 : 0)
+        var operation =  @(ViewBag.Operation)
+        var messagePush = '@ViewBag.PushMessage'
+        var DataSource = '@ViewBag.DataSource'
+        var type = @(ViewBag.type)
+        var DataType = @(ViewBag.DataType)
+        var IsAnony =  '@(ViewBag.IsAnony)'
+    </script>
+    <script src="@ViewBag.StaticFile/js/common/recommend/recommend-user.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/invite.js"></script>
+    <script src="@ViewBag.StaticFile/js/wechat.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js?v=0.05325821"></script>
+}

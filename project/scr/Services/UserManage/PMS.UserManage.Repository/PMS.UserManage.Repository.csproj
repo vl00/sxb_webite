@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\OperationPlateform\PMS.OperationPlateform.Repository\PMS.OperationPlateform.Repository.csproj" />
+    <ProjectReference Include="..\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\ProductManagement.Framework.MSSQLAccessor.Plus\ProductManagement.Framework.MSSQLAccessor.Plus.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46" />
+  </ItemGroup>
+</Project>

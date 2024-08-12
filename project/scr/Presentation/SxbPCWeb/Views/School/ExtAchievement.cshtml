@@ -1,0 +1,546 @@
+﻿@using iSchool;
+@using PMS.School.Infrastructure;
+@using SchoolGrade = PMS.School.Domain.Common.SchoolGrade;
+@using SchoolType = PMS.School.Domain.Common.SchoolType;
+@{
+    ViewBag.vCustomContentDiv = true;
+    Layout = "layout_school";
+    var schFType = (SchFType0)ViewBag.SchFType;
+
+    ViewBag.Title = Has_iRanks() ? ViewBag.SchoolName0+"-上学帮" : $"{ViewBag.SchoolName0}高中毕业";
+
+    var graduationDto = ViewBag.GraduationDto as PMS.School.Domain.Dtos.GraduationDto;
+    var dict = graduationDto.ToDict();
+
+    object GetKv0(IDictionary<string, object> kvs, string k)
+    {
+        return kvs.TryGetValue(k, out var v) ? v : null;
+    }
+
+    IDictionary<string, object> CopyAndSet(IDictionary<string, object> kvs, string k, object v)
+    {
+        var _kvs = new Dictionary<string, object>(kvs);
+        _kvs[k] = v;
+        return _kvs;
+    }
+
+    bool Has_iRanks() => schFType.Grade == (byte)SchoolGrade.SeniorMiddleSchool && schFType.Type == (byte)SchoolType.International;
+
+    if (dict?.Any() == true)
+    {
+        dict.Remove("Sid");
+        dict.Remove("Extid");
+    }
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-graduation.css">
+    <style>
+        .hiden {
+            display: none;
+        }
+
+        .g2-not-found {
+            /*background: white; */
+            width: auto;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .g2-not-found-content {
+            text-align: center;
+            margin: 0 auto;
+            /* background: white; */
+            top: 45%;
+            position: relative;
+        }
+
+        .g2-list {
+            min-height: 360px;
+        }
+
+        .domestic .pager-div {
+            display: flex;
+            justify-content: center;
+        }
+
+        .domestic .page {
+            margin: 0 auto;
+            bottom: 32px;
+            left: 0;
+            right: 0;
+        }
+    </style>
+}
+
+@if (true)
+{
+    <pre style="display:none;" title="iRanks">@(((object)ViewBag.iRanks).ToJson())</pre>
+    <pre style="display:none;" title="LRanks">@(((object)ViewBag.LRanks).ToJson())</pre>
+    <pre style="display:none;" title="graduationDto dict">@(dict.ToJson())</pre>
+    <text>
+        <div class="graduation-more">
+            <div class="graduation-tab d-flex justify-content-between">
+                <div>
+                    @if (Has_iRanks())
+                    {
+                        <a class="@(Equals(GetKv0(dict, nameof(graduationDto.G)) ?? 1, 1) ? "graduation-tab-select" : "")" href="/school-@ViewBag.SchoolNo/extachievement/?g=1" data-classification="international">国际</a>
+                        <a class="@(Equals(GetKv0(dict, nameof(graduationDto.G)) ?? 1, 2) ? "graduation-tab-select" : "")" href="/school-@ViewBag.SchoolNo/extachievement/?g=2" data-classification="domestic">国内</a>
+                    }
+                    else
+                    {
+                        <a class="graduation-tab-select hiden" data-classification="domestic">国内</a>
+                    }
+                    <span>年份：</span>
+                    <div class="year">
+                        <a title="年份">@(ViewBag.Year != null ? $"{ViewBag.Year}年" : "")</a>
+                        <div class="select-year">
+                            <ul>
+                                @foreach (var year in (ViewBag.Years as int[] ?? new int[0]))
+                                {
+                                    <li>
+                                        <a title="@(year)年" href="@(Url.Action("ExtAchievement", "School", CopyAndSet(dict, nameof(graduationDto.Y), year)))">@(year)</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    @if (Equals(GetKv0(dict, nameof(graduationDto.G)) ?? (Has_iRanks() ? 1 : 2), 1))
+                    {
+                        <label class="bui-radios-label bui-radios-anim">
+                            @if (Equals(GetKv0(dict, nameof(graduationDto.P)) ?? 0, 1))
+                            {
+                                <input type="checkbox" checked="checked">
+                            }
+                            else
+                            {
+                                <input type="checkbox">
+                            }
+                            <i class="bui-radios"></i>屏蔽无数据项
+                        </label>
+                    }
+                    @if (Equals(GetKv0(dict, nameof(graduationDto.G)) ?? (Has_iRanks() ? 1 : 2), 2))
+                    {
+                        <div class="domestic arrangement">
+                            <span>排序方式：</span>
+                            <div class="arrangement-tab">
+                                <a title="年份">@("录取人数".If((graduationDto.O2 ?? 1) == 1))@("拼音排名".If((graduationDto.O2 ?? 1) == 2))</a>
+                                <div class="select-arrangement">
+                                    <ul>
+                                        @if (ViewBag.LRanks is ValueTuple<(Guid SchoolId, string SchoolName, double Count)[], int> _lranks && _lranks.Item1.Length > 0)
+                                        {
+                                            <li><a title="录取人数" data-o2="1">录取人数</a></li>
+                                            <li><a title="拼音排名" data-o2="2">拼音排名</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="tab-input position-relative">
+                    <input type="text" placeholder="请输入您心仪的大学" class="font-12" id="tabInputVal" value="@(GetKv0(dict, nameof(graduationDto.SF)))">
+                    <div class="graduation-search position-absolute hiden">
+                        <ul>
+                            @*<li>1</li>
+                                <li>2</li>
+                                <li>3</li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @* 国际3榜 *@
+            @if (Equals(GetKv0(dict, nameof(graduationDto.G)) ?? (Has_iRanks() ? 1 : 2), 1))
+            {
+                <div class="international">
+                    <div class="d-flex justify-content-between text-center rank-content">
+                        <div>
+                            <h3 class="font-20 font-weight-bold">QS世界大学排名</h3>
+                            <div class="rank-title d-flex justify-content-between font-weight-bold font-14">
+                                <span class="text-left">排名</span>
+                                <span class="text-left">学校名称</span>
+                                <span class="text-right">录取人数</span>
+                            </div>
+                            @if (ViewBag.iranks1 is ValueTuple<PMS.School.Domain.Dtos.AchievementInfos.RankItems.RankItem[], int> _iranks1)
+                            {
+                                var (iranks1, total) = _iranks1; //QS世界大学排名
+                                <text>
+                                @*<!--如果不存在排名把d-none打开-->*@
+                                @if (!string.IsNullOrEmpty(graduationDto.SF) && iranks1.Length <= 0)
+                                {
+                                    <p class="no-rank">该校未上此榜单！</p>
+                                }
+                                else if (string.IsNullOrEmpty(graduationDto.SF) && iranks1.Length <= 0)
+                                {
+                                    <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                }
+                                else
+                                {
+                                    <ul class="font-13">
+                                        @for (var i = 0; i < iranks1.Length; i++)
+                                        {
+                                            var rank = iranks1[i];
+                                            var b123 = rank.Sort == 1 || rank.Sort == 2 || rank.Sort == 3;
+                                            <text>
+                                            <li class="rank-list @(!string.IsNullOrEmpty(graduationDto.SF) && rank.SchoolName.IndexOf(graduationDto.SF) > -1 ? "search-school" : "")">
+                                                <a class="d-flex justify-content-between" title="@(rank.SchoolName)">
+                                                    @*<i class="num rank-1 rank-2 rank-3" @(rank.SchoolId>1</i>*@
+                                                    <i class="num @(b123 ? $"rank-{i + 1}" : "")">@(rank.Sort)</i><b>@(rank.SchoolName)</b><span>@(rank.Count)人</span>
+                                                </a>
+                                            </li>
+    </text>
+}
+                                    </ul>
+                                    @if (true)
+                                    {
+                                        await Html.RenderPartialAsync("P_pager4ExtAchievement", new Dictionary<string, object>
+                                        {
+                                            ["PageIndex"] = (graduationDto.I1 ?? 1),
+                                            ["PageSize"] = 10,
+                                            ["Total"] = total,
+                                            ["GetpHref"] = new Func<int, string>(_pi => Url.Action("ExtAchievement", "School", CopyAndSet(dict, nameof(graduationDto.I1), _pi))),
+                                        });
+                                    }
+                                }
+                                </text>
+                            }
+                            else
+                            {
+                                <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                            }
+                        </div>
+                        <div>
+                            <h3 class="font-20 font-weight-bold">USNEWS世界大学排名</h3>
+                            <div class="rank-title d-flex justify-content-between font-weight-bold font-14">
+                                <span class="text-left">排名</span>
+                                <span class="text-left">学校名称</span>
+                                <span class="text-right">录取人数</span>
+                            </div>
+                            @if (ViewBag.iranks2 is ValueTuple<PMS.School.Domain.Dtos.AchievementInfos.RankItems.RankItem[], int> _iranks2)
+                            {
+                                var (iranks2, total) = _iranks2; //USNEWS世界大学排名
+                                <text>
+                                    @*<!--如果不存在排名把d-none打开-->*@
+                                    @if (!string.IsNullOrEmpty(graduationDto.SF) && iranks2.Length <= 0)
+                                    {
+                                        <p class="no-rank">该校未上此榜单！</p>
+                                    }
+                                    else if (string.IsNullOrEmpty(graduationDto.SF) && iranks2.Length <= 0)
+                                    {
+                                        <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                    }
+                                    else
+                                    {
+                                        <ul class="font-13">
+                                            @for (var i = 0; i < iranks2.Length; i++)
+                                            {
+                                                var rank = iranks2[i];
+                                                var b123 = rank.Sort == 1 || rank.Sort == 2 || rank.Sort == 3;
+                                                <text>
+                                                <li class="rank-list @(!string.IsNullOrEmpty(graduationDto.SF) && rank.SchoolName.IndexOf(graduationDto.SF) > -1 ? "search-school" : "")">
+                                                    <a class="d-flex justify-content-between" title="@(rank.SchoolName)">
+                                                        @*<i class="num rank-1 rank-2 rank-3" @(rank.SchoolId>1</i>*@
+                                                        <i class="num @(b123 ? $"rank-{i + 1}" : "")">@(rank.Sort)</i><b>@(rank.SchoolName)</b><span>@(rank.Count)人</span>
+                                                    </a>
+                                                </li>
+                                </text>
+                            }
+                                        </ul>
+                                        @if (true)
+                                        {
+                                            await Html.RenderPartialAsync("P_pager4ExtAchievement", new Dictionary<string, object>
+                                            {
+                                                ["PageIndex"] = (graduationDto.I2 ?? 1),
+                                                ["PageSize"] = 10,
+                                                ["Total"] = total,
+                                                ["GetpHref"] = new Func<int, string>(_pi => Url.Action("ExtAchievement", "School", CopyAndSet(dict, nameof(graduationDto.I2), _pi))),
+                                            });
+                                        }
+                                    }
+                                    </text>
+                                }
+                                else
+                                {
+                                    <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                }
+                        </div>
+                        <div>
+                            <h3 class="font-20 font-weight-bold">泰晤士高等教育世界大学排名</h3>
+                            <div class="rank-title d-flex justify-content-between font-weight-bold font-14">
+                                <span class="text-left">排名</span>
+                                <span class="text-left">学校名称</span>
+                                <span class="text-right">录取人数</span>
+                            </div>
+                            @if (ViewBag.iranks3 is ValueTuple<PMS.School.Domain.Dtos.AchievementInfos.RankItems.RankItem[], int> _iranks3)
+                            {
+                                var (iranks3, total) = _iranks3; //泰晤士高等教育世界大学排名
+                                <text>
+                                    @*<!--如果不存在排名把d-none打开-->*@
+                                    @if (!string.IsNullOrEmpty(graduationDto.SF) && iranks3.Length <= 0)
+                                    {
+                                        <p class="no-rank">该校未上此榜单！</p>
+                                    }
+                                    else if (string.IsNullOrEmpty(graduationDto.SF) && iranks3.Length <= 0)
+                                    {
+                                        <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                    }
+                                    else
+                                    {
+                                        <ul class="font-13">
+                                            @for (var i = 0; i < iranks3.Length; i++)
+                                            {
+                                                var rank = iranks3[i];
+                                                var b123 = rank.Sort == 1 || rank.Sort == 2 || rank.Sort == 3;
+                                                <text>
+                                                <li class="rank-list @(!string.IsNullOrEmpty(graduationDto.SF) && rank.SchoolName.IndexOf(graduationDto.SF) > -1 ? "search-school" : "")">
+                                                    <a class="d-flex justify-content-between" title="@(rank.SchoolName)">
+                                                        @*<i class="num rank-1 rank-2 rank-3" @(rank.SchoolId>1</i>*@
+                                                        <i class="num @(b123 ? $"rank-{i + 1}" : "")">@(rank.Sort)</i><b>@(rank.SchoolName)</b><span>@(rank.Count)人</span>
+                                                    </a>
+                                                </li>
+                                </text>
+                            }
+                                        </ul>
+                                        @if (true)
+                                        {
+                                            await Html.RenderPartialAsync("P_pager4ExtAchievement", new Dictionary<string, object>
+                                            {
+                                                ["PageIndex"] = (graduationDto.I3 ?? 1),
+                                                ["PageSize"] = 10,
+                                                ["Total"] = total,
+                                                ["GetpHref"] = new Func<int, string>(_pi => Url.Action("ExtAchievement", "School", CopyAndSet(dict, nameof(graduationDto.I3), _pi))),
+                                            });
+                                        }
+                                    }
+                                    </text>
+                                }
+                                else
+                                {
+                                    <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                }
+                        </div>
+                    </div>
+                </div>
+            }
+            @* 国内榜 *@
+            @if (Equals(GetKv0(dict, nameof(graduationDto.G)) ?? (Has_iRanks() ? 1 : 2), 2))
+            {
+                <div class="domestic">
+                    @if (ViewBag.LRanks is ValueTuple<(Guid SchoolId, string SchoolName, double Count)[], int> _lranks)
+                    {
+                        var (lranks, total) = _lranks;
+                        <text>
+                            @if (!string.IsNullOrEmpty(graduationDto.SF) && lranks.Length <= 0)
+                            {
+                                <div class="g2-not-found">
+                                    <div class="g2-not-found-content">
+                                        @* no-rank *@
+                                        <p>查无此学校！</p>
+                                        <p>换个学校名称试试呗~</p>
+                                    </div>
+                                </div>
+                            }
+                            else if (string.IsNullOrEmpty(graduationDto.SF) && lranks.Length <= 0)
+                            {
+                                <div class="g2-not-found">
+                                    <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                                </div>
+                            }
+                            else
+                            {
+                                var lranks123 = Enumerable.Range(0, 30).Aggregate(new[]
+                                {
+                        new (Guid SchoolId, string SchoolName, double Count)[10],
+                        new (Guid SchoolId, string SchoolName, double Count)[10],
+                        new (Guid SchoolId, string SchoolName, double Count)[10],
+                    }, (arrs, i) =>
+                                                                                        {
+                                                                                            //if (i < lranks.Length) arrs[i % 3][i / 3] = lranks[i]; //横
+                                                                                            if (i < lranks.Length) arrs[i / 10][i % 10] = lranks[i]; //竖
+                                                                                            return arrs;
+                                                                                        });
+                                <text>
+                                <div class="d-flex justify-content-between g2-list">
+                                    @foreach (var rrank in lranks123)
+                                    {
+                                        <ul>
+                                            @foreach (var rank in rrank)
+                                            {
+                                                @if (rank.SchoolId != Guid.Empty)
+                                                {
+                                                    <li class="@(!string.IsNullOrEmpty(graduationDto.SF) && rank.SchoolName.IndexOf(graduationDto.SF) > -1 ? "search-school" : "")">
+                                                        <a class="d-flex justify-content-between" title="@(rank.SchoolName)">
+                                                            <span>@(rank.SchoolName)</span><i>@(rank.Count)人</i>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                        </text>
+                        <div class="pager-div">
+                            @if (true)
+                            {
+                                await Html.RenderPartialAsync("P_pager4ExtAchievement", new Dictionary<string, object>
+                                {
+                                    ["PageIndex"] = (graduationDto.II1 ?? 1),
+                                    ["PageSize"] = 30,
+                                    ["Total"] = total,
+                                    ["GetpHref"] = new Func<int, string>(_pi => Url.Action("ExtAchievement", "School", CopyAndSet(dict, nameof(graduationDto.II1), _pi))),
+                                });
+                            }
+                        </div>
+                    }
+                            </text>
+                        }
+                        else
+                        {
+                            <div class="g2-not-found">
+                                <div class="dynamic-not-data font-14">暂未收录当前学校的相关毕业去向</div>
+                            </div>
+                        }
+                </div>
+            }
+        </div>
+        </text>
+        @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+        @*导航栏*@
+        await Html.RenderPartialAsync("QuickNavigation");
+    }
+
+@section script{
+    @*<script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailGraduation.js"></script>*@
+    <script>
+
+        $(function () {
+            $('div.' + $('a.graduation-tab-select').data('classification')).show();
+            $('a.hiden').hide();
+
+            $('.year').on('click', function () {
+                $('.select-year').toggle();
+            });
+
+            //点击 国际 屏蔽无数据项
+            $('.bui-radios-label').one('click', function () {
+                var url = location.href;
+                console.log('click to change url with graduationDto.P');
+                var p = $(this).find(':checkbox').prop('checked') ? 0 : 1;
+                url = replaceUrl(url, 'p', p);
+                url = replaceUrl(url, 'i1');
+                url = replaceUrl(url, 'i2');
+                url = replaceUrl(url, 'i3');
+                location.href = url;
+            });
+
+            //输入搜索框
+            (function ($, doct, window) {
+                var time0;
+
+                doct.on('keyup', '.tab-input', function (e) {
+                    e = e || window.event;
+                    if (e && (e.keyCode == 13 || e.key == 'Enter')) {
+                        on_search($('.graduation-search:visible ul li').eq(0).html() || $(this).find(':text').val());
+                    }
+                });
+                doct.on('click', '.tab-input', function (e) {
+                    var ele = $(this), p = ele.offset(), ew = ele.outerWidth(), eh = ele.outerHeight();
+                    var c = { width: 20, height: 20, dw: 4, dh: 4 };
+                    if (e.pageX < (p.left + ew - c.width - c.dw * 2) || e.pageX > (p.left + ew - c.dw)) return;
+                    if (e.pageY < (p.top + c.dh) || e.pageY > (p.top + eh - c.dh)) return;
+                    on_search($('.graduation-search:visible ul li').eq(0).html() || $(this).find(':text').val());
+                });
+
+                $('#tabInputVal').bind('input propertychange', function (e) {
+                    if (time0 === undefined) time0 = +new Date();
+                    else {
+                        var now = +new Date();
+                        if ((now - time0) / 1000 <= 1.2) return;
+                        time0 = now;
+                    }
+                    console.log('input at ' + time0);
+                    var o = {};
+                    o.txt = $(this).val();
+                    o.grade = '@schFType.Grade';
+                    o.sid = '@ViewBag.Sid';
+                    o.eid = '@ViewBag.ExtId';
+                    o.g = '@(graduationDto.G ?? (Has_iRanks() ? 1 : 2))';
+                    o.year = $('.year a').html().replace('年', '');
+                    $.post('/school/Autosearch4Achievement', o, function (res) {
+                        if (res.succeed) {
+                            $('.graduation-search ul').html(render_ulli(res));
+                            $('.graduation-search').show();
+                        } else {
+                            $('.graduation-search ul').html('');
+                            $('.graduation-search').hide();
+                        }
+                    });
+                });
+
+                $(document).on('click', '.graduation-search ul li', function () {
+                    on_search($(this).html());
+                });
+
+                function on_search(txt) {
+                    console.log('click to change url with graduationDto.SF = ' + txt);
+                    var url = location.href;
+                    url = replaceUrl(url, 'sf', txt);
+                    url = replaceUrl(url, 'i1');
+                    url = replaceUrl(url, 'i2');
+                    url = replaceUrl(url, 'i3');
+                    url = replaceUrl(url, 'ii1');
+                    location.href = url;
+                }
+
+                function render_ulli(res) {
+                    var str = '';
+                    for (var i = 0, len = (res.data && res.data.length); i < len; i++) {
+                        str += '<li>' + res.data[i].item2 + '</li>';
+                    }
+                    return str;
+                }
+            })($, $(document), window);
+
+            //国内排序方式
+            $('.arrangement-tab').on('click', function () {
+                $('.select-arrangement').toggle();
+            });
+            $('.select-arrangement a[data-o2]').on('click', function () {
+                $('.select-arrangement').toggle();
+                location.href = replaceUrl(location.href, 'o2', $(this).data().o2);
+            });
+        });
+
+        @if (Equals(ViewBag.rechangeUrl, true))
+        {
+            <text>
+        $(function () {
+            var url = location.href;
+            url = replaceUrl(url, 'id');
+            @foreach (var kv in dict)
+            {
+                @:url = replaceUrl(url, '@kv.Key.ToLower()', '@(!(kv.Value?.ToString() is string str) ? "" : Guid.TryParse(str, out var _gid) ? _gid.ToString("n") : str)');
+            }
+            window.history.replaceState('', '@ViewBag.Title', url);
+        });
+            </text>
+        }
+
+        function replaceUrl(url, p, v) {
+            if (!url || !p) return url;
+            url = url.replace(new RegExp('&' + p + '=[a-zA-Z0-9%]*', 'gi'), '').replace(new RegExp(p + '=[a-zA-Z0-9%]*', 'gi'), '').replace(new RegExp('(_' + p + ')?~', 'gi'), '').replace(/~$/gi, '');
+            if (v !== undefined && v !== null && v !== '') {
+                if (url.indexOf("?") < 0) {
+                    url += "?";
+                }
+                if (url.substring(url.indexOf("?")).length > 1) {
+                    url += ('&' + p + '=' + encodeURIComponent(('' + v).replace(/[-_]/gi, ' ')));
+                } else {
+                    url += (p + '=' + encodeURIComponent(('' + v).replace(/[-_]/gi, ' ')));
+                }
+                //url += ('_' + p + '-' + encodeURIComponent(('' + v).replace(/[-_]/gi, ' ')));
+            }
+            return url;
+        }
+    </script>
+}

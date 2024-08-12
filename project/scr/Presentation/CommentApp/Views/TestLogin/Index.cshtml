@@ -1,0 +1,15 @@
+﻿@page
+@{
+}
+
+
+<form name="input" action="/TestLogin/Login" method="post">
+    <input value="@ViewBag.BackCallUrl" name="BackCallUrl" type="hidden">
+    <select name="userid">
+        @foreach (var user in ViewBag.Users)
+        {
+        <option value="@user.Id">@user.NickName</option>
+        }
+    </select>
+    <input type="submit" value="模拟登录">
+</form>

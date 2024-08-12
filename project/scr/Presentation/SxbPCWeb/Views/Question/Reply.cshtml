@@ -1,0 +1,143 @@
+﻿<html lang="zh">
+@using Sxb.PCWeb.ViewModels
+@{
+    var keywords = $"{ViewBag.ReplyDetail.UserInfoVo.NickName},{ViewBag.ReplyDetail.SchoolName} - {ViewBag.ReplyDetail.SchoolExtName},上学帮";
+    var description = ViewBag.ReplyDetail.Content;
+    var title = $"{ViewBag.ReplyDetail.UserInfoVo.NickName}对{ViewBag.ReplyDetail.SchoolName} - {ViewBag.ReplyDetail.SchoolExtName}的回答";
+
+    string schoolName = ViewBag.ReplyDetail.SchoolName + " - " + ViewBag.ReplyDetail.SchoolExtName;
+    string shortSchoolNo = ViewBag.ReplyDetail.ShortSchoolNo;
+    var headerBreadcrumb = HeaderBreadcrumb.Instance
+            .SetChild("问答", "/question")
+            .SetChild(schoolName, $"/question/school-{shortSchoolNo}")
+            .SetChild("回答详情", "#")
+            .Head;
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-details.css">
+</head>
+
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderPartial", 3)
+        </div>
+    </header>
+
+    <!-- 面包屑导航 - S -->
+    @await Html.PartialAsync("HeaderBreadcrumb", headerBreadcrumb)
+    <!-- 面包屑导航 - E -->
+
+    <section class="review-details">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                <div class="left-content d-block">
+                    <div class="comments-list">
+                        @await Html.PartialAsync("_ReplyItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionAnswerViewModel)ViewBag.ReplyDetail)
+                    </div>
+                    <div class="hot-reply">
+                        @if (ViewBag.ReplyList.Count > 0)
+                        {
+                            <h2 class="font-20 color-333 font-weight-bold h2-margin-b-14">全部回复<i>（@ViewBag.TotalPage）</i> <a href="javascript:;" class="sorting font-12">智能排序</a></h2>
+                            <ul class='comments-list'>
+                                @foreach (var reply in ViewBag.ReplyList)
+                                {
+                                    @await Html.PartialAsync("_ReplySimpleItem2.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionAnswerViewModel)reply)
+                                }
+                            </ul>
+                            @if ((ViewBag.TotalPage / 10) > 1)
+                            {
+                                <nav class="page d-flex justify-content-end">
+                                    @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                    "Reply",
+                                    "Question",
+                                    (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                    (int)ViewBag.PageSize,
+                                    (int)ViewBag.PageIndex,
+                                    (_this) => { return new { Id = @ViewBag.Id, page = _this.CurrentPage - 1 }; },
+                                    (_pageItem, _this) => { return new { Id = @ViewBag.Id, page = _pageItem }; },
+                                    (_this) => { return new { Id = @ViewBag.Id, page = _this.CurrentPage + 1 }; }
+                                    )))
+                                </nav>
+                            }
+                        }
+                        else
+                        {
+                            <div class='school-review-list-no-comment-div'>
+                                <div class="text-center no-comment have-icon">
+                                    <p class="font-14"><i></i><span class="font-14 d-block">暂无回复，快来抢沙发！</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="27" id="swiperSchoolAd-27" style="height: 205px;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 广告结束 -->
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热问学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolQuestion = (List<Sxb.PCWeb.ViewModels.School.SchoolQuestionCardViewModel>)ViewBag.HottestSchoolView;
+                                for (int i = 0; i < HotSchoolQuestion.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("_HotSchoolQuestion.cshtml", HotSchoolQuestion[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-question">
+                        <h2 class="font-18 font-weight-bold">热门问答</h2>
+                        <ul>
+                            @foreach (var item in ViewBag.HottestSchoolQuesitonView)
+                            {
+                                @await Html.PartialAsync("_HottestQuestion.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+</body>
+
+</html>

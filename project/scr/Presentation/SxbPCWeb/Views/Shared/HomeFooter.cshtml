@@ -1,0 +1,60 @@
+﻿<footer class="footer position-relative">
+       <div class="container d-flex justify-content-between clearfix">
+           <dl class="font-12">
+                <img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/qr-code.png"))" alt="二维码" class="qr-code float-left" />
+                <p class="scanning float-right">扫描下载上学帮APP <span class="consulting">随时随地了解学校咨询</span></p>
+                <!-- <p class="consulting"></p> -->
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">关于我们</dt>
+                <dd><a href="@Url.Action("About","Home")/" title="公司介绍">公司介绍</a></dd>
+                @*<dd><a href="https://itunes.apple.com/cn/app/shang-xue-bang/id996973993?l=zh&ls=1&mt=8" nofollow="" target="_blank" title="iPhone">iPhone</a></dd>
+                    <dd><a href="http://zhushou.360.cn/detail/index/soft_id/2532977" nofollow="" target="_blank" title="Android">Android</a></dd>*@
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">联系我们</dt>
+                <dd><a href="@Url.Action("Center","Home")/" title="帮助中心">帮助中心</a></dd>
+                <dd><a href="@Url.Action("HR","Home")/" title="招贤纳士">招贤纳士</a></dd>
+                <dd><a href="@Url.Action("Contact","Home")/" title="联系方式">联系方式</a></dd>
+                @*<dd><a href="" title="学校开放平台">学校开放平台</a></dd>*@
+                @*<dd><a href="" title="微信家长群">微信家长群</a></dd>*@
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">协议声明</dt>
+                <dd><a href="@Url.Action("Principle","home",new {idx=4 })" title="隐私协议">隐私协议</a></dd>
+                <dd><a href="@Url.Action("Principle","home",new {idx=3 })" title="免责声明">免责声明</a></dd>
+                <dd><a href="@Url.Action("Principle","home",new {idx=2 })" title="服务条款">服务条款</a></dd>
+            </dl>
+        </div>
+        @await Component.InvokeAsync("FootNav")
+        <div class="friendship ">
+            <p class="friendship-mail container">
+                <span class="font-14">友情链接<i>链接合作邮箱：service@sxkid.com</i></span>
+            </p>
+            <p class="friendship-mail container">
+                <span class="font-14">直播上传助手<i><a target="_blank" href="https://wk2.sxkid.com/UploadTool/html/home.html">https://wk2.sxkid.com/UploadTool/html/home.html</a></i></span>
+            </p>
+            <div class="container friendship-list d-flex clearfix">
+                <ul class="font-12">
+                    @foreach (var link in ViewBag.Links)
+                    {
+                        <li><a href="@link.Href" target="_blank" title="@link.Title">@link.Title</a></li>
+                    }
+                </ul>
+                <a href="javascript:;" class="friendship-more font-12">展开</a>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center address-photo font-12">
+            <a href=" " target="_blank" title="广州市藏星网络科技有限公司 Copyright©. All Rights Reserved" rel="nofollow">广州市藏星网络科技有限公司 Copyright©. All Rights Reserved</a >
+            <a href="https://www.amap.com/place/B0FFIG4PXR" target="_blank" title="公司总部地址：广州市海珠区新港东路1168号环汇商业广场北塔2306" rel="nofollow">公司总部地址：广州市海珠区新港东路1168号环汇商业广场北塔2306</a>
+            <span>电话：020-89623090</span>
+        </div>
+        <div class="address-photo font-12 text-center">
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010502001596" target="_blank" rel="nofollow" title="粤公网安备 44010502001596号">
+                <i class="icon-police"></i>
+                <span>粤公网安备 44010502001596号</span>
+            </a >
+            <a href="https://tsm.miit.gov.cn/dxxzsp/xkz/xkzgl/resource/qiyesearch.jsp?num=%E7%B2%A4B2-20200043&type=xuke" rel="nofollow" target="_blank" title="互联网信息服务业务经营许可证：粤B2-20200043">互联网信息服务业务经营许可证：粤B2-20200043</a >
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow" title="粤ICP备13052028号">粤ICP备13052028号</a >
+        </div>
+    </footer>

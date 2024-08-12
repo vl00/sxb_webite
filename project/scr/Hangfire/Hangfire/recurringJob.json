@@ -1,0 +1,52 @@
+﻿[
+  {
+    "job-name": "开始统计学校分数",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.StatisticalSchoolScoreJob, Hangfire.ConsoleWeb",
+    "cron-expression": "0 */1 * * *"
+  },
+  {
+    "job-name": "开始统计学校提问数",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.StatisticalQuestionJob, Hangfire.ConsoleWeb",
+    "cron-expression": "*/50 * * * *"
+  },
+  {
+    "job-name": "开始统计热评学校",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.HotCommentSchoolJob, Hangfire.ConsoleWeb",
+    "cron-expression": "15 0 */2 * *"
+  },
+  {
+    "job-name": "开始统计热问学校",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.HotQuestionSchoolJob, Hangfire.ConsoleWeb",
+    "cron-expression": "15 0 */2 * *"
+  },
+  {
+    "job-name": "开始热门点评",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.HottestCommentJob, Hangfire.ConsoleWeb",
+    "cron-expression": "15 0 */2 * *"
+  },
+  {
+    "job-name": "开始热门问答",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.HottestQuestionJob, Hangfire.ConsoleWeb",
+    "cron-expression": "15 0 */2 * *"
+  },
+  {
+    "job-name": "导入点评_问答数据",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.ImportChangeJob, Hangfire.ConsoleWeb",
+    "cron-expression": "0 0/2 * * * ?"
+  },
+  {
+    "job-name": "兼职管理系统兼职人员数据统计",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.SettlementAmountMoneyJob,Hangfire.ConsoleWeb",
+    "cron-expression": "0 0 1 * * ?"
+  },
+  {
+    "job-name": "PC官网热门口碑评分全国榜",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.PCHottestRecommendJob,Hangfire.ConsoleWeb",
+    "cron-expression": "0 0 0 * * ?"
+  },
+  {
+    "job-name": "PC官网热门评分全国榜",
+    "job-type": "Hangfire.ConsoleWeb.Jobs.PCHottestScoreSchoolJob,Hangfire.ConsoleWeb",
+    "cron-expression": "0 0 0 * * ?"
+  }
+]

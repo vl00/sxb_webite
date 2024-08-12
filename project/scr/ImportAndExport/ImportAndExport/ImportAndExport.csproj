@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspectCore.Extensions.Autofac" Version="1.3.0" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.4.0" />
+    <PackageReference Include="NPOI" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Application\PMS.CommentsManage.Application.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Repository\PMS.CommentsManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Cache.Redis\ProductManagement.Framework.Cache.RedisProfiler\ProductManagement.Framework.Cache.RedisProfiler.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.EntityFramework\ProductManagement.Framework.EntityFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Content\" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

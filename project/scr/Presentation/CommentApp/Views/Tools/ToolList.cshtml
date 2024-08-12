@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PMS.OperationPlateform.Domain.Entitys.Tools>
+@{
+    ViewBag.Title = "工具-"+ViewBag.ToolTypeName;
+
+}
+@section Styles{
+
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/tool.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">工具</span>
+    <span class=""></span>
+</header>
+
+<section class="tool-detail mt">
+    <h5 class="title">@ViewBag.ToolTypeName</h5>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li class="toolLink" data-url="@(item.LinkUrl)">@item.Name</li>
+        }
+
+    </ul>
+</section>
+
+<div class="tips text-center">
+    <p>*部分链接打开后展示效果不佳，<br>请登录<a href=" ">www.sxkid.com</a>查看。</p>
+</div>
+@section Scripts{ 
+    <script>
+        $(function () {
+            $('.toolLink').click(function () {
+                var url = $(this).data('url');
+                window.location = url;
+
+            });
+        })
+
+    </script>
+
+}

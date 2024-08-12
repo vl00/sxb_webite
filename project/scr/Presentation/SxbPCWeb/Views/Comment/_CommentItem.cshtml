@@ -1,0 +1,95 @@
+﻿@model Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel
+
+<div class="client-data">
+    <div class='photo'>
+        <img src="@Model.UserInfo?.HeadImager" alt="头像">
+    </div>
+    @if (Model.UserInfo?.IsSchool == true && Model.UserInfo?.IsTalent == true)
+    {
+        <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+             class="icon-certification">
+        <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+             class="icon-certification">
+    }
+    else if (Model.UserInfo?.IsSchool == true)
+    {
+        <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+             class="icon-certification">
+    }
+    else if (Model.UserInfo?.IsTalent == true)
+    {
+        <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+             class="icon-certification">
+    }
+</div>
+<div class="list-right">
+    <span class='client-name font-13'>@Model.UserInfo?.NickName</span>
+    <div class="client-comments-detail clearfix">
+        <div class="comments-star big-star-@(@Model.CommentScore.AggStar)">
+            @if (Model.CommentScore.IsAttend)
+            {
+                <ul class='comprehensive-list font-13 float-left'>
+                    <li>师资 <span>@(Model.CommentScore.TeachStar)星</span></li>
+                    <li>硬件 <span>@(Model.CommentScore.HardStar)星</span></li>
+                    <li>环境 <span>@(Model.CommentScore.EnvirStar)星</span></li>
+                    <li>校风 <span>@(Model.CommentScore.ManageStar)星</span></li>
+                    <li>生活 <span>@(Model.CommentScore.LifeStar)星</span></li>
+                </ul>
+            }
+            <div class="tab">
+                @if (Model.IsEssence)
+                {<span class="essence font-12">精华</span>}
+                @if (Model.CommentScore.IsAttend)
+                {<span class="person-tab d-block">过来人</span>}
+            </div>
+            @if (Model.RumorRefuting)
+            {
+                <img src="@(ViewBag.StaticFile)/imgs/detail/rumours.png" alt="辟谣" class="comments-rumours">
+            }
+        </div>
+
+        <a href="/comment/school-@Model.School.ShortSchoolNo/" title="@(Model.School?.SchoolName)" class="school-tab d-block font-16">
+            @(Model.School?.SchoolName)
+            <div class="school-score-star score-@(Model.School?.Stars)">
+                <span class=" font-12">@(Model.School?.CommentTotal)条点评</span>
+            </div>
+        </a>
+    </div>
+    <div>
+        <a href="@Url.Action("Detail","Comment",new {No = Model.No})" class="comments-content font-15 have-show-all">
+            @Model.Content
+        </a>
+    </div>
+    <div class="d-flex justify-content-end">
+        <a href="javascript:;" class='show-all-comments font-12'>显示全部</a>
+    </div>
+    @if (Model.Images != null && Model.Images.Count > 0)
+    {<div class="photo-scroll">
+            <div class="swiper-container answer-question-swiper" id='commentsPhoto'>
+                <div class="swiper-wrapper">
+                    @foreach (var img in Model.Images)
+                    {
+                        <div class="swiper-slide"><img src="@img" alt="" data-img-url="@img"></div>
+                    }
+                </div>
+                @if (Model.Images.Count > 6)
+                {
+                    <div class="swiper-button-prev swiper-button-black"></div>
+                    <div class="swiper-button-next"></div>}
+            </div>
+        </div>}
+    <div class="like">
+        <span class='font-13'>@Model.AddTime</span>
+        <a href="javascript:;" class='collection float-right iconReport selected' data-reportType="3" data-reportId="@Model.Id" title="举报">举报</a>
+        <a href="javascript:;" class='collection float-right collect  @(Model.IsCollection?"selected":"")' data-Type="3" data-Id="@Model.Id" title="收藏">收藏</a>
+        <a href="javascript:;" class="icon-like font-12 float-right @(Model.IsLike?"selected":"")" data-Id="@Model.Id" data-Type="1" title="点赞">@Model.LikeTotal</a>
+        <a href="javascript:;" class="icon-comments font-12 float-right" title="评论">@Model.ReplyTotal</a>
+    </div>
+    <div class="textarea">
+        <textarea name="reply-comment" cols="30" rows="10" maxlength="300"
+                  class="reply-textarea"></textarea>
+        <a href="javascript:;" title="发表" data-Id="@Model.Id" data-Type="1" data-ReplyId="" class="release-comments">发表</a>
+        <a href="javascript:;" title="匿名" class="comments-way">匿名</a>
+        <a href="javascript:;" title="在读" class="comments-way">在读</a>
+    </div>
+</div>   

@@ -1,0 +1,153 @@
+﻿@model IEnumerable<PMS.OperationPlateform.Domain.DTOs.ToolModuleInfoDto>
+
+
+<html lang="zh">
+
+<head>
+    <title>工具</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/principle/principle.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/tool/tool.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>工具</span>
+                <div class="select font-14">
+                    <i class="header-icon">@ViewBag.CityName</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("Index","Tools",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li><a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a></li>
+                            }
+
+                        </ul>
+                        <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <section class="tool-content">
+        <div class="container d-flex">
+            <ul class="tool-classification">
+
+                @foreach (var item in Model)
+                {
+                    if (item.SecondModule != null && item.SecondModule.Count > 0)
+                    {
+                        <li>
+                            <p class="font-14 classification-name">@item.FirstModule.Name</p>
+                            <ul class="tool-list font-12 d-flex">
+                                @foreach (var toolType in item.SecondModule)
+                                {
+                                    <li>
+                                        <a class="young-up-small" data-id="@toolType.Id" data-name="@toolType.Name">
+                                            <img src="@(toolType.Icon.Replace("file.sxkid.com","cdn.sxkid.com",StringComparison.CurrentCultureIgnoreCase))" alt="">
+                                            <span>@toolType.Name</span>
+                                        </a>
+                                    </li>
+
+
+                                }
+                            </ul>
+                        </li>
+
+
+                    }
+                }
+
+            </ul>
+        </div>
+
+    </section>
+    <div class="popup-window">
+        <div class="entrance">
+            <div class="popup-window-content">
+                <i class="delete-entrance position-absolute"></i>
+                <p class="font-17 text-center font-weight-bold">幼升小报名入口</p>
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("Right_bar")
+
+    @await Html.PartialAsync("Footer")
+    <script src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+    <script src="@ViewBag.StaticFile/js/tool/tool.js"></script>
+
+    <script>
+        $(function () {
+
+            $('.young-up-small').click(function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                $.ajax({
+                    url: '@Url.Action("GetTools","Tools")',
+                    type: 'get',
+                    data: {
+                        toolTypeId: id
+                    },
+                    success: function (res) {
+                        if (res.status == 1) {
+                            if (res.data.length == 1) {
+                                window.open(res.data[0].linkUrl);
+                            } else {
+                                var youngUpSmallParam = {
+                                    typeName: name,
+                                    toolList: []
+                                };
+
+                                $.each(res.data, function (idx, val) {
+                                    youngUpSmallParam.toolList.push({
+                                        id: val.id,
+                                        name: val.name,
+                                        url: val.linkUrl
+                                    });
+                                });
+                                youngUpSmallParam.toolList.sort(function (s, f) {
+                                    return s.name.length - f.name.length
+                                });
+
+                                console.log(youngUpSmallParam);
+                                youngUpSmall(youngUpSmallParam);
+
+                            }
+                        } else {
+                            console.log(res.msg);
+                        }
+                    }
+
+
+                })
+
+            });
+
+        });
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

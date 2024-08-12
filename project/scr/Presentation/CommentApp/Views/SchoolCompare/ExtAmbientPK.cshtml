@@ -1,0 +1,446 @@
+﻿@using PMS.School.Domain.Dtos;
+@{
+    var fscore = (List<SchoolExtScore>)ViewBag.fScore;
+    var findex = (List<SchoolExtScoreIndex>)ViewBag.fScoreIndex;
+    var lscore = (List<SchoolExtScore>)ViewBag.lScore;
+    var lindex = (List<SchoolExtScoreIndex>)ViewBag.lScoreIndex;
+    var fambient = (AmbientScore)ViewBag.fAmbient;
+    var lambient = (AmbientScore)ViewBag.lAmbient;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>周边环境PK</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/ambient.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">周边环境PK</span>
+        <span class=""></span>
+    </header>
+
+    <section class="mt">
+        @if (fscore != null && fscore.Count > 0 && lscore != null && lscore.Count > 0)
+        {
+            <div class="school-score text-center">
+                <div>
+                    <input type="hidden" data-ambient='[{"name":"周边舒适度","score":@(fscore.FirstOrDefault(p => p.IndexId == 5)?.Score ?? 0)},{"name":"周边安全性","score":@(fscore.FirstOrDefault(p => p.IndexId == 7)?.Score ?? 0)},{"name":"交通便利性","score":@(fscore.FirstOrDefault(p => p.IndexId == 6)?.Score ?? 0)}]' class="ambient-1">
+                    <input type="hidden" data-ambient='[{"name":"周边舒适度","score":@(lscore.FirstOrDefault(p => p.IndexId == 5)?.Score ?? 0)},{"name":"周边安全性","score":@(lscore.FirstOrDefault(p => p.IndexId == 7)?.Score ?? 0)},{"name":"交通便利性","score":@(lscore.FirstOrDefault(p => p.IndexId == 6)?.Score ?? 0)}]' class="ambient-2">
+                    <div class="flex score-contrast">
+                        @if (fscore != null && fscore.Count > 0)
+                        {
+                            <span>@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                        }
+                        else
+                        {
+                            <span class="not-data">暂未评分</span>
+                        }
+                    <i>周边</i>
+                        @if (lscore != null && lscore.Count > 0)
+                        {
+                            <span>@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                        }
+                        else
+                        {
+                            <span class="not-data">暂未评分</span>
+                        }
+                    </div>
+                    <div id="echearts2" style="height: 4.5rem; margin-top: .5rem;"></div>
+                </div>
+            </div>
+
+            <div class="score-list text-center bottom-border">
+                @if (fambient != null && lambient != null)
+                {
+                    <div>
+                        <div class="add-score">
+                            <h5>周边舒适度</h5>
+                            <p>加分项</p>
+                            <ul>
+                                <li class="flex">
+                                    @if (fambient.Library != 0)
+                                    {
+                                        <span>@(fambient.Library)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>图书馆</i>
+                                    @if (lambient.Library != 0)
+                                    {
+                                        <span>@(lambient.Library)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.BookMarket != 0)
+                                    {
+                                        <span>@(fambient.BookMarket)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>书店</i>
+                                    @if (lambient.BookMarket != 0)
+                                    {
+                                        <span>@(lambient.BookMarket)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Traininfo != 0)
+                                    {
+                                        <span>@(fambient.Traininfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>机构</i>
+                                    @if (lambient.Traininfo != 0)
+                                    {
+                                        <span>@(lambient.Traininfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Museum != 0)
+                                    {
+                                        <span>@(fambient.Museum)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>博物馆</i>
+                                    @if (lambient.Museum != 0)
+                                    {
+                                        <span>@(lambient.Museum)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Market != 0)
+                                    {
+                                        <span>@(fambient.Market)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>商场</i>
+                                    @if (lambient.Market != 0)
+                                    {
+                                        <span>@(lambient.Market)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.View != 0)
+                                    {
+                                        <span>@(fambient.View)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>风景区</i>
+                                    @if (lambient.View != 0)
+                                    {
+                                        <span>@(lambient.View)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.River != 0)
+                                    {
+                                        <span>@(fambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>河流</i>
+                                    @if (lambient.River != 0)
+                                    {
+                                        <span>@(lambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="subtract-score">
+                            <p>减分项</p>
+                            <ul>
+                                <li class="flex">
+                                    @if (fambient.Play != 0)
+                                    {
+                                        <span>@(fambient.Play)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>网吧</i>
+                                    @if (lambient.Play != 0)
+                                    {
+                                        <span>@(lambient.Play)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Rubbish != 0)
+                                    {
+                                        <span>@(fambient.Rubbish)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>垃圾处理</i>
+                                    @if (fambient.Rubbish != 0)
+                                    {
+                                        <span>@(lambient.Rubbish)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Poiinfo != 0)
+                                    {
+                                        <span>@(fambient.Poiinfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>在建楼房</i>
+                                    @if (lambient.Poiinfo != 0)
+                                    {
+                                        <span>@(lambient.Poiinfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="add-score">
+                            <h5>周边安全性</h5>
+                            <p>加分项</p>
+                            <ul>
+                                <li class="flex">
+                                    @if (fambient.Hospital != 0)
+                                    {
+                                        <span>@(fambient.Hospital)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>医院</i>
+                                    @if (lambient.Hospital != 0)
+                                    {
+                                        <span>@(lambient.Hospital)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Police != 0)
+                                    {
+                                        <span>@(fambient.Police)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>派出所</i>
+                                    @if (lambient.Police != 0)
+                                    {
+                                        <span>@(lambient.Police)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="subtract-score">
+                            <p>减分项</p>
+                            <ul>
+                                <li class="flex">
+                                    @if (fambient.ShoppingInfo != 0)
+                                    {
+                                        <span>@(fambient.ShoppingInfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>批发市场</i>
+                                    @if (lambient.ShoppingInfo != 0)
+                                    {
+                                        <span>@(lambient.ShoppingInfo)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Subway != 0)
+                                    {
+                                        <span>@(fambient.Subway)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>铁轨</i>
+                                    @if (lambient.Subway != 0)
+                                    {
+                                        <span>@(lambient.Subway)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.River != 0)
+                                    {
+                                        <span>@(fambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>河涌</i>
+                                    @if (lambient.River != 0)
+                                    {
+                                        <span>@(lambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.River != 0)
+                                    {
+                                        <span>@(fambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>水库</i>
+                                    @if (lambient.River != 0)
+                                    {
+                                        <span>@(lambient.River)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="add-score">
+                            <h5>交通便利性</h5>
+                            <ul>
+                                <li class="flex">
+                                    @if (fambient.Metro != 0)
+                                    {
+                                        <span>@(fambient.Metro)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>地铁线路图</i>
+                                    @if (lambient.Metro != 0)
+                                    {
+                                        <span>@(lambient.Metro)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                                <li class="flex">
+                                    @if (fambient.Bus != 0)
+                                    {
+                                        <span>@(fambient.Bus)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                    <i>公交站点数</i>
+                                    @if (lambient.Bus != 0)
+                                    {
+                                        <span>@(lambient.Bus)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/echarts.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pk-list/ambient.js"></script>
+</body>
+</html>

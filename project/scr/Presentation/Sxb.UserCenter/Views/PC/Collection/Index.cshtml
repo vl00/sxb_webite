@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "关注";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+    ViewBag.BodyClass = "follow";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/mine-list.css">
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">关注</span>
+    <span class="btn">编辑</span>
+</header>
+
+<ul class="tab flex justify-content-between text-center">
+    <li data-url="@Url.Action("School")" class="active">学校</li>
+    <li data-url="@Url.Action("Comment")">点评</li>
+    <li data-url="@Url.Action("QA")">问答</li>
+    <li data-url="@Url.Action("Article")">攻略</li>
+</ul>
+
+<section class="mt">
+    <div class="content"></div>
+</section>
+
+<section class="bottom-btn text-center">
+    <ul class="flex">
+        <li class="all-select">全选</li>
+        <li id="delete" class="delete">删除</li>
+    </ul>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/mine-list.js"></script>
+    <script type="text/javascript">
+        $('#delete').click(function () {
+            $('.delete-select.select').each(function (i, e) {
+                var li = $(this).parent();
+                var id = li.data('id');
+                $.ajax({
+                    url: '@Url.Action("RemoveCollection")',
+                    data: 'dataID=' + id,
+                    dataType: 'jsonp',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            li.remove();
+                            var sellen = $('.delete-select.select').length
+                            if (sellen > 0) {
+                                $('#delete').text('删除(' + sellen + ')');
+                            } else {
+                                $('#delete').removeClass('selected').text('删除');
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

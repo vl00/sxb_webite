@@ -1,0 +1,19 @@
+﻿@using PMS.Infrastructure.Application.ModelDto;
+@{
+    var provinces = ViewBag.Provinces is Lazy<List<ProvinceCodeDto>> lzy ? lzy.Value : new List<ProvinceCodeDto>();
+}
+
+@if (Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")
+              || Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("Googlebot"))
+{
+<div class="footer-nav">
+    <div class="container">
+        <ul class="site-map-list">
+            @foreach (var item in provinces)
+            {
+                <li><a href="/@("pr" + @item.ProvinceId)" title="@item.Province">@item.Province</a></li>
+            }
+        </ul>
+    </div>
+</div>
+}

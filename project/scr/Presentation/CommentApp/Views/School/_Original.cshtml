@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Sxb.Web.ViewModels.School.SchoolExtListItemViewModel>
+@using Sxb.Web.Utils
+@foreach (var school in Model)
+{
+    <li>
+        @*<a href="@Url.Action("Detail","School",new {extId=school.BranchId,sid=school.SchoolId })">*@
+        <a href="/school-@school.ShortSchoolNo/" data-eid="@school.BranchId">
+            <div class="flex">
+                <div class="school-msg">
+                    <div class="school-name">
+                        <h5>@school.SchoolName</h5>
+                    </div>
+                    <ul class="tag flex">
+                        @if (school.Type == 4)
+                        {
+                            <li>外籍</li>
+                        }
+                        @if (school.Type == 3)
+                        {
+                            <li>国际</li>
+                        }
+                        else if (school.Type == 2)
+                        {
+                            <li>民办</li>
+                        }
+                        else if (school.Type == 1)
+                        {
+                            <li>公办</li>
+                        }
+                        @if (!String.IsNullOrWhiteSpace(school.LodgingReason))
+                        {
+                            <li>@school.LodgingReason</li>
+                        }
+                        @if (school.Auth)
+                        {
+                            <li class="bcg-none"><i class="icon"></i></li>
+                        }
+
+                    </ul>
+                    <div class="price">
+                        @if (school.Cost != null && school.Cost > 0)
+                        {
+                            <span>@(school.Cost >= 10000 ? ((school.Cost / 10000).GetValueOrDefault().ToString("#.##") + "万") : (school.Cost.ToString()))元/年</span>
+                        }
+                        @*else
+                            {
+                            <span>学费：暂未收录</span>
+                            }*@
+                        @if (school.Distance != null)
+                        {
+                            <span class="range">@(Math.Round((decimal)(school.Distance / 1000), 2) + "km")</span>
+                        }
+                        @if (school.CityName != null && school.AreaName != null)
+                        {
+                            <span class="position">@(school.CityName) | @(school.AreaName)</span>
+                        }
+                        else if (school.CityName != null)
+                        {
+                            <span class="position">@school.CityName</span>
+                        }
+                        else if (school.AreaName != null)
+                        {
+                            <span class="position">@school.AreaName</span>
+                        }
+                    </div>
+                    <ul class="keyword flex text-center">
+                        @foreach (var tag in school.Tags)
+                        {
+                            <li>@tag</li>
+                        }
+                    </ul>
+                </div>
+                <div class="school-grade">
+                    <div class="score">
+                        @if (school.Score != null)
+                        {
+                            @*<span class="num">@school.Score</span><span>分</span>*@
+                            <span class="num private-score-grading">@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(school.Score.Value))</span>
+                        }
+                        else
+                        {
+                            <span class="not-data">暂未评分</span>
+                        }
+                    </div>
+                    <p class="comment-num">学校总评</p>
+                    @if (school.Score != null)
+                    {
+                        <a href="/school-@school.ShortSchoolNo/data/">
+                            <span class="btn">评分详情</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </a>
+    </li>
+}

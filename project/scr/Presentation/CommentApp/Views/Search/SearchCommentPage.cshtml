@@ -1,0 +1,101 @@
+﻿@page
+@{
+}
+@foreach (var comment in ViewBag.Rows)
+{
+    <li>
+        <div class="list-header flex justify-content-between">
+            <div class="user-msg flex">
+                <div class="head">
+                    <div><img src="@comment.UserHeadImage" alt="" /></div>
+                    @if (comment.IsUserSchool)
+                    {
+                        <i class="comment-icon school"></i>
+                    }
+                </div>
+                <span class="name">
+                    @comment.UserName
+                    @if (comment.Score.IsAttend)
+                    {
+                        <i class="identity">过来人</i>
+                    }
+
+                </span>
+            </div>
+            <div class="other flex">
+                @if (comment.IsRumorRefuting)
+                {
+                    <i class="comment-icon"></i>
+                }
+                <div class="other-list-btn text-center" data-id="@comment.Id" data-report="3" data-type="1" data-name="@comment.UserName">
+                    <div class="flex">
+                        <i class="round"></i>
+                        <i class="round"></i>
+                        <i class="round"></i>
+                    </div>
+                    @if (comment.IsSelected)
+                    {
+                        <span>精华</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="school-msg">
+            <a href="/comment/school-@comment.School.ShortSchoolNo/">
+                <p>@comment.School.SchoolName</p>
+                <div class="flex justify-content-between">
+                    <ul class="star flex">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (comment.School.SchoolStars >= i)
+                            {
+                                <li class="score-star"><i class="comment-icon"></i></li>
+                            }
+                            else
+                            {
+                                <li><i class="comment-icon"></i></li>
+                            }
+                        }
+                        <li>@(comment.School.SchoolStars)星</li>
+                    </ul>
+                    <span>@comment.School.CommentTotal 条点评</span>
+                </div>
+            </a>
+        </div>
+
+        <a href="/comment/@(comment.No).html">
+            <p class="content">@comment.Content</p>
+        </a>
+        @if (comment.Images.Count > 0)
+        {<div class="img-list">
+                <ul class="flex justify-content-between" id="imgList">
+                    @{int ii = 0;}
+                    @foreach (var image in comment.Images)
+                    {
+                        @if (++ii > 3) { break; }
+                        <li><img src="@image" alt="" /></li>
+                    }
+                    @for (int i = 0; i < 3 - comment.Images.Count; i++)
+                    {
+                        <li></li>
+                    }
+                </ul>
+                <span class="text-center"><i class="comment-icon"></i>@comment.Images.Count</span>
+            </div>}
+        <div class="comment-msg flex justify-content-between">
+            <div>
+                <span class="department">@comment.School.SchoolBranch</span>
+                <span class="time">@comment.CreateTime</span>
+            </div>
+            <div class="ctr">
+                <span class="comment"><i class="comment-icon"></i>@comment.ReplyCount</span>
+                <span class="like @(comment.IsLike?"click-like":"")" data-id="@comment.Id" data-type="1">
+                    <i class="comment-icon"></i>
+                    <span>@comment.LikeCount</span>
+                </span>
+            </div>
+        </div>
+
+    </li>
+}

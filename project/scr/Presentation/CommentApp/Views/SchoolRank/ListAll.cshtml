@@ -1,0 +1,242 @@
+﻿@using PMS.OperationPlateform.Domain.Enums
+@using PMS.OperationPlateform.Domain.Entitys
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+@{
+
+    ViewBag.KeyWords = "胡润学校区域排名分类,国际学校,民办学校,公办学校,排行榜,排名分类-上学帮";
+    ViewBag.Description = "上学帮排行榜频道提供学校_国际学校_民办学校_公办学校_排行榜_排名分类信息，方便家长为孩子选择优秀的名校。";
+    ViewBag.Title = "国际学校_民办学校_公办学校_排行榜_排名分类-上学帮";
+}
+@section Styles{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-rank-recommend.css" />
+}
+
+
+
+@*
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">榜单列表</span>
+        <span class=""></span>
+    </header>
+*@
+
+
+<section class="mt">
+    <div class="search-bar">
+        <i class="search-icon"></i>
+        <input type="text" placeholder="寻找榜单" readonly class="search">
+    </div>
+    <ul class="tab flex text-center">
+        @{
+            var Kindergarten = ((Enum)SchoolGrade.Kindergarten);
+            <li data-id="@((int)SchoolGrade.Kindergarten)" data-target="#Kindergarten-tab" data-offset="@ViewBag.InitOffset" data-limit="@ViewBag.InitLimit">@Kindergarten.GetDescription()</li>
+        }
+        @{
+            var PrimarySchool = ((Enum)SchoolGrade.PrimarySchool);
+            <li data-id="@((int)SchoolGrade.PrimarySchool)" data-target="#PrimarySchool-tab" data-offset="@ViewBag.InitOffset" data-limit="@ViewBag.InitLimit">@PrimarySchool.GetDescription()</li>
+        }
+        @{
+            var JuniorMiddleSchool = ((Enum)SchoolGrade.JuniorMiddleSchool);
+            <li data-id="@((int)SchoolGrade.JuniorMiddleSchool)" data-target="#JuniorMiddleSchool-tab" data-offset="@ViewBag.InitOffset" data-limit="@ViewBag.InitLimit">@JuniorMiddleSchool.GetDescription()</li>
+        }
+        @{
+            var SeniorMiddleSchool = ((Enum)SchoolGrade.SeniorMiddleSchool);
+            <li data-id="@((int)SchoolGrade.SeniorMiddleSchool)" data-target="#SeniorMiddleSchool-tab" data-offset="@ViewBag.InitOffset" data-limit="@ViewBag.InitLimit">@SeniorMiddleSchool.GetDescription()</li>
+        }
+    </ul>
+</section>
+
+<section class="rank-list">
+    @{
+        var KindergartenDatas = ViewBag.KindergartenDatas as IEnumerable<Sxb.Web.ViewModels.SchoolRank.SchoolRankDetailViewModel>;
+        var PrimarySchoolDatas = ViewBag.PrimarySchoolDatas as IEnumerable<Sxb.Web.ViewModels.SchoolRank.SchoolRankDetailViewModel>;
+        var JuniorMiddleSchoolDatas = ViewBag.JuniorMiddleSchoolDatas as IEnumerable<Sxb.Web.ViewModels.SchoolRank.SchoolRankDetailViewModel>;
+        var SeniorMiddleSchoolDatas = ViewBag.SeniorMiddleSchoolDatas as IEnumerable<Sxb.Web.ViewModels.SchoolRank.SchoolRankDetailViewModel>;
+
+    }
+    <!-- 幼儿园 -->
+    <div id="Kindergarten-tab">
+        @if (KindergartenDatas != null && KindergartenDatas.Any())
+        {
+            <ul class="flex justify-content-between">
+
+                @foreach (var item in KindergartenDatas)
+                {
+                    <li>
+                        <a href="/schoolrank/detail/@(item.Base32No).html">
+                            <div class="img-box"><img src="@item.Cover" alt=""></div>
+                            <p>@item.Title</p>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <div class="rank-no-data">暂无已收录榜单</div>
+        }
+
+    </div>
+    <!-- 小学 -->
+    <div id="PrimarySchool-tab">
+        @if (PrimarySchoolDatas != null && PrimarySchoolDatas.Any())
+        {
+            <ul class="flex justify-content-between">
+
+                @foreach (var item in PrimarySchoolDatas)
+                {
+                    <li>
+                        <a href="/schoolrank/detail/@(item.Base32No).html">
+                            <div class="img-box"><img src="@item.Cover" alt=""></div>
+                            <p>@item.Title</p>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <div class="rank-no-data">暂无已收录榜单</div>
+        }
+    </div>
+    <!-- 初中 -->
+    <div id="JuniorMiddleSchool-tab">
+
+        @if (JuniorMiddleSchoolDatas != null && JuniorMiddleSchoolDatas.Any())
+        {
+            <ul class="flex justify-content-between">
+
+                @foreach (var item in JuniorMiddleSchoolDatas)
+                {
+                    <li>
+                        <a href="/schoolrank/detail/@(item.Base32No).html">
+                            <div class="img-box"><img src="@item.Cover" alt=""></div>
+                            <p>@item.Title</p>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <div class="rank-no-data">暂无已收录榜单</div>
+        }
+    </div>
+    <!-- 高中 -->
+    <div id="SeniorMiddleSchool-tab">
+        @if (SeniorMiddleSchoolDatas != null && SeniorMiddleSchoolDatas.Any())
+        {
+            <ul class="flex justify-content-between">
+
+                @foreach (var item in SeniorMiddleSchoolDatas)
+                {
+                    <li>
+                        <a href="/schoolrank/detail/@(item.Base32No).html">
+                            <div class="img-box"><img src="@item.Cover" alt=""></div>
+                            <p>@item.Title</p>
+                        </a>
+                    </li>
+                }
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="rank-no-data">暂无已收录榜单</div>
+        }
+    </div>
+</section>
+
+@section Scripts{
+
+    <script src="@ViewBag.StaticFile/js/school-rank-recommend.js"></script>
+    <script src="/Article/lib/pullScroll/pullScroll.js"></script>
+
+    <script>
+
+
+
+        function initTabFunc() {
+            $('.rank-list>div').hide();//隐藏所有的列表
+            var initTab = @((int)ViewBag.InitGrade);
+            $('.tab li').each((index, el) => {
+                var id = $(el).data('id');
+
+                if (initTab == id) {
+                    $(el).click();  //选中当前的默认的列表
+                }
+            });
+
+        }
+
+        //获取当前选中的tab
+        function GetSelectedTab() {
+            return $('.tab li.active');
+        }
+
+        function LoadMore() {
+            var currentTab = GetSelectedTab();
+            var apiUrl = '@Url.Action("listAll","SchoolRank")';
+            //记录一下当前操作的域的偏移量
+            $.ajax({
+                url: apiUrl,
+                type: 'get',
+                data: {
+                    grade: currentTab.data('id'),
+                    offset: currentTab.data('offset') + currentTab.data('limit')
+                },
+                success: function (res) {
+                    if (res.status == 1) {
+                        if (res.data && res.data.length > 0) {
+                            currentTab.data('offset', currentTab.data('offset') + currentTab.data('limit'));
+                            var targetDiv = $(currentTab.data('target'));//获取当前focus 的div box
+                            $.each(res.data, (index, value) => {
+                                var el = SchoolRankItemTemplate(value);
+                                targetDiv.find('ul').append(el);
+                            });
+                        }
+
+                    }
+                    else {
+                        console.log(res.msg);
+                    }
+                }
+            })
+
+        }
+
+
+        function SchoolRankItemTemplate(schoolrank) {
+            var template = '';
+            template += '<li> ';
+            template += '      <a href="/schoolrank/detail/' + schoolrank.base32No+'.html">';
+            template += '        <div class="img-box"><img src="' + schoolrank.cover + '" alt=""></div>';
+            template += '        <p>' + schoolrank.title + '</p>';
+            template += '    </a>';
+            template += '</li>';
+            return $(template);
+        }
+
+        function HandlePullUp() {
+            LoadMore();
+        }
+
+        $(function () {
+            initTabFunc();
+
+            $('input.search').click(() => {
+                window.location = '/home-search'
+            })
+
+            pullScroll.listen(HandlePullUp, function () {
+                });
+
+        })
+
+    </script>
+
+}

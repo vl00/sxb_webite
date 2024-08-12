@@ -1,0 +1,311 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <LangVersion>7.2</LangVersion>
+    <UserSecretsId>88314ccf-4057-4e54-abda-9940096b0d1d</UserSecretsId>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Custom' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <ApplicationURL>http://localhost:5000</ApplicationURL>
+    <LaunchUrl>https://localhost:5001</LaunchUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'James.Web' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <LaunchUrl>https://James.Sxkid.com:5003/swagger</LaunchUrl>
+    <ApplicationURL>http://0.0.0.0:5002;https://0.0.0.0:5003</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Dev' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <LaunchUrl>https://dev.sxkid.com:5001</LaunchUrl>
+    <ApplicationURL>https://dev.sxkid.com:5001</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Lonlykids' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <EnvironmentVariables>
+      <Variable name="Programer" value="Lonlykids" />
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+    </EnvironmentVariables>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>https://0.0.0.0:5000</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Staging' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Labbor' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'James.Production.Web' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Production' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Lonlykids-Production' " />
+  <ItemGroup>
+    <Compile Remove="ViewModels\Comment\CommentScoreViewModel.cs" />
+    <Compile Remove="ViewModels\Common\ScoreStar.cs" />
+    <Compile Remove="ViewModels\School\SchoolCmScoreViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.CAP.InMemoryStorage" Version="5.2.0" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="5.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.2" />
+    <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
+    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" ExcludeAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="IdentityModel" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="NPOI" Version="2.5.3" />
+    <PackageReference Include="NPOIHelper" Version="2.0.12" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.11.3" />
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Domain\PMS.Infrastructure.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Repository\PMS.Infrastructure.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\Live\PMS.Live.Application\PMS.Live.Application.csproj" />
+    <ProjectReference Include="..\..\Services\Live\PMS.Live.Domain\PMS.Live.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\Live\PMS.Live.Repository\PMS.Live.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\MediatRManage\PMS.MediatR.Request\PMS.MediatR.Request.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Mongo\PMS.OperationPlateform.Mongo.csproj" />
+    <ProjectReference Include="..\..\Services\PaidQA\PMS.PaidQA.Application\PMS.PaidQA.Application.csproj" />
+    <ProjectReference Include="..\..\Services\PaidQA\PMS.PaidQA.Domain\PMS.PaidQA.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\PaidQA\PMS.PaidQA.Repository\PMS.PaidQA.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Domain\PMS.School.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Mongo\PMS.School.Mongo.csproj" />
+    <ProjectReference Include="..\..\Services\SignalR\PMS.SignalR\PMS.SignalR.csproj" />
+    <ProjectReference Include="..\..\Services\TopicCircle\PMS.TopicCircle.Repository\PMS.TopicCircle.Repository.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.API.Aliyun\ProductManagement.API.Aliyun.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Repository\PMS.CommentsManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Application\PMS.Infrastructure.Application.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\iSchool.Internal.API\iSchool.Internal.API.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Application\PMS.OperationPlateform.Application.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Domain\PMS.OperationPlateform.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Repository\PMS.OperationPlateform.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Infrastructure\PMS.School.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Application\PMS.School.Application.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Repository\PMS.School.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Application\PMS.CommentsManage.Application.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.AspNetCoreHelper\ProductManagement.Framework.AspNetCoreHelper.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.EntityFramework\ProductManagement.Framework.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.MongoDb\ProductManagement.Framework.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.WeChat\ProductManagement.Framework.WeChat.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Application\PMS.UserManage.Application.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Repository\PMS.UserManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.RabbitMQ\ProductManagement.Framework.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.RabbitMQ.Di\ProductManagement.Framework.RabbitMQ.Di.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.Serialize.Json\ProductManagement.Framework.Serialize.Json.csproj" />
+    <ProjectReference Include="..\..\Services\MqManage\PMS.RabbitMQ.Handle\PMS.RabbitMQ.Handle.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.API.Amap\ProductManagement.API.Amap.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Cache.Redis\ProductManagement.Framework.Cache.RedisProfiler\ProductManagement.Framework.Cache.RedisProfiler.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.SearchAccessor\ProductManagement.Framework.SearchAccessor.csproj" />
+    <ProjectReference Include="..\..\Services\Search\PMS.Search.Elasticsearch\PMS.Search.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\Services\Search\PMS.Search.Application\PMS.Search.Application.csproj" />
+    <ProjectReference Include="..\..\Services\MediatRManage\PMS.MediatR.Events\PMS.MediatR.Events.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\MediatRManage\PMS.MediatR.Handle\PMS.MediatR.Handle.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\ProductManagement.Identification\ProductManagement.Identification.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Tool.Email\ProductManagement.Tool.Email.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Tool.QRCoder\ProductManagement.Tool.QRCoder.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Tool.WeChat\ProductManagement.Tool.WeChat.csproj" />
+    <ProjectReference Include="..\..\Services\TopicCircle\PMS.TopicCircle.Application\PMS.TopicCircle.Application.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="schtype.json" />
+    <Content Remove="Views\Home\Data.cshtml" />
+    <Content Remove="Views\Home\Details.cshtml" />
+    <Content Remove="wwwroot\dist\screeningschool.html" />
+    <Content Remove="nlog.Development.config" />
+    <Content Remove="wwwroot\imgs\filtrate\icon.png" />
+    <Content Remove="wwwroot\imgs\filtrate\icon.png" />
+    <Content Remove="wwwroot\imgs\school-detail\graduationList.png" />
+    <Content Remove="nlog %28副本%29.Development.config" />
+    <Content Remove="nlogStaging.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Logs\internal-nlog.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Article\Filters\" />
+    <Folder Include="Areas\Common\Models\SystemNotify\" />
+    <Folder Include="Areas\PaidQA\Filters\" />
+    <Folder Include="Areas\PaidQA\Models\Coupon\" />
+    <Folder Include="Config\Options\" />
+    <Folder Include="Logs\" />
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="ViewModels\Common\" />
+    <Folder Include="ViewModels\Coupon\" />
+    <Folder Include="Views\TestLogin\" />
+    <Folder Include="RequestModel\School\" />
+    <Folder Include="RequestModel\Comment\" />
+    <Folder Include="RequestModel\Question\" />
+    <Folder Include="wwwroot\Article\component\ueditor\" />
+    <Folder Include="ViewModels\Search\" />
+    <Folder Include="Middleware\Diffluence\" />
+    <Folder Include="RequestModel\Map\" />
+    <Folder Include="wwwroot\errors\" />
+    <Folder Include="wwwroot\dist\live\" />
+    <Folder Include="Areas\SignUp\" />
+    <Folder Include="Areas\SignUp\Controllers\" />
+    <Folder Include="Areas\SignUp\Models\" />
+    <Folder Include="Views\Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nlog.Development.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\School\Components\OrgLesson\Default.cshtml" />
+    <None Include="wwwroot\Article\component\qacard\qacard.js" />
+    <None Include="wwwroot\Article\css\comment\.project" />
+    <None Include="wwwroot\Article\css\font\PingFangSC-Regular.woff2" />
+    <None Include="wwwroot\Article\js\achievement-msg.js" />
+    <None Include="wwwroot\Article\js\article-detail.js" />
+    <None Include="wwwroot\Article\js\article\article-and-subscribe.js" />
+    <None Include="wwwroot\Article\js\article\article-detail.js" />
+    <None Include="wwwroot\Article\js\article\more-comment.js" />
+    <None Include="wwwroot\Article\js\city-select.js" />
+    <None Include="wwwroot\Article\js\city.js" />
+    <None Include="wwwroot\Article\js\collection.js" />
+    <None Include="wwwroot\Article\js\comment-and-qa.js" />
+    <None Include="wwwroot\Article\js\comment-detail.js" />
+    <None Include="wwwroot\Article\js\comment-list.js" />
+    <None Include="wwwroot\Article\js\comment-success.js" />
+    <None Include="wwwroot\Article\js\comment.js" />
+    <None Include="wwwroot\Article\js\commentSuccess.js" />
+    <None Include="wwwroot\Article\js\comment\city-select.js" />
+    <None Include="wwwroot\Article\js\comment\collection.js" />
+    <None Include="wwwroot\Article\js\comment\jquery.serializejson.min.js" />
+    <None Include="wwwroot\Article\js\comment\UploadImager.js" />
+    <None Include="wwwroot\Article\js\complaint-content.js" />
+    <None Include="wwwroot\Article\js\complaint-reply.js" />
+    <None Include="wwwroot\Article\js\complaint.js" />
+    <None Include="wwwroot\Article\js\echarts.min.js" />
+    <None Include="wwwroot\Article\js\exif.js" />
+    <None Include="wwwroot\Article\js\filtrate\filtrate-school-list.js" />
+    <None Include="wwwroot\Article\js\filtrate\hk-filtrate-school-list.js" />
+    <None Include="wwwroot\Article\js\flexible.js" />
+    <None Include="wwwroot\Article\js\home-search.js" />
+    <None Include="wwwroot\Article\js\home-select-city.js" />
+    <None Include="wwwroot\Article\js\home.js" />
+    <None Include="wwwroot\Article\js\invite.js" />
+    <None Include="wwwroot\Article\js\jquery-3.4.0.min.js" />
+    <None Include="wwwroot\Article\js\jquery.mark.min.js" />
+    <None Include="wwwroot\Article\js\jquery.range-min.js" />
+    <None Include="wwwroot\Article\js\jquery.serializejson.min.js" />
+    <None Include="wwwroot\Article\js\layout-common.js" />
+    <None Include="wwwroot\Article\js\loading.js" />
+    <None Include="wwwroot\Article\js\login\login.js" />
+    <None Include="wwwroot\Article\js\map.js" />
+    <None Include="wwwroot\Article\js\mine\account-cancellation.js" />
+    <None Include="wwwroot\Article\js\mine\account-confilct.js" />
+    <None Include="wwwroot\Article\js\mine\bind-phone.js" />
+    <None Include="wwwroot\Article\js\mine\correct-errors.js" />
+    <None Include="wwwroot\Article\js\mine\feedback-detail.js" />
+    <None Include="wwwroot\Article\js\mine\history.js" />
+    <None Include="wwwroot\Article\js\mine\mine-follow.js" />
+    <None Include="wwwroot\Article\js\mine\mine-like.js" />
+    <None Include="wwwroot\Article\js\mine\mine-news.js" />
+    <None Include="wwwroot\Article\js\mine\mine-release.js" />
+    <None Include="wwwroot\Article\js\mine\mine-reply.js" />
+    <None Include="wwwroot\Article\js\mine\modify-password.js" />
+    <None Include="wwwroot\Article\js\mine\push-record.js" />
+    <None Include="wwwroot\Article\js\mine\push-setting.js" />
+    <None Include="wwwroot\Article\js\mine\replace-phone.js" />
+    <None Include="wwwroot\Article\js\mine\replenish-msg.js" />
+    <None Include="wwwroot\Article\js\mine\retrieve-password.js" />
+    <None Include="wwwroot\Article\js\more-comment.js" />
+    <None Include="wwwroot\Article\js\more-recruit-students.js" />
+    <None Include="wwwroot\Article\js\MultiPicker.js" />
+    <None Include="wwwroot\Article\js\picker.min.js" />
+    <None Include="wwwroot\Article\js\prompt.js" />
+    <None Include="wwwroot\Article\js\qa-detail.js" />
+    <None Include="wwwroot\Article\js\qa-success.js" />
+    <None Include="wwwroot\Article\js\query.js" />
+    <None Include="wwwroot\Article\js\questionnaire.js" />
+    <None Include="wwwroot\Article\js\reply-common.js" />
+    <None Include="wwwroot\Article\js\reply-detail.js" />
+    <None Include="wwwroot\Article\js\reply-dialog.js" />
+    <None Include="wwwroot\Article\js\school-comment.js" />
+    <None Include="wwwroot\Article\js\school-correct.js" />
+    <None Include="wwwroot\Article\js\school-detail.js" />
+    <None Include="wwwroot\Article\js\school-more-msg.js" />
+    <None Include="wwwroot\Article\js\school-qa.js" />
+    <None Include="wwwroot\Article\js\school-rank-recommend.js" />
+    <None Include="wwwroot\Article\js\site.js" />
+    <None Include="wwwroot\Article\js\swiper.min.js" />
+    <None Include="wwwroot\Article\js\viewer.min.js" />
+    <None Include="wwwroot\Article\js\visit-school\visit-school.js" />
+    <None Include="wwwroot\Article\js\wechat.js" />
+    <None Include="wwwroot\Article\lib\pullScroll\pullScroll.js" />
+    <None Include="wwwroot\js\comment-list.js" />
+    <None Include="wwwroot\js\signalr\dist\browser\signalr.js" />
+    <None Include="wwwroot\js\signalr\dist\browser\signalr.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="iSchool.Library">
+      <HintPath>..\..\Tools\ProductManagement.Framework.WeChat\DLL\iSchool.Library.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\WangKeTong\guwen_cd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\WangKeTong\guwen_gz.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\WangKeTong\inviter_cd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\WangKeTong\inviter_gz.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="shared-auth-ticket-keys\key-1f99fd07-943a-4ecb-9ea4-1c98bd39349a.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="shared-auth-ticket-keys\key-704ddf0d-753b-4ea8-a7b7-735fbb9dad3d.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="shared-auth-ticket-keys\key-f5b7b523-6f00-4b24-b95a-f956961bb5bb.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\errors\404 %28副本%29.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\errors\404.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="" appsettings_1json__JsonSchema="https://gitpod.io/schemas/gitpod-schema.json" /></VisualStudio></ProjectExtensions>
+</Project>

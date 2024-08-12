@@ -1,0 +1,160 @@
+﻿<html lang="zh">
+@{
+    var keywords = "";
+    var description = "";
+    var title = "提问";
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/school-write-comments.css">
+</head>
+
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderLogoPartial", 3)
+        </div>
+    </header>
+    <section class="write-comments school-detail">
+        <div class="container d-flex">
+            <div class="left-content d-block">
+                <div class="write-comments-school-name d-flex justify-content-between position-relative">
+                    <h1 class="font-26 color-333 font-weight-bold">@ViewBag.SchoolInfo.SchoolName</h1>
+                    <a href="javascript:;" id="reviewSchool" title="点评其他学校" class="d-block font-14">提问其他学校</a>
+                    <div class="review-rest-school position-absolute">
+                        <input type="text" placeholder="请输入学校名称">
+                        <img src="@(ViewBag.StaticFile)/imgs/home/iconSearch.png" alt="" class="position-absolute">
+                        <ul class="font-13 color-333">
+                            @foreach (var item in ViewBag.AllSchoolBranch)
+                            {
+                                <li><a href="@Url.Action("Write", "Question", new { eid =@item.SchoolSectionId })" title="@item.SchoolName">@item.SchoolName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <ul class="question-content qa list-ul">
+                        <li>
+                            <div class="comment-content write-question">
+                                <p class="font-16 color-333 font-weight-bold">问题内容</p>
+                                <textarea id="textareaVal" name="comment-content"
+                                          placeholder="亲，学校好不好？好在哪？孩子就读体验怎样？马上和更多家长分享您的见解，还可使用标签评价学校哦！" cols="1"
+                                          rows="1"></textarea>
+                                <span class="font-12">写30个字，有机会被采纳为精选点评哦！</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <p class="font-16 color-333 font-weight-bold">添加图片（最多9张）</p>
+                                <ul class="upload-img-list d-flex flex-wrap">
+                                    <li class="upload-btn text-center position-relative">
+                                        <p class="font-12">上传照片</p>
+                                        <input type="file" name="image" accept="image/*" class="position-absolute">
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="font-16 color-333 font-weight-bold">
+                                匿名提问
+                                <i class="question-icon position-relative"></i>
+                                <a href="" class="anonymous position-relative"></a>
+                            </p>
+                            <span class="font-12 select-tab-detail">选择匿名提问后，学校将无法获取你的个人信息以便进一步反馈。</span>
+                        </li>
+                    </ul>
+                    <!-- 未能保存请删除save -->
+                    <a href="javascript:;" title="提交点评" data-Eid="@ViewBag.SchoolInfo.ExtId" data-Sid="@ViewBag.SchoolInfo.Sid" class="submit save">发布</a>
+                </div>
+            </div>
+            <div class="right-list">
+                <!-- 广告开始 -->
+                <div class="mkt-box">
+                    <div class="swiper-container swiper-mkt swiperSchoolAd" alt="27" id="swiperSchoolAd-27" style="height: 205px;">
+                        <div class="swiper-wrapper">
+                        </div>
+                        <div class="swiper-pagination mkt-pagination"></div>
+                    </div>
+                </div>
+                <!-- 广告结束 -->
+                <div class="hot-comment-school">
+                    <h2 class="font-18 font-weight-bold">热问学校</h2>
+                    <ul class="school-list">
+                        @{
+                            var HotSchoolQuestion = (List<Sxb.PCWeb.ViewModels.School.SchoolQuestionCardViewModel>)ViewBag.HottestSchoolView;
+                            for (int i = 0; i < HotSchoolQuestion.Count(); i++)
+                            {
+                                ViewBag.Level = i + 1;
+                                @await Html.PartialAsync("_HotSchoolQuestion.cshtml", HotSchoolQuestion[i]);
+                            }
+                        }
+                    </ul>
+                </div>
+                <div class="hot-question">
+                    <h2 class="font-18 font-weight-bold">热门问答</h2>
+                    <ul>
+                        @foreach (var item in ViewBag.HottestSchoolQuesitonView)
+                        {
+                            @await Html.PartialAsync("_HottestQuestion.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)item);
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/user/user.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/commitQuestion.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script>
+        $(function () {
+            var searchtime;
+
+            // 搜索内容
+            $(".review-rest-school input").bind('input propertychange', function () {
+                clearTimeout(searchtime);
+                var inputText = $(this).val();
+                searchtime = setTimeout(function () {
+                    $('.review-rest-school ul').empty();
+                    $.ajax({
+                        url: "/search/GetSuggestList",
+                        type: 'GET',
+                        dataType: 'json',
+                        traditional: true,
+                        jsonp: "callback",
+                        data: { 'keyWords': inputText, 'channel': 0 },
+                        success: function (data) {
+                            var json = data
+                            for (var i = 0; i < json.data.list[0].items.length; i++) {
+                                $('.review-rest-school ul').append("<li><a href='/question/write?eid=" + json.data.list[0].items[i].value.id + "' title=" + json.data.list[0].items[i].keyWord + ">" + json.data.list[0].items[i].keyWord + "</a></li>");
+                            }
+                        }
+                    })
+                }, 500)
+            });
+        })
+    </script>
+</body>
+
+</html>

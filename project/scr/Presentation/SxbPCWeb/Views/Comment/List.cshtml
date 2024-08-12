@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+@{
+    var keywords = $"{ViewBag.LocalCity}学校评价,{ViewBag.LocalCity}学校怎么样,{ViewBag.LocalCity}学校评分";
+    var description = "上学帮点评频道，提供学校点评，评价学校怎么样及学校评分信息，让家长细致的了解学校点评信息，为孩子升学做选择。";
+    var title = $"{ViewBag.LocalCity}学校评价_怎么样_评分";
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <!-- <link rel="stylesheet" href="../../css/school-detail/school-detail-comments.css"> -->
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 2)
+        </div>
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" class="d-block">上学帮</a></h1>
+                <div class="select font-14" id="select-city">
+                    <i class="header-icon">@ViewBag.LocalCity</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("Index","Home",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li>
+                                    <a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a>
+                                </li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                    <li>
+                        <a href="javascript:;" data-searchType="comment" class="font-14 @(ViewBag.ListType=="comment"?"selected":"")" id="selectReview" data-left-content="searchReview">搜点评</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-searchType="school" class="font-14 @(ViewBag.ListType=="school"?"selected":"")" id="selectSchool" data-left-content="searchSchool">搜学校</a>
+                    </li>
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <form action="@Url.Action("List","Comment",new { })" class="d-flex justify-content-between" method="get" id='search_form'>
+                        <div class="search-div">
+                            <input type="text" placeholder="请输入点评内容关键词搜索点评" name="search" class="input-keyword font-12" value="@ViewBag.KeyWords">
+                            <input type="hidden" name="type" value="@ViewBag.ListType">
+                        </div>
+                        <input type="button" value="搜索" class="btn-search font-14" id="serchBtn">
+                    </form>
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0">
+                        <span style="@(((List<string>)ViewBag.HotSearchWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword d-flex">
+                            @foreach (var item in (List<string>)ViewBag.HotSearchWord)
+                            {
+                                <li><a href="@Url.Action("List", "Comment", new { search = item, type = @ViewBag.ListType })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="school-detail">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                @if (ViewBag.ListType == "comment")
+                {
+                    <!-- 搜点评 -->
+
+                    <div class="left-content d-block" id="searchReview">
+                        @if (ViewBag.CommentList != null && ViewBag.CommentList.Count > 0)
+                        {
+                            <div class="parents-comments-list comments-list">
+                                <div class="review-navigation">
+                                    <a href="/">首页</a>
+                                    <span class="comment-navigation-span">&gt;</span>
+                                    <a href="/comment/">点评</a>
+                                </div>
+                                <ul class='comments-list'>
+                                    @foreach (var comment in ViewBag.CommentList)
+                                    {
+                                        <li class="d-flex" data-Id="@comment.Id">
+                                            @await Html.PartialAsync("_CommentItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)comment)
+                                        </li>
+                                    }
+                                </ul>
+                                @if ((ViewBag.TotalPage / 10) > 1)
+                                {
+                                    <nav class="page d-flex justify-content-end">
+                                        @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                    "List",
+                                    "Comment",
+                                    (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                    (int)ViewBag.PageSize,
+                                    (int)ViewBag.PageIndex,
+                                    (_this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _this.CurrentPage - 1 }; },
+                                    (_pageItem, _this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _pageItem }; },
+                                    (_this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _this.CurrentPage + 1 }; }
+                                    )))
+                                    </nav>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class='school-review-list-no-comment-div'>
+                                <div class="text-center no-comment school-review-list-no-comment">
+                                    <p class="font-14">很抱歉，暂未找到与“<span class="color-blue">@(ViewBag.KeyWords)</span>”相关的点评<span class="font-14 d-block">换个搜索条件试试呗~~</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                }
+                else
+                {
+                    <!-- 搜学校   -->
+                    <div class="left-content d-block" id="searchSchool">
+                        @if (ViewBag.SchoolList != null && ViewBag.SchoolList.Count > 0)
+                        {
+                            <div class="search-school-list comments-list">
+                                <div class="review-navigation">
+                                    <a href="/">首页</a>
+                                    <span class="comment-navigation-span">&gt;</span>
+                                    <a href="/comment/">点评</a>
+                                </div>
+                                <ul class="school-list-ul">
+                                    @foreach (var school in ViewBag.SchoolList)
+                                    {
+                                        @await Html.PartialAsync("_SchoolItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentSchoolViewModel)school)
+                                    }
+                                </ul>
+                                @if ((ViewBag.TotalPage / 10) > 1)
+                                {
+                                    <!--分页-->
+                                    <nav class="page d-flex justify-content-end">
+                                        @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                                "List",
+                                                "Comment",
+                                                (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                                (int)ViewBag.PageSize,
+                                                (int)ViewBag.PageIndex,
+                                                (_this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _this.CurrentPage - 1 }; },
+                                                (_pageItem, _this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _pageItem }; },
+                                                (_this) => { return new { search = @ViewBag.KeyWords, type = ViewBag.ListType, page = _this.CurrentPage + 1 }; }
+                                                )))
+                                    </nav>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class='school-review-list-no-comment-div'>
+                                <div class="text-center no-comment school-review-list-no-comment">
+                                    <p class="font-14">很抱歉，暂未找到与“<span class="color-blue">@(ViewBag.KeyWords)</span>”相关的学校<span class="font-14 d-block">换个搜索条件试试呗~~</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box" id="rightBanner">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="26" id="swiperSchoolAd-26" style="height: 205px;overflow: hidden !important;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 广告结束 -->
+                    <div class="hot-school">
+                        <h2 class="font-18 font-weight-bold">热门点评</h2>
+                        <ul class="hot-comment">
+                            @foreach (var item in ViewBag.HottestComment)
+                            {
+                                @await Html.PartialAsync("_HottestComment.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热评学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolComment = (List<Sxb.PCWeb.ViewModels.School.SchoolCommentCardViewModel>)ViewBag.HottestSchoolView;
+                                for (int i = 0; i < HotSchoolComment.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("_HotSchoolComment.cshtml", HotSchoolComment[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="https://cdn.sxkid.com/v4source/statistics.js?appid=1"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script>
+        $(function () {
+            $("#selectReview").click(function () {
+                $("#search_form input[name='type']").val("comment");
+                $("#search_form").submit();
+            });
+            $("#selectSchool").click(function () {
+                $("#search_form input[name='type']").val("school");
+                $("#search_form").submit();
+            });
+
+            $("#serchBtn").click(function () {
+                var searchType = $(".search-type li a[class='font-14 selected']").attr("data-searchType")
+                $("#search_form input[name='type']").val(searchType);
+                $("#search_form").submit();
+            })
+        })
+    </script>
+</body>
+</html>

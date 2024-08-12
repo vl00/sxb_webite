@@ -1,0 +1,313 @@
+﻿@using Sxb.Web.ViewModels.Sign;
+@using Sxb.Web.ViewModels;
+@{
+    int PageTotal = (int)(Math.Ceiling(ViewBag.TotalPage / ViewBag.PageSize));
+    List<LSRFSchoolDetailViewModel> recommend = ViewBag.Recommend;
+
+    ViewBag.ShareTitle = "上学帮2020年国际化学校招生报名";
+    ViewBag.ShareDesc = "想了解和报读广东TOP国际高中吗？赶紧来报名吧！";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿,亲子,家庭教育,孩子教育,小学教育,中学教育,高中教育,高校教育,中小学教育,学校探访,民办小学,公办小学,择校,名校,教育,小学,初中,择校,名师,中考,高考">
+    <meta name="description" content="上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <title>上学帮2020年国际化学校招生报名</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-registration.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between isHeader">
+        <a class="arrow"></a>
+        <span class="header-title">上学帮2020年国际化学校招生报名</span>
+         <a class="share" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@(ViewBag.ShareLink)" data-logo="@(ViewBag.ShareImgLink)"></a>
+    </header>
+    <!-- 轮播图 -->
+    <section class="banner-box">
+        <div class="banner text-center position-relative">
+            <div class="swiper-container banner text-center">
+                <div id="swiperApm" class="swiper-wrapper">
+                    @if (ViewBag.Advs!=null && (ViewBag.Advs as List<Adver>).Any())
+                    {
+                        foreach (Adver item in ViewBag.Advs)
+                        {
+                            <div class="swiper-slide">
+                                <a href="@item.Url" title="@item.Title" target="_blank" rel="nofollow">
+                                    <img src="@item.PicUrl" alt="">
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="swiper-slide">
+                            <img src="@ViewBag.StaticFile/imgs/school-registration/12.png" alt="">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="@ViewBag.StaticFile/imgs/school-registration/12.png" alt="">
+                        </div>
+                    }
+                </div>
+                <div class="swiper-pagination point"></div>
+            </div>
+        </div>
+    </section>
+    <!-- 课程选择 -->
+    <section class="tab">
+        <div class="swiper-container">
+            <ul class="swiper-wrapper tab-list text-center">
+                @foreach (var item in ViewBag.CourseType)
+                {
+                    <li class="swiper-slide @(item.Id == ViewBag.ActiveCourseType ? "active" : "")" data-tab="@item.Id">@item.Name</li>
+                }
+            </ul>
+        </div>
+    </section>
+    <!-- 国际学校名单-->
+    <section class="school-list-box">
+        <div class="school-list tab-1">
+            @foreach (LSRFSchoolDetailViewModel item in ViewBag.SchViewModel)
+            {
+                <div class="school-box @(item.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise && item.AdvType ==2 ? "row-school" : "")">
+                    <a href="/school/detail/@(item.Eid.ToString("N"))?coursetype=@ViewBag.ActiveCourseType">
+                        <div class="img-box">
+                            @if (item.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise && item.AdvType == 2)
+                            {
+                                <img src="@item.AdvPicUrl">
+                                <span class="img-tag">推广</span>
+                            }
+                            else if (item.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise)
+                            {
+                                @if (item.Hardware.Any())
+                                {
+                                    <img src="@item.Hardware[0]" />
+                                }
+                                <span class="img-tag">推广</span>
+                            }
+                            else
+                            {
+                                @if (item.Hardware.Any())
+                                {
+                                    <img src="@item.Hardware[0]" />
+                                }
+                            }
+                        </div>
+                        <div class="word-box">
+                            <div class="school-name">@item.Sname</div>
+                            <div class="school-tag">
+                                @*if (item.Authentication.Any())
+                                    {
+                                        <span>@item.Authentication[0].Key</span>
+                                    }*@
+                                <span>@item.LodgingReason</span>
+
+                                @if (item.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise && item.AdvType == 2)
+                                {
+                                    if (item.Courses.Any())
+                                    {
+                                        if (item.Courses.Count > 1)
+                                        {
+                                            <span>@item.Courses[0].Key</span>
+                                            <span>@item.Courses[1].Key</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.Courses[0].Key</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (item.Courses.Any())
+                                    {
+                                        <span>@item.Courses[0].Key</span>
+                                    }
+                                }
+
+                            </div>
+                            @if (item.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise)
+                            {
+                                if (item.AdvType == 2)
+                                {
+                                    <i class="rec-i"></i>
+                                }
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="show-more" style="display:@(PageTotal > 1 && ViewBag.PageIndex != PageTotal ? "block" : "none")" data-totalPage="@PageTotal" data-currentPage="@(ViewBag.PageIndex + 1)"><a href="#">加载更多></a></div>
+
+        @if (!recommend.Any() && PageTotal <= 1)
+        {
+            <p class="tips text-center">没有更多学校了</p>
+        }
+    </section>
+
+
+    <!-- 推荐学校 -->
+    <section class="recommend-school-box" style="display:@(recommend.Any() ? "block" : "none")">
+        <div class="title text-center">
+            <h3>推荐学校</h3>
+        </div>
+        <div class="school-list">
+            @if (recommend.Any())
+            {
+                @foreach (LSRFSchoolDetailViewModel item in recommend)
+                {
+                    <div class="school-box" data-id="@item.Eid">
+                        <a href="/school/detail/@(item.Eid.ToString("N"))?coursetype=@ViewBag.ActiveCourseType">
+                            @if (item.Hardware.Any())
+                            {
+                                <img src="@item.Hardware[0]" />
+                            }
+                            <div class="school-name">@item.Sname</div>
+                            <div class="school-tag">
+                                @*@if (item.Authentication.Any())
+                                    {
+                                        <span>@item.Authentication[0].Key</span>
+                                    }*@
+                                <span>@item.LodgingReason</span>
+                                @if (item.Courses.Any())
+                                {
+                                    <span>@item.Courses[0].Key</span>
+                                }
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+        <p class="tips text-center">没有更多学校了</p>
+    </section>
+
+
+    <!-- 考虑因素 -->
+    <section class="consideration">
+        <h1 class="title text-center">选择国际学校/国际班要看什么！</h1>
+        <div>
+            <img src="@ViewBag.StaticFile/imgs/school-registration/13@2x.png">
+        </div>
+    </section>
+
+    <!-- 报名流程 -->
+    <section class="reg-process">
+        <h1 class="title text-center">国际学校报名流程</h1>
+        <div class="text-center">
+            <img src="@ViewBag.StaticFile/imgs/school-registration/14@2x.png">
+        </div>
+    </section>
+
+    <!-- 商务信息 -->
+    <section class="business-msg">
+        <span>
+            联系号码：020-89623090转接商务部<br>
+            邮箱：market@sxkid.com<br>
+        </span>
+        <span>
+            公司名称：广州市藏星网络科技有限公司<br>
+            ICP备案号：粤ICP备13052028号<br>
+        </span>
+        <p>免责声明：提示此网页信息目的在于为考生报考广东国际高中提供信息参考，如有疑问，请以各学校正式公布数据为准。</p>
+    </section>
+
+    <!-- 底部按钮 -->
+    <section class="bottom-btn text-center">
+        <div class="flex justify-content-between">
+            @*<a class="consultation-btn">报名咨询</a>*@
+            <a class="registration-btn">马上报名</a>
+        </div>
+    </section>
+
+    <input id="selectedSchool" type="hidden" />
+    <input id="signType" type="hidden" value="1" />
+    <input id="courseType" type="hidden" value="@ViewBag.ActiveCourseType" />
+    <input id="currentPostForm" value="0" type="hidden" />
+
+    <!-- 报名弹窗 -->
+    <div class="reg-box" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="content">
+            <h1 class="title">广东国际高中招生报名中</h1>
+            <form action="" class="data">
+                <div class="group">
+                    <input type="text" name="name" id="name" placeholder="您的称呼">
+                </div>
+                <div class="group">
+                    <input type="text" name="phone" id="phone" placeholder="您的电话" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11">
+                </div>
+                <div class="tips">
+                    <span class="mycheckbox"></span>
+                    <span>同意上学帮为您推荐其他国际高中</span>
+                </div>
+            </form>
+            <div class="submit-btn">
+                <button type="submit" id="submit">立即报名</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 群二维码弹窗 -->
+    @*<div class="QRcode-box" style="display: none;">
+            <span class="close-btn">+</span>
+            <div class="text-center">
+                <h1 class="title">加入微信群面对面咨询了解</h1>
+                <div class="QRcode-img">
+                    <img src="@ViewBag.StaticFile/imgs/school-registration/img6515bd7a0ac38.png" />
+                    <div>保存图片后关注加入<br />上学帮报名咨询群</div>
+                </div>
+                <div class="submit-btn"><a>我知道了</a></div>
+            </div>
+        </div>*@
+
+    <!-- 报名成功 -->
+    <div class="success-alert" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="text-center">
+            <div>
+                <img src="@ViewBag.StaticFile/imgs/school-registration/822.png" />
+                <span class="alert-text">您已成功报名</span>
+            </div>
+            <!-- <div class="qrcode"></div> -->
+            <img class="qrcode" src="@ViewBag.StaticFile/imgs/school-registration/qrcode@2x.png" />
+            <span>上学帮小助手</span>
+            <p>您可扫码添加上学帮小助手微信，或稍后通过上学帮小助手微信号的好友添加，在线咨询了解学校</p>
+            <a>确定</a>
+        </div>
+    </div>
+
+    <!-- 报名失败 -->
+    <div class="fail-alert" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="text-center">
+            <img src="@ViewBag.StaticFile/imgs/school-registration/3475.png" />
+            <div class="alert-text">抱歉，信息提交失败<br>请尝试再次提交</div>
+            <a>确定</a>
+        </div>
+    </div>
+
+    <!-- 幕布 -->
+    <div class="curtain" style="z-index: 2; display: none;"></div>
+</body>
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+<script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+<script src="@ViewBag.StaticFile/js/school-registration.js"></script>
+<script>
+    $(async function () {
+         var headerH = $('.header').outerHeight()
+        if (await isHideHeader()) {
+            $('.banner-box').css('margin-top', 0)
+        } else {
+            $('.banner-box').css('margin-top', headerH)
+        }
+    })
+</script>
+</html>

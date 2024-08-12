@@ -1,0 +1,98 @@
+﻿@model Sxb.PCWeb.ViewModels.ViewComponent.OrgLessonViewModel;
+
+@if (Model?.RecommendOrgs?.Any() == true)
+{
+    <!-- 推荐机构 start -->
+    @*<div class="recomment-agency">
+        <div class="recomment-agency-title clearfix">
+            <h2>推荐机构</h2>
+            <a class="more-agency" href="/org/orgs">
+                <span>查看更多></span>
+            </a>
+        </div>
+        <ul class="recomment-agency-list">
+            @foreach (var item in Model.RecommendOrgs)
+            {
+                <li>
+                    <a href="/org/orgs/detail/@item.ID_S" class="clearfix">
+                        <img class="agency-img"
+                             src="@item.Logo"
+                             alt="">
+                        <div class="agency-content">
+                            <div class="agency-info clearfix">
+                                <h3 class="agency-name">@item.Name</h3>
+                                @if (item.Authentication)
+                                {
+                                    <div class="auth-tag">
+                                        <img class="auth" src="@(ViewBag.StaticFile)/imgs/school-detail-profile/auth@3x.png" alt="">
+                                        <span>认证</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="not-auth-tag">
+                                        <span>未认证</span>
+                                    </div>
+                                }
+                            </div>
+
+                            <span class="agency-tips-one">@item.Desc</span>
+                            <span class="agency-tips-two">@item.SubDesc</span>
+                            <div class="clearfix agency-desc">
+                                <div class="agency-course">课程数量<span>@item.CourceCount</span></div>
+                                <div class="agency-evaluation">测评数<span>@item.EvaluationCount</span></div>
+                            </div>
+
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>*@
+    <!-- 推荐机构 end -->
+}
+
+@if (Model?.HotSellCourses?.Any() == true)
+{
+    <!-- 热卖课程 start -->
+    <div class="hot-course">
+        <div class="hot-course-title clearfix">
+            <h2>热卖课程</h2>
+            <a class="more-course" href="/org/course">
+                <span>查看更多></span>
+            </a>
+        </div>
+        <ul class="hot-course-list">
+            @foreach (var item in Model.HotSellCourses)
+            {
+                <li>
+                    <a href="/org/course/detail/@item.ID_S" class="clearfix">
+                        <img class="agency-img"
+                             src="@item.Banner"
+                             alt="">
+                        <div class="course-content clearfix">
+                            <div class="course-info clearfix">
+                                <h3 class="course-name">@item.Title</h3>
+                                <div class="course-price">¥<span>@item.Price</span></div>
+                            </div>
+                            @if (item.Authentication)
+                            {
+                                <div class="auth-tag">
+                                    <img class="auth" src="@(ViewBag.StaticFile)/imgs/school-detail-profile/auth@3x.png" alt="">
+                                    <span>认证</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="not-auth-tag">
+                                    <span>未认证</span>
+                                </div>
+                            }
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- 热卖课程 end -->
+}

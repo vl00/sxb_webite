@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MongoDb\ProductManagement.Framework.MongoDb.csproj" />
+    <ProjectReference Include="..\PMS.OperationPlateform.Domain\PMS.OperationPlateform.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

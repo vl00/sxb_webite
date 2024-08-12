@@ -1,0 +1,26 @@
+{
+  "DbConnectionStrings": [
+    {
+      "Name": "postgres",
+      "LoadBalancer": "Server=10.0.0.178;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      "RealDbConnectionStrings": [
+        "Server=10.0.2.71;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+        "Server=10.0.2.72;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+        "Server=10.0.2.73;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+        "Server=10.0.2.74;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+        "Server=10.0.2.75;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+        "Server=10.0.2.76;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;"
+      ]
+      //"Name": "postgres",
+      //"LoadBalancer": "Server=10.0.5.155;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //"RealDbConnectionStrings": [
+      //  "Server=10.0.5.182;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //  "Server=10.0.5.183;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //  "Server=10.0.5.184;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //  "Server=10.0.5.185;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //  "Server=10.0.5.186;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;",
+      //  "Server=10.0.5.187;Port=5432;User Id=ha;Password=123456; Database=postgres;Timeout=1;Timeout=2;CommandTimeout=0;ApplicationName=HM_PostgreSQLAccessor;"
+      //]
+    }
+  ]
+}

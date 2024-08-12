@@ -1,0 +1,365 @@
+﻿
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+
+        .btn:hover {
+        cursor:pointer;
+        }
+
+        .BoxHide{
+            display:none;
+        }
+
+        .BoxShow {
+            display:block;
+        }
+
+    </style>
+}
+
+<div id="box" class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                            <div class="col-sm-7">
+                                <h5 style="font-weight:bold;">
+                                    账号管理
+                                </h5>
+                                <span style="font-size:13px;color: gray;">显示当前系统中的兼职人员账号信息</span>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <button class=" float-right btn btn-dark" onclick="member_add('新建账号','/PartTimeJob/Manage/Register','470','600')">新建账号</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-5">
+                                    <label class="">角色身份：</label>
+                                    <select id="adminRoleType">
+                                        <!--1：兼职，2：兼职领队，3：供应商，4：审核，5：管理员 -->
+                                        <option value="3">供应商</option>
+                                        <option value="2">兼职领队</option>
+                                        <option value="1">兼职</option>
+                                        <option value="4">审核</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-7" style="display:none;" id="searchPhone">
+                                    <label class="">检索：</label>
+                                    <input id="phoneSerach" type="text" />
+                                    <button id="searchPhone">检索</button>
+                                </div>
+                            </div>
+                                <div class="col-sm-12">
+                                    <div id="SupplierAndExaminerBox">
+                                        <table class="table" id="SupplierAndExaminer"></table>
+                                    </div>
+                                    <div id="JobLeaderBox" style="display:none;">
+                                        <table class="table" id="JobLeader"></table>
+                                    </div>
+                                    <div id="JobBox" style="display:none;">
+                                        <table class="table" id="Job"></table>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript">
+        $(function () {
+            $(".nav").find("li[class='active']").removeClass("active")
+            $(".nav li:eq(4)").addClass("active")
+            
+            //默认加载供应商数据
+            LoadSupplierAndExaminer(3);
+
+            $("#adminRoleType").change(function () {
+                var type = $("#adminRoleType").find("option:selected").val();
+
+                //供应商、审核
+                if (type == 3 || type == 4) {
+                    $("#SupplierAndExaminerBox").show()
+                    $("#JobLeaderBox").hide();
+                    $("#JobBox").hide();
+                    $("#searchPhone").hide()
+                    LoadSupplierAndExaminer(type);
+                }
+                //兼职领队
+                else if (type == 2)
+                {
+                    $("#SupplierAndExaminerBox").hide()
+                    $("#JobLeaderBox").show();
+                    $("#JobBox").hide();
+                    LoadJobLeader();
+                    $("#searchPhone").hide()
+                }
+                    //兼职
+                else
+                {
+                    $("#SupplierAndExaminerBox").hide()
+                    $("#JobLeaderBox").hide();
+                    $("#JobBox").show();
+                    $("#searchPhone").show()
+                    LoadJob();
+                }
+            })
+
+            $("#searchPhone").click(function () {
+                LoadJob();
+            })
+
+            //加载供应商、审核人员账号信息
+            function LoadSupplierAndExaminer(role)
+            {
+                $("#SupplierAndExaminer").bootstrapTable('destroy')
+                $('#SupplierAndExaminer').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/Manage/GetPartTimeJobAdminPage",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            role: role,
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            Tel: $('#search_tel').val()
+                        };
+                        return temp;
+                    },
+                    columns: [
+                        {
+                            title: '昵称',
+                            field: 'name'
+                        }, {
+                            title: '手机号',
+                            field: 'phone'
+                        }, {
+                            title: '注册时间',
+                            field: 'regesitTime'
+                        },
+                        {
+                            title: '操作',
+                            class:'operationTitle',
+                            formatter: operation,//对资源进行操作
+                        }]
+                })
+            }
+
+
+            //加载兼职领队账号信息
+            function LoadJobLeader() {
+                $("#JobLeader").bootstrapTable('destroy')
+                $('#JobLeader').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/Manage/GetAllJobLeader",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            Tel: $('#search_tel').val()
+                        };
+                        return temp;
+                    },
+                    columns: [
+                        {
+                            title: '昵称',
+                            field: 'name'
+                        }, {
+                            title: '手机号',
+                            field: 'phone'
+                        }, {
+                            title: '所属供应商',
+                            field: 'supplier'
+                        }, {
+                            title: '注册时间',
+                            field: 'registerTime'
+                        },
+                        {
+                            title: '操作',
+                            class: 'operationTitle',
+                            formatter: operation,//对资源进行操作
+                        }]
+                })
+            }
+
+            //加载兼职信息
+            function LoadJob() {
+                $("#Job").bootstrapTable('destroy')
+                $('#Job').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/Manage/GetAllJob",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                           
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+                                
+                            Name: $('#search_name').val(),
+                            phone: $('#phoneSerach').val()
+                        };
+                        return temp;
+                    },
+                    columns: [
+                        {
+                            title: '昵称',
+                            field: 'name'
+                        }, {
+                            title: '手机号',
+                            field: 'phone'
+                        }, {
+                            title: '所属供应商',
+                            field: 'supplier'
+                        }, {
+                            title: '所属兼职领队',
+                            field: 'leader'
+                        }, {
+                            title: '注册时间',
+                            field: 'registerTime'
+                        },
+                        {
+                            title: '操作',
+                            class: 'operationTitle',
+                            formatter: operation,//对资源进行操作
+                        }]
+                })
+            }
+            
+            
+            //删除、编辑操作
+            function operation(value, row, index)
+            {
+                var htm = "";
+                var statu = row["prohibit"] == true ? "恢复" : "删除";
+                htm += "<button data-Id='" + row["id"] + "' class='CheckStatu btn btn-dark'>" + statu+"</button>";
+                htm += "<button data-code='" + row["invitationCode"] + "' class='SelectCode btn btn-dark' style='margin-left: 10px;' > 查看邀请码</button > "
+
+                if ($("#adminRoleType option:selected").val() == 1)
+                {
+                     //.btn-danger
+                    if (row["shield"])
+                    {
+                        htm += "<button  data-Id='" + row["id"] + "'  class='Checkshield btn btn-danger' >屏蔽</button>"
+                    }
+                    else
+                    {
+                        htm += "<button  data-Id='" + row["id"] + "'  class='Checkshield btn btn-dark' >正常</button>"
+                    }
+                }
+
+               
+                return htm;
+            }
+
+            //格式化数据
+            function changeDateFormat(cellval) {
+                var dateVal = cellval + "";
+                if (cellval != null) {
+                    var date = new Date(cellval);
+                    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                    var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                    var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                    var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+                    return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+                }
+            }
+
+            //查看邀请码
+            $("#box").on("click", ".SelectCode", function () {
+                layer.alert($(this).attr("data-code"),{ title:"邀请码" })
+            })
+
+            $("#box").on("click", ".Checkshield", function () {
+                var Id = $(this).attr("data-Id");
+                var that = $(this)
+                $.ajax({
+                    url: "/PartTimeJob/Manage/CheckShieldStatus?Id=" + Id, success: function (data) {
+                        //layer.alert(data.message)
+                        if (data.statusCode == 200) {
+                            //console.log(data)
+                            if (data.data) {
+                                that.text("屏蔽").removeClass("btn-dark").addClass("btn-danger")
+                                layer.alert("账号已屏蔽")
+                            }
+                            else {
+                                that.text("正常").removeClass("btn-danger").addClass("btn-dark")
+                                layer.alert("账号已恢复")
+                            }
+                        }
+                    }
+                })
+            })
+
+            //删除
+            $("#box").on("click", ".CheckStatu", function () {
+                var Id = $(this).attr("data-Id");
+                var that = $(this)
+                $.ajax({
+                    url: "/PartTimeJob/Manage/CheckStatus?Id=" + Id, success: function (data) {
+                        //layer.alert(data.message)
+                        if (data.statusCode == 200)
+                        {
+                            //console.log(data)
+                            if (data.data)
+                            {
+                                that.text("恢复")
+                                layer.alert("账号已禁止登录")
+                            }
+                            else
+                            {
+                                that.text("删除")
+                                layer.alert("账号已恢复")
+                            }
+                        }
+                    }
+                })
+            })
+
+        })
+    </script>
+}

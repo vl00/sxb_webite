@@ -1,0 +1,149 @@
+﻿
+@model PMS.OperationPlateform.Application.Dtos.SchoolActivityDetailDto
+@using PMS.OperationPlateform.Domain.Enums;
+@{
+    PMS.School.Domain.Dtos.SchoolExtensionDto school = ViewBag.School;
+
+    var activity = Model;
+    //活动标题
+    var activityTitle = "入读意向登记";
+    if (activity.Category == (byte)SchoolActivityCategory.Single)
+    {
+        activityTitle = string.IsNullOrWhiteSpace(activity.Title) ? "预约探校" : activity.Title;
+    }
+
+    //页面标题, 默认活动名称, 无则取学校名称
+    var pageTitle = activity.Name;
+    if (string.IsNullOrWhiteSpace(pageTitle))
+    {
+        pageTitle = activity.SchoolName;
+    }
+
+    var mainViewData = new ViewDataDictionary(ViewData);
+    var dialogViewData = new ViewDataDictionary(ViewData);
+    mainViewData.Add("Prefix", "topform");
+    dialogViewData.Add("Prefix", "dialog");
+}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>@pageTitle</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/home.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/leave-information/leave-information.css">
+</head>
+
+<body>
+    @* 无留资活动信息 *@
+    @if (Model == null || Model.Extensions == null || !Model.Extensions.Any())
+    {
+
+    }
+
+    <!-- 公共头部 -->
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 1)
+        </div>
+    </header>
+    <!-- 主体内容的开始 -->
+    <div class="leave-information-content">
+        <!-- 这是顶部广告和表单部分的开始 -->
+        <!-- banner - S -->
+        @if (Model.Images != null && Model.Images.Any())
+        {
+            <div class="banner container">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in Model.Images)
+                        {
+                            <div class="swiper-slide">
+                                <img src="@item.Url" data-sort="@item.Sort" alt="@item.Url">
+                            </div>
+                        }
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        }
+        <!-- banner - E -->
+        <!-- 这是预约探校表单部分的开始 -->
+
+        <div class="topContent container">
+
+            <div class="orderBox">
+                <!-- 提示层部分 -->
+                <div class="hintBox">
+                    <h2>请输入<br><span></span></h2>
+                </div>
+                <h1>@activityTitle</h1>
+                <form id="order" class="orderForm clearfix activityId" name="order" eport-submit="false" data-activityId="@Model.Id">
+                    @await Html.PartialAsync("ExtensionsPartial", Model.Extensions, mainViewData)
+                    <div class="submitBtn">马上报名</div>
+                    <h3>点击报名即代表你已阅读并同意<a href="/home/principle?idx=4">“隐私政策”</a></h3>
+                </form>
+                <!-- <div class="submitBtn">马上报名</div>
+                <h3>点击报名即代表你已阅读并同意<a href="home/principle?idx=4">“隐私政策”</a></h3> -->
+            </div>
+        </div>
+        <!-- 这是预约探校表单部分的结束 -->
+        <!-- 这是顶部广告和表单部分的结束 -->
+        <!-- 这是学校信息部分的开始 -->
+        @if (Model.IsConnectSchool && school != null && !string.IsNullOrWhiteSpace(school.SchoolName))
+        {
+            @await Html.PartialAsync("SchoolPartial", school)
+        }
+        <!-- 这是学校信息部分的结束 -->
+    </div>
+    <!-- 主体内容的结束 -->
+    <!-- 报名吸附横栏部分的开始 -->
+    <div class="applyNav">
+        <div class="container navBox">
+            <div class="titleBox">@activityTitle</div>
+            <div class="subBox">@Model.Subtitle</div>
+            <div class="applyBtn"><span></span>马上报名</div>
+        </div>
+    </div>
+    <!-- 报名吸附横栏部分的结束 -->
+    <!-- 遮罩层部分 -->
+    <div class="mask">
+        <!-- 报名弹层部分的开始 -->
+        <div class="applyFormDialog">
+            <!-- 提示层部分 -->
+            <div class="hintBox">
+                <h2>请输入<br><span></span></h2>
+            </div>
+            <h1>@activityTitle</h1>
+            <form class="formContent activityId" data-activityId="@Model.Id">
+                @await Html.PartialAsync("ExtensionsPartial", Model.Extensions, dialogViewData)
+                <div class="submitBtn">马上报名</div>
+                <h3>点击报名即代表你已阅读并同意<a href="/home/principle?idx=4">“隐私政策”</a></h3>
+            </form>
+            <!-- <div class="submitBtn">马上报名</div>
+    <h3>点击报名即代表你已阅读并同意<a href="#">“隐私政策”</a></h3> -->
+        </div>
+        <!-- 报名弹层部分的结束 -->
+
+        @{ await Html.RenderPartialAsync("MaskPartial"); }
+    </div>
+
+    <!-- 公共底部 -->
+    @{ await Html.RenderPartialAsync("Footer"); }
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js//leave-information/leave-information.js"></script>
+    <script src="@(ViewBag.StaticFile)/js//leave-information/formValue.js"></script>
+</body>
+
+</html>

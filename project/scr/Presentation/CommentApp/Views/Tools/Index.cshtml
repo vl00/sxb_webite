@@ -1,0 +1,81 @@
+﻿@model IEnumerable<PMS.OperationPlateform.Domain.DTOs.ToolModuleInfoDto>
+@using Sxb.Web.Utils
+@{
+    ViewBag.Title = "工具";
+
+}
+@section Styles{
+
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/tool.css" />
+}
+
+
+<section>
+
+    <div class="topNav"><a href="#" onclick="javascript: window.history.back(); return false;"><span class="back"></span></a></div>
+
+    <div class="top-bcg"><img src="@ViewBag.StaticFile/imgs/tool-bcg.png" alt=""></div>
+    <div class="content">
+        @foreach (var item in Model)
+        {
+            if (item.SecondModule != null && item.SecondModule.Count > 0)
+            {
+
+                <div class="often-use">
+                    <h5 class="title">@item.FirstModule.Name</h5>
+                    <ul class="tool-list flex text-center">
+
+                        @foreach (var toolType in item.SecondModule)
+                        {
+                            <li>
+                                <a href="@Url.Action("ToolList",new {toolTypeId = toolType.Id ,toolTypeName = toolType.Name})">
+                                    <div><img src="@(toolType.Icon.Replace("file.sxkid.com","cdn.sxkid.com",StringComparison.CurrentCultureIgnoreCase))" alt=""></div>
+                                    <p>@toolType.Name</p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+
+
+    </div>
+</section>
+
+@if (Context.Request.GetClientType() != UA.Mobile)
+{
+
+    @*<footer class="footer">
+            <ul class="flex text-center">
+                <li>
+                    <a href="/">
+                        <p><i class="footer-icon"></i></p>
+                        <div>首页</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/live/client/livelist.html">
+                        <p><i class="footer-icon"></i></p>
+                        <div>攻略</div>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="@Url.Action("index", "tools", new { })">
+                        <p><i class="footer-icon"></i></p>
+                        <div>工具</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="@(ViewBag.UserServiceUrl)/mine/mine.html">
+                        <p><i class="footer-icon"></i></p>
+                        <div>我的</div>
+                    </a>
+                </li>
+            </ul>
+        </footer>*@
+}
+
+@section Scripts{
+
+}

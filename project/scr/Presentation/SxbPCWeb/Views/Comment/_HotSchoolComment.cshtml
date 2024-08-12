@@ -1,0 +1,7 @@
+﻿@model Sxb.PCWeb.ViewModels.School.SchoolCommentCardViewModel;
+<li>
+    <a href="/comment/school-@Model.ShortSchoolNo/" title="@Model.SchoolName" class="d-flex justify-content-between">
+        <h3 class="font-15"><i class="num">@ViewBag.Level</i>@Model.SchoolName</h3>
+        <div class="comment-num font-12">@(Model.CommentTotal)条点评</div>
+    </a>
+</li>

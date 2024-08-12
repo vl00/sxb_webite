@@ -1,0 +1,106 @@
+﻿@model Sxb.PCWeb.ViewModels.School.LSRFSchoolDetailViewModel;
+
+
+    <!-- 显示6间学校 -->
+    <div class="single-school" data-id="@Model.Eid">
+        @if (Model.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise && Model.AdvType == 2)
+        {
+            <div><img src="@Model.AdvPicUrl" /><span class="label">推广</span></div>
+        }
+        else
+        {
+            if (Model.Hardware.Any())
+            {
+                <div><img src="@Model.Hardware[0]" /><span class="label">推广</span></div>
+            }
+        }
+        <div class="content">
+            <a href="/school/detail/@Model.Eid.ToString("N")?coursetype=@ViewBag.ActiveCourseType">
+                <span class="school-name">@Model.Sname</span>
+                @if (Model.Type == PMS.OperationPlateform.Domain.Enums.LSRFSchoolType.Advertise  && Model.AdvType == 2)
+                {
+                    <span class="icon-box"><i class="ad-tag"></i></span>
+                }
+                <ul>
+                    <li>
+                        <i class="number-i"></i>
+                        招生人数：
+                        @if(Model.Count < 0)
+                        {
+                            <span>暂未收录</span>
+                        }
+                        else
+                        {
+                            <span>@(Model.Count)人</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="direction-i"></i>
+                        出国方向：
+                        @if (String.IsNullOrEmpty(Model.Abroad))
+                        {
+                            <span>暂未收录</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Abroad</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="subject-i"></i>
+                        考试科目：
+                        @if (String.IsNullOrEmpty(Model.Subjects))
+                        {
+                            <span>暂未收录</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Subjects</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="isloding-i"></i>
+                        走读寄宿：
+                        @if (!string.IsNullOrWhiteSpace(Model.LodgingReason))
+                        {
+                            <span>@Model.LodgingReason</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="curri-i"></i>
+                        课程设置：
+                        @if (Model.Courses.Any())
+                        {
+                            <div class="tag">
+                                @foreach (var item in Model.Courses)
+                                {
+                                    <span>@item.Key</span>
+                                }
+                            </div>
+                        }
+                        else 
+                        {
+                            <span>暂未收录</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="intro-i"></i>
+                        学校简介：
+                        @if (String.IsNullOrEmpty(Model.Intro))
+                        {
+                            <span>暂未收录</span>
+                        }
+                        else
+                        {
+                            <div class="SchoolProfile">
+                                <p>@Model.Intro</p>
+                            </div>
+                        }
+                    </li>
+                </ul>
+            </a>
+            <div class="school-btn">
+                <a href="javascript:;" class="regis-btn" data-signType="2">马上报名</a>
+            </div>
+        </div>
+    </div>

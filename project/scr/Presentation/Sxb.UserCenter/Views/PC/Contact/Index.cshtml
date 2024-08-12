@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "联系客服";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/agreement.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">联系客服</span>
+    <span class=""></span>
+</header>
+
+<h5 class="mt title">常见问题</h5>
+
+<section class="list">
+    <ul>
+        <li><a href="@(Url.Action("QA"))#q1">学校总评问题<i class="arrow"></i></a></li>
+        <li><a href="@(Url.Action("QA"))#q2">账户信息/登录问题<i class="arrow"></i></a></li>
+        <li><a href="@(Url.Action("QA"))#q3">身份认证问题<i class="arrow"></i></a></li>
+    </ul>
+</section>
+
+<div class="message">
+    <a href="@Url.Action("QA")" class="submit-btn text-center">没有找到相关问题？</a>
+</div>

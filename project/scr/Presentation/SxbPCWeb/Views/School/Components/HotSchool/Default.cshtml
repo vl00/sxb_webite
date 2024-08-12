@@ -1,0 +1,62 @@
+﻿@using PMS.School.Domain.Dtos;
+@using PMS.OperationPlateform.Domain.Enums;
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+@{
+    var schools = ViewBag.HotVisitSchools is Lazy<SimpleHotSchoolDto[]> lzy ? lzy.Value : new SimpleHotSchoolDto[0];
+    var schoolNos = ViewBag.SchoolNos as Dictionary<Guid, string>;
+
+    string Url_schoolDetail(object eid)
+    {
+        var id = eid is Guid g ? g.ToString("n") :
+            Guid.TryParse(eid?.ToString(), out g) ? g.ToString("n") :
+            throw new ArgumentException($"{eid} is not guid");
+        return Url.Action("detail", "school", new { id }).ToLower();
+    }
+}
+
+<div class="hot-school">
+    <h2 class="font-18 font-weight-bold">热门学校</h2>
+    <ul class="school-list">
+        @foreach (var school in schools)
+        {
+            <li>
+                @*<a href="@Url_schoolDetail(school.Eid)" title="@(school.Name)" class="d-flex justify-content-between">*@
+                <a href="/school-@schoolNos[school.Eid]?.ToLower()/" title="@(school.Name)" class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="font-15">@(school.Name)</h3>
+                        <ul class="tag d-flex font-12">
+                            @{
+                                var desc = ((PMS.OperationPlateform.Domain.Enums.SchoolType)school.SchFType.Type).GetDescription();
+                                if (!string.IsNullOrEmpty(desc))
+                                {
+                                    <text>
+                                        <li>@desc</li>
+                                    </text>
+                                }
+                            }
+                            @{
+                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(school.LodgingType);
+                            }
+                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                            {
+                                <li>@lodgingDesc</li>
+                            }
+                            @*<li class="authentication"><img src="/imgs/detail/authentication.png" alt="认证"></li>*@
+                        </ul>
+                    </div>
+                    <div>
+                        @if (school.TotalScore != null)
+                        {
+                            <div class="grade text-center font-18">@(school.TotalScore)<i class="font-14">分</i></div>
+                        }
+                        else
+                        {
+                            <div class="grade text-center font-18"><i class="color-999 font-14">暂未评分</i></div>
+                        }
+                        <p class="font-12">学校总评</p>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

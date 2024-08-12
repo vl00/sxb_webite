@@ -1,0 +1,11 @@
+﻿@using Microsoft.Extensions.Configuration;
+@{
+    var config = Context.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
+    var staticFile = config.GetSection("StaticFile").Get<string>();
+    var userServiceUrl = config.GetSection("UserSystemConfig").GetValue<string>("ServerUrl");
+#if DEBUG
+    if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("Programer"))) staticFile = string.Empty; //For Lonlykids
+#endif
+    ViewBag.StaticFile = staticFile;
+    ViewBag.UserServiceUrl = userServiceUrl;
+}

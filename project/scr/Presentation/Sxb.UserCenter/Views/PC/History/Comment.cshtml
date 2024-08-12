@@ -1,0 +1,65 @@
+﻿@model PMS.UserManage.Application.ModelDto.VoBase
+@{
+    Layout = null;
+    var data = Newtonsoft.Json.JsonConvert.DeserializeObject<PMS.UserManage.Application.ModelDto.ModelVo.CommentVo.CommentReplyData>(Model.data.ToString());
+}
+@if (data != null && data.commentModels != null && data.commentModels.Count > 0)
+{
+    <ul class="comment-list">
+        @foreach (var comment in data.commentModels)
+        {
+            <li>
+                <a href="https://m.sxkid.com/SchoolComment/CommentDetail_CommentId-@comment.Id.ToString("N")~">
+                    <!-- 校方 -->
+                    <div class="list-header flex justify-content-between">
+                        <div class="user-msg flex">
+                            <div class="head">
+                                <div><img src="@comment.UserHeadImage" alt="@comment.UserName"></div>
+                                @*<i class="comment-icon school"></i>*@
+                            </div>
+                            <span class="name">
+                                @comment.UserName
+                                <!-- <i class="identity">过来人</i> -->
+                            </span>
+                        </div>
+                        <div class="other flex">
+                            @*<i class="comment-icon"></i>*@
+                            <div class="other-list-btn text-center">
+                                <div class="flex">
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                </div>
+                                @*<span>精华</span>*@
+                            </div>
+                        </div>
+                    </div>
+                    <p class="reply-content">@comment.Content</p>
+                    @if (comment.Images.Count > 0)
+                    {
+                        <div class="img-num">共@(comment.Images.Count)张图&gt;</div>
+                    }
+                    <div class="comment-msg flex justify-content-between">
+                        <div>
+                            <span class="time">@comment.CreateTime</span>
+                        </div>
+                        <div class="ctr">
+                            <span class="comment"><i class="comment-icon"></i>@comment.ReplyCount</span>
+                            <span class="like click-like">
+                                <i class="comment-icon"></i>
+                                <span>@comment.LikeCount</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

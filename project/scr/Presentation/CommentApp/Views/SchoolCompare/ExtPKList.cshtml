@@ -1,0 +1,171 @@
+﻿@using PMS.School.Domain.Common;
+@model PMS.School.Domain.Dtos.PKSchools
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>PK列表</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/pk-list.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">PK列表</span>
+        <span class="btn">编辑</span>
+    </header>
+
+    <section class="mt pk-list-content">
+
+        <div class="add-school text-center">
+            <a href="@Url.Action("ExtAddSchool", "PK")">+添加学校</a>
+        </div>
+        
+        @if (Model.PKSchoolList.Count == 0)
+        {
+            <div class="not-add text-center">暂无PK学校<br>马上去添加呗~</div>
+        }
+        else
+        {
+            <ul class="school-list">
+                @foreach (var item in Model.PKSchoolList)
+                {
+                    <li data-extid="@item.ExtId" data-sid="@item.Sid">
+                        <div class="flex justify-content-between">
+                            <div class="flex">
+                                <span class="delete-select"><i></i></span>
+                                <div>
+                                    <h2 class="school-name">@item.Name</h2>
+                                    <div class="tag">
+                                        <span>
+                                            @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                        </span>
+                                        @{
+                                            var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                            var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                        {
+                                            <span>@lodgingDesc</span>
+                                        }
+
+                                        @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+                                    </div>
+                                    <div class="msg">
+                                        @if (item.Tuition != null)
+                                        {
+                                        <span class="price">
+                                            @(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年
+                                        </span>
+                                        }
+
+                                        @if (item.Distance != null)
+                                        {
+                                            <span>@(Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                                        }
+
+
+                                        <span>@item.CityName | @item.AreaName</span>
+                                    </div>
+                                    <ul class="type-list flex">
+                                        <li>
+                                            @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                        </li>
+                                        @if (item.Tags != null && item.Tags.Count > 0)
+                                        {
+                                            @foreach (var tag in item.Tags)
+                                            {
+                                                <li>@tag</li>
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="score text-center">
+                                @if (item.ExtPoint != null)
+                                {
+                                    <h3>@(Math.Round((decimal)item.ExtPoint, 0))<span>分</span></h3>
+                                }
+                                else
+                                {
+                                    <span class="not-data">暂未评分</span>
+                                }
+                                <p>学校总评</p>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+
+    <section class="bottom-btn">
+
+        <a class="text-center" data-url="">开始PK</a>
+        <div class="edit text-center" style="display: none;">
+            <div class="flex">
+                <a class="all-clear">一键清空</a>
+                <a class="delete">删除</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pk-list/pk-list.js"></script>
+    <script>
+        $('.delete').click(function () {
+            var extId = $.map($('li.select[data-extid]'), function (n) { return $(n).attr('data-extid') });
+
+            if (extId.length > 0) {
+                $.ajax({
+                    url: "/pk/ExtPKListDele",
+                    type: "POST",
+                    data: { extId: extId },
+                    beforeSend: function () {
+                        //$.loading("数据提交中")
+                    },
+                    success: function (data) {
+                        if (data.status == 200) {
+                            location.href = "/pk/extpklist?extId[0]=data[0]";
+                        }
+                        else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+
+        $('.all-clear').click(function () {
+            var extId = $.map($('li[data-extid]'), function (n) { return $(n).attr('data-extid') });
+
+            if (extId.length > 0) {
+                $.ajax({
+                    url: "/pk/ExtPKListDele",
+                    type: "POST",
+                    data: { extId: extId },
+                    beforeSend: function () {
+                        //$.loading("数据提交中")
+                    },
+                    success: function (data) {
+                        if (data.status == 200) {
+                            location.href = "/pk/extpklist?extId[0]=data[0]";
+                        }
+                        else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            }
+        });
+        
+
+    </script>
+
+</body>
+</html>

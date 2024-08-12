@@ -1,0 +1,138 @@
+﻿@using iSchool;
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Infrastructure;
+@using PMS.School.Infrastructure.Common;
+@using SchoolGrade = PMS.School.Domain.Common.SchoolGrade;
+@using SchoolType = PMS.School.Domain.Common.SchoolType;
+@{
+    Layout = "layout_school";
+    ViewBag.Title = $"{ViewBag.SchoolName}学校师资力量评分_硬件设施_家长费用负担_周边设施评分";
+    ViewBag.Page_Description = $"上学帮学校频道，为您提供全面的{ViewBag.SchoolName}学校师资力量评分,硬件设施,家长费用负担,周边设施评分等信息";
+    ViewBag.Page_keywords = string.Format("{0}学校师资力量评分,{0}硬件设施,{0}家长费用负担,{0}周边设施评分", ViewBag.SchoolName);
+
+    //const string NullData = "暂未收录";
+    var schtype = (SchFType0)ViewBag.SchFType;
+
+    var character = ViewBag.Character as SchoolExtCharacterDto ?? new SchoolExtCharacterDto
+    {
+        //TotalScore = 85,
+        //SchoolCredentials = 86,
+        //EnterEasy = 84,
+        //TeacherPower = 91,
+        //Hardware = 71,
+        //Edufund = 58,
+        //RegionaleConomic = 44,
+        //CoureType = 66,
+        //UpgradeEasy = 18,
+        //PopulationDensity = 20,
+        //Cost = 7,
+        //Comfort = 78,
+        //Safety = 68,
+        //TrafficEasy = 89,
+    };
+
+    var score = (List<SchoolExtScore>)ViewBag.Score;
+    var index = (List<SchoolExtScoreIndex>)ViewBag.ScoreIndex;
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-comments.css">
+}
+
+@* 左侧内容 *@
+<div class="left-content">
+    <input type="hidden" data-school="@ViewBag.ExtID" class="schoolID">
+    <div class="school-chart">
+        <h2 class="font-20 font-weight-bold">学校总评</h2>
+        <div class="E-charts">
+            <div id="charts" style="width: 600px;height:400px;"></div>
+        </div>
+        <p class="score font-15">总体评分：<i class='font-20 private-score-grading score-all'></i></p>
+        <p class="title font-15 separate-score">分项评分：</p>
+        <div class='columnar-charts'>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="parents-evaluation">
+        <h2 class="font-20 font-weight-bold">家长评价</h2>
+
+        <div class="answer">
+            共<i></i>人评分
+        </div>
+        <div class="score">
+            <div class="all-score">
+                <i id="score">4.7</i>分
+                <div class='newStar'>
+                </div>
+            </div>
+            <div class="score-line">
+                <div class="line-content newstar-5">
+                    <div class="line-back"></div>
+                    <div class="line-blue" style="width: 50%;"></div>
+                </div>
+                <div class="line-content newstar-4">
+                    <div class="line-back"></div>
+                    <div class="line-blue" style="width: 50%;"></div>
+                </div>
+                <div class="line-content newstar-3">
+                    <div class="line-back"></div>
+                    <div class="line-blue" style="width: 50%;"></div>
+                </div>
+                <div class="line-content newstar-2">
+                    <div class="line-back"></div>
+                    <div class="line-blue" style="width: 50%;"></div>
+                </div>
+                <div class="line-content newstar-1">
+                    <div class="line-back"></div>
+                    <div class="line-blue" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="score-more">
+            <a href="/comment/school-@ViewBag.SchoolNo/">查看全部评价 ></a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    @await Component.InvokeAsync("OtherSchoolExts", ViewBag.ExtId)
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+</div>
+@* 右侧内容 *@
+<div class="right-list">
+    <!-- 课程卡片广告 start -->
+    <div class="course-adv-wrapper"></div>
+    <!-- 课程卡片广告 end -->
+    <!-- 广告开始 -->
+    <div class="mkt-box" id="rightBanner">
+        <div class="swiper-container swiper-mkt swiperSchoolAd" data-id="@ViewBag.ExtId" alt="24" data-autos="24" id="swiperSchoolAd-24" style="height: 205px;">
+            <div class="swiper-wrapper">
+            </div>
+            <div class="swiper-pagination mkt-pagination"></div>
+        </div>
+    </div>
+    <!-- 广告结束 -->
+    <!-- 这是预约探校表单部分的开始 -->
+    @await Component.InvokeAsync("SchoolActivity", ViewBag.ExtId)
+    <!-- 这是预约探校表单部分的结束 -->
+    <div class="hot-goods"></div>
+    @await Component.InvokeAsync("OrgLesson", ViewBag.Grade)
+    @await Component.InvokeAsync("PaidQA", ViewBag.Grade)
+    @await Component.InvokeAsync("RelatedSchool", ViewBag.ExtId)
+</div>
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/echarts.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailComments.js"></script>
+    <script>
+        $(function () {
+            //...
+        });
+    </script>
+}

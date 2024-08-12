@@ -1,0 +1,361 @@
+﻿<html lang="zh">
+@using Sxb.PCWeb.ViewModels
+@{
+    string schoolNam = @ViewBag.SchoolQuestionCard.SchoolName;
+    var keywords = $"{schoolNam}学校答疑,{schoolNam}常见问题";
+    var description = string.IsNullOrWhiteSpace(ViewBag.Page_Description) ? keywords : ViewBag.Page_Description;
+    var title = $"{schoolNam}学校答疑_常见问题-上学帮";
+
+    var headerBreadcrumb = HeaderBreadcrumb.Instance
+                .SetChild("问答", "/question")
+                .SetChild(schoolNam, $"#")
+                .Head;
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/question/question-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/question/school-question-list.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+</head>
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderPartial", 3)
+        </div>
+    </header>
+
+    <!-- 面包屑导航 - S -->
+    @await Html.PartialAsync("HeaderBreadcrumb", headerBreadcrumb)
+    <!-- 面包屑导航 - E -->
+
+    <section class="review-details">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                <!-- 有数据 -->
+                <div class="left-content d-block">
+                    <div class="reply-comment-school-name d-flex justify-content-between">
+                        <div>
+                            <h1 class="color-333 font-weight-bold">@ViewBag.SchoolQuestionCard.SchoolName</h1>
+                            <P class="score color-333 font-weight-bold">共@(ViewBag.TotalPage)个问题</P>
+
+                            @if (ViewBag.SchoolQuestionCard.Type == 3)
+                            {
+                                <span class="international font-12">国际</span>
+                            }
+                            else if (ViewBag.SchoolQuestionCard.Type == 4)
+                            {
+                                <span class="international font-12">外籍</span>
+                            }
+                            else if (ViewBag.SchoolQuestionCard.Type == 2)
+                            {
+                                <span class="international font-12">民办</span>
+                            }
+                            else if (ViewBag.SchoolQuestionCard.Type == 1)
+                            {
+                                <span class="international font-12">公办</span>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(ViewBag.SchoolQuestionCard.LodgingReason))
+                            {
+                                <span class="boarding font-12">@ViewBag.SchoolQuestionCard.LodgingReason</span>
+                            }
+
+                            @if (@ViewBag.SchoolQuestionCard.Auth)
+                            {
+                                <img src="@(ViewBag.StaticFile)/imgs/detail/authentication.png" alt="学校认证" class="school-certification">
+                            }
+                        </div>
+                        <div class="reply-comment-right">
+                            <a href="/school-@ViewBag.SchoolQuestionCard.ShortSchoolNo/" title="查看学校详情" class="see-school-detail font-14">查看学校详情</a>
+                            <a href="@Url.Action("Write", "Question", new { eid = @ViewBag.SchoolQuestionCard.ExtId })" title="马上提问" class="share" rel="nofollow">马上提问</a>
+                        </div>
+                    </div>
+                    @if (ViewBag.KeyWords == null || ViewBag.KeyWords == "")
+                    {
+                        @if (ViewBag.QuestionTotal[0].Total > 0)
+                        {
+                            int SelectedTab = ViewBag.SelectedTab;
+
+                            if (ViewBag.QuestionTotal[SelectedTab - 1].Total > 0)
+                            {
+                                <div class="parents-comments-list school-review-list-content">
+                                    <div>
+                                        <div class="d-flex justify-content-between comments-all">
+                                            <h4 class="font-16">全部问题<i>（@ViewBag.TotalPage）</i></h4>
+                                            <div class="search-div school-review-search position-relative">
+                                                <form action="@Url.Action("School","Question",new { })" id='search_form'>
+                                                    <input type="text" id="questionContent" name="search" placeholder="在问答中搜索" class="input-keyword font-12" data-channel='0'>
+                                                    <a></a>
+                                                    <i class="search-icon-btn" id="search-icon-btn"></i>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comments-tab">
+                                        @foreach (var item in ViewBag.QuestionTotal)
+                                        {
+
+                                            if (item.SchoolSectionId != default(Guid))
+                                            {
+                                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="/question/school-@ViewBag.SchoolQuestionCard.ShortSchoolNo/@item.TotalTypeNumber/">@item.Name@("(" + item.Total + ")")</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="/question/school-@ViewBag.SchoolQuestionCard.ShortSchoolNo/@item.TotalTypeNumber/">@item.TotalType@("(" + item.Total + ")")</a>
+                                            }
+                                        }
+                                        <div class='clearfix'></div>
+                                    </div>
+                                    @if (ViewBag.HotQuestionList != null && ViewBag.HotQuestionList.Count > 0)
+                                    {
+                                        <h2 class="font-20 color-333 font-weight-bold school-review-list-hot">热门问题</h2>
+                                        <div class="search-question-list">
+                                            <ul class="comments-list school-review-list-comments">
+                                                @foreach (var question in ViewBag.HotQuestionList)
+                                                {
+                                                    @await Html.PartialAsync("_QuestionSimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)question)
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                    <h2 class="font-20 color-333 font-weight-bold school-review-list-hot">最新问题</h2>
+                                    <div class="search-question-list">
+                                        <ul class="comments-list school-review-list-comments">
+                                            @foreach (var question in ViewBag.NewQuestionList)
+                                            {
+                                                @await Html.PartialAsync("_QuestionSimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)question)
+                                            }
+                                        </ul>
+                                        @if ((ViewBag.TotalPage / 10) > 1)
+                                        {
+                                            <nav class="page d-flex justify-content-end">
+                                                @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                                        "School",
+                                                        "Question",
+                                                        (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                                        (int)ViewBag.PageSize,
+                                                        (int)ViewBag.PageIndex,
+                                                        (_this) => { return new {  Tab = ViewBag.SelectedTab, page = _this.CurrentPage - 1 }; },
+                                                        (_pageItem, _this) => { return new {  Tab = ViewBag.SelectedTab, page = _pageItem }; },
+                                                        (_this) => { return new {  Tab = ViewBag.SelectedTab, page = _this.CurrentPage + 1 }; }
+                                                        )))
+                                            </nav>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="parents-comments-list school-review-list-content">
+                                    <div>
+                                        <div class="d-flex justify-content-between comments-all">
+                                            <h4 class="font-16">全部问题<i>（0）</i></h4>
+                                            <div class="search-div school-review-search position-relative">
+                                                @*<form action="@Url.Action("School","Question",new { })" id='search_form'>
+                                                        <input type="text" value="@ViewBag.KeyWords" id="questionContent" name="search" placeholder="在问答中搜索" class="input-keyword font-12" data-channel='0'>
+                                                        <a></a>
+                                                        <i class="search-icon-btn" id="search-icon-btn"></i>
+                                                    </form>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comments-tab">
+                                        @foreach (var item in ViewBag.QuestionTotal)
+                                        {
+
+                                            if (item.SchoolSectionId != default(Guid))
+                                            {
+                                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="/question/school-@ViewBag.SchoolQuestionCard.ShortSchoolNo/@item.TotalTypeNumber/">@item.Name@("(" + item.Total + ")")</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="@(SelectedTab == item.TotalTypeNumber ? "selected" : "")" href="/question/school-@ViewBag.SchoolQuestionCard.ShortSchoolNo/@item.TotalTypeNumber/">@item.TotalType@("(" + item.Total + ")")</a>
+                                            }
+                                        }
+                                        <div class='clearfix'></div>
+                                    </div>
+                                    <h3 class="font-16">
+                                        全部问答
+                                    </h3>
+                                    <div class="text-center no-comment">
+                                        <p class="font-14">暂无问答 <span class="font-12 d-block">换个筛选条件试试吧~</span></p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <!-- 无数据 -->
+                            <div class="parents-comments-list school-review-list-content">
+                                <h3 class="font-16">
+                                    全部问答
+                                    <i>（0）</i>
+                                </h3>
+                                <div class="text-center no-comment">
+                                    <p class="font-14"><i></i> <span class="font-12 d-block">暂无问答，有疑惑赶紧提问呗~</span></p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (ViewBag.TotalPage > 0)
+                        {
+                            <div class="parents-comments-list school-review-list-content">
+                                <div>
+                                    <div class="d-flex justify-content-between comments-all">
+                                        <h4 class="font-16">全部问答<i>（@ViewBag.TotalPage）</i></h4>
+                                        <div class="search-div school-review-search position-relative">
+                                            <form action="@Url.Action("School","Question",new { })" id='search_form'>
+                                                <input type="text" value="@ViewBag.KeyWords" id="questionContent" name="search" placeholder="在问答中搜索" class="input-keyword font-12" data-channel='0'>
+                                                <a></a>
+                                                <i class="search-icon-btn" id="search-icon-btn"></i>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<h2 class="font-20 color-333 font-weight-bold school-review-list-hot">最新问题</h2>*@
+                                <div class="search-question-list">
+                                    <ul class="comments-list school-review-list-comments">
+                                        @foreach (var question in ViewBag.NewQuestionList)
+                                        {
+                                            @await Html.PartialAsync("_QuestionSimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)question)
+                                        }
+                                    </ul>
+                                    @if ((ViewBag.TotalPage / 10 + 1) > 1)
+                                    {
+                                        <nav class="page d-flex justify-content-end">
+                                            @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                                "School",
+                                                "Question",
+                                                (int)(ViewBag.TotalPage / 10 + 1),
+                                                (int)ViewBag.PageSize,
+                                                (int)ViewBag.PageIndex,
+                                                (_this) => { return new { Id = ViewBag.ExtId.ToString("N"), Tab = ViewBag.SelectedTab, page = _this.CurrentPage - 1 }; },
+                                                (_pageItem, _this) => { return new { Id = ViewBag.ExtId.ToString("N"), Tab = ViewBag.SelectedTab, page = _pageItem }; },
+                                                (_this) => { return new { Id = ViewBag.ExtId.ToString("N"), Tab = ViewBag.SelectedTab, page = _this.CurrentPage + 1 }; }
+                                                )))
+                                        </nav>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- 无数据 -->
+                            <div class="parents-comments-list school-review-list-content">
+                                <div>
+                                    <div class="d-flex justify-content-between comments-all">
+                                        <h4 class="font-16">全部问题<i>（0）</i></h4>
+                                        <div class="search-div school-review-search position-relative">
+                                            <form action="@Url.Action("School","Question",new { })" id='search_form'>
+                                                <input type="text" value="@ViewBag.KeyWords" id="questionContent" name="search" placeholder="在问答中搜索" class="input-keyword font-12" data-channel='0'>
+                                                <a></a>
+                                                <i class="search-icon-btn" id="search-icon-btn"></i>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center no-comment">
+                                    <p class="font-14">暂无问答 <span class="font-12 d-block">换个搜索条件试试呗~</span></p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="27" id="swiperSchoolAd-27" style="height: 205px;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 广告结束 -->
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热问学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolQuestion = (List<Sxb.PCWeb.ViewModels.School.SchoolQuestionCardViewModel>)ViewBag.HottestSchoolView;
+                                for (int i = 0; i < HotSchoolQuestion.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("_HotSchoolQuestion.cshtml", HotSchoolQuestion[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-question">
+                        <h2 class="font-18 font-weight-bold">热门问答</h2>
+                        <ul>
+                            @foreach (var item in ViewBag.HottestSchoolQuesitonView)
+                            {
+                                @await Html.PartialAsync("_HottestQuestion.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-school">
+                        <h2 class="font-18 font-weight-bold">热门点评</h2>
+                        <ul class="hot-comment">
+                            @foreach (var item in ViewBag.HottestComment)
+                            {
+                                @await Html.PartialAsync("../Comment/_HottestComment.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热评学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolComment = (List<Sxb.PCWeb.ViewModels.School.SchoolCommentCardViewModel>)ViewBag.HottestCommentSchoolView;
+                                for (int i = 0; i < HotSchoolComment.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("../Comment/_HotSchoolComment.cshtml", HotSchoolComment[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script>
+        $(function () {
+            $("#search-icon-btn").click(function () {
+                $("#search_form").submit()
+            })
+        })
+    </script>
+</body>
+</html>

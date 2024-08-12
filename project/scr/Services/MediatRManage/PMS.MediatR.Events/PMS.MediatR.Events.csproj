@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Tool.WeChat\ProductManagement.Tool.WeChat.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\PaidQA\PMS.PaidQA.Domain\PMS.PaidQA.Domain.csproj" />
+  </ItemGroup>
+</Project>

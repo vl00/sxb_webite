@@ -1,0 +1,250 @@
+﻿@using System.Web;
+@using System.Linq;
+@using Sxb.PCWeb.ViewModels.School;
+@using Sxb.PCWeb.ViewModels.Common;
+@using Microsoft.AspNetCore.Routing;
+@{
+    var keywords = "上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿";
+    var description = "上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，学位，家庭教育，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍";
+    var title = "上学帮-家长帮孩子选学校专业平台_家庭教育_学位";
+
+    if (!string.IsNullOrWhiteSpace(ViewBag.SelectCityName))
+    {
+        title += string.Format("{0}学校推荐_", ViewBag.SelectCityName);
+        keywords += string.Format("{0}学校推荐,{0}学校师资排行,{0}学校学费,{0}学校评分,{0}学校等级分类 ", ViewBag.SelectCityName);
+        description += string.Format("上学帮给家长推荐{0}学校，师资排行、学费、学校评分等学校信息，方便家长给孩子选择选择优质{0}学校 ", ViewBag.SelectCityName);
+    }
+
+
+    var gradeOptions = ((List<OptionViewModel>)ViewBag.Options.TypeOption).Where(q => q.Active);
+    if (gradeOptions.Any())
+    {
+        foreach (var grade in gradeOptions)
+        {
+            var name = grade.Title;
+
+            title += string.Format("{0}学校推荐_", name);
+            keywords += string.Format("{0}学校推荐,{0}学校师资排行,{0}学校学费,{0}学校评分,{0}学校等级分类 ", name);
+            description += string.Format("上学帮给家长推荐{0}学校，师资排行、学费、学校评分等学校信息，方便家长给孩子选择选择优质{0}学校 ", name);
+
+
+            var names = grade.List.Where(q => q.Active).Select(q => q.Title);
+
+            foreach (var n in names)
+            {
+                title += string.Format("{0}学校推荐_", n);
+                keywords += string.Format("{0}学校推荐,{0}学校师资排行,{0}学校学费,{0}学校评分,{0}学校等级分类 ", n);
+                description += string.Format("上学帮给家长推荐{0}学校，师资排行、学费、学校评分等学校信息，方便家长给孩子选择选择优质{0}学校 ", n);
+            }
+        }
+    }
+    var areaOptions = ((List<OptionViewModel>)ViewBag.Options.Areas).Where(q => q.Active);
+    if (areaOptions.Any())
+    {
+        var names = areaOptions.Select(q => q.Title);
+
+        foreach (var name in names)
+        {
+            title += string.Format("{0}学校推荐_", name);
+            keywords += string.Format("{0}学校推荐,{0}学校师资排行,{0}学校学费,{0}学校评分,{0}学校等级分类 ", name);
+            description += string.Format("上学帮给家长推荐{0}学校，师资排行、学费、学校评分等学校信息，方便家长给孩子选择选择优质{0}学校 ", name);
+        }
+    }
+
+    var characidList = new Dictionary<string, KeyDescViewModel>();
+    characidList.Add("91933FB5-02C8-46F7-826C-98EF2368B1F0",
+        new KeyDescViewModel { Title = "STEM", Desc = "上学帮stem课程频道为您精选了stem课程学校排名，STEM是科学（Science），技术（Technology），工程（Engineering），数学（Mathematics）,帮助家长们更好的给孩子选择好的开设STEM课程学校" });
+    characidList.Add("02C2C000-B776-4AD0-B7CE-FF4746C7538A",
+        new KeyDescViewModel { Title = "奥数", Desc = "上学帮提供优质的奥数培训课程学校推荐,精英名师辅导,针对性强,提分快,个性化教学,短期提高成绩.指明学习方向。" });
+    characidList.Add("B5A965B3-1324-4E30-BDF6-F4B0D62980F4",
+        new KeyDescViewModel { Title = "器乐类", Desc = "上学帮乐器课程频道为您精选了乐器课程学校排名，帮助家长们选择适合孩子的乐器课程，让孩子根据自己的兴趣选择乐器课程，最少掌握一门特长，让孩子快乐学习。" });
+    characidList.Add("1C25B2A7-AC33-4093-A3AB-C6327F4FC0A0",
+        new KeyDescViewModel { Title = "英语", Desc = "上学帮英语课程频道为您精选了英语课程学校排名，优秀名校，帮助孩子们提升英语学习能力和学习成绩，在未来的学习路上，爱上英语，让英语成为习惯，不再是学习的难题和拉低成绩的绊脚石。" });
+    characidList.Add("2E4E555F-D669-46F3-ABF1-469E3A0BA034",
+        new KeyDescViewModel { Title = "足球", Desc = "上学帮足球课程频道为您精选了足球课程学校排名，帮助孩子培养强健的体魄、坚强的意志、团队协作的能力、沟通交流能力、抗挫折能力等，让孩子在学校养成优秀的习惯和坚韧的品质。" });
+    characidList.Add("BF5595B0-1B7F-414E-9AF9-FF3433D49AA8",
+        new KeyDescViewModel { Title = "艺术类", Desc = "上学帮艺术课程频道为您精选了艺术课程学校排名，艺术教育能够让孩子解放天性、建立自信、完善气质、规范谈吐，并且让孩子对艺术的鉴赏力得到提高，敢于展现自我、表现自我。" });
+
+    var characids = (List<string>)ViewBag.characids;
+    if (characids.Any())
+    {
+        foreach (var characid in characids)
+        {
+            if (characidList.ContainsKey(characid.ToUpper()))
+            {
+                title += string.Format("{0}课程学校排名_{0}课程学校哪个好", characidList[characid.ToUpper()].Title);
+                keywords += string.Format("{0}学校推荐,{0}学校师资排行,{0}学校学费,{0}学校评分,{0}学校等级分类 ", characidList[characid.ToUpper()].Title);
+                description += characidList[characid.ToUpper()].Desc;
+            }
+        }
+    }
+
+    if (string.IsNullOrWhiteSpace(title))
+    {
+        title = "学校列表_";
+    }
+    title += "师资排行_学费_学校评分_等级分类";
+    if (string.IsNullOrWhiteSpace(description))
+    {
+        description = "上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，学位，家庭教育，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍";
+    }
+    if (string.IsNullOrWhiteSpace(keywords)) keywords = "上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿";
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/jquery.range.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/school-list.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/home.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 1)
+        </div>
+
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <div class="select font-14">
+                    <i class="header-icon">@ViewBag.LocalCity.Value</i>
+                    <div class="city-list position-absolute">
+                        @{
+                            var areas = ViewBag.HotCity;
+
+                            <text>
+                                <ul class="d-flex font-12 flex-wrap clearfix">
+                                    @foreach (var item in areas)
+                                    {
+                                        <text>
+                                        @*<li><a href="@Url.Action("Index", "Home", new { city = item.AdCode })" title="@item.AreaName" data-city="@(item.AdCode)">@item.AreaName</a></li>*@
+                                        <li><a href="/c-@item.OptionCode/" title="@item.Title" data-city="@(item.OptionCode)">@item.Title</a></li>
+                            </text>
+                        }
+                                </ul>
+                                @*<pre style="display:none;">@($"{Context.Request.Scheme}://{Context.Request.Host}" + Url.Action(action, controller, d0))</pre>*@
+                                @*<a href="@Url.Action("Select", "Home", new { backurl = enurl(Url.Action(action, controller, d0)) })" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>*@
+                                <a href="@Url.Action("Select", "Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                                </text>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" name="keywords" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" value="@ViewBag.KeyWords">
+                        <a></a>
+                    </div>
+                    <input type="submit" value="搜索" class="btn-search font-14">
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0">
+                        <span style="@(((List<string>)ViewBag.HotSchoolWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotSchoolWord)
+                            {
+                                <li><a href="@Url.Action("list", "School",new { KeyWords=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    @*选项*@
+    <section class="container">
+        @await Html.PartialAsync("L_Options.cshtml", (Sxb.PCWeb.ViewModels.School.SchoolExtOptionViewModel)ViewBag.Options)
+    </section>
+
+    <section class="content container clearfix">
+        <div class="d-flex">
+            <!-- 左侧内容 -->
+            <div class="left-content position-relative">
+                <a href="@ViewBag.Options.ClearAll.Href" title="@ViewBag.Options.ClearAll.Title" class="clear-keyword position-absolute">@ViewBag.Options.ClearAll.Title</a>
+                <ul class="d-flex font-16 list-tab text-center clearfix">
+                    @foreach (var order in ViewBag.Options.Order)
+                    {
+                        <li class="@(order.Active?"active":"")" @("data-" + order.OptionName)="@order.OptionCode"><a href="@order.Href" title="@order.Title">@order.Title</a></li>
+                    }
+                </ul>
+                <p class="total-school font-14">共找到<i>@ViewBag.SchoolExts.Total</i>所学校</p>
+                @if (ViewBag.SchoolExts.List.Count == 0)
+                {
+                    <!-- 如果没有内容就显示 -->
+                    <div>
+                        <p class="no-match text-center font-14">未找到符合所选条件的学校，建议您调整筛选条件再试试</p>
+                        <div class="guess-like font-20 font-weight-bold">猜你喜欢</div>
+                    </div>
+                }
+                else
+                {
+                    <!-- 学校列表内容 -->
+                    <div class="school-list hot-week-scroll">
+                        <ul>
+                            @await Html.PartialAsync("L_SchoolItem.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.School.SchoolExtListItemViewModel>)ViewBag.SchoolExts.List)
+                        </ul>
+                    </div>
+                }
+                <nav class="page d-flex justify-content-end">
+                    @await Html.PartialAsync("../Shared/PageNav.cshtml", (Sxb.PCWeb.ViewModels.School.PageNavViewModel)ViewBag.SchoolExts.PageNav)
+                </nav>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="right-list">
+                @*@{ await Html.RenderPartialAsync("P_HotSchools"); }*@
+                <div class="hot-question">
+                    <h2 class="font-18 font-weight-bold">热门问答</h2>
+                    <ul class="comments-list">
+                        @foreach (var item in ViewBag.HottestSchoolQuesitonView)
+                        {
+                            @await Html.PartialAsync("../Question/_HottestQuestion.cshtml", (Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel)item);
+                        }
+                    </ul>
+                </div>
+                <div class="hot-school">
+                    <h2 class="font-18 font-weight-bold">热门点评</h2>
+                    <ul class="hot-comment">
+                        @foreach (var item in ViewBag.HottestComment)
+                        {
+                            @await Html.PartialAsync("../Comment/_HottestComment.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)item);
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="qr-mask">
+        <div class="qr-code-box">
+            <div id="qrCode">
+            </div>
+            <h2>微信扫一扫二维码<br>咨询升学专家</h2>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.range-min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/history.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/qrcode.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/school-list.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+</body>
+</html>

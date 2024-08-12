@@ -1,0 +1,193 @@
+﻿<!doctype html>
+<html lang="zh-cn" charset="utf-8">
+    <head>
+        <title>达人账号信息导入导出</title>
+        <style>
+            body{
+                overflow-x:hidden;
+                font-family:'微软雅黑';
+            }
+
+            .container{
+                width:100%;
+                height:70px;
+                margin:10px 10px;
+            }
+
+            #resultcontainer
+            {
+                width:80%;
+                border:1px #b6ff00 solid ;
+                padding:10px 10px;
+            }
+        </style>
+        <link rel="stylesheet" href="~/css/layer.css" />
+        <script type="text/javascript" src="~/js/jquery.js"></script>
+        <script type="text/javascript" src="~/js/layer.js"></script>
+        <script type="text/javascript" src="~/js/laydate/laydate.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <span>数据导出</span><br />
+            <span>
+                导出类型：
+                <select id="export">
+                    <option value="1">达人总数据</option>
+                    <option selected="selected" value="2">达人邀请数据</option>
+                    <option value="3">ugc抓取数据导出</option>
+                </select>
+            </span> 
+            <span style="display:none;">月：<input class="date" type="text" id="month"></span>
+            <span>开始日期：<input class="datetime" type="text" id="startTime" /></span>
+            <span>截至日期：<input class="datetime" type="text" id="endTime" /></span>
+            <input value="数据导出" id="exportExcel" type="button" />
+        </div>
+        <div class="container">
+                <span>数据导入：</span>
+                <select id="ImportType">
+                    <option value="1">达人邀请数据导入</option>
+                    <option selected="selected" value="2">UGC激励</option>
+                </select>
+                <input name="files" accept=".xls,.xlsx" id="excel" type="file" />
+                <input type="button" id="import" value="数据导入" />
+        </div>
+
+        <div class="container">
+            <span><h3>导入结果：</h3></span>
+            <div id="resultcontainer"></div>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+
+                $("#export").change(function () {
+                    var type = $("#export option:selected").val()
+                    if (type == 3)
+                    {
+                        $("#startTime").parent().hide()
+                        $("#endTime").parent().hide()
+
+                        $("#month").parent().hide()
+                    }
+                    else if (type == 1)
+                    {
+                        $("#month").parent().show()
+
+                        $("#startTime").parent().hide()
+                        $("#endTime").parent().hide()
+                    }
+                    else
+                    {
+                        $("#month").parent().hide()
+                        $("#startTime").parent().show()
+                        $("#endTime").parent().show()
+                    }
+                })
+
+                    $(".datetime").each(function () {
+                        laydate.render({
+                            elem: '#' + $(this).attr("id")
+                            , type: 'datetime',
+                            theme: "#830717"
+                        });
+                    })
+
+                $(".date").each(function () {
+                        laydate.render({
+                            elem: '#' + $(this).attr("id")
+                            , type: 'month',
+                            theme: "#830717"
+                        });
+                    })
+
+
+                $("#import").click(function () {
+                    if ($("#excel")[0].files[0] != undefined)
+                    {
+                        var fromData = new FormData();
+                        fromData.append("files", $("#excel")[0].files[0])
+                        fromData.append("type",$("#ImportType option:selected").val())
+
+                        $.ajax({
+                            url: "/Home/Import",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            data: fromData,
+                            beforeSend: function ()
+                            {
+                                index =layer.msg("数据导入中，请稍后", {
+		                                icon:16,
+		                                shade:[0.1, 'rgba(0,0,0,.8)'],
+		                                time:false  //取消自动关闭
+	                                })
+                            },
+                            complete: function ()
+                            {
+                                layer.close(index);
+                            },
+                            success: function (data)
+                            {
+                                //alert(data.message)
+                                $("#resultcontainer").html("<span>" + data.message + "</span>");
+                            }
+                        })
+                    }
+                    else
+                    {
+                        alert("请先选择一个Excel文件");
+                    }
+                })
+
+
+                //导出数据
+                $("#exportExcel").click(function () {
+                    var exportType = $("#export option:selected").val()
+                    var startTime = $("#startTime").val()
+                    var endTime = $("#endTime").val()
+
+                    if (exportType == 1 || exportType == 3)
+                    {
+                        alert("功能完善中");
+                        return false;
+                    }
+
+                    if (startTime == null || endTime == null)
+                    {
+                        alert("导出时间段必选")
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "/Home/Export?startTime=" + startTime + "&endTime=" + endTime+"&type="+exportType,
+                        type: "GET",
+                        beforeSend: function ()
+                        {
+                            index =layer.msg("数据导出中，请稍后", {
+		                            icon:16,
+		                            shade:[0.1, 'rgba(0,0,0,.8)'],
+		                            time:false  //取消自动关闭
+	                            })
+                        },
+                        complete: function ()
+                        {
+                            layer.close(index);
+                        },
+                        success: function (data)
+                        {
+                            if (data.success)
+                            {
+                                location.href = "/home/DownloadExcel?filename=" + data.filename;
+                            }
+                            else {
+                                alert("异常错误："+data.logs)
+                            }
+                        }
+                    })
+                })
+
+            })
+        </script>
+    </body>
+</html>

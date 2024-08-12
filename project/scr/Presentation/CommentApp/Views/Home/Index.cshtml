@@ -1,0 +1,594 @@
+﻿@using Sxb.Web.Utils;
+@using PMS.School.Domain.Common;
+@model PMS.School.Domain.Dtos.SchoolExtListDto
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+
+    <title>上学帮_汇集全国学校_家长帮孩子选幼儿园,小学,中学,国际民办公办学校门户网站</title>
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿,亲子,家庭教育,孩子教育,小学教育,中学教育,高中教育,高校教育,中小学教育,学校探访,民办小学,公办小学,择校,名校,教育,小学,初中,择校,名师,中考,高考">
+    <meta name="description" content="上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <meta name="baidu-site-verification" content="PcawLA0eVN" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/newHome.css" />
+    @*<link rel="stylesheet" href="@ViewBag.StaticFile/css/home.css" />*@
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/newHome.js"></script>
+    <script src="@ViewBag.StaticFile/js/home.js"></script>
+</head>
+<body>
+    <!-- 顶部搜索框 -S -->
+    <section class="fixed-search flex">
+        <a href="/home/select" class="city">@ViewBag.LocalCity<i class="arrow"></i></a>
+        <div href="#" class="search-input">
+            <i class="search-icon"></i>
+            <input type="text" disabled="disabled">
+            <ul class="recommendBox" id="recommend">
+                @foreach (var item in ViewBag.SearchSuggest)
+                {
+                    <li><a href="/home-search/home-search.html?placeholder=@item.Key">@item.Key</a></li>
+                }
+            </ul>
+        </div>
+        <a href="/search/map" class="map-btn"></a>
+        <div class="search-icon-list" style="display: none;">
+            <ul class="flex justify-content-between">
+                <li><a href="./filtrate/filtrate-school-list.html"><i class="search-icon"></i></a></li>
+                <li><a href="./filtrate/filtrate-school-list.html"><i class="search-icon"></i></a></li>
+                <li><a href="./filtrate/filtrate-school-list.html"><i class="search-icon"></i></a></li>
+            </ul>
+        </div>
+        <div class="search-cancel" style="display: none;">取消</div>
+    </section>
+    <!-- 顶部搜索框 -E -->
+    <!-- 主体内容部分 -S -->
+    <div class="home-content">
+        <!-- 直播间列表 -S -->
+        <div class="banner">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    @if (ViewBag.Lectures != null)
+                    {
+                        foreach (var item in ViewBag.Lectures)
+                        {
+                            <div class="swiper-slide banner-img" style="background-image: url('@item.HomeCover');"
+                                 data-type="@item.Status" data-id="@item.Id" data-url="/live/client/livedetail.html?showtype=1&contentid=@item.Id"></div>
+                        }
+                    }
+                </div>
+                <div class="swiper-pagination point"></div>
+            </div>
+            <div class="liveing">直播中</div>
+            <wx-open-launch-weapp id="launch-btn" username=""
+                                  path="">
+                <template>
+                    <button style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; /* opacity: 0; */ overflow: hidden; z-index: 99;">
+                    </button>
+                </template>
+            </wx-open-launch-weapp>
+        </div>
+        <!-- 直播间列表 -E -->
+        <!-- 屏蔽全局悬浮按钮 -->
+        <div id="suspension-box-hide"></div>
+
+        <!-- 导航栏 -S -->
+        @if (ViewBag.Navigations != null)
+        {
+            <div class="nav-tab">
+                <ul>
+                    @foreach (var item in ViewBag.Navigations)
+                    {
+                    <li>
+                        @if (item.Name != "网课评测" && item.Name != "网课测评")
+                        {
+                          <a href="@item.TargetUrl">
+                              <img src="@item.IconUrl" alt="">
+                              <h2>@item.Name</h2>
+                          </a>
+                        }
+                        else
+                        {
+                          <a>
+                            <wx-open-launch-weapp id="launch-btn-eva" username="gh_612839295087" path="pages/index/index">
+                                <template>
+                                    <button style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; /* opacity: 0; */ overflow: hidden; z-index: 99;">
+                                    </button>
+                                </template>
+                            </wx-open-launch-weapp>
+                            <img src="@item.IconUrl" alt="">
+                            <h2>@item.Name</h2>
+                          </a>
+                        }
+                    </li>
+                    }
+                </ul>
+            </div>
+        }
+        <!-- 导航栏 -E -->
+        <!-- 达人榜 -S -->
+        @if (ViewBag.Talents != null)
+        {
+            var listTalent = ViewBag.Talents as IEnumerable<PMS.School.Domain.Dtos.KeyValueDto<string, string, string, Guid, int>>;
+            <div class="talent-list">
+                <div class="talent-list-top">
+                    <div class="bg-clice"></div>
+                    <h1>达人排行榜</h1>
+                    <a href="/talent/talent-list.html">查看更多<i></i></a>
+                </div>
+
+                @switch (listTalent.Count())
+                {
+                    case 3:
+                        <div class="talent-list-content-less">
+                            <ul>
+                                @foreach (var item in listTalent)
+                                {
+                                    <li>
+                                        <a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.Data">
+                                            <img src="@item.Value" alt="">
+                                            <div class="talent-info">
+                                                <h1>@item.Key</h1>
+                                                <h2><span @if (item.Other == 1) { WriteLiteral("class=\"blue\""); }></span>@item.Message</h2>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        break;
+                    case 2:
+                        <div class="talent-list-content-less less-two">
+                            <ul>
+                                @foreach (var item in listTalent)
+                                {
+                                    <li>
+                                        <a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.Data">
+                                            <img src="@item.Value" alt="">
+                                            <div class="talent-info">
+                                                <h1>@item.Key</h1>
+                                                <h2><span @if (item.Other == 1) { WriteLiteral("class=\"blue\""); }></span>@item.Message</h2>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        break;
+                    case 1:
+                        <div class="talent-list-content-one">
+                            @foreach (var item in listTalent)
+                            {
+                                <a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.Data">
+                                    <img src="@item.Value" alt="">
+                                    <div class="talent-info">
+                                        <h1>@item.Key</h1>
+                                        <h2><span @if (item.Other == 1) { WriteLiteral("class=\"blue\""); }></span>@item.Message</h2>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        break;
+                    default:
+                        <div class="talent-list-content">
+                            <ul>
+                                @foreach (var item in listTalent)
+                                {
+                                    <li>
+                                        <a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.Data">
+                                            <div class="talent-ranking @if (item.Other == 1) { WriteLiteral("blue"); }"></div>
+                                            <img src="@item.Value" alt="">
+                                            <div class="talent-name">@item.Key</div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        break;
+                }
+            </div>
+        }
+        <!-- 达人榜 -E -->
+        <!-- 专题 -S -->
+        @*<div class="specia-list">
+            <ul>
+            </ul>
+        </div>*@
+        <!-- 专题 -E -->
+    </div>
+
+    <!-- 旧版学校列表 -S -->
+    <section class="content">
+        <ul class="content-tab flex">
+            <li class="active" data-orderBy="1">
+                <span>推荐</span>
+            </li>
+            <li data-orderBy="2">
+                <span>口碑</span>
+            </li>
+            <li data-orderBy="3">
+                <span>附近</span>
+            </li>
+        </ul>
+        <ul class="content-list">
+            @foreach (var item in Model.List)
+            {
+                <li>
+                    <div class="flex">
+                        <div class="school-msg">
+                            @*<a href="@Url.Action("Detail","School",new {Id=item.ExtId.ToString("N") })">*@
+                            <a href="/school-@item.ShortSchoolNo/">
+
+                                <div class="school-name">
+                                    <h5>@item.Name</h5>
+                                </div>
+                                <ul class="tag flex">
+                                    <li>
+                                        @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                    </li>
+                                    @{
+                                        var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                        var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                    {
+                                        <li>@lodgingDesc</li>
+                                    }
+                                    <li class="bcg-none">
+                                        @*<i class="icon"></i>*@
+                                    </li>
+                                </ul>
+                                <div class="price">
+
+                                    @if (item.Tuition != null)
+                                    {
+                                        <span>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</span>
+                                    }
+                                    <span class="range">@(item.Distance == 999999999 ? "暂未收录" : Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                                    <span class="position">@item.City | @item.Area</span>
+                                </div>
+                                <ul class="keyword flex text-center">
+                                    @if (!Model.IsRecommend)
+                                    {
+                                        <li>
+                                            @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                        </li>
+                                    }
+                                    @foreach (var tag in item.Tags)
+                                    {
+                                        <li>@tag</li>
+                                    }
+                                </ul>
+                            </a>
+                        </div>
+
+                        <div class="school-grade text-center">
+                            <div class="score">
+                                @if (item.Score != null)
+                                {
+                                    <span class="num private-score-grading">@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                }
+                                else
+                                {
+                                    <span class="not-data">暂未评分</span>
+                                }
+                            </div>
+                            <p>学校总评</p>
+                            @if (item.Score != null)
+                            {
+                                @*<a href="@Url.Action("Data","School",new {Id=item.ExtId })">*@
+                                <a href="/school-@item.ShortSchoolNo/data/">
+                                    <span class="btn">评分详情</span>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    @if (item.CommentCount > 0 || item.Ranks.Count > 0)
+                    {
+                        <div class="school-detail-bottom">
+                            @if (item.CommentCount > 0)
+                            {
+                                <a href="/comment/@(item.CommontNo).html">
+                                    <div class="comment flex">
+                                        <span>评</span>
+                                        <div class="comment-content">@(item.Comment)</div>
+                                        <span>@(item.CommentCount)回复</span>
+                                        <i class="arrow"></i>
+                                    </div>
+                                </a>
+                            }
+                            @if (item.CommentCount > 0 && item.Ranks.Count > 0)
+                            {
+                                <div class="school-detail-line"></div>
+                            }
+                            @if (item.Ranks.Count > 0)
+                            {
+                                <a href="@Url.Action("Detail","SchoolRank",new {Base32No=item.Ranks.FirstOrDefault().Base32No })">
+                                    <div class="rank flex">
+                                        <span>榜</span>
+                                        <div class="rank-name">@($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")</div>
+                                        <i class="arrow"></i>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    }
+                </li>
+            }
+
+        </ul>
+        @if (Model.List.Count == 0)
+        {
+            <div class="not-school-list text-center">暂未收录学校信息</div>
+        }
+        else
+        {
+            if ((int)ViewBag.PageSize > Model.PageIndex)
+            {
+                @*<div class="load-more text-center" onclick="LoadMore()">加载更多</div>*@
+                <div class="load-more text-center">正在努力加载</div>
+            }
+            else
+            {
+                <div class="not-more-data">没有更多数据</div>
+            }
+        }
+
+
+        @*隐藏数据*@
+        @Html.HiddenFor(p => p.PageIndex)
+        @Html.HiddenFor(p => p.PageCount)
+        <input type="hidden" name="PageSize" id="PageSize" value="@((int)ViewBag.PageSize)" />
+        <input type="hidden" name="Province" id="Province" value="@ViewBag.Province" />
+        <input type="hidden" name="City" id="City" value="@ViewBag.City" />
+        <input type="hidden" name="Area" id="Area" value="@ViewBag.Area" />
+        <input type="hidden" name="orderBy" id="orderBy" value="@ViewBag.OrderBy" />
+
+    </section>
+    <!-- 旧版学校列表 -E -->
+    <!-- 主体内容部分 -E -->
+    <!-- 底部导航栏 -S -->
+    @if (Context.Request.GetClientType() != UA.Mobile)
+    {
+        <div class="bottom-tab bottom-tab-default">
+            <ul>
+                <li class="active">
+                    <a href="/">
+                        <i></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/live/client/livelist.html">
+                        <i></i>
+                        <span>直播</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/find/findIndex.html">
+                        <i></i>
+                        <span>发现</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@(ViewBag.UserServiceUrl)/mine/">
+                        <i></i>
+                        <div class="mes"></div>
+                        <span>我的</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="bottom-circle-nav">
+            <div class="bottom-tab">
+                <ul>
+                    <li class="active">
+                        <a href="/">
+                            <i></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/live/client/livelist.html">
+                            <i></i>
+                            <span>直播</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/find/findIndex.html">
+                            <i></i>
+                            <span>发现</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@(ViewBag.UserServiceUrl)/mine/">
+                            <i></i>
+                            <div class="mes"></div>
+                            <span>我的</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="left-box"></div>
+            <div class="mid-box">
+                <div class="left-tab tab-box"></div>
+                <div class="mid-tab tab-box"></div>
+                <div class="right-tab tab-box"></div>
+            </div>
+            <div class="right-box"></div>
+            <div class="circle">
+                <a href="/ask/home">
+                    <img src="@ViewBag.StaticFile/imgs/newHome/qa-bottom-icon (3).png" alt="">
+                </a>
+            </div>
+        </div>
+        <!-- 引导图 -S -->
+        <div class="intro-mask">
+            <div class="highlight-icon-box">
+                <img src="@ViewBag.StaticFile/imgs/newHome/qa-icon@3x.png" alt="">
+                <h2>上学问</h2>
+            </div>
+            <div class="intro-hint-box">
+                <img class="intro-hint-arrow-top" src="@ViewBag.StaticFile/imgs/newHome/arrow (2).png" alt="">
+                <div class="intro-content-box">
+                    <div class="intro-text">
+                        新上线上学问功能<br>
+                        马上来体验一下吧~
+                    </div>
+                    <div class="intro-button-box">我知道了</div>
+                </div>
+                <img class="intro-hint-arrow-bottom" src="@ViewBag.StaticFile/imgs/newHome/arrow (2).png" alt="">
+            </div>
+            <div class="bottom-circle-icon">
+                <img src="@ViewBag.StaticFile/imgs/newHome/qa-bottom-icon (3).png" alt="">
+            </div>
+        </div>
+        <!-- 引导图 -E -->
+    }
+    <a href="/article/hdlst" style="display:none;">友情文章</a>
+    <!-- 底部导航栏 -E -->
+
+
+
+    <script type="text/javascript">
+
+        // 判断是否滚动到页面底部 加载更多数据
+    var canLoad = true;
+    $(window).scroll(function () {
+        if (Math.round($(window).scrollTop() + $(window).height()) >= $(document).height()-20) {
+            if (canLoad == false) {
+                return;
+            }
+            LoadMore();
+        }
+    });
+    //加载更多点击
+    function LoadMore() {
+        console.log("加载更多点击");
+        canLoad = false;
+        var orderBy = jQuery(".content .content-tab").find(".active").attr("data-orderBy");
+        LoadListHtml(orderBy, 2);
+    }
+    //附近无数据时，默认显示全国数据
+    function getDefault() {
+        jQuery.get("@Url.Action("SchoolExtsPartial")",
+            {
+                "city": city, "area": area,
+                "province": province, "index": index,
+                "orderBy": orderBy, "distance": 0, "isrecommend": "@(Model.IsRecommend.ToString().ToLower())"
+            },
+            function (data) {
+                //console.log(data)
+            });
+    }
+            //加载列表数据
+        //1html 2append
+      var tabHeight = null;
+
+       window.onload = function () {
+           tabHeight = $('.content-tab').offset().top-70
+           console.log(tabHeight,'!')
+        }
+        console.log(tabHeight)
+
+    function LoadListHtml(orderBy, type) {
+
+        //if (parseInt(jQuery("#PageIndex").val()) >= jQuery("#PageSize").val()) {
+        //    return;
+        //}
+        //jQuery.loading();
+        var index = parseInt(jQuery("#PageIndex").val()) + 1;
+        if (type == 1) {
+            index = 1;
+        }
+        var count = parseInt(jQuery("#PageSize").val());
+        var oldOrderBy = jQuery("#orderBy").val();
+        if (index > count && oldOrderBy == orderBy) { return; }
+        var city = jQuery("#City").val();
+        var area = jQuery("#Area").val();
+        var province = jQuery("#Province").val();
+        jQuery.get("@Url.Action("SchoolExtsPartial")",
+            {
+                "city": city, "area": area,
+                "province": province, "index": index,
+                "orderBy": orderBy, "distance": 0, "isrecommend": "@(Model.IsRecommend.ToString().ToLower())"
+            },
+            function (data) {
+                //更新页码
+                //是否显示加载更多
+                jQuery("#PageIndex").val(index);
+                jQuery("#orderBy").val(orderBy);
+                if (type == 1) {
+                    jQuery(".content-list").html(data);
+                    //滑动到顶部
+                    jQuery("body,html").animate({ scrollTop: tabHeight }, 200);
+                    console.log(tabHeight, '3')
+
+                }
+                else {
+                    jQuery(".content-list").append(data);
+                }
+                //jQuery.loading("remove");
+                console.log("orderby:" + jQuery("#orderBy").val() + ";index:" + jQuery("#PageIndex").val());
+                canLoad = true;
+                setScoreGradingColor();
+            });
+    }
+
+    $('.banner .swiper-wrapper').on('click', '.banner-img', function () {
+        var url = $(this).data("url");
+        window.location.href = url;
+    });
+
+
+
+        $(function () {
+            $('.banner .swiper-wrapper').on('click', '.banner-img', function () {
+                if ($(this).data("url")) {
+                    window.location.href = $(this).data("url");
+                }
+            });
+            //点击tab切换列表
+            jQuery(".content-tab li").on("click", function () {
+                console.log("点击tab切换列表");
+                var orderBy = jQuery(this).attr("data-orderBy");
+                var oldOrderBy = jQuery("#orderBy").val();
+                if (oldOrderBy == orderBy) {
+                    //如果切换当前框 回到顶部
+                    jQuery("body,html").animate({ scrollTop: tabHeight }, 200);
+                    console.log(tabHeight,'1')
+                    return;
+                } else {
+                    //切换不同的选项
+                    //先将当前选项框的内容保存起来
+                    var oldhtml = jQuery(".content-list").html();
+                    jQuery("#hide-exttab-" + oldOrderBy).html(oldhtml);
+
+                    //获取切换tab后时候有预留的隐藏内容
+                    //有的话赋值
+                    var hide_html = jQuery("#hide-exttab-" + orderBy).html();
+                    if (hide_html) {
+                        jQuery(".content-list").html(hide_html);
+                        jQuery("#orderBy").val(orderBy);
+                        jQuery("body,html").animate({ scrollTop: tabHeight }, 200);
+                        console.log(tabHeight,'2')
+                        return;
+                    } else {
+                        LoadListHtml(orderBy, 1);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

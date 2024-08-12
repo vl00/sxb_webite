@@ -1,0 +1,788 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" data-dpr="1">
+<head>
+    <title>上学帮 - 招聘</title>
+    <meta charset="utf-8" />
+    <meta id="meta_viewport" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <script type="text/javascript">
+        var designWidth = 950;//设计图宽度
+        if (window.innerWidth < designWidth) {
+            document.getElementsByTagName('html').item(0).style.fontSize = parseInt(window.innerWidth / designWidth * 100, 10) + 'px';
+        }
+    </script>
+    <style type="text/css">
+        html {
+            font-size: 350%;
+        }
+
+        pre label {
+            color: rgb(252,120,78);
+            font-weight: 600;
+        }
+
+        body {
+            margin: 0px;
+            overflow-x: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .Rectangle {
+            width: 9.5rem;
+            background-color: #ffd24d;
+            margin: 0px auto;
+        }
+
+        .head {
+            width: 100%;
+            height: 5.24rem;
+            text-align: center;
+            padding-top: 0.60rem;
+        }
+
+            .head img {
+                width: 8.50rem;
+            }
+
+        .Rectangle-2 {
+            width: 8.50rem;
+            border-radius: 0.139rem;
+            background-color: #F9EDDB;
+            border: solid 0.06rem #333331;
+            margin: 0px auto;
+            margin-top: 0.5rem;
+        }
+
+            .Rectangle-2 div {
+                opacity: 1;
+            }
+
+        .Rectangle-6 {
+            width: 5.26rem;
+            height: 0.88rem;
+            border-radius: 0.30rem;
+            background-color: #ffd24d;
+            border: solid 0.056rem #333331;
+            margin-left: 0.62rem;
+            margin-top: -0.144rem;
+        }
+
+        .Rectangle-5 {
+            width: 4.64rem;
+            height: 0.8rem;
+            border-radius: 0.34rem;
+            background-color: #1e1c1c;
+            border: solid 0.01rem #979797;
+            margin: 0px 0.30rem;
+            text-align: center;
+            line-height: 0.8rem;
+            margin-top: -0.21rem;
+        }
+
+        .layer {
+            width: 2.656rem;
+            height: 0.528rem;
+            font-family: PingFangSC;
+            font-size: 0.368rem;
+            font-weight: 600;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            position: relative;
+            top: -0.26rem;
+            color: #ffd24d;
+        }
+
+        .Oval {
+            width: 0.299rem;
+            height: 0.299rem;
+            background-color: #ffd24d;
+            border: solid 0.04rem #333331;
+            border-radius: 50%;
+        }
+
+        .Left {
+            margin-top: 0.288rem;
+            margin-left: 0.20rem;
+        }
+
+        .Right {
+            margin-top: 0.288rem;
+        }
+
+        .Circle {
+            margin-left: 0.05rem;
+        }
+
+        .Context1 {
+            margin: 0px auto;
+            width: 100%;
+        }
+
+        .Context2 {
+            margin: 0px auto;
+            width: 6.44rem;
+            height: 2rem;
+        }
+
+        .Rectangle-3 {
+            width: 2.6rem;
+            opacity: 0.85;
+            border-radius: 0.12rem;
+            box-shadow: 0 0.048rem 0.18rem 0 rgba(181, 184, 186, 0.32);
+            background-color: #00bcf3;
+            border: solid 0.029rem #333331;
+            text-align: center;
+            font-family: PingFangSC;
+            font-size: 0.36rem;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #2b2626;
+        }
+
+            .Rectangle-3 span {
+                line-height: 0.61rem
+            }
+
+        .img1 {
+            margin-left: 0.89rem;
+        }
+
+        .Triangle {
+            position: absolute;
+            left: 1rem;
+        }
+
+        .Context3 {
+            padding-bottom: 0.50rem;
+        }
+
+        .ContextLeft3 {
+            padding-bottom: 0.50rem;
+        }
+
+        .Context3-1 {
+            text-align: center;
+            opacity: 0.14;
+            padding-bottom: 0.50rem;
+        }
+
+        .BrandManager {
+            font-family: PingFangSC;
+            font-size: 0.29rem;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #121212;
+            text-align: center;
+            width: 5rem;
+            margin: 0px auto;
+        }
+
+        .BrandManagerLeftImg {
+            display: inline-block;
+            margin-top: -0.81rem;
+            margin-left: 5.62rem;
+        }
+
+        .BrandManagerRightImg1 {
+            display: inline-block;
+            margin-top: -1rem;
+            margin-left: -5.855rem;
+        }
+
+        .Star {
+            position: absolute;
+            display: inline-block;
+            left: 1.60rem;
+            top: 0.8rem;
+        }
+
+        .Electriclight {
+            position: absolute;
+            display: inline-block;
+            right: 1rem;
+            bottom: 0rem;
+        }
+
+        .BrandManagerImg {
+            bottom: 0.88rem;
+        }
+
+        .Rectangle-7 {
+            margin: 0px auto;
+            margin-top: 0.42rem;
+            width: 8.64rem;
+            border-radius: 0.14rem;
+            background-color: #FC7849;
+            border: solid 0.04rem #333331;
+            text-align: center;
+            position: relative;
+        }
+
+            .Rectangle-7 > div {
+                font-family: PingFangSC;
+                font-size: 0.29rem;
+                font-weight: 500;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: normal;
+                vertical-align: middle;
+                letter-spacing: normal;
+                color: #14393a;
+            }
+
+        .Rectangle-8 {
+            width: 8.64rem;
+            border-radius: 0.13rem;
+            background-color: #60C7C3;
+            border: solid 0.04rem #333331;
+            margin: 0px auto;
+            margin-top: 0.28rem;
+            font-family: PingFangSC;
+            font-size: 0.31rem;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            position: relative;
+        }
+
+        .Email {
+            display: inline-block;
+            color: #ede9e8;
+            text-decoration: underline;
+            margin: 0px 0.10rem;
+            font-weight: bold;
+        }
+
+        .Rectangle-9 {
+            width: 2.72rem;
+            border-radius: 0.068rem;
+            background-color: #F1E2B6;
+            box-shadow: 0 0.02rem 0.47rem 0 rgba(169, 132, 24, 0.62);
+            margin: 0.32rem auto;
+        }
+
+        .PublicNumberImg {
+            padding-top: 0.21rem;
+            text-align: center;
+        }
+
+        .PublicNumberFont {
+            font-family: PingFangSC;
+            font-size: 0.2rem;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 0.216rem;
+            letter-spacing: normal;
+            text-align: center;
+            color: #181e1e;
+        }
+
+        .EmailFontDiv {
+            padding: 0.34rem 0rem;
+            width: 7.67rem;
+            margin: 0px auto;
+            font-family: PingFangSC;
+            font-size: 0.25rem;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+        }
+
+        .Addr {
+            padding: 0.32rem 0rem;
+            font-family: PingFangSC;
+            font-size: 0.30rem;
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+        }
+
+        .Circle-1 {
+            width: 0.24rem;
+            height: 0.24rem;
+            background-color: #ffd24d;
+            border: solid 0.04rem #333331;
+            border-radius: 50%;
+        }
+
+        .RightCircleDiv {
+            position: absolute;
+            margin-left: 8.49rem;
+            margin-top: -1.08rem;
+            z-index: 10;
+        }
+
+            .RightCircleDiv > div {
+                margin: 0px auto;
+            }
+
+        .LeftCircleDiv {
+            position: absolute;
+            margin-left: 0.69rem;
+            margin-top: -1.08rem;
+            z-index: 10;
+        }
+
+        .Line-2 {
+            width: 0px;
+            height: 1.29rem;
+            border: solid 0.04rem #433216;
+            border-radius: 0.496rem/0.30rem;
+            box-shadow: 0.02rem 0.04rem 0.14rem #433216;
+            margin-top: 0.09rem;
+        }
+
+        .RightCircleDiv-1 {
+            width: 0.19rem;
+            height: 0.02rem;
+            border: solid 0.06rem #433216;
+            border-radius: 50%;
+        }
+
+        .Fist {
+            position: relative;
+            top: 0.42rem;
+        }
+
+        .A {
+            position: absolute;
+            display: inline-block;
+            margin-left: -1.49rem;
+            margin-top: 0.2rem;
+        }
+
+        .BrandManager1-1 {
+            margin-top: -0.86rem;
+            margin-left: 5.69rem;
+        }
+
+        .Apple {
+            position: absolute;
+            left: 7rem;
+        }
+
+        .D {
+            position: absolute;
+            right: 7rem;
+            bottom: 0rem;
+        }
+
+        .TraineeBook {
+            position: absolute;
+            right: 1.5rem;
+            top: -0.20rem;
+        }
+
+        .Eraser {
+            position: absolute;
+            left: 1rem;
+            top: 3.9rem;
+        }
+
+        .Thumbtack {
+            position: absolute;
+            left: 0.8rem;
+            bottom: 0.10rem;
+        }
+
+        .Compasses {
+            position: absolute;
+            right: 0.8rem;
+            bottom: -0.2rem;
+        }
+
+        .Magnifier {
+            position: absolute;
+            right: 0.40rem;
+            bottom: 0.10rem;
+        }
+
+        .PaperPlane {
+            position: absolute;
+            bottom: -0.50rem;
+            left: 0.50rem;
+        }
+
+        .CircleS {
+            position: absolute;
+            margin-left: 3.45rem;
+        }
+
+        .Triangle1-1 {
+            position: absolute;
+            right: -0.4rem;
+            top: 8.5rem;
+        }
+
+        .Delete {
+            position: absolute;
+            left: -0.45rem;
+        }
+
+        .Emc2 {
+            position: absolute;
+            left: 8.60rem;
+        }
+
+        .BrandManager-1 {
+            position: relative;
+            bottom: 0.08rem;
+        }
+
+        .BrandManagerImg-1 {
+            width: 1.06rem;
+            position: absolute;
+            margin-top: -2.45rem;
+            left: 1.32rem;
+        }
+
+        .ProductManagerImg {
+            width: 1.01rem;
+            position: absolute;
+            margin-top: 2.28rem;
+            margin-left: -0.75rem;
+        }
+
+        .ProductOperationImg {
+            width: 0.94rem;
+            position: absolute;
+            margin-top: -2.495rem;
+        }
+
+        .ContentOperationImg {
+            width: 1.02rem;
+            position: relative;
+            margin-top: 5.12rem;
+            margin-left: -4.75rem;
+        }
+
+        .OperationClassInternImg {
+            width: 0.98rem;
+            position: absolute;
+            margin-top: -1.71rem;
+        }
+
+        .PublicNumberImg-1 {
+            width: 2.36rem;
+        }
+
+        .ChemistryImg {
+            width: 0.75rem;
+            margin-right: 1rem;
+        }
+
+        .TriangleImg {
+            width: 0.28rem;
+        }
+
+        .StarImg {
+            width: 0.45rem;
+        }
+
+        .CircleSImg {
+            width: 0.43rem;
+        }
+
+        .ElectriclightImg {
+            width: 1.01rem;
+        }
+
+        .Aimg {
+            width: 0.73rem;
+        }
+
+        .AppleImg {
+            width: 0.46rem;
+        }
+
+        .Dimg {
+            width: 0.77rem;
+        }
+
+        .TraineeBookImg {
+            width: 0.77rem;
+        }
+
+        .Emc2Img {
+            width: 0.35rem;
+        }
+
+        .EraserImg {
+            width: 0.55rem;
+        }
+
+        .ThumbtackImg {
+            width: 0.41rem;
+        }
+
+        .CompassesImg {
+            width: 0.64rem;
+        }
+
+        .MagnifierImg {
+            width: 0.58rem;
+        }
+
+        .PaperPlaneImg {
+            width: 0.92rem;
+        }
+
+        .DeleteImg {
+            width: 0.33rem;
+        }
+
+        .RightCircleDivLine {
+            position: relative;
+            z-index: 10;
+            top: 0.20rem;
+        }
+
+        .LeftCircleDivLine {
+            position: relative;
+            z-index: 10;
+            top: 0.20rem;
+            margin: 0px auto;
+        }
+
+        .Pen {
+            position: absolute;
+            left: -0.45rem;
+            top: 8.8rem;
+        }
+
+            .Pen img {
+                width: 0.39rem;
+            }
+
+        .Chemistry {
+            position: absolute;
+            top: -0.65rem;
+            right: 1rem;
+        }
+
+            .Chemistry img {
+                width: 0.75rem;
+            }
+
+        .Star img {
+            width: 0.45rem;
+        }
+
+        .Triangle img {
+            width: 0.28rem;
+        }
+
+        .Star1 {
+            position: absolute;
+            display: inline-block;
+            right: 2.2rem;
+            top: 0.10rem;
+        }
+
+            .Star1 img {
+                width: 0.45rem;
+            }
+    </style>
+</head>
+<body>
+    <div class="Rectangle">
+        <div class="head">
+            <img src="https://cdn.sxkid.com/images/www/v3/hr/SXB.png" />
+        </div>
+        <div class="Rectangle-2">
+            <div class="Context" style="display: flex;flex-direction: row; position: relative;">
+                <div class="Left" style="display: flex;flex-direction: row;float: right;">
+                    <div class="Oval"></div>
+                    <div class="Oval Circle"></div>
+                </div>
+                <div class="Rectangle-6">
+                    <div class="Rectangle-5">
+                        <span class="layer">上学帮招聘职位</span>
+                    </div>
+                </div>
+                <div class="Left" style="display: flex;flex-direction: row;float: right;margin-left: 0.40rem;">
+                    <div class="Oval"></div>
+                    <div class="Oval Circle"></div>
+                </div>
+            </div>
+            <div class="Context1 BrandManagerDiv" style="background: url(https://cdn.sxkid.com/images/www/v3/hr/ProductManager.png); background-repeat: no-repeat; background-size: 1.01rem;background-position: bottom; background-position-x: 11%;position: relative;">
+                <div class="Rectangle-3" style="margin: 0.7rem auto;">
+
+                    <span class="Chemistry"><img src="https://cdn.sxkid.com/images/www/v3/hr/Chemistry.png" /></span>
+                    <span class="Star"><img src="https://cdn.sxkid.com/images/www/v3/hr/Star.png" /></span>
+                    <span class="Triangle"><img src="https://cdn.sxkid.com/images/www/v3/hr/Triangle.png" /></span>
+
+                    <span class="layer1">运营总监</span>
+                    <span class="CircleS"><img class="CircleSImg" src="https://cdn.sxkid.com/images/www/v3/hr/CircleS.png" /></span>
+                </div>
+                <div class="ContextLeft3">
+                    <span class="Electriclight"><img class="ElectriclightImg" src="https://cdn.sxkid.com/images/www/v3/hr/Electriclight.png" /></span>
+                    <span class="Triangle1-1"><img class="TriangleImg" src="https://cdn.sxkid.com/images/www/v3/hr/Triangle.png" /></span>
+                    <span class="Pen"><img src="https://cdn.sxkid.com/images/www/v3/hr/Pen.png" /></span>
+                    <pre class="BrandManager ElectriclightImg1-1">
+5年+运营岗位工作经验
+懂战略，带过人
+会数据，烧过钱
+</pre>
+                </div>
+                <div style="width: 6.44rem;border-top: 0.032rem solid #333331;margin: 0px auto;"></div>
+            </div>
+
+            <div class="Context1 BrandManagerDiv" style="background:url(https://cdn.sxkid.com/images/www/v3/hr/BrandManager.png);background-repeat: no-repeat; background-size: 0.94rem;background-position: bottom; background-position-x:89%;position: relative;">
+                <div class="Rectangle-3" style="margin: 0.7rem auto;">
+                    <span class="Star1"><img src="https://cdn.sxkid.com/images/www/v3/hr/Star.png" /></span>
+                    <span class="layer1">产品经理</span>
+                </div>
+                <div class="Context3">
+                    <span class="Electriclight" style="left: 1rem; bottom: 0.5rem;"><img class="ElectriclightImg" src="https://cdn.sxkid.com/images/www/v3/hr/PaperPlane.png" /></span>
+                    <pre class="BrandManager" style="margin: 0px auto;">
+3年+产品经理岗位工作经验
+至少1个互联网产品的完整生
+命周期中担任过核心职责
+对K12教育了解者优先
+			        		</pre>
+                </div>
+                <div style="width: 6.44rem;border-top: 0.032rem solid #333331;margin: 0px auto;"></div>
+            </div>
+
+
+            <div class="Context1 BrandManagerDiv" style="background:url(https://cdn.sxkid.com/images/www/v3/hr/ProductOperation.png);background-repeat: no-repeat; background-size: 0.94rem;background-position: bottom; background-position-x:11%;position: relative;">
+                <div class="Rectangle-3" style="margin: 0.7rem auto;">
+                    <span class="A"><img class="Aimg" src="https://cdn.sxkid.com/images/www/v3/hr/A.png" /></span>
+                    <span class="layer1">产品运营</span>
+                </div>
+                <div class="Context3">
+                    <span class="Apple"><img class="AppleImg" src="https://cdn.sxkid.com/images/www/v3/hr/Apple.png" /></span>
+                    <pre class="BrandManager" style="margin: 0px auto;">
+1年+互联网产品运营经验
+整合不同渠道对产品进行推广
+有数据库管理经验优先
+			        		</pre>
+                </div>
+                <div style="width: 6.44rem;border-top: 0.032rem solid #333331;margin: 0px auto;"></div>
+            </div>
+            <div class="Context1 BrandManagerDiv" style="background:url(https://cdn.sxkid.com/images/www/v3/hr/ContentOperation.png);background-repeat: no-repeat; background-size: 1.02rem;background-position: bottom; background-position-x:89%;position: relative;">
+                <div class="Rectangle-3" style="margin: 0.7rem auto;">
+                    <span class="layer1">
+                        内容运营
+                        <span class="D"><img class="Dimg" src="https://cdn.sxkid.com/images/www/v3/hr/D.png" /></span>
+                    </span>
+                </div>
+                <div class="ContextLeft3">
+                    <span class="Delete"><img class="DeleteImg" src="https://cdn.sxkid.com/images/www/v3/hr/Delete.png" /></span>
+                    <pre class="BrandManager">
+具备“网感”、了解产品、懂
+传懂整合资、能写软文能洗
+文，如果能原创更佳，应聘
+简历请附上往期文章
+<label>工作地点：广州/成都</label>
+			        		</pre>
+                </div>
+                <div style="width: 6.44rem;border-top: 0.032rem solid #333331;margin: 0px auto;"></div>
+            </div>
+            <div class="Context1 BrandManagerDiv" style="position: relative;background: url(https://cdn.sxkid.com/images/www/v3/hr/Eraser.png);background-repeat: no-repeat; background-size: 0.5rem;background-position: bottom; background-position-x:11%;background-position-y: 93%;">
+                <div class="Rectangle-3" style="margin: 0.7rem auto;">
+                    <span class="TraineeBook"><img class="TraineeBookImg" src="https://cdn.sxkid.com/images/www/v3/hr/TraineeBook.png" /></span>
+                    <span class="layer1">运营类实习生</span>
+                </div>
+                <div class="Context3-1">
+                    <span class="Emc2"><img class="Emc2Img" src="https://cdn.sxkid.com/images/www/v3/hr/Emc2.png" /></span>
+                    <pre class="BrandManager1 BrandManager" style="width: 100%;">
+爱微博，爱抖音掌握各种新潮APP
+热衷拍照，喜欢记录各种趣闻轶事
+文笔不错、记性好，想学习推文撰写与管理
+面向对象：大三、大四在校学生
+时间要求：每周一到五至少三天  
+PS：有自媒体经验跟无拖延症患者优先哦
+<label>实习地点：广州/成都</label>
+			        		</pre>
+                </div>
+            </div>
+        </div>
+        <div class="RightCircleDiv">
+            <div class="Circle-1 Fist"></div>
+            <div class="Line-2 RightCircleDivLine"></div>
+            <div class="Circle-1"></div>
+        </div>
+        <div class="LeftCircleDiv">
+            <div class="Circle-1 Fist"></div>
+            <div class="Line-2 LeftCircleDivLine"></div>
+            <div class="Circle-1"></div>
+        </div>
+        <div class="Rectangle-7">
+            <span class="Thumbtack"><img class="ThumbtackImg" src="https://cdn.sxkid.com/images/www/v3/hr/Thumbtack.png" /></span>
+            <span class="Compasses"><img class="CompassesImg" src="https://cdn.sxkid.com/images/www/v3/hr/Compasses.png" /></span>
+            <pre class="Addr">高大上的办公环境，透明化晋升空间，五险一金 
+周末双休，完善的培训体系，漂亮妹纸多
+以上岗位坐标广州天河区</pre>
+        </div>
+        <div class="Rectangle-8">
+            <span class="PaperPlane"><img class="PaperPlaneImg" src="https://cdn.sxkid.com/images/www/v3/hr/PaperPlane.png" /></span>
+            <span class="Magnifier"><img class="MagnifierImg" src="https://cdn.sxkid.com/images/www/v3/hr/Magnifier.png"></span>
+            <pre class="EmailFontDiv">
+重要的事情再说一遍，如果你有任何想法和创意
+请将职位意向和简历投递至邮箱<span class="Email">&nbsp;hr@sxkid.com&nbsp;</span>
+我们将尽快与你联系！
+</pre>
+        </div>
+        <div class="Rectangle-9">
+            <div class="PublicNumberImg"><img class="PublicNumberImg-1" src="https://cdn.sxkid.com/images/www/v3/hr/PublicNumber.png" /></div>
+            <div class="PublicNumberFont" style="padding-bottom: 0.20rem;">
+                <span>扫一扫</span><br />
+                <span style="display: block; margin-top: 0.1rem;">关注微信公众号</span>
+            </div>
+        </div>
+        <div style="height: 0.10rem;"></div>
+    </div>
+    <script src="https://cos.sxkid.com/js/lib/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(window).resize(function () {
+            var viewScale = $(window).width() < designWidth ? $(window).width() / designWidth : 1;
+            console.info(viewScale);
+            $('html').css('font-size', parseInt(viewScale * 100, 10) + 'px');
+        }).trigger('resize');
+    </script>
+    <script type="text/javascript" src="https://cos.sxkid.com/js/lib/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cos.sxkid.com/js/plugin/cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="https://cos.sxkid.com/js/h5/v3/common.js?ver=20170102"></script>
+    <script type="text/javascript">
+        share_title = '上学帮 - 2018招聘启示';//分享标题
+        share_link = 'https://m.sxkid.com/hr.aspx';//分享链接O
+        share_desc = '高大上的办公环境，透明化晋升空间，五险一金，周末双休，完善的培训体系，漂亮妹纸多，以上岗位坐标广州天河区';//分享描述
+        share_title_Timeline = '上学帮2018招聘启示-' + share_desc;
+        share_imgUrl = 'https://cdn.sxkid.com/images/www/v3/hr/shareIcon.png?ver=1';
+        $(document).ready(function () {
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '', // 必填，公众号的唯一标识
+                timestamp: '1570871491189', // 必填，生成签名的时间戳
+                nonceStr: 'cdf950fdf73d4f27b1842074e62e4fbf', // 必填，生成签名的随机串
+                signature: '',// 必填，签名，见附录1
+                jsApiList: weixin_api_list // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        });
+    </script>
+</body>
+</html>

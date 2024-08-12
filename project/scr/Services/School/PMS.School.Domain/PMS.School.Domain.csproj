@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="2.12.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\ProductManagement.Infrastructure\ProductManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\OperationPlateform\PMS.OperationPlateform.Domain\PMS.OperationPlateform.Domain.csproj" />
+    <ProjectReference Include="..\..\UserManage\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.EntityFramework\ProductManagement.Framework.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\PMS.School.Infrastructure\PMS.School.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Entities\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.txt</LastGenOutput>
+    </None>
+    <None Update="Entities\Model.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+</Project>

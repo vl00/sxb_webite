@@ -1,0 +1,48 @@
+﻿@model Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel;
+    <li>
+        <a href="@Url.Action("Detail","Comment",new {No = Model.No})">
+            @if (Model.School == null)
+            {
+                <p class="font-15 text-left school-name">该学校已下架</p>
+            }
+            else
+            {
+                <p class="font-15 text-left school-name">@Model.School.SchoolName</p>
+            }
+            <div class="d-flex justify-content-between parents-box">
+                <div>
+                    <span class="font-13 client-name">@Model.UserInfo?.NickName</span>
+                    @if (Model.UserInfo?.IsSchool == true)
+                    {
+                        <i class="school-tab ">校方</i>
+                    }
+                </div>
+                <div class="parents-comment">
+                    @{
+                        string starEn = "three";
+                        switch (Model.CommentScore.AggStar)
+                        {
+                            case 1: starEn = "one"; break;
+                            case 2: starEn = "two"; break;
+                            case 3: starEn = "three"; break;
+                            case 4: starEn = "four"; break;
+                            case 5: starEn = "five"; break;
+                            default: starEn = "three"; break;
+                        }
+                    }
+                    <span class="font-12">家长评价：</span>
+                    <img src="@(ViewBag.StaticFile)/imgs/starHide11/@(starEn).png" alt="家长评分">
+                </div>
+            </div>
+            <p class="font-13 text-left comment-content">
+                @Model.Content
+            </p>
+            <div class="font-12 time-like d-flex justify-content-between">
+                <span class="time">@Model.AddTime</span>
+                <div class="comment-like">
+                    <span title="评论" class="cm">@(Model.ReplyTotal)</span>
+                    <span title="点赞" data-Id="@Model.Id" data-Type="1" class="lk  @(Model.IsLike ? "selected" : "")">@Model.LikeTotal</span>
+                </div>
+            </div>
+        </a>
+    </li>

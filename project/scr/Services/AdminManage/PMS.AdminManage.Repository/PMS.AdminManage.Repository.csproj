@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PMS.AdminManage.Domain\PMS.AdminManage.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\ProductManagement.Framework.MSSQLAccessor.Plus\ProductManagement.Framework.MSSQLAccessor.Plus.csproj" />
+  </ItemGroup>
+</Project>

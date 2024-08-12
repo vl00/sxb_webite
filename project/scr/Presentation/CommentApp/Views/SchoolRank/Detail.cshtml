@@ -1,0 +1,58 @@
+﻿@model Sxb.Web.ViewModels.SchoolRank.SchoolRankViewModel
+
+@{
+    ViewBag.KeyWords = $"{@Model.RankName}排行榜、{@Model.RankName}榜单排名";
+    ViewBag.Description = $"上学帮排行榜频道提供{@Model.RankName}排行榜、{@Model.RankName}榜单排名信息，方便家长为孩子选择优秀的名校。";
+    ViewBag.Title = $"{@Model.RankName}排行榜__榜单排名-上学帮";
+}
+@section Styles{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-rank-detail.css" />
+}
+
+@*
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">排行榜</span>
+        <span class=""></span>
+    </header>
+*@
+
+<section class="rank-detail mt">
+    <div class="title text-center">
+        <img src="@Model.RankCoverUrl" alt="">
+        <h1>@Model.RankName</h1>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Intro) || !string.IsNullOrEmpty(Model.DTSource))
+    {
+        <div class="tips">
+            @if (!string.IsNullOrEmpty(Model.Intro?.Trim()))
+            {
+                <p class="introduce">@Model.Intro</p>
+            }
+            @if (!string.IsNullOrEmpty(Model.DTSource?.Trim()))
+            {
+                <p>数据来源: @Model.DTSource</p>
+            }
+
+        </div>
+    }
+
+    <ul class="rank-list">
+        @foreach (var item in Model.Schools)
+        {
+            <li data-id="@item.Id" data-extid="@item.ExtId" data-no="@item.ShortSchoolNo" data-statu="@item.Statu">
+                <i class="num">@item.Sort</i>
+                <div>
+                    <div>@item.Name</div>
+                    <p>@item.Remark</p>
+                </div>
+            </li>
+            @*<li data-id="@item.Id" data-extid="@item.ExtId" data-statu="@item.Statu"><i class="num">@item.Sort</i><div>@item.Name</div></li>*@
+        }
+
+    </ul>
+</section>
+
+@section Scripts{
+    <script src="@(ViewBag.StaticFile)/js/school-rank-detail.js"></script>
+}

@@ -1,0 +1,189 @@
+﻿@model PMS.UserManage.Application.ModelDto.Login.Get
+@{
+    ViewData["Title"] = "登录";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+    string UserAgent = Context.Request.Headers["User-Agent"].ToString().ToLower();
+}
+
+
+@section css{
+    @if (Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("ischool"))
+    {
+        <script type="text/javascript">
+            window.open("ischool://login?action=refresh_home&url=@ViewBag.ReturnUrl");
+            history.back();
+        </script>
+    }
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/login/login.css" />
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/login/select-area.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">手机登录</span>
+    <span class=""></span>
+</header>
+
+<section style="padding-top: 55px;">
+    <ul class="login-mode flex justify-content-around">
+        <li class="active">验证码登录</li>
+        <li><i></i></li>
+        <li>密码登录</li>
+    </ul>
+</section>
+<form id="loginForm">
+    <section>
+        <div class="phone-num flex">
+            <a class="area-code" data-for="nationCode">
+                <span>+86 <i class="arrow"></i></span>
+                <input id="nationCode" type="hidden" name="nationCode" value="86" />
+            </a>
+            <input id="txtMobile" autocomplete="off" type="number" placeholder="请输入手机号">
+            <input type="hidden" id="mobile" name="mobile" />
+        </div>
+        <div id="imgCode" style="display:none;">
+            <div class="verification-code flex">
+                <input id="imgrnd" type="text" placeholder="请输入图形验证码" class="font-14" autocomplete="off">
+                <img />
+            </div>
+        </div>
+        <div id="rndLogin">
+            <div class="verification-code flex">
+                <input id="txtRnd" name="rnd" type="text" maxlength="6" placeholder="请输入验证码" autocomplete="off">
+                <span id="getCode" class="get-code text-center">获取验证码</span>
+            </div>
+        </div>
+        <div id="passwordLogin" style="display: none;">
+            <div class="password flex justify-content-between">
+                <input id="txtPassword" autocomplete="off" type="password" placeholder="请输入密码" autocomplete="new-password">
+                <input type="hidden" id="password" name="password" />
+                <input type="password" style="display:none;" />
+                <i class="icon"></i>
+            </div>
+            <a href="@Url.Action("ForgetPSW")" class="forget-password">忘记密码？</a>
+        </div>
+    </section>
+
+    <section class="login-btn text-center">
+        <input type="hidden" name="kid" value="@Model.Kid" />
+        <a id="submit">登录</a>
+    </section>
+</form>
+
+<section>
+    <ul class="other-login-list flex justify-content-around">
+        <li class="wechat"><a href="@ViewBag.Login_Uri_WX"><i class="icon"></i></a></li>
+        @if (!(UserAgent.Contains("micromessenger") && UserAgent.Contains("miniprogram")))
+        {
+            <li class="qq"><a href="@ViewBag.Login_Uri_QQ"><i class="icon"></i></a></li>
+        }
+        @*<li class="weibo"><i class="icon"></i></li>*@
+    </ul>
+    <p class="tips text-center">登录即代表您已阅读并同意<a href="@Url.Action("TermsOfService","Agreement")" class="clause">服务条款</a>、<a href="@Url.Action("Privacy","Agreement")" class="clause">隐私条款</a></p>
+</section>
+
+<section class="confirm-popup text-center">
+    <h5 class="confirm-title">“上学帮”想要打开<span>微信</span></h5>
+    <ul class="btn-list flex">
+        <li class="cancel">取消</li>
+        <li>打开</li>
+    </ul>
+</section>
+
+<div class="select-area"></div>
+<!-- 幕布 -->
+<div class="curtain"></div>
+
+@section js{
+    <script src="@ViewBag.FileHost_M/js/login/login.js"></script>
+
+    <script src="//aeu.alicdn.com/waf/interfaceacting.js"></script>
+    <script src="//aeu.alicdn.com/waf/antidomxss.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(Model.PublicKey)';
+        $('#txtRnd').val('');
+        $('#txtPassword').val('');
+        $('#submit').click(function () {
+            var _this = $(this).parent();
+            if (_this.hasClass('can-login')) {
+                _this.removeClass('can-login');
+                if ($('#txtMobile').val() != '') {
+                    $('#mobile').val(do_encrypt($('#txtMobile').val()));
+                } else {
+                    _this.addClass('can-login');
+                    return;
+                }
+                if ($('#txtPassword').val() != '') {
+                    $('#password').val(do_encrypt($('#txtPassword').val()));
+                } else if ($('#txtRnd').val() == '') {
+                    _this.addClass('can-login');
+                    return;
+                }
+                $.loading();
+                $.ajax({
+                    type: 'post',
+                    data: $('#loginForm').serialize(),
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            $.loading('登录成功,正在跳转...')
+                            location.replace(json.ReturnUrl || '/');
+                        } else {
+                            $.loading('remove');
+                            $.prompt(json.errorDescription);
+                        }
+                    },
+                    complete: function () {
+                        _this.addClass('can-login');
+                    }
+                });
+            }
+        });
+
+    //====================================================================================
+
+    function do_encrypt(plaintext) {
+        var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+        var doOaepPadding = false;
+        // ------------------------------------------------
+        // Encrypt
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import the RSA Key information.
+        rsa.ImportParameters(GetRsaKey(false));
+        // Encrypt the passed byte array and specify OAEP padding.
+        var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+        var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+        // ------------------------------------------------
+        // Display the encrypted data.
+        //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+        return encryptedString;
+    }
+    function GetRsaKey(includePrivateParameters) {
+        var xmlParams = publickey;
+        // ------------------------------------------------
+        // RSA Keys
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import parameters from xml.
+        rsa.FromXmlString(xmlParams);
+        // Export RSA key to RSAParameters and include:
+        //    false - Only public key required for encryption.
+        //    true  - Private key required for decryption.
+        return rsa.ExportParameters(includePrivateParameters);
+    }
+    function GetNewRsaProvider(dwKeySize) {
+        // Create a new instance of RSACryptoServiceProvider.
+        if (!dwKeySize) dwKeySize = 512;
+        return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+
+
+    </script>
+}

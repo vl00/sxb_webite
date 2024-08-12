@@ -1,0 +1,22 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div>
+    <ul class="qa-list">
+        
+    </ul>
+</div>
+<script>
+	// 点赞
+	$('.like').on('click', function() {
+		let num = Number($(this).text());
+		 if($(this).hasClass('click-like')) {
+		 	$(this).removeClass('click-like').children('i').css('animation', 'none').next().text(num - 1);
+		 }
+		 else {
+	 	 	$(this).addClass('click-like').children('i').css('animation', 'animate .5s').next().text(num + 1);
+		 }
+	})
+</script>

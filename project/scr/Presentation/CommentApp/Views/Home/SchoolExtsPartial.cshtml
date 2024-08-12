@@ -1,0 +1,132 @@
+﻿@model PMS.School.Domain.Dtos.SchoolExtListDto
+@using PMS.School.Domain.Common;
+
+@foreach (var item in Model.List)
+{
+    <li>
+        <div class="flex">
+            <div class="school-msg">
+                @*<a href="@(ViewBag.UA== Sxb.Web.Utils.UA.Mobile?$"ischool://web?url={Uri.EscapeDataString(Url.Action("Detail","School",new {extId=item.ExtId,sid=item.Sid }))}": Url.Action("Detail","School",new {Id=item.ExtId.ToString("N") }))">*@
+                <a href="@(ViewBag.UA== Sxb.Web.Utils.UA.Mobile?$"ischool://web?url=/school-{item.ShortSchoolNo}/": $"/school-{item.ShortSchoolNo}/")">
+
+                    <div class="school-name">
+                        <h5>@item.Name</h5>
+                    </div>
+                    <ul class="tag flex">
+                        <li>
+                            @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                        </li>
+                        @{
+                            var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                            var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                        }
+                        @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                        {
+                            <li>@lodgingDesc</li>
+                        }
+                        <li class="bcg-none">
+                            @*<i class="icon"></i>*@
+                        </li>
+                    </ul>
+                    <div class="price">
+
+                        @if (item.Tuition != null)
+                        {
+                            <span>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</span>
+                        }
+                        <span class="range">@(item.Distance == 999999999 ? "暂未收录" : Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                        <span class="position">@item.City | @item.Area</span>
+                    </div>
+                    <ul class="keyword flex text-center">
+                        @if (!Model.IsRecommend)
+                        {
+                            <li>
+                                @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                            </li>
+                        }
+                        @foreach (var tag in item.Tags)
+                        {
+                            <li>@tag</li>
+                        }
+                    </ul>
+                </a>
+            </div>
+
+            <div class="school-grade text-center">
+                <div class="score">
+                    @if (item.Score != null)
+                    {
+                        @*<span class="num">@(Math.Round((decimal)item.Score, 0))</span>*@
+                        <span class="num private-score-grading">@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                        @*<span>分</span>*@
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未评分</span>
+                    }
+                </div>
+                <p>学校总评</p>
+                @if (item.Score != null)
+                {
+                    <a href="@(ViewBag.UA== Sxb.Web.Utils.UA.Mobile?$"ischool://web?url={Uri.EscapeDataString(Url.Action("Data","School",new {Id=item.ExtId }))}":$"/school-{item.ShortSchoolNo}/data/")">
+                        <span class="btn">评分详情</span>
+                    </a>
+                }
+            </div>
+        </div>
+        @if (item.Ranks.Count > 0 || (item.CommontId != null && item.CommentCount > 0))
+        {
+            <div class="school-detail-bottom">
+                @if (item.CommontId != null && item.CommentCount > 0)
+                {
+                    <a href="@(ViewBag.UA == Sxb.Web.Utils.UA.Mobile ? $"ischool://web?url={Uri.EscapeDataString(Url.Action("CommentDetail", "SchoolComment", new { CommentId = item.CommontId }))}" : Url.Action("CommentDetail", "SchoolComment", new { CommentId = item.CommontId }))">
+                        <div class="comment flex">
+                            <span>评</span>
+                            <div class="comment-content">@(item.Comment)</div>
+                            <span>@(item.CommentCount)回复</span>
+                            <i class="arrow"></i>
+                        </div>
+                    </a>
+                }
+                @if (item.Ranks.Count > 0 && item.CommentCount > 0)
+                {
+                    <div class="school-detail-line"></div>
+                }
+                @if (item.Ranks.Count > 0)
+                {
+                    <a href="@(ViewBag.UA == Sxb.Web.Utils.UA.Mobile ? $"ischool://web?url={Uri.EscapeDataString(Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No }))}" : Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No }))">
+                        <div class="rank flex">
+                            <span>榜</span>
+                            <div class="rank-name">@($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")</div>
+                            <i class="arrow"></i>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </li>
+}
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#PageIndex").val("@(Model.PageIndex)")
+        jQuery("#PageCount").val("@(Model.PageCount)");
+        jQuery("#PageSize").val("@((int)((Model.PageCount+Model.PageSize-1)/Model.PageSize))");
+        jQuery(".load-more").remove();
+        jQuery(".not-more-data, .not-school-list").remove();
+        @if (Model.PageIndex==1&&Model.List.Count==0)
+        {
+            @:jQuery(".content-list").after('<div class="not-school-list text-center">暂未收录学校信息</div>');
+        }
+        else
+        {
+        @if (Model.PageIndex < (int)((Model.PageCount + Model.PageSize - 1) / Model.PageSize))
+        {
+            @:jQuery(".content-list").after('<div class="load-more text-center">正在努力加载</div>');
+        }
+        else {
+            @:jQuery(".content-list").after('<div class="not-more-data">没有更多数据</div>');
+        }
+
+       }
+    });
+</script>

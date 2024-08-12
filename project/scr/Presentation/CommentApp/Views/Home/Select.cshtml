@@ -1,0 +1,164 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>选择城市</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/search.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home.css" />
+</head>
+<body>
+    <div class="city-search header dev">
+        <div class="flex justify-content-between">
+            <a class="arrow"></a>
+            <div class="city-search-input">
+                <i class="search-icon"></i>
+                <input type="text" placeholder="输入城市名或拼音查询">
+            </div>
+        </div>
+    </div>
+
+    <section class="select-city"></section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/home-select-city.js"></script>
+    <script type="text/javascript">
+        jQuery(function () {
+            var localcity = '@Html.Raw(ViewBag.LocalCity)';
+            var hotcity =@Html.Raw(ViewBag.HotCity);
+            var history =@Html.Raw(ViewBag.History);
+            var allcity =@Html.Raw(ViewBag.AllCity);
+
+            function cityList(locationcity, history, hotselect, citydata) {
+                $('.select-city').html('<div class="location-city"><i class="location-icon"></i>' + locationcity + '</div>');
+                var html = '';
+                var html2 = '';
+                var html3 = '';
+                var html4 = '';
+                if (history.CityCodes.length > 0) {
+                    for (let i = 0; i < history.CityCodes.length; i++) {
+                        html += '<li data-AdCode="' + history.CityCodes[i].AdCode + '"><a href="' + history.CityCodes[i].url + '">' + history.CityCodes[i].Name + '</a></li>';
+                    }
+                    $('.select-city').children('.location-city').after('<div class="history"><h5>历史访问城市</h5><ul class="history-list flex">' + html + '</ul></div>');
+                }
+                else {
+                    $('.select-city').children('.location-city').after('<div class="history not-list"></div>')
+                }
+                for (let j = 0; j < hotselect.CityCodes.length; j++) {
+                    html2 += '<li data-AdCode="' + hotselect.CityCodes[j].AdCode + '"><a href="' + hotselect.CityCodes[j].url + '">' + hotselect.CityCodes[j].Name + '</a></li>';
+                }
+                $('.select-city').children('.history').after('<div class="hot-select"><h5>热门城市</h5><ul class="hot-select-list flex">' + html2 + '</ul></div>');
+                for (let k = 0; k < citydata.length; k++) {
+                    html3 += '<div>'
+                    html3 += '<h5 class="acronym">' + citydata[k].Key + '</h5>'
+                    html3 += '<ul>'
+                    for (let l = 0; l < citydata[k].CityCodes.length; l++) {
+                        html3 += '<li data-AdCode="' + citydata[k].CityCodes[l].AdCode + '"><a href="' + citydata[k].CityCodes[l].url + '">' + citydata[k].CityCodes[l].Name + '</a></li>'
+                    }
+                    html3 += '</ul>'
+                    html3 += '</div>'
+                }
+                $('.select-city').children('.hot-select').after('<div class="select-content">' + html3 + '</div>');
+                html4 += '<div class="tab-select text-center">'
+                html4 += '<ul>'
+                if (history.CityCodes.length > 0) {
+                    html4 += '<li>历</li>'
+                }
+                html4 += '<li>热</li>'
+                html4 += '</ul>'
+                html4 += '<ul>'
+                for (let m = 0; m < citydata.length; m++) {
+                    html4 += '<li>' + citydata[m].Key + '</li>'
+                }
+                html4 += '</ul>'
+                html4 += '</div>'
+                $('.select-city').children('.select-content').after(html4);
+            }
+            // 分别对应：目前定位、历史访问、热门城市、城市列表
+            cityList(localcity, history, hotcity, allcity);
+
+            var newList = [];
+            function searchList(str, container) {
+                newList = [];
+                var startChar = str.charAt(0);
+                var strLen = str.length;
+                for (var i = 0; i < container.length; i++) {
+                    var obj = container[i];
+                    var isMatch = false;
+                    for (var p in obj) {
+                        if (p == "url") {
+                            break;
+                        }
+                        if (typeof (obj[p]) == "function") {
+                            obj[p]();
+                        } else {
+                            var curItem = "";
+                            if (obj[p] != null) {
+                                curItem = obj[p];
+                            }
+                            for (var j = 0; j < curItem.length; j++) {
+                                if (curItem.charAt(j) == startChar) {
+                                    if (curItem.substring(j).substring(0, strLen) == str) {
+                                        isMatch = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isMatch) {
+                        newList.push(obj);
+                    }
+                }
+                return newList;
+            }
+            var searchAllCity = [];
+            for (var i = 0; i < allcity.length; i++) {
+                for (var j = 0; j < allcity[i].CityCodes.length; j++) {
+                    searchAllCity.push({ Name: allcity[i].CityCodes[j].Name, Pinyin: allcity[i].CityCodes[j].pinyin, url: allcity[i].CityCodes[j].url });
+                }
+            }
+            // 监听搜索城市input
+            $('.city-search-input input').bind('input propertychange', function () {
+                inputVal = $(this).val();
+                $('.not-search-data').remove();
+                $('.result-list').css('display', 'none');
+                if (inputVal != '') {
+                    searchList(inputVal, searchAllCity);
+                    if (newList == '') {
+                        // 无城市数据
+                        var html = '<div><i class="icon"></i></div><p>暂无该城市数据</p></div>';
+                        $('.not-search-data').length == 0 ? $('.select-city').after('<div class="not-search-data">' + html + '</div>') : $('.not-search-data').html(html);
+                    }
+                    else {
+                        $('.result-list').css('display', 'block');
+                        // 渲染搜索结果列表
+                        var html = '';
+                        for (var i = 0; i < newList.length; i++) {
+                            html += '<li><a href="' + newList[i].url + '">' + newList[i].Name + '</a></li>';
+                        }
+                        $('.result-list').length == 0 ? $('.select-city').after('<ul class="result-list">' + html + '</ul>') : $('.result-list').html(html);
+
+                        $('.result-list, .not-search-data').css('display', 'block');
+                    }
+                    $('.select-city').css('display', 'none');
+                }
+                else {
+                    $('.select-city').css('display', 'block');
+                    $('.not-search-data, .result-list').css('display', 'none');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

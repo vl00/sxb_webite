@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageTags>Html;HtmlAnalysis</PackageTags>
+    <Description>
+      Simple HtmlAnalysis
+      
+      
+      //inject or create instance
+      var builder = new HtmlAnalysisBuilder(logger, httpClient);
+
+      var context = await builder.GetHtmlAnalysisContext(url);
+
+      WriteLine(context.Title);
+      WriteLine(context.TitleImage);
+      WriteLine(context.Images);
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Compile\**" />
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Compile\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Compile\**" />
+    <None Remove="Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

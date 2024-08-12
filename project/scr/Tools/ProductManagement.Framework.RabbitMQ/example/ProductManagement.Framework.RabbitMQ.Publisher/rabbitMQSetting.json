@@ -1,0 +1,14 @@
+﻿{
+  "rabbitMQSetting": {
+    "AmqpUris": [
+      "amqp://10.0.0.181:5672",
+      "amqp://10.0.0.182:5672",
+      "amqp://10.0.0.183:5672"
+    ],
+    "Uri": "amqp://myuser:mypass@10.0.0.181:5672"
+
+    //"hostName": "192.168.50.99",
+    //"userName": "guest",
+    //"password": "guest"
+  }
+}

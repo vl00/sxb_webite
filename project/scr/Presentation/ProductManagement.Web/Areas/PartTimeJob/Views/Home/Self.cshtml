@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewData["Title"] = "我的";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+@section styles
+{
+
+    <style>
+        .card{
+            border:none;
+        }
+
+        .row {
+            margin: 10px 0px;
+        }
+
+        #MySelf{
+            color:#fff !important;
+        }
+    </style>
+ }
+
+<div class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                            <div class="col-sm-12">
+                                <h5 style="font-weight:bold;">我的</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                账号ID：
+                            </div>
+                            <div class="col-sm-9">
+                                @ViewBag._admin.Phone
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                昵称：
+                            </div>
+                            <div class="col-sm-2">
+                                <span class="showName">@ViewBag._admin.Name</span>
+                                <span style="display:none;"><input style="width:100px" class="Nametxt" type="text" /></span>
+                            </div>
+                            <div class="col-sm-7">
+                                <input data-updateFalg="0" id="updateAdminName" class="btn btn-dark" type="button" value="修改" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span>密码：</span><br />
+                                @if (ViewBag.isFirst)
+                                {
+                                    <span class="col-sm-12" style="color:red;font-size: 10px;display: block;width: 100%;padding: 0px;">* 点击按钮进行密码初始化设置</span>
+                                }
+                            </div>
+                            <div id="password" class="col-sm-2">
+                                @{
+                                    if (ViewBag._admin.Password != null && ViewBag._admin.Password != "")
+                                    {
+                                        @ViewBag._admin.Password
+                                    }
+                                }
+                            </div>
+                            <div class="col-sm-7">
+                                <input data-layerIndex="0" class="btn btn-dark" id="openUpdatePwd" type="button" value="修改" />
+                                <input style="display:none;" id="closeLayer" type="button" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                手机号：
+                            </div>
+                            <div class="col-sm-9">
+                                @ViewBag._admin.Phone
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col-sm-12">
+                                <input id="sava" class="btn btn-dark" value="保存" type="button" />
+                                @if (ViewBag.isFirst)
+                                {
+                                    <span style="color:red;font-size: 10px;padding-left: 20px;">* 点击按钮保存修改操作</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var oldName = "";
+            var newpwd = "";
+            var ii;
+            
+            $(".nav").find("li[class='active']").removeClass("active")
+            $(".nav li:eq(5)").addClass("active")
+
+            $("#updateAdminName").click(function () {
+                oldName = $(".Nametxt").val();
+              
+                
+                var that = $(this);
+                //修改密码状态更改，切换元素展示
+                if (that.attr("data-updateFalg") == 0)
+                {
+                    $(".Nametxt").parent().show();
+                    $(".showName").hide()
+                    that.attr("data-updateFalg", 1)
+                    that.parent().append("<input id='takeoff' class='btn btn - dark' type='button' value='取消' />")
+                    that.attr("value", "确定")
+                }
+                else
+                {
+                    var Nametxt = $(".Nametxt").val()
+                    if (Nametxt != "")
+                    {
+                        $(".showName").text(Nametxt)
+                        $("#updateAdminName").attr("value", "修改")
+                        $("#takeoff").remove();
+                        $("#updateAdminName").attr("data-updateFalg", 0)
+                        $(".showName").show()
+                        $(".Nametxt").parent().hide()
+                        $(".Nametxt").val("")
+                    }
+                    else
+                    {
+                        layer.alert("昵称不允许为空")
+                    }
+                }
+            })
+
+            //修改个人资料
+            $("#sava").click(function () {
+
+                var status = $("#updateAdminName").attr("data-updatefalg")
+
+                if (status == 0) {
+                    var name = $(".showName").text()
+                    if (name != "") {
+                        $.ajax({
+                            url: "/PartTimeJob/Home/UpdateInfo?name=" + name, type: "GET", success: function (data) {
+                                if (data.statusCode == 200)
+                                {
+                                    layer.alert(data.data)
+                                    $(".user-area").html('<i class="fa fa-angle-double-down"></i>'+name)
+                                }
+                                else
+                                {
+                                    layer.alert("失败，请联系管理员")
+                                }
+                            }
+                        })
+                    }
+                } else
+                {
+                    layer.alert("请先完成名称编辑操作")
+                }
+            })
+
+            $("#openUpdatePwd").click(function () {
+                ii = member_add('修改密码', '/PartTimeJob/Manage/Index', '400', '500')
+                
+                //$("#openUpdatePwd").attr("data-layerIndex", ii); 
+            })
+
+            $("#closeLayer").click(function () {
+                $(".layui-layer-btn0").click()
+            })
+
+            //取消修改昵称
+            $(".container").on("click", "#takeoff", function () {
+                $("#takeoff").remove();
+                $("#updateAdminName").attr("value", "修改")
+                $(".Nametxt").parent().hide()
+                $(".showName").show()
+                $("#updateAdminName").attr("data-updateFalg", 0)
+            })
+            
+        })
+    </script>
+
+ }

@@ -1,0 +1,94 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.ModelVo.SchoolModel>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="content-list">
+        @foreach (var school in Model)
+        {
+            if (string.IsNullOrEmpty(school.SchoolName))
+            {
+                <li data-id="@school.ExtId">
+                    <div class="flex">
+                        <div class="school-msg">
+                            <div class="school-name">
+                                <h5>此学校已从平台下线</h5>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+            else
+            {
+    <li data-id="@school.ExtId">
+        <div class="flex">
+            <div class="school-msg">
+                <a href="https://m.sxkid.com/school/detail/@school.ExtId.ToString("N")">
+                    <div class="school-name">
+                        <h5>@school.SchoolName</h5>
+                    </div>
+                    <ul class="tag flex">
+                        <li>@ProductManagement.Framework.Foundation.CommonHelper.GetDescriptionFromEnumValue(school.Type)</li>
+                        @if (school.LodgingType>0)
+                        {
+                            <li>@school.LodgingReason</li>
+                        }
+                        @*<li class="bcg-none"><i class="icon"></i></li>*@
+                    </ul>
+                    <div class="price">
+                        @if (school.Tuition != null)
+                        {
+                        <span>@(school.Tuition >= 10000 ? Math.Round((decimal)(school.Tuition / 10000), 2) + "万" : school.Tuition.ToString())元/年</span>
+                        }
+                        @if (!string.IsNullOrEmpty(school.Distance))
+                        {
+                        <span class="range">@school.Distance</span>
+                        }
+                        <span class="position">@school.CityName | @school.AreaName</span>
+                    </div>
+                    <ul class="keyword flex text-center">
+                        @*<li>
+            @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+        </li>*@
+                        <li>@school.TypeName</li>
+                        @foreach (var tag in school.Tags)
+                        {
+                            <li>@tag</li>
+                        }
+                    </ul>
+                </a>
+            </div>
+            <div class="school-grade text-center">
+                <div class="score">
+                    @if (school.Score != null)
+                    {
+                        <span class="num">@(school.Score)</span>
+                        <span>分</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未评分</span>
+                    }
+                </div>
+                <p>学校总评</p>
+                @if (school.Score != null)
+                {
+                    <a href="https://m.sxkid.com/school/detail/@school.ExtId.ToString("N")">
+                        <span class="btn">评分详情</span>
+                    </a>
+                }
+            </div>
+        </div>
+    </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

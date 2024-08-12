@@ -1,0 +1,26 @@
+﻿@using PMS.School.Domain.Dtos;
+@{
+    var _eid = (Guid)ViewBag.ExtId;
+    var exts = (ViewBag.OtherSchoolExts is Lazy<List<KeyValueDto<Guid>>> lzy ? lzy.Value : new List<KeyValueDto<Guid>>()).Where(_ => _.Value != _eid).ToList();
+
+    string Url_schoolDetail(object eid)
+    {
+        var id = eid is Guid g ? g.ToString("n") :
+            Guid.TryParse(eid?.ToString(), out g) ? g.ToString("n") :
+            throw new ArgumentException($"{eid} is not guid");
+        return Url.Action("detail", "school", new { id }).ToLower();
+    }
+}
+
+@if (exts.Count > 0)
+{
+    <div class="related-school">
+        <h2 class="font-20 font-weight-bold">相关学部</h2>
+        <div class="school-division d-flex flex-wrap font-15">
+            @foreach (var ext in exts)
+            {
+                <a href="/school-@ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(int.Parse(ext.Year))?.ToLower()/" title="@(ext.Key)">@(ext.Key)</a>
+            }
+        </div>
+    </div>
+}

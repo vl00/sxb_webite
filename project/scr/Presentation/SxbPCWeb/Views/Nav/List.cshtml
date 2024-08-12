@@ -1,0 +1,111 @@
+﻿@{
+    var schoolcity = "";
+    var schooltype = "";
+    if (ViewBag.Province!=null)
+    {
+        schoolcity += ViewBag.ProvinceName;
+    }
+    else if(ViewBag.City!=null)
+    {
+        schoolcity += ViewBag.CityName;
+    }
+    if (ViewBag.Grade!=null)
+    {
+        if (ViewBag.Type!=null)
+        {
+            schooltype += ViewBag.TypeName;
+        }
+        schooltype += ViewBag.GradeName;
+    }
+
+    if (string.IsNullOrWhiteSpace(schooltype))
+    {
+        schooltype = "学校";
+    }
+
+    var keywords = $"{schoolcity}{schooltype}推荐,{schoolcity}{schooltype}有哪些";
+    var description = $"上学帮提供优质的{schoolcity}{schooltype}名单大全，查找{schoolcity}{schooltype}就找上学帮";
+    var title = $"{schoolcity}{schooltype}推荐、{schooltype}大全";
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/site-map/site-map.css">
+</head>
+<body>
+<header class="header">
+    <div>
+        @await Html.PartialAsync("HeaderPartial", 0)
+    </div>
+</header>
+<section class="city-classification">
+    <div class="container">
+        <p class="provincial-name">@ViewBag.ProvinceName</p>
+        <div class="category d-flex justify-content-between">
+            <p class="category-title">城市</p>
+            <ul class="category-list">
+                @foreach (var item in ViewBag.Citys)
+                {
+                    <li class=@(item.Key == @ViewBag.City?"selected":"")>
+                        <a href="@item.Url" title="@item.Value">@item.Value</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="category d-flex justify-content-between">
+            <p class="category-title">分类</p>
+            <ul class="category-list">
+                 @foreach (var item in ViewBag.Types)
+                {
+                    <li class=@(item.Key == @ViewBag.Type?"selected":"")>
+                        <a href="@item.Url" title="@item.Value">@item.Value</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="category d-flex justify-content-between">
+            <p class="category-title">学段</p>
+            <ul class="category-list">
+                @foreach (var item in ViewBag.Grades)
+                {
+                    <li class=@(item.Key == @ViewBag.Grade?"selected":"")>
+                        <a href="@item.Url" title="@item.Value">@item.Value</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>
+<section class="school-list">
+    <div class="container">
+        <ul>
+            @foreach (var item in ViewBag.Schoolexts)
+            {
+                <li><a href="/school/detail/@item.Id.ToString("N")" title="@item.SchoolName">@item.SchoolName</a></li>
+            }
+        </ul>
+        <!--分页-->
+        <nav class="page d-flex justify-content-end">
+            @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+            "List",
+            "Nav",
+            (int)(Math.Ceiling(ViewBag.Total / 500.0)),
+            (int)ViewBag.PageSize,
+            (int)ViewBag.PageIndex,
+            (_this) => { return new { option1 = ViewBag.Option1, option2 = ViewBag.Option2, page = _this.CurrentPage - 1 }; },
+            (_pageItem, _this) => { return new { option1 = ViewBag.Option1, option2 = ViewBag.Option2, page = _pageItem }; },
+            (_this) => { return new { option1 = ViewBag.Option1, option2 = ViewBag.Option2, page = _this.CurrentPage + 1 }; }
+            )))
+        </nav>
+    </div>
+</section>
+@* 底部栏 *@
+@{ await Html.RenderPartialAsync("Footer"); }
+</body>
+</html>

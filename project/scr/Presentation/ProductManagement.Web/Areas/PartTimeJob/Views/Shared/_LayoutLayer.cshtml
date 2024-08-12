@@ -1,0 +1,63 @@
+﻿<!-- 弹出层等布局页  -->
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link rel="stylesheet" href="/Content/vendors/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/vendors/themify-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/Content/vendors/selectFX/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="/Content/vendors/jqvmap/dist/jqvmap.min.css">
+    <link rel="stylesheet" href="/Content/assets/css/style.css">
+    <link rel="stylesheet" href="~/Bootstrap/bootstrap-table.min.css" />
+
+    <style>
+        .navbar .navbar-nav li.menu-item-has-children a:before {
+            content: "";
+        }
+
+        .layui-layer-btn .layui-layer-btn0 {
+            border-color: none;
+            background-color: none;
+        }
+    </style>
+
+    @RenderSection("styles", false)
+</head>
+<body>
+    @RenderBody()
+
+
+    <script src="~/Content/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/Content/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/Content/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/Content/assets/js/main.js"></script>
+
+    <script src="/Content/vendors/jqvmap/dist/jquery.vmap.min.js"></script>
+    <script src="/Content/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+
+    <!-- bootstra-table 分页插件 -->
+
+    <script src="/Content/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Bootstrap/bootstrap-table.min.js"></script>
+    <script src="~/Bootstrap/bootstrap-table-zh-CN.min.js"></script>
+
+
+    <!-- layer 弹出框 -->
+    <script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+
+    <script type="text/javascript">
+        var $ = jQuery;
+    </script>
+
+    <!--请在下方写此页面业务相关的脚本-->
+    @RenderSection("scripts", false)
+</body>
+</html>

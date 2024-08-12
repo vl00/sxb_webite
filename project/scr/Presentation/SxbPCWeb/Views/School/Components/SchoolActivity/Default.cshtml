@@ -1,0 +1,35 @@
+﻿@model PMS.OperationPlateform.Application.Dtos.SchoolActivityDetailDto
+@using PMS.OperationPlateform.Domain.Enums;
+@{
+    var activity = Model;
+    var extId = ViewBag.ExtId;
+
+    var activityTitle = "入读意向登记";
+    if (activity !=null && activity.Category == (byte)SchoolActivityCategory.Single)
+    {
+        activityTitle = string.IsNullOrWhiteSpace(activity.Title) ? "预约探校" : activity.Title;
+    }
+}
+
+@if (activity != null)
+{
+    <!-- 这是预约探校表单部分的开始 -->
+    <div class="orderBox">
+        <!-- 提示层部分 -->
+        <div class="hintBox">
+            <h2>请输入<br><span></span></h2>
+        </div>
+        <h1>@activityTitle</h1>
+        <form id="order" class="orderForm clearfix activityId" name="order" eport-submit="false" data-activityid="@activity.Id" data-extid="@extId">
+            @await Html.PartialAsync("/Views/SchoolActivity/ExtensionsPartial.cshtml", activity.Extensions)
+            <div class="submitBtn">马上报名</div>
+            <h3>点击报名即代表你已阅读并同意<a href="/home/principle?idx=4">“隐私政策”</a></h3>
+        </form>
+    </div>
+    <!-- 遮罩层部分 -->
+    <div class="mask">
+        @{ await Html.RenderPartialAsync("/Views/SchoolActivity/MaskPartial.cshtml", activity); }
+    </div>
+    <!-- 这是预约探校表单部分的结束 -->
+
+}

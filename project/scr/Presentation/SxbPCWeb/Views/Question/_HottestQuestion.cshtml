@@ -1,0 +1,20 @@
+﻿@model Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel
+@using ProductManagement.Framework.Foundation;
+<li class="d-flex justify-content-between">
+    <i class="classification font-12">问</i>
+    <a class="hot-question-content " href="@Url.Action("Detail","Question",new {No = Model.No})" title="">
+        <p class="font-15">@Model.Content.GetShortString(50)</p>
+        @if (Model.School != null)
+        {
+            <b class="font-13 color-333">@Model.School.SchoolName</b>
+        }
+        else 
+        {
+            <b class="font-13 color-333">该学校已下架</b>
+        }
+        <div class="d-flex justify-content-between font-12">
+            <span>@Model.AddTime</span>
+            <span>@(Model.AnswerCount)条回答</span>
+        </div>
+    </a>
+</li>

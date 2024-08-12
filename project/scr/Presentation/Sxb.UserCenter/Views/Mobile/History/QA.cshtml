@@ -1,0 +1,34 @@
+﻿@model PMS.UserManage.Application.ModelDto.VoBase
+@{
+    Layout = null;
+    var data = Newtonsoft.Json.JsonConvert.DeserializeObject<PMS.UserManage.Application.ModelDto.ModelVo.QuestionAnswerData>(Model.data.ToString());
+}
+@if (data != null && data.questionModels != null && data.questionModels.Count() > 0)
+{
+    <ul class="qa-list">
+        @foreach (var qa in data.questionModels)
+        {
+            <li>
+                <div class="question flex">
+                    <div class="q-icon"><span>问</span></div>
+                    <a href="https://m.sxkid.com/question/questiondetail?questionid=@qa.Id">
+                        <h5 class="question-title">@qa.QuestionContent</h5>
+                        <span class="time">@qa.QuestionCreateTime</span>
+                    </a>
+                    <span class="flex round">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </span>
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

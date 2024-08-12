@@ -1,0 +1,209 @@
+﻿@model PMS.UserManage.Application.ModelDto.Login.Get
+@{
+    ViewData["Title"] = "找回密码";
+    Layout = "~/Views/PC/Shared/_PCLoginLayout.cshtml";
+    ViewBag.Login = false;
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_PC/css/tool/tool.css">
+    <link rel="stylesheet" href="@ViewBag.FileHost_PC/css/login/findpassword.css">
+}
+
+<section class="access-content cent">
+    <div class="container">
+        <ul class="findList d-flex">
+            <li class="active"><label>①</label>确认账号</li>
+            <li><label>②</label>安全认证</li>
+            <li><label>③</label>重置密码</li>
+            <li><label>④</label>完成修改</li>
+        </ul>
+        <form id="form">
+            <div class="part-1 position-relative">
+                <h2 class="title font-15">请输入手机号找回密码</h2>
+                <div class="phone-num d-flex">
+                    <a class="font-14 area-code" data-for="nationCode">+86</a>
+                    <input id="nationCode" type="hidden" name="nationCode" value="86" />
+                    <input id="txtMobile" type="number" placeholder="手机号" class="font-14">
+                    <input id="mobile" type="hidden" name="mobile" />
+                </div>
+                <div class="code-list">
+                    <ul class="font-14">
+                        <li class="d-flex">中国<span data-code="86">+86</span></li>
+                        <li class="d-flex">中国香港<span data-code="852">+852</span></li>
+                        <li class="d-flex">中国澳门<span data-code="853">+853</span></li>
+                        <li class="d-flex">中国台湾<span data-code="886">+886</span></li>
+                    </ul>
+                </div>
+                <p class="tips font-12">若手机号不可用，可拨打客服电话020-89623090找回密码</p>
+                <a class="next-btn font-14 d-block text-center">发送</a>
+            </div>
+
+            <div class="part-2">
+                <h2 class="title font-15">已发送验证码到该手机，收到之前请勿关闭此页面。</h2>
+                <div class="verification-code d-flex justify-content-between">
+                    <input id="rnd" type="number" name="rnd" placeholder="请输入验证码" class="font-14">
+                    <span class="get-code font-12 text-center">获取验证码</span>
+                </div>
+                <p class="tips font-12">如果在1分钟后仍未收到短信，可以试试重新发送一遍</p>
+                @*<div class="submit-btn text-center">
+                    <a class="next-btn2 font-14 d-block text-center">提交</a>
+                </div>
+            </div>
+
+            <div class="part-3">
+                <h2 class="title font-15">已发送验证码到该手机，收到之前请勿关闭此页面。</h2>*@
+                <div class="password">
+                    <input id="txtPassword" type="password" placeholder="请输入新密码">
+                    <input id="password" type="hidden" name="password" />
+                    <span class="font-12">密码长度8~12位字符</span>
+                </div>
+                <div class="confirm-password">
+                    <input id="txtRePassword" type="password" placeholder="请再次输入新密码">
+                    <span class="font-12">密码长度8~12位字符</span>
+                </div>
+                <p class="tips font-12">提示：8~12位的密码应包含数字、大小写字母、特殊字符中的两种或两种以上</p>
+                <input type="hidden" name="kid" value="@Model.Kid" />
+                <a class="submit font-14 d-block text-center">提交</a>
+            </div>
+        </form>
+        <div class="success">
+            <h2 class="titl font-15">密码修改成功！</h2>
+            <p class="tips">请用新密码进行登录，以后要妥善保管自己的密码哦！</p>
+            <a href="/Login?ReturnUrl=@ViewBag.ReturnUrl" class="login font-14 d-block text-center">立即登录</a>
+        </div>
+    </div>
+
+</section>
+
+<div class="img-code text-center">
+    <span class="close position-absolute"><i></i></span>
+    <h5 class="font-17 font-weight-bold">请输入图片验证码</h5>
+    <div class="d-flex code">
+        <div class="box"><img id="imgCode" src="@Url.Action("VerifyCode","Setting", new { r = new Random().Next() })" alt=""></div>
+        <span><i class="icon"></i></span>
+    </div>
+    <div class="input-list position-relative">
+        <ul class="d-flex justify-content-between">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <input type="tel" maxlength="4" id="verifyCode" class="position-absolute">
+    </div>
+    <a class="confirm d-inline-block">确认</a>
+</div>
+
+<div class="curtain"></div>
+
+
+@*<form id="form">
+        <section class="mt">
+            <div class="phone-num flex">
+                <a class="area-code" data-for="nationCode">
+                    <span>+86 <i class="arrow"></i></span>
+                    <input id="nationCode" type="hidden" name="nationCode" value="86" />
+                </a>
+                <input id="txtMobile" type="number" placeholder="请输入手机号">
+                <input id="mobile" type="hidden" name="mobile" />
+            </div>
+            <span class="phone-error">手机号错误</span>
+            <div class="next-btn text-center">
+                <a>下一步</a>
+            </div>
+        </section>
+
+        <section class="part-2">
+            <div class="verification-code flex">
+                <input id="rnd" type="number" name="rnd" placeholder="请输入验证码">
+                <span class="get-code text-center">获取验证码</span>
+            </div>
+            <div class="password flex justify-content-between">
+                <input id="txtPassword" type="password" placeholder="请输入新密码（8～11位英文或数字）">
+                <input id="password" type="hidden" name="password" />
+            </div>
+            <div class="password flex justify-content-between">
+                <input id="txtRePassword" type="password" placeholder="请重新输入新密码">
+            </div>
+            <div class="submit-btn text-center">
+                <input type="hidden" name="kid" value="@Model.Kid" />
+                <a id="submit">提交</a>
+            </div>
+        </section>
+
+        <div class="select-area"></div>
+    </form>
+
+
+    <div class="img-code text-center">
+        <span class="close"><i></i></span>
+        <h5>请输入图片验证码</h5>
+        <div class="flex code">
+            <div class="box"><img id="imgCode" src="@Url.Action("VerifyCode","Setting", new { r = new Random().Next() })" alt=""></div>
+            <span><i class="icon"></i></span>
+        </div>
+        <div class="input-list">
+            <ul class="flex justify-content-between">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <input id="verifyCode" type="tel" maxlength="4" />
+        </div>
+    </div>
+
+
+    <div class="curtain"></div>*@
+
+
+@section js{
+    <script src="@ViewBag.FileHost_PC/js/login/findpassword.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(Model.PublicKey)';
+        $('#txtPassword').val('');
+        //====================================================================================
+        function do_encrypt(plaintext) {
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+            var doOaepPadding = false;
+            // ------------------------------------------------
+            // Encrypt
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import the RSA Key information.
+            rsa.ImportParameters(GetRsaKey(false));
+            // Encrypt the passed byte array and specify OAEP padding.
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+            var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+            // ------------------------------------------------
+            // Display the encrypted data.
+            //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+            return encryptedString;
+        }
+        function GetRsaKey(includePrivateParameters) {
+            var xmlParams = publickey;
+            // ------------------------------------------------
+            // RSA Keys
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import parameters from xml.
+            rsa.FromXmlString(xmlParams);
+            // Export RSA key to RSAParameters and include:
+            //    false - Only public key required for encryption.
+            //    true  - Private key required for decryption.
+            return rsa.ExportParameters(includePrivateParameters);
+        }
+        function GetNewRsaProvider(dwKeySize) {
+            // Create a new instance of RSACryptoServiceProvider.
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+    </script>
+}

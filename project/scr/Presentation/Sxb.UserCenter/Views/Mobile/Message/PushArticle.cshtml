@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "推荐攻略";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/push-record-list.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">推荐攻略</span>
+    <span class="btn">编辑</span>
+</header>
+
+@if (false)
+{
+    <section class="push-content">
+        <ul class="record-list">
+            <li>
+                <a href="../article/article-detail.html" class="flex">
+                    <div>
+                        <h5 class="article-title">明年小升初，现阶段如何准备,上985不是问题？</h5>
+                        <div class="article-msg">
+                            <span>2小时前</span>
+                            <span><i class="icon"></i>2556</span>
+                        </div>
+                    </div>
+                    <div class="img-box"><img src="../../imgs/comment-1.jpg" alt=""></div>
+                </a>
+            </li>
+            <li>
+                <a href="../article/article-detail.html" class="flex">
+                    <div>
+                        <h5 class="article-title">明年小升初，现阶段如何准备,上985不是问题？</h5>
+                        <div class="article-msg">
+                            <span>2小时前</span>
+                            <span><i class="icon"></i>2556</span>
+                        </div>
+                    </div>
+                    <!-- <div class="img-box"><img src="../../imgs/test2.png" alt=""></div> -->
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="bottom-btn text-center">
+        <ul class="flex">
+            <li class="all-select">一键清空</li>
+            <li class="delete">删除</li>
+        </ul>
+    </section>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/push-record.js"></script>
+}

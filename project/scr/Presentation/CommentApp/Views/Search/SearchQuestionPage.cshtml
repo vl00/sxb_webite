@@ -1,0 +1,100 @@
+﻿@foreach (var question in ViewBag.Rows)
+{
+    <li>
+        <div class="question flex">
+            <div class="q-icon"><span>问</span></div>
+            <a href="/question/@(question.No).html">
+                <h5 class="question-title">@question.QuestionContent</h5>
+                @if (question.Images.Count > 0)
+                {
+                    <div class="img-list">
+                        <ul class="flex justify-content-between" id="imgList">
+                            @{int ii = 0;}
+                            @foreach (var image in question.Images)
+                            {
+                                @if (++ii > 3) { break; }
+                                <li><img src="@image" alt="" /></li>
+                            }
+                            @for (int i = 0; i < 3 - question.Images.Count; i++)
+                            {
+                                <li></li>
+                            }
+                        </ul>
+                        <span class="text-center"><i class="comment-icon"></i>@question.Images.Count</span>
+                    </div>
+                }
+                <span class="time">@question.QuestionCreateTime</span>
+            </a>
+            <div class="other-list-btn text-center" data-id="@question.Id" data-report="2" data-type="3" data-name="@question.UserInfo.NickName">
+                <span class="flex round">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </span>
+            </div>
+        </div>
+        @foreach (var answer in question.Answer)
+        {
+            <div class="answer flex">
+                <div class="a-icon"><span>答</span></div>
+
+                <div>
+                    <div class="user-msg flex">
+                        <div class="head">
+                            <div><img src="@answer.UserInfo.HeadImager" alt="" /></div>
+                            @if (answer.UserInfo.IsSchool)
+                            {
+                                <i class="comment-icon school"></i>
+                            }
+                        </div>
+                        <div>
+                            <div class="name">@answer.UserInfo.NickName<i></i></div>
+                            <div class="time">@answer.AddTime</div>
+                        </div>
+                    </div>
+                    <a href="/ReplyDetail/Index?type=2&DatascoureId=@answer.Id">
+                        <p class="content">@answer.AnswerContent</p>
+                    </a>
+                    <div class="flex justify-content-between">
+                        <a href="/question/Reply/@answer.Id"><span class="reply-num">共@(answer.ReplyCount)条回复></span></a>
+                        <span class="like  @(answer.IsLike?"click-like":"")" data-id="@answer.Id">
+                            <i class="comment-icon"></i>
+                            <span>@answer.LikeCount</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="school-msg">
+            <a href="/question/school-@question.School.ShortSchoolNo/">
+                <h5 class="school-name">@question.School?.SchoolName<span class="question-num">共@(question.School?.SchoolQuestionTotal)个问题</span></h5>
+                <ul class="tag flex">
+                    @if (question.School?.SchoolType == 3)
+                    {
+                        <li>国际</li>
+                    }
+                    else if (question.School?.SchoolType == 4)
+                    {
+                        <li>外籍</li>
+                    }
+                    else if (question.School?.SchoolType == 2)
+                    {
+                        <li>民办</li>
+                    }
+                    else if (question.School?.SchoolType == 1)
+                    {
+                        <li>公办</li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(question.School?.LodgingReason))
+                    {
+                        <li>@question.School?.LodgingReason</li>
+                    }
+                    @if (question.School?.IsAuth == true)
+                    {
+                        <li class="bcg-none"><i class="comment-icon"></i></li>
+                    }
+                </ul>
+            </a>
+        </div>
+    </li>
+}

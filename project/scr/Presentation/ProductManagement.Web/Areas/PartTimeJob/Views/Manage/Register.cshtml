@@ -1,0 +1,275 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_LayoutLayer.cshtml";
+}
+
+@section styles{
+    <style>
+        .hideBox {
+            display:none;
+        }
+    </style>
+
+}
+<div class="sufee-login d-flex align-content-center flex-wrap">
+    <div class="container">
+        <div class="login-content">
+            <div class="login-form">
+                <form>
+                    <div class="form-group">
+                        <label>手机号</label>
+                        <input type="tel" name="phone" class="form-control" placeholder="请输入手机号">
+                    </div>
+                    <div class="form-group">
+                        <label>昵称</label>
+                        <input type="text" name="name" class="form-control" placeholder="请输入进入系统后的昵称">
+                    </div>
+                    <div class="form-group">
+                        <label>角色类型</label>
+                        <div>
+                            <!--1：兼职，2：兼职领队，3：供应商，4：管理员，5：审核-->
+                            <select id="type" class="custom-select">
+                                <option value="-1">请选择</option>
+                                <option value="1">兼职</option>
+                                <option value="3">供应商</option>
+                                <option value="2">兼职领队</option>
+                                <option value="4">审核人</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group hideBox" id="SupplierBox">
+                        <label>供应商</label>
+                        <div>
+                            <!--1：兼职，2：兼职领队，3：供应商，4：管理员，5：审核-->
+                            <select id="Supplier" class="custom-select">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group hideBox" id="leaderBox">
+                        <label>兼职领队</label>
+                        <div>
+                            <!--1：兼职，2：兼职领队，3：供应商，4：管理员，5：审核-->
+                            <select id="leader" class="custom-select">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group hideBox" id="SettlementTypeBox">
+                        <label>结算方式</label>
+                        <div class="SettlementType">
+                            <label>微信现结  <input type="radio" value="1" name="type"></label>
+                            <label style="padding-left:20px;">另结  <input value="2" type="radio" name="type"></label>
+                        </div>
+                    </div>
+                    <button id="register" type="button" class="form-group btn btn-success btn-flat m-b-30 m-t-30">注册</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            //账号注册
+            $("#register").click(function () {
+                var AdminType = $("#type").find("option:selected").val();
+                if (AdminType == -1)
+                {
+                    layer.alert("请选择一个类型");
+                    return false;
+                }
+
+                var reg = /^1[3|4|5|8|7][0-9]\d{4,8}$/;
+                var phone = $("input[name='phone']").val();
+                var name = $("input[name='name']").val();
+
+                if (phone == "")
+                {
+                    layer.alert("请输入联系方式")
+                    return false;
+                }
+
+                if (name == "")
+                {
+                    layer.alert("请输入姓名")
+                    return false;
+                }
+
+                if (!reg.test(phone))
+                {
+                    layer.alert("请输入正确的手机号")
+                    return false
+                }
+
+                var parentId = "";
+                var settlementType = 0;
+                 //1：兼职，2：兼职领队，3：供应商，4：审核，5：管理员
+                if (AdminType == 2)
+                {
+                    parentId = $("#Supplier").find("option:selected").val();
+                } else if (AdminType == 1)
+                {
+                    parentId = $("#leader").find("option:selected").val();
+                }
+                else if (AdminType == 3 || AdminType == 4)
+                {
+                    settlementType = $(".SettlementType input[type=radio]:checked").val()
+                }
+
+                
+                $.ajax({
+                    url: "/PartTimeJob/Manage/Register", type: "Post", data: { Phone: phone, Name: name, Role: AdminType, ParentId: parentId, SettlementType: settlementType}, success: function (data) {
+                        layer.alert(data.message)
+                        if (data.statusCode == 200)
+                        {
+                            empty();
+
+                            //刷新页面，获取最新数据
+                            window.setTimeout(function () {
+                                window.parent.location.reload();
+                            }, 1500);
+                        }
+                    }
+                })
+            })
+
+            //兼职领队
+            $("#leader").change(function ()
+            {
+                var SelectedSupplier = $("#Supplier option:selected").attr("data-settlementtype");
+                if ($("#type option:selected").val() == 1 && SelectedSupplier == 1) {
+                    $("#SettlementTypeBox").show()
+                }
+                else {
+                    $("#SettlementTypeBox").hide()
+                }
+            })
+
+            $("#type").change(function () {
+                var AdminType = $("#type").find("option:selected").val();
+                //1：兼职，2：兼职领队，3：供应商，4：审核,5：管理员，
+
+                //新建供应商
+                if (AdminType == 3)
+                {
+                    $("#SettlementTypeBox").show()
+                    $("#SupplierBox").hide()
+                    $("#leaderBox").hide()
+                }
+                else
+                {
+                  
+                    $("#SettlementTypeBox").hide()
+                    
+                    //新建兼职
+                    if (AdminType == 1) {
+                        $("#SupplierBox").show()
+                        $("#leaderBox").show()
+
+                        GetDataByAdminType()
+                    }   //兼职领队
+                    else if (AdminType == 2) {
+                        $("#SupplierBox").show();
+                        $("#leaderBox").hide();
+                        GetDataByAdminType()
+                    }//审核
+                    else if (AdminType == 4) {
+                        $("#SupplierBox").hide()
+                        $("#leaderBox").hide()
+                        $("#SettlementTypeBox").show()
+                    }
+                    else if (AdminType == -1) {
+                        $("#leader").empty();
+                        $("#SupplierBox").hide();
+                        $("#leaderBox").hide();
+                        $("#SettlementTypeBox").hide();
+                    }
+                }
+            })
+
+            //供应商
+            $("#Supplier").change(function () {
+
+                var SelectedSupplier = $("#Supplier option:selected").attr("data-settlementtype");
+               
+                if ($("#type option:selected").val() == 2 && SelectedSupplier == 1)
+                {
+                    $("#SettlementTypeBox").show()
+                }
+                else
+                {
+                    $("#SettlementTypeBox").hide()
+                }
+
+
+                var SupplierId = $("#Supplier").find("option:selected").val()
+                if (SupplierId != 0) {
+                    $("#leader").empty();
+                    $.ajax({
+                        url: "/PartTimeJob/Manage/GetCurrentAllItem?Id=" + SupplierId, type: "GET", success: function (data) {
+                            if (data.totalCount != 0) {
+                                var html = "<option value='0'>请选择</option>";
+                                for (var i = 0; i < data.rows.length; i++) {
+                                    html += "<option value='" + data.rows[i].id + "'>" + data.rows[i].name + "</option>";
+                                }
+
+                                $("#leader").append(html);
+                            }
+                            else {
+                                $("#leader").append("<option value='0'>暂无兼职领队</option>");
+                            }
+                        }
+                    })
+                } else
+                {
+                    $("#leader").empty();
+                }
+            })
+
+            function GetDataByAdminType()
+            {
+                $("#Supplier").empty();
+                $("#leader").empty();
+
+                $.ajax({
+                    url: "/PartTimeJob/Manage/GetAllSupplier", type: "GET", success: function (data) {
+                        if (data.statusCode == 200)
+                        {
+                            var rows = data.rows
+                            if (rows.length != 0)
+                            {
+                                var html = "<option value='0'>请选择</option>";
+                                for (var i = 0; i < rows.length; i++) {
+                                    html += "<option value='" + rows[i].id + "' data-settlementType = '" + rows[i].settlementType + "'>" + rows[i].name + "</option>";
+                                }
+                                $("#Supplier").append(html);
+                            }
+                            else
+                            {
+                                $("#Supplier").append("<option value='0'>暂无供应商</option>");
+                            }
+                        }
+                    }
+                })
+            }
+
+            function empty()
+            {
+                $("input[name='phone']").val('')
+                $("input[name='name']").val('')
+                $("#type").find("option[eq=0]").prop("selected", true);
+
+                $("#SupplierBox").hide();
+                $("#leaderBox").hide();
+                $("#Supplier").empty();
+                $("#leader").empty();
+            }
+
+        })
+    </script>
+
+}

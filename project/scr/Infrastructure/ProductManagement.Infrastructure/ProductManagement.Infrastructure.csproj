@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="Unity" Version="5.9.7" />
+    <PackageReference Include="Unity.Configuration" Version="5.9.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="EntityFramework\EntityBase.cs" />
+    <Compile Remove="EntityFramework\EntityFrameworkRepository.cs" />
+    <Compile Remove="EntityFramework\EntityFrameworkRepositoryContext.cs" />
+    <Compile Remove="EntityFramework\IAggregateRoot.cs" />
+    <Compile Remove="EntityFramework\IEntityBase.cs" />
+    <Compile Remove="EntityFramework\IEntityFrameworkRepositoryContext.cs" />
+    <Compile Remove="EntityFramework\IRepository.cs" />
+    <Compile Remove="EntityFramework\IRepositoryContext.cs" />
+    <Compile Remove="EntityFramework\IUnitOfWork.cs" />
+    <Compile Remove="EntityFramework\Repository.cs" />
+    <Compile Remove="EntityFramework\RepositoryContext.cs" />
+    <Compile Remove="Ioc\IIocService.cs" />
+    <Compile Remove="Ioc\IocService.cs" />
+    <Compile Remove="Ioc\IocServiceContainer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+  </ItemGroup>
+</Project>

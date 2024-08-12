@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "通用设置";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{ 
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/setting.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">通用设置</span>
+    <span class=""></span>
+</header>
+
+<section class="mt">
+    <ul>
+        <li>
+            <a href="@Url.Action("Index","Account")">账号设置<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="@Url.Action("PushSetting","Message")">推送设置<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="@Url.Action("PushHistory","Message")">推送记录<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>
+<section class="part-2">
+    <ul>
+        <li>
+            <a href="">关于我们<i class="arrow"></i></a>
+        </li>
+        @*<li>
+            <a href="">为我打call<i class="arrow"></i></a>
+        </li>*@
+        <li class="invite">
+            <a class="share">告诉朋友<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>
+@if (User.Identity.IsAuthenticated)
+{
+<section class="part-2">
+    <ul>
+        <li>
+            <a href="/Account/Logout">退出登录<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>
+}

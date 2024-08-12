@@ -1,0 +1,20 @@
+﻿@using ProductManagement.Framework.Foundation;
+@foreach (var item in (List<Sxb.Web.ViewModels.TopicCircle.CircleItemViewModel>)ViewBag.Data)
+{
+    <li class="circle-item subject-circle-join" data-id="@item.Id" data-userid="@item.UserId">
+        <a href="/topic/subject-details.html?circleId=@item.Id" class="circle-item-content">
+            <div class="circle-item-main">
+                <img src="@item.Cover" alt="" class="subject-circle-join-img">
+                <div class="subject-circle-join-div">
+                    <p class="subject-circle-join-p1">@item.Name</p>
+                    <p class="subject-circle-join-p2">圈主：<span>@item.UserName</span></p>
+                    <p class="subject-circle-join-p3">粉丝数：<span>@item.FollowCount</span>人</p>
+                </div>
+            </div>
+            @if (item.LoginUserFollow)
+            {
+                <p class="subject-circle-join-p">已加入</p>
+            }
+        </a>
+    </li>
+}

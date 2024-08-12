@@ -1,0 +1,222 @@
+﻿<html lang="zh">
+
+<head>
+    <title>学校纠错</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/principle/principle.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>帮助中心</span>
+            </div>
+        </div>
+    </header>
+    <section class="principle-content">
+        <div class="container d-flex clearfix">
+            <div class="left-content">
+                <h4 class="font-16 ">客户服务</h4>
+                <ul>
+                    <li><a title="常见问题" data-classname="common-problems">常见问题</a></li>
+                    <li><a title="学校信息纠错" data-classname="error-correction">学校信息纠错</a></li>
+                    <li><a title="意见反馈" data-classname="terms">意见反馈</a></li>
+                    <li><a title="联系客服" data-classname="disclaimer">联系客服</a></li>
+                </ul>
+            </div>
+            <div class="right-content">
+                <!-- 学校信息纠错 -->
+                <div class="error-correction sxb-principle">
+                    <h2 class="font-20 font-weight-bold color-333">学校信息纠错</h2>
+
+                    <p class="font-16">对象学校</p>
+                    <div class="school-name-box">
+                        <span class="school-name-title">学校名称</span>
+                        <span class="school-name-input">
+                            <input type="text" id="name" placeholder="请输入学校全称" />
+                            <i class="close-btn"></i>
+                        </span>
+                        <!-- select option -->
+                        <ul class="name-list">
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                        </ul>
+                    </div>
+
+                    <p class="font-16">纠错类型</p>
+                    <div class="error-btn">
+                        <a href="javascript:;" title="位置信息错误" class="selected" data-error-type="location">位置信息错误</a>
+                        <a href="javascript:;" title="学校名称错误" data-error-type="school-name">学校名称错误</a>
+                        <a href="javascript:;" title="学校类型错误" data-error-type="school-type">学校类型错误</a>
+                        <a href="javascript:;" title="其它" data-error-type="other">其它</a>
+                    </div>
+
+                    <!-- 位置信息错误 -->
+                    <div class="modify-information location">
+                        <p>位置信息</p>
+                        <div class="school-name-box">
+                            <span><i>*</i>地址</span>
+                            <span class="school-name-input">
+                                <input type="text" class="set-address" placeholder="请输入地址" />
+                                <i class="close-btn"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="" value="113.383318" class="lng d-none">
+                        <input type="text" name="" value="23.10347" class="lat d-none">
+                        <!-- 地图 -->
+                        <div id="error-information-map">
+                            <div class="map-mask"><a>更新地图位置</a></div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <!-- <li>
+                    <div class="text-center">
+                    <img src="../../imgs/sxb.png" />
+                    <i class="remove-img" style="display: none;"></i>
+                </li> -->
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a title="提交" class="submit">提交</a>
+                    </div>
+                    <!-- 学校名称错误 -->
+                    <div class="modify-information school-name">
+                        <p>名称信息</p>
+                        <div class="school-name-box">
+                            <!-- 用户修改的学校名称 -->
+                            <span><i>*</i>学校名称</span>
+                            <div class="school-name-input">
+                                <input type="text" class="set-address" placeholder="请输入学校名称" />
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a title="提交" class="submit">提交</a>
+                    </div>
+                    <!-- 学校类型错误 -->
+                    <div class="modify-information school-type">
+                        <p>类型信息</p>
+                        <div class="conditions-select">
+                            <span><i>*</i>学校类型</span>
+                            <div class="select-div">
+                                <!-- 学段选择 -->
+                                <a class="period font-12" title="学段">
+                                    <span>请选择</span>
+                                    <i class="down-icon"></i>
+                                </a>
+                                <div class="period-list ">
+                                    <ul>
+                                        <li><a title="幼儿园">幼儿园</a></li>
+                                        <li><a title="小学">小学</a></li>
+                                        <li><a title="初中">初中</a></li>
+                                        <li><a title="高中">高中</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- 类型选择 -->
+                                <a class="type-select font-12" title="类型">
+                                    <span>请选择</span>
+                                    <i class="down-icon"></i>
+                                </a>
+                                <div class="type-select-list">
+                                    <ul>
+                                        <li><a title="国际幼儿园">国际幼儿园</a></li>
+                                        <li><a title="民办普惠幼儿园">民办普惠幼儿园</a></li>
+                                        <li><a title="民办普通幼儿园">民办普通幼儿园</a></li>
+                                        <li><a title="公办幼儿园">公办幼儿园</a></li>
+                                        <li><a title="幼托机构">幼托机构</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a title="提交" class="submit">提交</a>
+                    </div>
+                    <!-- 其他 -->
+                    <div class="modify-information other">
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a title="提交" class="submit">提交</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @{await Html.RenderPartialAsync("Right_bar");}
+
+    @{await Html.RenderPartialAsync("Footer"); }
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/principle/principle.js"></script>
+</body>
+
+</html>

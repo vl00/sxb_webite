@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PMS.OperationPlateform.Domain.DTOs.TagDto>
+
+<div class="hot-tags">
+    <h1>热门标签</h1>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li><a href="/articletag/@(item.TagName).html"  class="a-txt">@item.TagName</a></li>
+        }
+    </ul>
+</div>
+

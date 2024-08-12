@@ -1,0 +1,552 @@
+﻿
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    
+    <meta name="keywords" content="学校评价,学校怎么样,学校评分" />
+    <meta name="description" content="上学帮点评频道，提供学校点评，评价学校怎么样及学校评分信息，让家长细致的了解学校点评信息，为孩子升学做选择。" />
+    <title>学校评价_怎么样_评分-上学帮</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-and-qa.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/search.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <script>
+        var user = "@ViewBag.UserServiceUrl"
+    </script>
+</head>
+<body>
+    <header class="header comment-an-qa-header">
+        <a class="arrow">
+        </a>
+    </header>
+    <section class="top">
+        <!-- 轮播 -->
+        <div class="swiper-container banner text-center">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="test" style="width: 100%; height: 162px; background: rgba(0,0,0,.5)">
+                        <img src="/imgs/comment-and-qa/banner.jpg" />
+                    </div>
+                </div>
+                @*<div class="swiper-slide">
+                        <div class="test" style="width: 100%; height: 162px; background: rgba(100,100,100,.5)"></div>
+                    </div>*@
+            </div>
+            <div class="swiper-pagination point"></div>
+        </div>
+        <div>
+            <ul class="tab flex justify-content-between text-center">
+                <li data-query="1">点评</li>
+                <li data-query="2">问答</li>
+            </ul>
+            <!-- 筛选 -->
+            <div class="filter-btn-list">
+                <ul class="flex justify-content-between text-center">
+                    <li>附近<i class="arrow"></i></li>
+                    <li>智能排序<i class="arrow"></i></li>
+                    <li>筛选<i class="arrow"></i></li>
+                </ul>
+                <div class="screen">
+                    <!-- 附近 -->
+                    <div class="nearby">
+                        <ul class="area">
+                        </ul>
+                        <div class="btn-list flex text-center">
+                            <a class="reset">重置</a>
+                            <a class="confirm">确认</a>
+                        </div>
+                    </div>
+                    <!-- 智能排序 -->
+                    <ul class="sort">
+                        <li data-val="-1" class="active" style="">智能排序</li>
+                        <li data-val="1">时间优先</li>
+                        <li data-val="3">评论数优先</li>
+                    </ul>
+                    <!-- 筛选 -->
+                    <div class="screen-attr">
+                        <div>
+                            <div class="title">学段</div>
+                            <ul class="flex text-center justify-content-between school">
+                                <li data-val="1">幼儿园</li>
+                                <li data-val="2">小学</li>
+                                <li data-val="3">初中</li>
+                                <li data-val="4">高中</li>
+                            </ul>
+                            <div class="title">学校类型</div>
+                            <ul class="flex text-center justify-content-between school-type">
+                                <li data-val="3">国际</li>
+                                <li data-val="2">民办</li>
+                                <li data-val="1">公办</li>
+                                <li></li>
+                            </ul>
+                            <div class="title">寄宿</div>
+                            <ul class="flex text-center justify-content-between lodging">
+                                <li data-val="1">寄宿</li>
+                                <li data-val="0">走读</li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </div>
+                        <div class="btn-list flex text-center">
+                            <a class="reset">重置</a>
+                            <a class="confirm">确认</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* 学校模糊筛选 *@
+    <section class="search">
+        <a class="close-select-city"></a>
+        <div class="search-school">
+            <div class="flex text-center">
+                <div class="city"></div>
+                <div class="input">
+                    <i class="search-icon"></i>
+                    <input id="search" disabled="disabled" type="text" placeholder="搜索点评内容">
+                </div>
+            </div>
+        </div>
+        <div class="cancel">取消</div>
+    </section>
+    @*<section class="search-content">
+            <h5>
+                <i id="result-icon" class="search-icon"></i>
+                <span class="keyword"></span>
+                <span class="result">约<span></span>个结果</span>
+            </h5>
+            <ul class="search-list"></ul>
+        </section>*@
+
+    <section class="select-city">
+        <div class="location-city"><i class="location-icon"></i></div>
+        <div class="history">
+            <h5>历史访问城市</h5>
+            <ul class="history-list flex"></ul>
+        </div>
+        <div class="hot-select">
+            <h5>热门城市</h5>
+            <ul class="hot-select-list flex"></ul>
+        </div>
+        <div class="select-content"></div>
+        <div class="tab-select text-center">
+            <ul>
+                <li>历</li>
+                <li>热</li>
+            </ul>
+            <ul></ul>
+        </div>
+    </section>
+
+    <!-- 没有数据显示 -->
+    <section class="not-match text-center" style="display:none;">
+        <i class="search-icon"></i>
+        <p>暂无该学校数据</p>
+    </section>
+
+    <section>
+        <div class="content">
+
+        </div>
+        <div class="load-more text-center">正在努力加载</div>
+        <div style="display:none;" class="not-more-data">没有更多数据</div>
+        <div class="nothing not-result text-center">
+            <div><i class="search-icon"></i></div>
+            <p>暂无该筛选结果<br>换个条件试试呗</p>
+        </div>
+    </section>
+
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="/Report">举报</a></li>
+            <li class="cancelBox" style="display:block;"><a>取消</a></li>
+        </ul>
+    </section>
+
+    <section class="reply-box" style="padding: .36rem .32rem;">
+        <div class="flex justify-content-between btn-list">
+            <span class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>
+                }
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+
+    <!-- 新增弹窗 第一次打开要显示 -->
+    <div style="display:none;" class="box text-center">
+        <h2>上学帮点评及问答规则</h2>
+        <p>亲爱的用户，上学帮依照相关法规要求需要充分理解和同意以下协议条款内容后才可进行点评和问答操作</p>
+        <a href="">《互联网跟帖评论服务管理规定》</a>
+        <div class="flex box-btn">
+            <a class="no-agree">不同意</a>
+            <a class="agree">同意</a>
+        </div>
+    </div>
+    <div style="display:none;" class="curtain2"></div>
+
+    <div class="curtain" style="z-index:3;"></div>
+
+    <div class="WarningBox">
+        <i class="warning-i"></i>
+        <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+        <a class="btn">确认</a>
+        <a class="btn" style="display:none;" href="#">绑定手机</a>
+    </div>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    @*<script src="/CommentApp/js/query.js"></script>*@
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.mark.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/comment/city-select.js"></script>
+    <script src="@ViewBag.StaticFile/js/comment-and-qa.js"></script>
+    @*<script src="/CommentApp/js/"></script>*@
+<script>
+        //var test =
+        var type = @(ViewBag.Selected);
+        var LoadPageIndex = 1, LoadPageSize = 20, isLoad = true;
+        var isLoadLikeSchool = true;
+        var isHttp;
+
+        var LoadSchoolSearch = false;
+
+        // 判断是否滚动到页面底部 加载更多数据
+        $(window).scroll(function () {
+            console.log($(window).height())
+            console.log($(window).scrollTop())
+            console.log($(document).height())
+            console.log(Math.round($(window).scrollTop() + $(window).height()) + "：" + $(document).height())
+            if (Math.round($(window).scrollTop() + $(window).height()) + 1 >= $(document).height() && isLoadLikeSchool == true)
+            {
+                let Url = "";
+                let CurrentLocation = $(".city").attr("data-currentLocation")
+                let inputVal = $(".input input[type='text']").val()
+                let isComment = $(".tab").find("li[class=active]").attr("data-query") == 1;
+
+                if (isComment)
+                {
+                     Url = "/SchoolComment/Index?SchoolId=";
+                }
+                else
+                {
+                    Url = "/Question/Index?SchoolId=";
+                }
+                GetSchoolByCity(inputVal, isComment, CurrentLocation, Url, LoadPageIndex, LoadPageSize)
+            }
+        });
+
+        var test = { "Key": "A", "CityCodes": @Html.Raw(ViewBag.History) }
+        var hot = {"Key":"A","CityCodes":@Html.Raw(ViewBag.HotCity)}
+        var test2 = @Html.Raw(ViewBag.AllCity);
+
+        // 分别对应：目前定位、历史访问、热门城市、城市列表
+        $('.select-city').cityList('@ViewBag.LocalCity.Name',@ViewBag.LocalCity.Id, test, hot, test2);
+
+        // 搜索栏
+        var inputVal = '';
+        var tabInx = 0;
+
+        $("#search").on("compositionstart", function () {
+            isHttp = false;
+        })
+
+        $("#search").on("compositionend", function () {
+            isHttp = true;
+        })
+
+        //城市更换
+        $(".select-city").on("click", ".select-content ul li,.hot-select ul li,.history ul li,.result-list li", function () {
+            var currentCity = $(this)
+            console.log(currentCity.text())
+
+            //清空 条件
+            $(".filter-btn-list .reset").click()
+
+            $(".search-school .city").attr("data-currentLocation", currentCity.attr("data-adcode")).html(currentCity.text() + '<i class="arrow"></i>');
+            $(".location-city").attr("data-currentLocation", currentCity.attr("data-adcode")).html("<i class='location-icon'></i>" + currentCity.text())
+            LoadCurrentCityArea()
+
+            QPageIndex = 1;
+            //加载对应城市数据
+            LoadData(true)
+            CloseMask()
+        })
+
+        $("body").on("click", ".result-list li", function () {
+            var currentCity = $(this)
+            console.log(currentCity.text())
+
+            $(".search-school .city").attr("data-currentLocation", currentCity.attr("data-adcode")).html(currentCity.text() + '<i class="arrow"></i>');
+            $(".location-city").attr("data-currentLocation", currentCity.attr("data-adcode")).html("<i class='location-icon'></i>" + currentCity.text())
+            LoadCurrentCityArea()
+
+            QPageIndex = 1;
+            $(".result-list").hide()
+            //加载对应城市数据
+            LoadData(true)
+            CloseMask()
+        })
+
+
+        $('#search').bind('input', function () {
+            var inputVal = $("#search").val()
+            console.log(LoadSchoolSearch)
+
+            if (!LoadSchoolSearch)
+            {
+                if ($('.city').hasClass('open-select-city'))
+                {
+                    if (inputVal != '')
+                    {
+                        setTimeout(function () {
+                                $.ajax({
+                                url: "/Common/GetCityInfoByPinYin?CityPinyin=" + inputVal,
+                                type: "GET",
+                                complete: function ()
+                                {
+                                   LoadSchoolSearch = false;
+                                },
+                                success: function (data)
+                                {
+                                    if (data.status == 200)
+                                    {
+                                        $(".result-list").empty()
+                                        if (data.data.length > 0)
+                                        {
+                                            var html = '';
+                                            for (var i = 0; i < data.data.length; i++) {
+                                                html += '<li data-AdCode="' + data.data[i].adCode + '">' + data.data[i].areaName + '</li>';
+                                            }
+                                            $('.result-list').length == 0 ? $('.select-city').after('<ul class="result-list">' + html + '</ul>') : $('.result-list').html(html);
+                                            $('.select-city').css('display', 'none');
+                                            $(".result-list").css("display", "block")
+                                            $(".not-search-data").hide()
+                                        }
+                                        else
+                                        {
+                                            $(".not-search-data").show()
+                                            $('.select-city').css('display', 'none');
+                                            var html = '<div><i class="icon"></i></div><p>暂无该城市数据</p></div>';
+                                            $('.not-search-data').length == 0 ? $('.select-city').after('<div class="not-search-data">' + html + '</div>') : $('.not-search-data').html(html);
+                                        }
+                                    }
+                                }
+                            })
+                        }, 300)
+                    }
+                    else
+                    {
+                        $('.select-city').css('display', 'block');
+                        $('.not-search-data, .result-list').css('display', 'none');
+                    }
+            }
+            else
+            {
+                //setTimeout(function () {
+                //if (isHttp)
+                //{
+                    $('.keyword').html(inputVal);
+                    var isCommentTitle = "点评";
+                    var isComment = true;
+                    var Url = "";
+                    var CurrentLocation = $(".city").attr("data-currentLocation")
+
+                    //检测当前为点评、还是问题
+                    if ($(".tab").find("li[class=active]").attr("data-query") == 2) {
+                        isComment = false;
+                        isCommentTitle = "问答";
+                    }
+                    if (inputVal)
+                    {
+                        if (isComment) {
+                            Url = "/SchoolComment/Index?SchoolId=";
+                        }
+                        else {
+                            Url = "/Question/Index?SchoolId=";
+                        }
+                        LoadPageIndex = 1;
+
+                        //setTimeout(function () {
+                        //    GetSchoolByCity(inputVal, isComment, CurrentLocation, Url, 1, 20)
+                        //},500)
+                        GetSchoolByCity(inputVal, isComment, CurrentLocation, Url, 1, 20)
+                    }
+                    else
+                    {
+                        $('.search-content, .not-match').css('display', 'none');
+                    }
+                    $('.search-content>h5, .search-list').css('display', 'block');
+                //}
+            //}, 0)
+            }
+            }
+        });
+        var mark = function () {
+            // Read the keyword
+            var keyword = inputVal;
+
+            // Determine selected options
+            var options = { "className": "match" };
+
+            // Mark the keyword inside the context
+            $(".search-school-name").removeMark();
+            $(".search-school-name").mark(keyword, options);
+        };
+        $('.search-school input').on("keyup", mark);
+
+        $('.search .search-icon').on('click', function () {
+            $('.search-school input').focus();
+        });
+
+        $('.search-school .input').click(function () {
+            if (!$('.city').hasClass('open-select-city'))
+            {
+                //var searchUrl = window.location.protocol + "//" + document.location.hostname + "/Search/Index?Channel=" + $(".tab").find("li[class='active']").attr("data-query");
+                var searchUrl = window.location.protocol + "//" + document.location.hostname + "/home-search/";
+                if ($.isAPP)
+                {
+                    location.href = encodeURIComponent("ischool://web?url=" + searchUrl);
+                }
+                else
+                {
+                    location.href = searchUrl;
+                }
+            }
+        })
+
+        // input失去焦点
+        $('.search-school input').blur(function () {
+            if (inputVal) {
+                return;
+            }
+            else {
+                resetInput();
+            }
+        });
+
+
+        // 取消
+        $('.cancel').on('click', function () {
+            $('.search-school input').val('');
+            resetInput();
+        });
+
+        function resetInput() {
+            $('.search').css('margin-left', '15%');
+            //$('.search, .search input').css({ 'background': '#fff', 'text-align': 'left' });
+            $('.top, .content').css('display', 'block');
+            $('.cancel').fadeOut();
+            $('.search-school .search-icon').css('display', 'block');
+            $('.search-content, .not-match').css('display', 'none');
+            $('.select-content .comment-list, .select-content .qa-list').css('display', 'none');
+            //$('.search-school input').attr('placeholder', '我要选校');
+
+             $(".screenContent").hide()
+
+            $(".comment").show()
+            $(".drop-down").hide()
+            $(".submit-btn").show()
+            $(".school-name").removeClass('open')
+            $(".write-question").show()
+            //$("#search").css("margin-left", "30pt")
+            $(".result-list").hide()
+            $(".nothing").hide()
+            $(".search-icon").removeAttr("style")
+            $("#search").removeAttr("style")
+            //$(".close-select-city").click()
+        }
+
+        function GetSchoolByCity(inputVal, isComment, cityCode, Url, PageIndex, PageSize)
+        {
+        }
+
+
+
+        $('.search-list').on('click', 'li', function () {
+            var schoolName = $(this).children('.search-school-name').text();
+            $('.search input').val(schoolName);
+            if (tabInx == 0) {
+                $('.select-content .comment-list').css('display', 'block');
+            }
+            else if (tabInx == 1) {
+                $('.select-content .qa-list').css('display', 'block');
+            }
+            $('.search-content>h5, .search-list').css('display', 'none');
+        });
+
+        // 点击城市名称首字母导航
+        $('.tab-select>ul:first-child').on('click', 'li', function () {
+            let inx = $(this).index();
+            if (inx == 0) {
+                $('html, body').scrollTop($('.history').offset().top - 30);
+            }
+            else if (inx == 1) {
+                $('html, body').scrollTop($('.hot-select').offset().top - 30);
+            }
+        });
+        $('.tab-select>ul:last-child').on('click', 'li', function () {
+            let inx = $(this).index();
+            $('html, body').scrollTop($('.select-content>div').eq(inx).offset().top - 30);
+        });
+
+        // 点击切换城市
+        $('.city').on('click', function () {
+            $(this).addClass('open-select-city').children('.arrow').css({ 'transform': 'rotate(180deg)', 'top': '-25%' });
+            $('.search-content, .not-match').css('display', 'none');
+            $('.select-city, .close-select-city').fadeIn();
+            $('.search, .search input').css({ 'background': 'rgb(248, 247, 249)', 'text-align': 'left' });
+            $('.search-school input').addClass('open-select').css('margin-left', '30pt').attr('placeholder', '输入城市名或拼音查询');
+            $('.top, section>.content').css('display', 'none');
+            $('.input .search-icon').css({ 'left': '13pt', 'right': 'unset' });
+            $("#search").removeAttr("disabled")
+        });
+
+        // 点击返回箭头关闭选择城市列
+        $('.close-select-city').on('click', function () {
+
+            $("#search").attr("disabled","disabled")
+            //debugger;
+            $(this).css('display', 'none');
+            $('.city').removeClass('open-select-city');
+            $('.select-city').css('display', 'none');
+            $('.search-school input').val('');
+            //resetInput();
+            $('.search-school input').blur()
+        });
+
+
+        //关闭城市弹框
+        function CloseMask()
+        {
+            $(".close-select-city").hide();
+            $('.city').removeClass('open-select-city');
+            $('.select-city').css('display', 'none');
+            $('.search-school input').val('');
+            resetInput();
+        }
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>
+@foreach (var article in Model)
+{
+    switch (article.Layout)
+    {
+        case 0:
+            //无图文章
+            <li>
+                <a href="@Url.Action("detail","article",new { no = article.No})">
+                    <div class="article-msg">
+                        <h5 class="article-title not-img">@article.Title</h5>
+                        <div class="bottom-msg">
+                            <span>@article.CNTime</span>
+                            <span class="check-num"><i class="icon"></i>@article.ViweCount</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            break;
+        case 1:
+            //单小图文章
+            <li>
+                <a href="@Url.Action("detail","article",new { no = article.No})" class="flex justify-content-between">
+                    <div class="article-msg">
+                        <h5 class="article-title">@article.Title</h5>
+                        <div class="bottom-msg">
+                            <span>@article.CNTime</span>
+                            <span class="check-num"><i class="icon"></i>@article.ViweCount</span>
+                        </div>
+                    </div>
+                    <div class="img-box"><img src="@article.Covers.FirstOrDefault()" alt="" /></div>
+                </a>
+            </li>
+            break;
+        case 2:
+            //单大图文章
+            <li>
+                <a href="@Url.Action("detail","article",new { no = article.No})" class="article-detail">
+                    <h5 class="article-title">@article.Title</h5>
+                    <div class="img-box"><img src="@article.Covers.FirstOrDefault()" alt="" /></div>
+                    @*<p class="article-content">@article.Digest</p>*@
+                    <div>
+                        <span>@article.CNTime</span>
+                        <span class="check-num"><i class="icon"></i>@article.ViweCount</span>
+                    </div>
+                </a>
+            </li>
+            break;
+
+        default:
+
+            //无图文章
+            <li>
+                <a href="@Url.Action("detail","article",new { no = article.No})">
+                    <div class="article-msg">
+                        <h5 class="article-title not-img">@article.Title</h5>
+                        <div class="bottom-msg">
+                            <span>@article.CNTime</span>
+                            <span class="check-num"><i class="icon"></i>@article.ViweCount</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            break;
+    }
+
+}

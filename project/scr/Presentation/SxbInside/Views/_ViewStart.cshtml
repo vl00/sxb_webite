@@ -1,0 +1,12 @@
+﻿@{
+    var hostE = Context.RequestServices.GetService(typeof(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)) as Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
+    if (hostE.EnvironmentName.Equals("Development", StringComparison.CurrentCultureIgnoreCase) || hostE.EnvironmentName.Equals("Staging", StringComparison.CurrentCultureIgnoreCase) )
+    {
+        ViewBag.StaticFile = "https://file.sxkid.com/v4source/H5Test";
+    }
+    else
+    {
+        ViewBag.StaticFile = "https://cdn.sxkid.com/v4source";
+    }
+}
+ 

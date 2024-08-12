@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
+     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
+     <ProjectReference Include="..\ProductManagement.API.Aliyun\ProductManagement.API.Aliyun.csproj" />
+    <ProjectReference Include="..\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+  </ItemGroup>
+
+</Project>

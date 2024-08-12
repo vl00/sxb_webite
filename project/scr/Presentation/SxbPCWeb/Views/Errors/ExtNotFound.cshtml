@@ -1,0 +1,28 @@
+﻿@using Sxb.PCWeb.Response;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>错误页</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/jquery.range.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="error" id="errorNoSchool">
+                <img src="@(ViewBag.StaticFile)/imgs/error-noSchool.png" alt="">
+                <p>抱歉，因信息有误或学校要求，该学校已下架</p>
+                <p><i class="seconds">5</i> 秒后自动回到上一页…</p>
+                <a href="/" class="go-home">返回首页</a>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script src="@ViewBag.StaticFile/js/other/error.js"></script>
+</body>
+</html>

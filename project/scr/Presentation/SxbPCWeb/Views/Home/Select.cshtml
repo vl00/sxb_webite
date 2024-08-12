@@ -1,0 +1,285 @@
+﻿@using PMS.Infrastructure.Application.ModelDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上学帮_汇集@(ViewBag.LocalCity)名校,帮助家长给孩子选优质的幼儿园,小学,中学_国际民办公办学校</title>
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿,亲子,家庭教育,孩子教育,小学教育,中学教育,高中教育,高校教育,中小学教育,学校探访,民办小学,公办小学,择校,名校,教育,小学,初中,择校,名师,中考,高考">
+    <meta name="description" content="上学帮@(ViewBag.LocalCity)是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/city.css">
+    @*<link rel="stylesheet" href="/css/swiper.css">*@
+    @*<link rel="stylesheet" href="/css/home/home.css">*@
+</head>
+<body>
+    <section class="city">
+        <div class="container">
+            <div class="city-list">
+                <h2 class="font-16">全部城市</h2>
+            </div>
+            <div class="conditions-select">
+                <span class="font-14">按省份选择：</span>
+                <div class="select-div">
+                    <a class="provinces font-12" title="省份">
+                        <span>省份</span>
+                        <div class="down-div">向下</div>
+                    </a>
+                    <div class="provinces-list ">
+                        <ul>
+                            <!--                        <li><a title="广东">广东</a></li>-->
+                        </ul>
+                    </div>
+                    <a class="city-select font-12" title="城市">
+                        <span>城市</span>
+                        <div class="down-div">向下</div>
+                    </a>
+                    <div class="city-select-list">
+                        <ul>
+                            <!--                        <li><a href="#">中山</a></li>-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="conditions-select-right position-relative">
+                    <span class="font-14">按省份选择：</span>
+                    <input type="text" placeholder="请输入城市中文或拼音" id="searchCity">
+                    <img src="@(ViewBag.StaticFile)/imgs/home/iconSearch.png" alt="放大镜">
+                    <div class="search-city-list position-absolute">
+                        <ul>
+                            <!--                        <li><a href="#" title="1">1</a></li>-->
+                            <!--                        <li><a href="#" title="2">2</a></li>-->
+                            <!--                        <li><a href="#" title="3">3</a></li>-->
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="hot-city">
+                <span class="font-14 float-left">热门城市：</span>
+                <ul class='hot-city-list float-left font-14'>
+                    @foreach (var item in (IEnumerable<PMS.School.Domain.Dtos.KeyValueDto<int>>)ViewBag.HotCity)
+                    {
+
+                        @*<li><a href="@item.Message" data-city="@(item.Value)">@item.Key</a></li>*@
+                        <li><a href="/c-@item.Value/" data-city="@(item.Value)">@item.Key</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="hot-city letter-search ">
+                <span class="font-14 float-left">按字母选择：</span>
+                <ul class='hot-city-list float-left font-14'>
+                    <!--                按字母搜索-->
+                    <!--                <li><a href="#A">A</a></li>-->
+                    @foreach (var item in (IEnumerable<Sxb.PCWeb.ViewModels.CityVo>)ViewBag.CityList)
+                    {
+                        if (item.CityCodes.Count() > 0)
+                        {
+                            <li><a href="#@item.Key" title="@item.Key">@item.Key</a></li>
+                        }
+                    }
+                </ul>
+                <div class="clearfix"></div>
+                @foreach (var item in (IEnumerable<Sxb.PCWeb.ViewModels.CityVo>)ViewBag.CityList)
+                {
+                    @if (item.CityCodes.Count() > 0)
+                    {
+                        <dl class="select-city-list">
+                            <dt id="@item.Key">@item.Key</dt>
+                            <dd>
+                                <ul>
+                                    @foreach (var city in item.CityCodes)
+                                    {
+                                        <li><a href="/c-@city.AdCode/" data-city="@city.AdCode" title="@city.Name">@city.Name</a></li>
+                                    }
+                                </ul>
+                            </dd>
+                        </dl>
+                    }
+                }
+                <!--            <dl class="select-city-list">-->
+                <!--                <dt>A</dt>-->
+                <!--                <dd>-->
+                <!--                    <ul class="font-14">-->
+                <!--                        <li><a href="#" title="广州">广州</a></li>-->
+                <!--                        <li><a href="#" title="广州">广州</a></li>-->
+                <!--                        <li><a href="#" title="上海">上海</a></li>-->
+                <!--                        <li><a href="#" title="广州">广州</a></li>-->
+                <!--                    </ul>-->
+                <!--                </dd>-->
+                <!--            </dl>-->
+                <!--            <dl class="select-city-list">-->
+                <!--                <dt>B</dt>-->
+                <!--                <dd>-->
+                <!--                    <ul class="font-14">-->
+                <!--                        <li><a href="#" title="广州">广州</a></li>-->
+                <!--                        <li><a href="#" title="广州">广州</a></li>-->
+                <!--                        <li><a href="#" title="上海">上海</a></li>-->
+                <!--                    </ul>-->
+                <!--                </dd>-->
+                <!--            </dl>-->
+            </div>
+        </div>
+        <div style="display:none;">
+            <iframe href="" id="if_Tmp"></iframe>
+        </div>
+    </section>
+
+    @{await Html.RenderPartialAsync("Footer"); }
+
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/home.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/city.js"></script>
+    <script>
+        $(function () {
+            // 按字母搜索列表
+
+            var allcity = @Html.Raw(ViewBag.AllCity);
+            // 按身份分选择框
+
+            var provinceData = @Html.Raw(ViewBag.Province);
+            var city = ['城市'];
+            // 字母搜索列表
+            //for (var i = 0; i < allcity.length; i++) {
+            //    // 按字母搜索
+            //    $('.letter-search .hot-city-list').append('<li><a href="#' + allcity[i].Key + '">' + allcity[i].Key + '</a></li>')
+            //    // 城市列表
+            //    var html = '';
+            //    html += '<dl class="select-city-list">'
+            //    html += '<dt id="' + allcity[i].Key + '">' + allcity[i].Key + '</dt>'
+            //    html += '<dd><ul>'
+            //    for (var k = 0; k < allcity[i].CityCodes.length; k++) {
+            //        html += '<li><a href="' + allcity[i].CityCodes[k].url + '" data-city="' + allcity[i].CityCodes[k].AdCode + '" title="' + allcity[i].CityCodes[k].Name + '">' + allcity[i].CityCodes[k].Name + '</a></li>'
+            //    }
+            //    html += '</ul></dd></dl>'
+            //    if (allcity[i].CityCodes.length != 0) {
+            //        $('.letter-search').append(html)
+            //    }
+            //}
+            // 选择框列表
+            for (var i = 0; i < provinceData.length; i++) {
+                $('.provinces-list>ul').append('<li><a title="' + provinceData[i].Province + '">' + provinceData[i].Province + '</a></li>')
+            }
+            // 点击了省份后隐藏省份列表
+            $('.provinces-list').on('click', 'a', function (e) {
+                $('.provinces span').text($(this).text());
+                $('.provinces-list').hide();
+                if ($('.provinces-list').css('display') == "block") {
+                    $('.provinces>div').addClass('up-div');
+                } else if ($('.provinces-list').css('display') == "none") {
+                    $('.provinces>div').removeClass('up-div');
+                }
+                for (var k = 0; k < provinceData.length; k++) {
+                    if (provinceData[k].Province == $(this).text()) {
+                        city = provinceData[k].CityCodes;
+                        break;
+                    }
+                }
+                $('.city-select-list>ul').empty();
+                for (var k = 0; k < city.length; k++) {
+                    $('.city-select-list>ul').append('<li><a data-city="' + city[k].AdCode + '" href="' + city[k].url + '" title="' + city[k].Name + '">' + city[k].Name + '</a></li>')
+                }
+            });
+            // 搜索框输入触发
+            var searchtime = '';
+            var newList = [];
+            var searchAllCity = [];
+            $("#searchCity").bind('input propertychange', function () {
+                clearTimeout(searchtime);
+                var inputText = $(this).val();
+                searchList(inputText, searchAllCity)
+                // searchtime = setTimeout(function () {
+                $('.search-city-list>ul').empty();
+                //     var json = JSON.parse('{"succeed":true,"msgTime":"2019-09-19 15:58:32","status":200,"msg":"查询成功","data":{"keyWords":"学校","total":70,"list":[{"groupType":1,"tipsText":null,"items":[{"channel":1,"channelName":0,"type":1,"keyWord":"增城碧桂园学校 - 初中部","show":null,"value":{"id":"2b07b020-0621-4fee-9e30-517e0fe16996"}},{"channel":1,"channelName":0,"type":1,"keyWord":"增城碧桂园学校 - 幼儿园","show":null,"value":{"id":"e9e9ddd1-d6d2-4611-9511-ef40ebc9070f"}},{"channel":1,"channelName":0,"type":1,"keyWord":"增城碧桂园学校 - 小学部","show":null,"value":{"id":"d8904b01-f353-4f8e-988d-ffdc5b3e7c35"}},{"channel":1,"channelName":0,"type":1,"keyWord":"广州培道实验学校 - 校本部","show":null,"value":{"id":"66a9da10-7036-4558-9bfd-766c178a273a"}},{"channel":1,"channelName":0,"type":1,"keyWord":"广州华联外语实验学校 - 小学部","show":null,"value":{"id":"8574a0c2-66dd-403c-abab-4b57838ceea3"}}]},{"groupType":2,"tipsText":null,"items":[]},{"groupType":3,"tipsText":null,"items":[]},{"groupType":4,"tipsText":null,"items":[]},{"groupType":5,"tipsText":null,"items":[]}]}}')
+                //     for (var i = 0; i < json.data.list[0].items.length; i++) {
+                //         $('.search-city-list>ul').append("<li><a href='#' title='学校'>"+json.data.list[0].items[i].keyWord+"</a></li>")
+                //     }
+                // },500)
+                console.log(newList[0])
+                for (var i = 0; i < newList.length; i++) {
+                    $('.search-city-list>ul').append('<li><a href="' + newList[i].url + '" title="学校" data-city="' + newList[i].AdCode + '">' + newList[i].Name + '</a></li>')
+                }
+            });
+            for (var i = 0; i < allcity.length; i++) {
+                for (var j = 0; j < allcity[i].CityCodes.length; j++) {
+                    searchAllCity.push({ Name: allcity[i].CityCodes[j].Name, Pinyin: allcity[i].CityCodes[j].pinyin, url: allcity[i].CityCodes[j].url, AdCode: allcity[i].CityCodes[j].AdCode });
+                }
+            }
+            function searchList(str, container) {
+                newList = [];
+                var startChar = str.charAt(0);
+                var strLen = str.length;
+                for (var i = 0; i < container.length; i++) {
+                    var obj = container[i];
+                    var isMatch = false;
+                    for (var p in obj) {
+                        if (p != "url") {
+                            if (typeof (obj[p]) == "function") {
+                                obj[p]();
+                            } else {
+                                var curItem = "";
+                                if (obj[p] != null) {
+                                    curItem = obj[p];
+                                }
+                                for (var j = 0; j < curItem.length; j++) {
+                                    if (curItem.charAt(j) == startChar) {
+                                        if (curItem.substring(j).substring(0, strLen) == str) {
+                                            isMatch = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isMatch) {
+                        newList.push(obj);
+                    }
+                }
+                return newList;
+            }
+            // var allcity = [];
+            // for(var i = 0; i < allcity.length; i ++) {
+            //     for(var j = 0; j < allcity[i].CityCodes.length; j++) {
+            //         allcity.push({
+            //             Name: allcity[i].CityCodes[j].Name,
+            //             Pinyin: allcity[i].CityCodes[j].pinyin,
+            //             url:allcity[i].CityCodes[j].url});
+            //     }
+            // }
+        });
+
+        $(function() {
+            $('body').on('click', 'a[data-city]', function(e) {
+                var isFilter = window.location.search.substring(1).toLowerCase().indexOf("filter=true") >= 0;
+                if (isFilter) {
+                    var url = '/school/ci' + $(this).attr('data-city') + '/';
+                    if (url) {
+                        window.location.href = url;
+                        sessionStorage.removeItem('backurltmp');
+                        return false;
+                    }
+                } else {
+                    $('#if_Tmp').attr('src', '/c-' + $(this).attr('data-city'));
+                    var code = $(this).attr('data-city');
+                    setTimeout(function () {
+                        window.location.href = '/c-' + code + '?callback=@ViewBag.CallbackURL';
+                    }, 1000);
+                    return false;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+

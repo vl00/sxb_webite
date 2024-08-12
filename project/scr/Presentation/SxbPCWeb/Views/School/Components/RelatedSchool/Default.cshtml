@@ -1,0 +1,243 @@
+﻿@model Sxb.PCWeb.ViewModels.ViewComponent.RelatedSchoolViewModel;
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+@using PMS.OperationPlateform.Domain.Enums;
+@using PMS.School.Domain.Dtos;
+@using ProductManagement.Framework.Foundation;
+<!-- 周边学校 or 热门学校 or 热评学校 or 热问学习 start -->
+<div class="aggregate">
+    <ul class="aggregate-title-list">
+        <li>
+            <span class="aggregate-tab active">周边学校</span>
+            <p></p>
+        </li>
+        <li>
+            <span class="aggregate-tab">热门学校</span>
+        </li>
+        <li>
+            <span class="aggregate-tab">热评学校</span>
+        </li>
+        <li>
+            <span class="aggregate-tab">热问学校</span>
+        </li>
+    </ul>
+
+    <!-- 周边学校 start -->
+    <ul class="surrounding-schools">
+        @if (Model.NearSchool?.Any() == true)
+        {
+            foreach (var item in Model.NearSchool.Take(6))
+            {
+                <li>
+                    <a href="/school-@item.ShortSchoolNo/" class="clearfix">
+                        <div class="surrounding-left">
+                            <h2>@item.SchName-@item.ExtName</h2>
+                            <ul class="surrounding-tags">
+                                @{
+                                    var desc = ((SchoolType)item.SchFType0.Type).GetDescription();
+                                    if (!string.IsNullOrEmpty(desc))
+                                    {
+                                        <li class="tag-item">@desc</li>
+                                    }
+                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+
+                                    if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                    {
+                                        <li class="tag-item">@lodgingDesc</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="surrounding-right">
+                            <div class="surrounding-score"><span><i class='private-score-grading'>@(item.TotalScore.HasValue ? item.TotalScore.Value.GetScoreString() : "暂无评分")</i></span></div>
+                            <p>学校总评</p>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+    <!-- 周边学校 end -->
+    <!-- 热门学校 start -->
+    <ul class="hot-schools">
+        @if (Model.HotSchools?.Any() == true)
+        {
+            foreach (var item in Model.HotSchools.Take(6))
+            {
+                <li>
+                    <a href="/school-@item.ShortSchoolNo/" class="clearfix">
+                        <div class="hot-left">
+                            <h2>@item.Name</h2>
+                            <ul class="hot-tags">
+                                @{
+                                    var desc = ((SchoolType)item.SchFType.Type).GetDescription();
+                                    if (!string.IsNullOrEmpty(desc))
+                                    {
+                                        <li class="tag-item">@desc</li>
+                                    }
+                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+
+                                    if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                    {
+                                        <li class="tag-item">@lodgingDesc</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="hot-right">
+                            <div class="hot-score"><span><i class='private-score-grading'>@(item.TotalScore.HasValue ? item.TotalScore.Value.GetScoreString() : "暂无评分")</i></span></div>
+                            <p>学校总评</p>
+                        </div>
+                    </a>
+
+                </li>
+            }
+        }
+    </ul>
+    <!-- 热门学校 end -->
+    <!-- 热评学校 start -->
+    <ul class="hot-comment">
+        @if (Model.HotCommentSchools?.Any() == true)
+        {
+            foreach (var item in Model.HotCommentSchools.Take(6))
+            {
+                <li class="clearfix">
+                    <a href="/school-@item.ShortSchoolNo/" class="clearfix">
+                        <div class="rank-img">
+                            <img src="@(ViewBag.StaticFile)/imgs/school-detail-profile/one-rank.png" alt="">
+                            <span>@item.Stars</span>
+                        </div>
+                        <h2>@item.SchoolName</h2>
+                        <span>新增@(item.CommentTotal)条点评</span>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+    <!-- 热评学校 end -->
+    <!-- 热问学校 start -->
+    <ul class="hot-ask">
+        @if (Model.HotQuestionSchools?.Any() == true)
+        {
+            foreach (var item in Model.HotQuestionSchools.Take(6))
+            {
+                <li>
+                    <a href="/school-@item.ShortSchoolNo/" class="clearfix">
+                        <div class="rank-img">
+                            <img src="@(ViewBag.StaticFile)/imgs/school-detail-profile/one-rank.png" alt="">
+                            <span></span>
+                        </div>
+                        <h2>@item.SchoolName</h2>
+                        <span>新增@(item.QuestionTotal)个问答</span>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+    <!-- 热问学校 end -->
+</div>
+<!-- 周边学校 or 热门学校 or 热评学校 or 热问学习 start -->
+<script type="">
+    window.onload = function () {
+        $(".aggregate-title-list li").on('click', function () {
+            if ($(this).children('.aggregate-tab').hasClass('active')) return
+            $(this).children('.aggregate-tab').addClass('active')
+            $(this).siblings().children('.aggregate-tab').removeClass('active');
+
+            if ($(this).index() == 0) {
+                $('.surrounding-schools').css({
+                    'display': 'block'
+                })
+                $('.hot-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-comment').css({
+                    'display': 'none'
+                })
+                $('.hot-ask').css({
+                    'display': 'none'
+                })
+            } else if ($(this).index() == 1) {
+                $('.surrounding-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-schools').css({
+                    'display': 'block'
+                })
+                $('.hot-comment').css({
+                    'display': 'none'
+                })
+                $('.hot-ask').css({
+                    'display': 'none'
+                })
+            } else if ($(this).index() == 2) {
+                $('.surrounding-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-comment').css({
+                    'display': 'block'
+                })
+                $('.hot-ask').css({
+                    'display': 'none'
+                })
+            } else if ($(this).index() == 3) {
+                $('.surrounding-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-schools').css({
+                    'display': 'none'
+                })
+                $('.hot-comment').css({
+                    'display': 'none'
+                })
+                $('.hot-ask').css({
+                    'display': 'block'
+                })
+            }
+
+        })
+
+
+        let hotCommentList = document.querySelectorAll('.hot-comment li');
+        let hotAskList = document.querySelectorAll('.hot-ask li');
+
+        for (let i = 0; i < hotCommentList.length; i++) {
+            const element = hotCommentList[i];
+            let hotCommentRankImg = element.querySelector('.rank-img img');
+            let hotCommentNum = element.querySelector('.rank-img span');
+            hotCommentNum.innerHTML = i + 1;
+
+            if (i == 0) {
+                hotCommentRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/one-rank.png')
+            } else if (i == 1) {
+                hotCommentRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/two-rank.png')
+
+            } else if (i == 2) {
+                hotCommentRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/three-rank.png')
+
+            } else {
+                hotCommentRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/four-rank.png')
+            }
+        }
+
+        for (let i = 0; i < hotAskList.length; i++) {
+            const element = hotAskList[i];
+            let hotAskRankImg = element.querySelector('.rank-img img')
+            let hotCommentNum = element.querySelector('.rank-img span');
+            hotCommentNum.innerHTML = i + 1;
+
+            if (i == 0) {
+                hotAskRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/one-rank.png')
+            } else if (i == 1) {
+                hotAskRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/two-rank.png')
+
+            } else if (i == 2) {
+                hotAskRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/three-rank.png')
+            } else {
+                hotAskRankImg.setAttribute('src', '@(ViewBag.StaticFile)/imgs/school-detail-profile/four-rank.png')
+            }
+        }
+    };
+</script>

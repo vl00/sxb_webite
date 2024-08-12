@@ -1,0 +1,28 @@
+﻿@using Sxb.PCWeb.ViewModels.Question;
+
+<div class="hot-question">
+    <h2 class="font-18 font-weight-bold">热门问答</h2>
+    <ul>
+        @foreach (QuestionInfoViewModel item in ViewBag.HottestSchoolQuesitonView)
+        {
+            <li class="d-flex justify-content-between">
+                <i class="classification font-12">问</i>
+                <a class="hot-question-content " href="@Url.Action("Detail","Question",new {No = item.No})" title="">
+                    <p class="font-15">@item.Content</p>
+                    @if (item.School != null)
+                    {
+                        <b class="font-13 color-333">@item.School.SchoolName</b>
+                    }
+                    else
+                    {
+                        <b class="font-13 color-333">该学校已下架</b>
+                    }
+                    <div class="d-flex justify-content-between font-12">
+                        <span>@item.AddTime</span>
+                        <span>@(item.AnswerCount)条回答</span>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

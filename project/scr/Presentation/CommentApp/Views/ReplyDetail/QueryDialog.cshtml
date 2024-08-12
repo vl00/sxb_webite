@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    
+    <title>查看对话-上学帮</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-comment.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/reply-detail.css">
+    <script>
+        var user = "@ViewBag.UserServiceUrl"
+    </script>
+</head>
+<body style="font-size:16px;">
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">查看对话</span>
+        <span class="btn"></span>
+    </header>
+
+    <section class="mt all-comment">
+        <input type="hidden" id="currentReply" data-replytype="@ViewBag.Type" data-datascoure="@ViewBag.ReplyId" data-loadend="@ViewBag.LoadEnd" />
+
+        <ul class="comment-list">
+            @foreach (var reply in ViewBag.Replys)
+            {
+                <li>
+                    <div class="list-header flex justify-content-between">
+                        <div class="user-msg flex">
+                            <div class="head login-head">
+                                <div class="headimager"><img src="@reply.UserInfo.HeadImager" alt=""></div>
+                                @if (reply.UserInfo.IsSchool && reply.UserInfo.IsTalent)
+                                {
+                                    <i class="icon"></i>
+                                    <i class="icon school"></i>
+                                }
+                                else if (reply.UserInfo.IsSchool)
+                                {
+                                    <i class="icon school"></i>
+                                }
+                                else if (reply.UserInfo.IsTalent)
+                                {
+                                    <i class="icon"></i>
+                                }
+                            </div>
+                            <div>
+                                <div>
+                                    <span class="name" name="@reply.UserInfo.NickName">
+                                        @reply.UserInfo.NickName
+                                        @if (@reply.IsAttend)
+                                        {
+                                            <i class="identity">过来人</i>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="reply-time">@reply.CreateTime</div>
+                            </div>
+                        </div>
+                        <div class="other flex">
+                            @if (reply.RumorRefuting)
+                            {
+                                <i class="icon"></i>
+                            }
+                            <div class="other-list-btn text-center" data-report="@(ViewBag.Type==1?3:4)" data-id="@reply.DatascoureId" data-datascoureid="@reply.DatascoureId" data-replyid="@reply.Id" data-type="@(ViewBag.Type==1?3:4)">
+                                <div class="flex">
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="content">@if (reply.ReplyId != null)
+                    {<span class="reply-target">回复<i class="user-name">@reply.ReplyUserInfo.NickName：</i></span>}@reply.Content</p>
+                    <div class="comment-msg flex justify-content-between">
+                        <div></div>
+                        <div class="ctr">
+                            @if (reply.IsLike)
+                            {
+                                <span data-replyid="@reply.Id" class="like click-like ">
+                                    <i class="icon"></i>
+                                    <span>@reply.LikeCount</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <span data-replyid="@reply.Id" class="like">
+                                    <i class="icon"></i>
+                                    <span>@reply.LikeCount</span>
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+
+    </section>
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="/Report">举报</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </section>
+    <section class="reply-box">
+        <div class="flex justify-content-between btn-list">
+            <span class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>
+                }
+
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+
+    <div class="curtain"></div>
+    <div class="WarningBox">
+        <i class="warning-i"></i>
+        <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+        <button class="btn">确认</button>
+        <a class="btn" style="display:none;" href="#">绑定手机</a>
+    </div>
+</body>
+
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="@ViewBag.StaticFile/js/loading.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+<script src="@ViewBag.StaticFile/js/reply-common.js"></script>
+<script src="@ViewBag.StaticFile/js/reply-dialog.js"></script>
+</html>

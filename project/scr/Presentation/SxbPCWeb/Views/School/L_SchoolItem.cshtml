@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.School.SchoolExtListItemViewModel>
+@using ProductManagement.Framework.Foundation;
+@using PMS.School.Domain.Common;
+
+@foreach (var school in Model)
+{
+    <li>
+        <a class="school-list-card clearfix" href="/school-@school.ShortSchoolNo/">
+            <div class="school-list-card-left">
+                <h2 class="school-list-card-name">@school.SchoolName</h2>
+
+                <div class="school-list-card-address  school-card-info">
+                    <i></i><span>
+                        @school.CityName
+                        @if (!string.IsNullOrWhiteSpace(school.CityName)) WriteLiteral(" | ");
+                        @school.AreaName
+                    </span>
+                </div>
+
+                <div class="school-list-card-info school-card-info">
+                    <i></i><span>
+                        @{
+                            var outputText = string.Empty;
+                            @if (school.TeacherCount.HasValue)
+                            {
+                                outputText += $"教师人数 {school.TeacherCount.Value}人";
+                            }
+                            @if (school.StudentCount.HasValue)
+                            {
+                                if (!string.IsNullOrWhiteSpace(outputText)) outputText += " | ";
+                                outputText += $"学生人数 {school.StudentCount.Value}人";
+                            }
+                            @if (school.CreationDate.HasValue)
+                            {
+                                if (!string.IsNullOrWhiteSpace(outputText)) outputText += " | ";
+                                outputText += $"建校年份 {school.CreationDate.Value.ToString("yyyy")}年";
+                            }
+                            @if (school.LodgingType != 0)
+                            {
+                                if (!string.IsNullOrWhiteSpace(outputText)) outputText += " | ";
+                                outputText += ((LodgingEnum)school.LodgingType).Description();
+                            }
+                            WriteLiteral(outputText);
+                        }
+                    </span>
+                </div>
+
+                <div class="school-list-card-desc school-card-info">
+                    <i></i><span>
+                        @if (school.Cost.HasValue)
+                        {
+                            if (school.Cost.Value > 10000)
+                            {
+                                WriteLiteral(Math.Round((decimal)(school.Cost.Value / 10000), 2) + "万元/年");
+                            }
+                            else
+                            {
+                                WriteLiteral(school.Cost.Value + "元/年");
+                            }
+                        }
+                        else
+                        {
+                            WriteLiteral("义务教育免学费");
+                        }
+                    </span>
+                </div>
+
+                <div class="school-list-card-tags">
+                    @foreach (var tag in school.Tags)
+                    {
+                        <span>@tag</span>
+                    }
+                </div>
+
+            </div>
+            <div class="school-list-card-right">
+                @if (school.Score.HasValue)
+                {
+                    <div class="school-card-score private-score-grading">@school.Str_Score</div>
+                }
+
+                <h3>学校总评</h3>
+                <div class="school-card-info-btn school-card-btn" data-no="@school.ShortSchoolNo">
+                    <i></i>
+                    <span>评分详情</span>
+                </div>
+                <div class="school-card-ask-btn school-card-btn">
+                    <i></i>
+                    <span>马上咨询</span>
+                </div>
+            </div>
+        </a>
+    </li>
+}

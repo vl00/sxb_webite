@@ -1,0 +1,48 @@
+﻿@model Sxb.PCWeb.ViewModels.Question.QuestionSchoolViewModel
+<li>
+    <a href="/question/school-@Model.ShortSchoolNo/" class="d-flex justify-content-between" title="@Model.SchoolName">
+        <div>
+            <p class="school-name">@Model.SchoolName</p>
+            
+            <p class="certification-tab font-12 float-left">
+                @if (Model.Type == 3)
+                {
+                    <span class="international">国际</span>
+                }
+                else if (Model.Type== 4)
+                {
+                    <span class="international">外籍</span>
+                }
+                else if (Model.Type == 2)
+                {
+                <span class="international">民办</span>
+                }
+                else if (Model.Type == 1)
+                {
+                <span class="international">公办</span>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.LodgingReason))
+                {
+                    <span class="boarding">@Model.LodgingReason</span>
+                }
+                @if (@Model.Auth)
+                {
+                    <img src="@(ViewBag.StaticFile)/imgs/detail/authentication.png" alt="学校认证"
+                         class="school-certification">
+                }
+            </p>
+        </div>
+        <div class="font-12 search-school-list-right text-center">
+            @if (@Model.Score == 0)
+            {
+            <p class="search-school-list-score no-score">暂无评分</p>
+            }
+            else
+            {
+            <p class="search-school-list-score">@Model.Score<i class="font-14">分</i></p>
+            }
+            <p>学校总评</p>
+            <p>@(Model.QuestionTotal)条问题</p>
+        </div>
+    </a>
+</li>

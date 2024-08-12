@@ -1,0 +1,139 @@
+﻿
+ 
+表的数量：13
+
+-生成Circle表
+	|_生成Id字段 类型Guid
+	|_生成Name字段 类型string
+	|_生成UserId字段 类型Guid?
+	|_生成IsDisable字段 类型bool
+	|_生成Intro字段 类型string
+	|_生成ModifyTime字段 类型DateTime?
+	|_生成CreateTime字段 类型DateTime?
+	|_生成TopicCount字段 类型long
+	|_生成ReplyCount字段 类型long
+	|_生成FollowCount字段 类型long
+	|_生成BGColor字段 类型string
+-生成CircleAccessLog表
+	|_生成CircleId字段 类型Guid
+	|_生成UserId字段 类型Guid
+	|_生成CreateTime字段 类型DateTime
+-生成CircleCover表
+	|_生成Id字段 类型Guid
+	|_生成Url字段 类型string
+	|_生成CircleId字段 类型Guid?
+	|_生成Modifytime字段 类型DateTime?
+-生成CircleFollower表
+	|_生成Id字段 类型Guid
+	|_生成UserId字段 类型Guid
+	|_生成CircleId字段 类型Guid
+	|_生成Time字段 类型DateTime?
+	|_生成ModifyTime字段 类型DateTime?
+-生成Tag表
+	|_生成Id字段 类型int
+	|_生成Name字段 类型string
+	|_生成ParentId字段 类型int
+	|_生成IsDeleted字段 类型byte
+-生成Topic表
+	|_生成Id字段 类型Guid
+	|_生成CircleId字段 类型Guid
+	|_生成Content字段 类型string
+	|_生成Status字段 类型int
+	|_生成OpenUserId字段 类型Guid?
+	|_生成Type字段 类型int
+	|_生成IsQA字段 类型byte
+	|_生成TopType字段 类型int
+	|_生成TopTime字段 类型DateTime?
+	|_生成IsGood字段 类型byte
+	|_生成IsHandPick字段 类型bool
+	|_生成GoodTime字段 类型DateTime?
+	|_生成FollowCount字段 类型long
+	|_生成LikeCount字段 类型long
+	|_生成ReplyCount字段 类型long
+	|_生成IsDeleted字段 类型byte
+	|_生成Creator字段 类型Guid
+	|_生成Updator字段 类型Guid
+	|_生成CreateTime字段 类型DateTime
+	|_生成UpdateTime字段 类型DateTime
+	|_生成LastReplyTime字段 类型DateTime
+	|_生成IsAutoSync字段 类型bool
+	|_生成LastEditTime字段 类型DateTime
+	|_生成DynamicTime字段 类型DateTime?
+-生成TopicReply表
+	|_生成Id字段 类型Guid
+	|_生成Depth字段 类型int
+	|_生成Content字段 类型string
+	|_生成LikeCount字段 类型long
+	|_生成TopicId字段 类型Guid
+	|_生成ParentId字段 类型Guid?
+	|_生成ParentUserId字段 类型Guid?
+	|_生成IsDeleted字段 类型byte
+	|_生成Creator字段 类型Guid
+	|_生成Updator字段 类型Guid
+	|_生成CreateTime字段 类型DateTime
+	|_生成UpdateTime字段 类型DateTime
+	|_生成FirstParentId字段 类型Guid?
+-生成TopicReplyAttachment表
+	|_生成Id字段 类型Guid
+	|_生成TopicId字段 类型Guid
+	|_生成TopicReplyId字段 类型Guid
+	|_生成Content字段 类型string
+	|_生成AttachId字段 类型Guid?
+	|_生成AttachUrl字段 类型string
+	|_生成IsDeleted字段 类型byte
+	|_生成UpdateTime字段 类型DateTime
+	|_生成Type字段 类型int
+-生成TopicReplyImage表
+	|_生成Id字段 类型Guid
+	|_生成TopicReplyId字段 类型Guid
+	|_生成Url字段 类型string
+	|_生成Sort字段 类型int
+	|_生成IsDeleted字段 类型byte
+-生成TopicReplyLike表
+	|_生成Id字段 类型Guid
+	|_生成UserId字段 类型Guid
+	|_生成TopicReplyId字段 类型Guid
+	|_生成Status字段 类型int
+	|_生成UpdateTime字段 类型DateTime
+-生成TopicTag表
+	|_生成TopicId字段 类型Guid
+	|_生成TagId字段 类型int
+-生成TopicView表
+	|_生成Id字段 类型Guid
+	|_生成CircleId字段 类型Guid
+	|_生成Content字段 类型string
+	|_生成Status字段 类型int
+	|_生成OpenUserId字段 类型Guid?
+	|_生成Type字段 类型int
+	|_生成IsQA字段 类型byte
+	|_生成TopType字段 类型int
+	|_生成TopTime字段 类型DateTime?
+	|_生成IsGood字段 类型byte
+	|_生成IsHandPick字段 类型bool
+	|_生成GoodTime字段 类型DateTime?
+	|_生成FollowCount字段 类型long
+	|_生成LikeCount字段 类型long
+	|_生成ReplyCount字段 类型long
+	|_生成IsDeleted字段 类型byte
+	|_生成Creator字段 类型Guid
+	|_生成Updator字段 类型Guid
+	|_生成CreateTime字段 类型DateTime
+	|_生成UpdateTime字段 类型DateTime
+	|_生成LastReplyTime字段 类型DateTime
+	|_生成IsAutoSync字段 类型bool
+	|_生成LastEditTime字段 类型DateTime
+	|_生成DynamicTime字段 类型DateTime?
+	|_生成TIME字段 类型DateTime
+-生成Topping表
+	|_生成Id字段 类型long
+	|_生成Title字段 类型string
+	|_生成Url字段 类型string
+	|_生成StartTime字段 类型DateTime
+	|_生成EndTime字段 类型DateTime
+	|_生成Status字段 类型int
+	|_生成IsDeleted字段 类型byte
+	|_生成Updator字段 类型Guid
+	|_生成UpdateTime字段 类型DateTime
+
+
+EndBlock（）是生成的文本模板

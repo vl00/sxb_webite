@@ -1,0 +1,359 @@
+﻿@using PMS.School.Domain.Enum;
+@using PMS.School.Domain.Dtos;
+@{
+    Layout = null;
+    var images = ViewBag.Images as List<PMS.School.Domain.Dtos.SchoolImageDto>;
+    var videos = ViewBag.Videos as List<PMS.School.Domain.Dtos.KeyValueDto<DateTime, string, byte, string, string>>;
+    var printIndex = 1;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <title>学校图册</title>
+    <meta name="keywords" content="@($"{ViewBag.SchoolName}学校图册")">
+    <meta name="description" content="@($"上学帮学校频道，为您提供全面的{ViewBag.SchoolName}学校图册等信息")">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-picture-list.css" />
+</head>
+
+<body>
+    @*<header class="header flex justify-content-between">
+            <a class="arrow"></a>
+            <span class="header-title">学校图册</span>
+            <span class=""></span>
+        </header>*@
+
+    <section class="picture-list mt">
+        @*学习专访*@
+        @if (videos.Any())
+        {
+            <div>
+                <h5 class="title">学习专访</h5>
+                <ul class="msg-list">
+                    @foreach (var item in videos)
+                    {
+                        <li>
+                            <div class="picture-box">
+                                <video src="@item.Value" width="100%" controls
+                                       style="object-fit:fill"
+                                       webkit-playsinline="true"
+                                       x-webkit-airplay="true"
+                                       playsinline="true"
+                                       x5-video-player-type="h5"
+                                       x5-video-orientation="h5"
+                                       x5-video-player-fullscreen="true"
+                                       @if (!string.IsNullOrWhiteSpace(item.Other)) { WriteLiteral($"poster=\"{item.Other}\""); }
+                                       preload="auto"></video>
+                            </div>
+                            <span class="video-title">@item.Data</span>
+                            <span class="date">@item.Key</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @*教学质量*@
+        @if ((images.Count(p => p.Type == SchoolImageType.SchoolHonor) + images.Count(p => p.Type == SchoolImageType.StudentHonor)) > 0)
+        {
+            <div>
+                <h5 class="title">教学质量</h5>
+                <ul class="img-content">
+                    @if (images.Any(p => p.Type == SchoolImageType.SchoolHonor))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">学校荣誉</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.SchoolHonor))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.SchoolHonor) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.SchoolHonor)</span>
+                            }
+                        </li>
+                    }
+                    @if (images.Any(p => p.Type == SchoolImageType.StudentHonor))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">学生荣誉</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.StudentHonor))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.StudentHonor) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.StudentHonor)</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @*师资展示*@
+        @if ((images.Count(p => p.Type == SchoolImageType.Principal) + images.Count(p => p.Type == SchoolImageType.Teacher)) > 0)
+        {
+            <div>
+                <h5 class="title">师资展示</h5>
+                <ul class="img-content">
+                    @if (images.Any(p => p.Type == SchoolImageType.Principal))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">校长风采</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.Principal))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.Principal) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.Principal)</span>
+                            }
+                        </li>
+                    }
+                    @if (images.Any(p => p.Type == SchoolImageType.Teacher))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">教师风采</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.Teacher))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.Teacher) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.Teacher)</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @*硬件设施*@
+        @if (images.Count(p => p.Type == SchoolImageType.Hardware) > 0)
+        {
+            <div>
+                <h5 class="title">硬件设施</h5>
+                <ul class="img-content" style="position: relative;">
+                    <li class="img_li">
+                        <span class="reader-title">学校设施</span>
+                        <ul class="img-list flex justify-content-between text-center">
+                            @{
+                                printIndex = 1;
+                            }
+                            @foreach (var item in images.Where(p => p.Type == SchoolImageType.Hardware))
+                            {
+                                <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                    <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                    <div>@item.ImageDesc</div>
+                                </li>
+                                printIndex++;
+                            }
+                        </ul>
+                        @if (images.Count(p => p.Type == SchoolImageType.Hardware) > 3)
+                        {
+                            <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.Hardware)</span>
+                        }
+                    </li>
+                </ul>
+            </div>
+        }
+
+        @*学生生活*@
+        @if ((images.Count(p => p.Type == SchoolImageType.CommunityActivities) + images.Count(p => p.Type == SchoolImageType.GradeSchedule) + images.Count(p => p.Type == SchoolImageType.Schedule) + images.Count(p => p.Type == SchoolImageType.Diagram)) > 0)
+        {
+
+            <div>
+                <h5 class="title">学生生活</h5>
+                <ul class="img-content">
+                    @if (images.Any(p => p.Type == SchoolImageType.CommunityActivities))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">社团活动</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.CommunityActivities))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.CommunityActivities) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.CommunityActivities)</span>
+                            }
+                        </li>
+                    }
+                    @if (images.Any(p => p.Type == SchoolImageType.GradeSchedule))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">各年级课程表</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.GradeSchedule))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.GradeSchedule) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.GradeSchedule)</span>
+                            }
+                        </li>
+                    }
+                    @if (images.Any(p => p.Type == SchoolImageType.Schedule))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">作息时间表</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.Schedule))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.Schedule) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.Schedule)</span>
+                            }
+                        </li>
+                    }
+                    @if (images.Any(p => p.Type == SchoolImageType.Diagram))
+                    {
+                        <li class="img_li">
+                            <span class="reader-title">校车路线</span>
+                            <ul class="img-list flex justify-content-between text-center">
+                                @{
+                                    printIndex = 1;
+                                }
+                                @foreach (var item in images.Where(p => p.Type == SchoolImageType.Diagram))
+                                {
+                                    <li @if (printIndex > 3) { WriteLiteral("style=\"display:none;\""); }>
+                                        <img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" />
+                                        <div>@item.ImageDesc</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @if (images.Count(p => p.Type == SchoolImageType.Diagram) > 3)
+                            {
+                                <span class="img-num text-center"><i class="icon"></i>@images.Count(p => p.Type == SchoolImageType.Diagram)</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </section>
+
+    <section class="tab">
+        <div class="swiper-container">
+            <ul class="tab-list swiper-wrapper text-center">
+                @if (videos.Any())
+                {
+                    <li class="swiper-slide">学校专访</li>
+                }
+                @if ((images.Count(p => p.Type == SchoolImageType.SchoolHonor) + images.Count(p => p.Type == SchoolImageType.StudentHonor)) > 0)
+                {
+                    <li class="swiper-slide">教学质量</li>
+                }
+                @if ((images.Count(p => p.Type == SchoolImageType.Principal) + images.Count(p => p.Type == SchoolImageType.Teacher)) > 0)
+                {
+                    <li class="swiper-slide">师资展示</li>
+                }
+                @if (images.Count(p => p.Type == SchoolImageType.Hardware) > 0)
+                {
+                    <li class="swiper-slide">硬件设施</li>
+                }
+                @if ((images.Count(p => p.Type == SchoolImageType.CommunityActivities) + images.Count(p => p.Type == SchoolImageType.GradeSchedule) + images.Count(p => p.Type == SchoolImageType.Schedule) + images.Count(p => p.Type == SchoolImageType.Diagram)) > 0)
+                {
+                    <li class="swiper-slide">学生生活</li>
+                }
+            </ul>
+        </div>
+    </section>
+
+    <div class="show_pic_content">
+        <div class="show_pic_content_top">
+            <div class="show_pic_content_close"></div>
+            <div class="show_pic_content_title" id="show_pic_content_title"></div>
+        </div>
+        <img class="show_pic_content_pic" id="show_pic_content_pic" src="" />
+        <div class="show_pic_content_foot">
+            <div class="show_pic_name" id="show_pic_name"></div>
+        </div>
+    </div>
+
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/school-picture-list.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            if ($('.swiper-slide').length > 0) {
+                $('.swiper-slide').first().addClass('active');
+            }
+        });
+    </script>
+</body>
+</html>

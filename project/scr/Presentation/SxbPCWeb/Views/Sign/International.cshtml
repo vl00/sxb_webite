@@ -1,0 +1,245 @@
+﻿@model IEnumerable<PMS.School.Domain.Entities.SEO_International.InternationalSchoolInfo>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.SelectedReading?.Title - 上学帮</title>
+    <meta name="keywords" content="@ViewBag.SelectedReading?.KeyWords">
+    <meta name="description" content="@ViewBag.SelectedReading?.Description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/home.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-registration.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 1)
+        </div>
+        <div class="container d-flex header-content clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <div class="local">
+                    <i></i>
+                    <span class="local-name">@ViewBag.LocalCity</span>
+                </div>
+            </div>
+            <div>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" value="@ViewBag.Name" class="input-keyword font-12 signsearch" data-channel='0'>
+                        <a></a>
+                    </div>
+                    <input type="button" value="搜索" class="btn-search font-14">
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0">
+                        <span style="@(((List<string>)ViewBag.HotSchoolWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix" style="display: flex">
+                            @foreach (var item in (List<string>)ViewBag.HotSchoolWord)
+                            {
+                                <li><a href="@Url.Action("list", "School",new { KeyWords=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="banner-box">
+        <!--广告1如果有广告图的时候把if-have-advertising-remove-this-class删掉-->
+        <div class="banner position-relative hidden">
+            <div class="swiper-container" id="school-regis-swipter">
+                <div id="swiperApm" class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a href="/" title="上学帮">
+                            <img src="@(ViewBag.StaticFile)/imgs/school-regis/2078.png" alt="" style="width: 100%;height: 100%;">
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-pagination-b swiper-pagination"></div>
+            </div>
+            <form action="" class="top-regis-box data">
+                <div class="content">
+                    <h1 class="title">广东国际高中招生报名中</h1>
+                    <div class="group">
+                        <input id="name" name="name" placeholder="您的称呼">
+                    </div>
+                    <div class="group">
+                        <input id="phone" name="phone" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength="11" placeholder="您的电话">
+                    </div>
+                    <div class="group">
+                        <span class="mycheckbox"></span>
+                        <span class="tips">同意上学帮为您推荐其他国际高中</span>
+                    </div>
+                    <button type="button" class="consult-btn submit-btn" data-signType="1" data-currentPostForm="0">马上报名</button>
+                    <div class="bottom-span">
+                        <a href="/home/principle?idx=4">隐私协议</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="guide-container clearfix">
+        <div class="guide-left"><img src="@(ViewBag.StaticFile)/imgs/school-regis/daodu.png" alt="导读"></div>
+        <div class="guide-right">
+            <p>
+                @ViewBag.SelectedReading?.SelectedReading
+            </p>
+        </div>
+    </div>
+
+    <section class="school-table-container">
+        <div class="school-table">
+            @*<h2>澳洲VCE课程学校一览表</h2>
+                <h3>择校咨询热线：400-0118-798</h3>*@
+            <ul class="scrool-table-list">
+                @if (Model?.Any() == true)
+                {
+                    foreach (var item in Model)
+                    {
+                        <li>
+                            <a href="/school/">
+                                @if (item.Only_Show_Log)
+                                {
+                                    <img src="https://cos.sxkid.com/v4source/pc/imgs/internationalpage/@item.ImagePath" alt="" />
+                                }
+                                else
+                                {
+                                    <div style="overflow: hidden; padding: 0px 20px;">
+                                        <img src="https://cos.sxkid.com/v4source/pc/imgs/internationalpage/@item.ImagePath" alt="" style="width:30%;height:64px;float:left;" />
+                                        <font style="float: left; line-height:84px;font-size: 20px; width: 65%; height: 84.5px; overflow: hidden; margin-left: 2%;">@item.SchoolName</font>
+                                    </div>
+                                }
+
+                                <div class="desc">
+                                    <span>@item.Introduction</span>
+                                </div>
+
+                                @if (item.Stages?.Any() == true)
+                                {
+                                    <div class="learning-stage">
+                                        <span class="title">学习阶段：</span>
+                                        <p class="tag">
+                                            @foreach (var stage in item.Stages)
+                                            {
+                                                <span>@stage</span>
+                                            }
+                                        </p>
+                                    </div>
+                                }
+                                @if (item.Course?.Any() == true)
+                                {
+                                    <div class="curriculum-system">
+                                        <span class="title">课程体系：</span>
+                                        <div class="tag">
+                                            @foreach (var course in item.Courses)
+                                            {
+                                                <span>@course</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </section>
+
+    <section class="consideration">
+        <h1 class="title text-center">选择国际学校/国际班要看什么!</h1>
+        <div class="consider-content">
+            <div class="consider-img">
+                <img src="@(ViewBag.StaticFile)/imgs/school-regis/gautam-krishnan-47gcGwUUHb0-unsplash@2x.png">
+            </div>
+            <div class="consider-text">
+                <img src="@(ViewBag.StaticFile)/imgs/school-regis/3461@3x.png">
+            </div>
+        </div>
+    </section>
+
+    <section class="reg-process">
+        <h1 class="title text-center">国际学校报名流程</h1>
+        <div class="process-img">
+            <!-- 流程大图 -->
+            <img src="@(ViewBag.StaticFile)/imgs/school-regis/3510@3x.png">
+        </div>
+    </section>
+
+    <section class="business-msg">
+        <div class="msg-content">
+            <div>
+                <span class="title">合作联系</span>
+            </div>
+            <div>
+                <span>联系号码：020-89623090 转接商务部</span>
+                <span>邮箱：market@sxkid.com</span>
+            </div>
+            <div>
+                <span>公司名称：广州市藏星网络科技有限公司</span>
+                <span>ICP备案号：粤ICP备13052028号</span>
+            </div>
+            <div>
+                <span>声明：提示此网页信息目的在于为考生报考广东国际高中提供信息参考，如有疑问，请以各学校正式公布数据为准。</span>
+            </div>
+        </div>
+    </section>
+
+    @* 普通报名 *@
+    @await Html.PartialAsync("_Popupregis")
+
+    @*快捷报名*@
+    @await Html.PartialAsync("_Quick")
+
+    @*报名成功*@
+    @await Html.PartialAsync("_Successalert")
+
+    @* 报名失败 *@
+    @await Html.PartialAsync("_Failalert")
+
+    @* 报名咨询 *@
+    @await Html.PartialAsync("_QRcodebox")
+
+    @* 报名提示 *@
+    @await Html.PartialAsync("_confirm")
+
+    <!-- 幕布 -->
+    <div class="curtain" style="z-index: 1; display: none;"></div>
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-registration/school-registration.js"></script>
+    
+    @*加载一次*@
+    @if (!string.IsNullOrEmpty(ViewBag.Name))
+    {
+        <script type="text/javascript">
+            $(function () {
+                $(".input-keyword").trigger("propertychange");
+            })
+        </script>
+    }
+    <script type="text/javascript">
+        $(function () {
+            $('.btn-search').click(function () {
+                var keyWord = $('.input-keyword').val();
+                window.location.href = "/school?keywords=" + keyWord;
+            });
+        });
+    </script>
+</body>
+</html>

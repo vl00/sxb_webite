@@ -1,0 +1,252 @@
+﻿<html lang="zh">
+@using Sxb.PCWeb.ViewModels
+@using Sxb.PCWeb.ViewModels.School
+@{
+    SchoolCommentCardViewModel school = ViewBag.SchoolCommentCard;
+    var Detail = ViewBag.CommentDetail;
+    var schoolName = school.SchoolName;
+    var shortSchoolNo = school.ShortSchoolNo;
+
+    var keywords = $"{Detail.UserInfo.NickName},{schoolName},上学帮";
+    var description = $"{schoolName}{Detail.Content}";
+    var title = $"{Detail.UserInfo.NickName}对{schoolName}的评价";
+
+    var headerBreadcrumb = HeaderBreadcrumb.Instance
+                    .SetChild("点评", "/comment")
+                    .SetChild(schoolName, $"/comment/school-{shortSchoolNo}")
+                    .SetChild("点评详情", "#")
+                    .Head;
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-details.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+</head>
+
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderPartial", 2)
+        </div>
+    </header>
+
+    <!-- 面包屑导航 - S -->
+    @await Html.PartialAsync("HeaderBreadcrumb", headerBreadcrumb, null)
+    <!-- 面包屑导航 - E -->
+
+    <section class="review-details">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                <div class="left-content d-block">
+                    <div class="comments-list">
+                        <div class="d-flex">
+                            <div class="client-data">
+                                <div class='photo'>
+                                    <img src="@Detail.UserInfo.HeadImager" alt="头像">
+                                </div>
+                                @if (Detail.UserInfo?.IsSchool == true && Detail.UserInfo?.IsTalent == true)
+                                {
+                                    <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+                                         class="icon-certification">
+                                    <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+                                         class="icon-certification">
+                                }
+                                else if (Detail.UserInfo?.IsSchool == true)
+                                {
+                                    <img src="@(ViewBag.StaticFile)/imgs/detail/schoolCertification@3x.png" alt="学校认证"
+                                         class="icon-certification">
+                                }
+                                else if (Detail.UserInfo?.IsTalent == true)
+                                {
+                                    <img src="@(ViewBag.StaticFile)/imgs/detail/weiboCertification@3x.png" alt="学校认证"
+                                         class="icon-certification">
+                                }
+                            </div>
+                            <div class="list-right">
+                                <span class='client-name font-13'>@Detail.UserInfo.NickName</span>
+                                <div class="client-comments-detail clearfix">
+                                    <div class="comments-star big-star-@(@Detail.CommentScore.AggStar)">
+                                        @if (Detail.CommentScore.IsAttend)
+                                        {
+                                            <ul class='comprehensive-list font-13 float-left'>
+                                                <li>师资 <span>@(Detail.CommentScore.TeachStar)星</span></li>
+                                                <li>硬件 <span>@(Detail.CommentScore.HardStar)星</span></li>
+                                                <li>环境 <span>@(Detail.CommentScore.EnvirStar)星</span></li>
+                                                <li>校风 <span>@(Detail.CommentScore.ManageStar)星</span></li>
+                                                <li>生活 <span>@(Detail.CommentScore.LifeStar)星</span></li>
+                                            </ul>
+                                        }
+                                        <div class="tab">
+                                            @if (Detail.IsEssence)
+                                            {<span class="essence font-12">精华</span>}
+                                            @if (Detail.CommentScore.IsAttend)
+                                            {<span class="person-tab d-block">过来人</span>}
+                                        </div>
+                                        @if (Detail.RumorRefuting)
+                                        {<img src="@(ViewBag.StaticFile)/imgs/detail/rumours.png" alt="辟谣" class="comments-rumours">}
+                                    </div>
+                                </div>
+                                <div class="font-15">
+                                    @Detail.Content
+                                </div>
+                                @if (Detail.Images != null && Detail.Images.Count > 0)
+                                {<div class="photo-scroll">
+                                        <div class="swiper-container answer-question-swiper" id='commentsPhoto'>
+                                            <div class="swiper-wrapper">
+                                                @foreach (var img in Detail.Images)
+                                                {
+                                                    <div class="swiper-slide"><img src="@img" alt="" data-img-url="@img"></div>
+                                                }
+                                            </div>
+                                            @if (Detail.Images.Count > 6)
+                                            {
+                                                <div class="swiper-button-prev swiper-button-black"></div>
+                                                <div class="swiper-button-next"></div>}
+                                        </div>
+                                    </div>}
+                                <div class="like">
+                                    <span class='font-13'>@Detail.AddTime</span>
+                                    <a href="javascript:;" class='collection float-right iconReport selected' data-reportType="3" data-reportId="@Detail.Id" title="举报">举报</a>
+                                    <a href="javascript:;" class='collection float-right collect @(Detail.IsCollection?"selected":"")' data-Id="@Detail.Id" data-type="3" title="收藏">收藏</a>
+                                    <a href="javascript:;" class="icon-like font-12 float-right @(Detail.IsLike?"selected":"")" data-Id="@Detail.Id" data-Type="1" title="点赞">@Detail.LikeTotal</a>
+                                    <a href="javascript:;" class="icon-comments font-12 float-right" title="评论">@Detail.ReplyTotal</a>
+                                </div>
+
+                                <a href="/comment/school-@Detail.School.ShortSchoolNo/" title="@(Detail.School?.SchoolName)" class="school-tab d-block font-16">
+                                    @(Detail.School?.SchoolName)
+                                    <div class="school-score-star score-@(Detail.School?.Stars)">
+                                        <span class=" font-12">@(Detail.School?.CommentTotal)条点评</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <p class="font-15 color-333 my-reply">我要回复</p>
+                        <textarea name="reply-comment" cols="30" rows="10" maxlength="300"
+                                  class="reply-textarea"></textarea>
+                        <a href="javascript:;" title="发表" data-Id="@Detail.Id" data-Type="1" data-ReplyId="" class="release bgc-blue release-comments">发表</a>
+                        <a href="javascript:;" title="匿名" class="comments-way">匿名</a>
+                        <a href="javascript:;" title="在读" class="comments-way">在读</a>
+                    </div>
+                    @if (ViewBag.HotReply != null && ViewBag.HotReply.Count > 0)
+                    {
+                        <div class="hot-reply">
+                            <h2 class="font-20 color-333 font-weight-bold">热门回复</h2>
+                            <ul class='comments-list'>
+                                @foreach (var reply in ViewBag.HotReply)
+                                {
+                                    @await Html.PartialAsync("_ReplySimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentReplyViewModel)reply)
+                                }
+                            </ul>
+                        </div>
+                    }
+                    <div class="hot-reply">
+                        <h2 class="font-20 color-333 font-weight-bold">最近回复</h2>
+
+                        @if (ViewBag.NewReply.Count > 0)
+                        {
+                            <ul class='comments-list'>
+                                @foreach (var reply in ViewBag.NewReply)
+                                {
+                                    @await Html.PartialAsync("_ReplySimpleItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentReplyViewModel)reply)
+                                }
+                            </ul>
+                            @if ((ViewBag.TotalPage / 10) > 1)
+                            {
+                                <nav class="page d-flex justify-content-end">
+                                    @(await Html.PartialAsync("PaginationGen", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                                   "Detail",
+                                   "Comment",
+                                   (int)(Math.Ceiling(ViewBag.TotalPage / 10.0)),
+                                   (int)ViewBag.PageSize,
+                                   (int)ViewBag.PageIndex,
+                                   (_this) => { return new { No = ViewBag.No, page = _this.CurrentPage - 1 }; },
+                                   (_pageItem, _this) => { return new { No = ViewBag.No, page = _pageItem }; },
+                                   (_this) => { return new { No = ViewBag.No, page = _this.CurrentPage + 1 }; }
+                                   )))
+                                </nav>
+                            }
+                        }
+                        else
+                        {
+                            <div class='school-review-list-no-comment-div'>
+                                <div class="text-center no-comment have-icon">
+                                    <p class="font-14"><i></i><span class="font-14 d-block">暂无回复，快来抢沙发！</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box" id="rightBanner">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="26" id="swiperSchoolAd-26" style="height: 205px;overflow: hidden !important;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 广告结束 -->
+                    <div class="hot-school">
+                        <h2 class="font-18 font-weight-bold">热门点评</h2>
+                        <ul class="hot-comment">
+                            @foreach (var item in ViewBag.HottestComment)
+                            {
+                                @await Html.PartialAsync("_HottestComment.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)item);
+                            }
+                        </ul>
+                    </div>
+                    <div class="hot-comment-school">
+                        <h2 class="font-18 font-weight-bold">热评学校</h2>
+                        <ul class="school-list">
+                            @{
+                                var HotSchoolComment = (List<Sxb.PCWeb.ViewModels.School.SchoolCommentCardViewModel>)ViewBag.HottestSchoolView;
+                                for (int i = 0; i < HotSchoolComment.Count(); i++)
+                                {
+                                    ViewBag.Level = i + 1;
+                                    @await Html.PartialAsync("_HotSchoolComment.cshtml", HotSchoolComment[i]);
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="https://cdn.sxkid.com/v4source/statistics.js?appid=1"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/school-detail/schoolDetail.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/upLoadImage.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+</body>
+
+</html>

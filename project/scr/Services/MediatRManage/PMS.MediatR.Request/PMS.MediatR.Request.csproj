@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="PaidQA - 复制\**" />
+    <EmbeddedResource Remove="PaidQA - 复制\**" />
+    <None Remove="PaidQA - 复制\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PaidQA\PMS.PaidQA.Domain\PMS.PaidQA.Domain.csproj" />
+  </ItemGroup>
+</Project>

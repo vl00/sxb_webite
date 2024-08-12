@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="ModelDto\ApiModelDto\" />
+    <Folder Include="Services\PartTimeJob\" />
+    <Folder Include="Services\Question\" />
+    <Folder Include="Services\Answer\" />
+    <Folder Include="Services\Question\" />
+    <Folder Include="IServices\CommonService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Services\.DS_Store" />
+    <None Remove=".DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\ProductManagement.Infrastructure\ProductManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Search\PMS.Search.Application\PMS.Search.Application.csproj" />
+    <ProjectReference Include="..\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\MqManage\PMS.RabbitMQ.Message\PMS.RabbitMQ.Message.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\School\PMS.School.Domain\PMS.School.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IServices\IOperationDataService.cs" />
+    <Compile Remove="Services\Operation\OperationDataService.cs" />
+  </ItemGroup>
+</Project>

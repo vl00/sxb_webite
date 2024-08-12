@@ -1,0 +1,156 @@
+﻿@model PMS.UserManage.Application.ModelDto.Login.Get
+@{
+    ViewData["Title"] = "升学达人进驻认证";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+    List <PMS.Infrastructure.Domain.Entities.Local_V2> provinceList = ViewBag.ProvinceList;
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/authentication/authentication-home.css" />
+}
+<section>
+    <div class="box">
+        <form id="loginForm">
+            <div class="phone">
+                <h2>手机号码：</h2>
+                <input type="hidden" name="nationCode" value="86" />
+                <div class="input"><input id="txtMobile" type="number" placeholder="请输入您的手机号码"></div>
+                <input type="hidden" id="mobile" name="mobile" />
+                <p class="tips">*手机号码不合法</p>
+            </div>
+            <div class="code">
+                <h2>验证码：</h2>
+                <div class="input flex">
+                    <input id="txtRnd" name="rnd" type="number" placeholder="请输入验证码">
+                    <a class="get-code">获取验证码</a>
+                </div>
+            </div>
+            <div class="name">
+                <h2>官方注册达人名</h2>
+                <div class="input"><input name="nickname" type="text" placeholder="请输入您的昵称"></div>
+                <p class="tips">*昵称请限制在12个字符以内</p>
+            </div>
+            <div class="local">
+                <h2>所在地</h2>
+                <div class="flex local-select">
+                    <div class="select">
+                        <div>省</div>
+                        <select name="province" id="province" data-default="省">
+                            <option value="">请选择</option>
+                            @foreach (var province in provinceList)
+                            {
+                                <option value="@province.id">@province.name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="select">
+                        <div>市</div>
+                        <select name="city" id="city" data-default="市">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="type">
+                <h2>注册类型</h2>
+                <div id="authType" class="flex radio">
+                    <span class="active" data-type="personal">个人</span>
+                    <span data-type="company">公司</span>
+                </div>
+            </div>
+            <input type="hidden" name="kid" value="@Model.Kid" />
+        </form>
+        <div class="clause flex">
+            <i></i><p>我同意并遵守<a href="@Url.Action("ContentAuthorization","Agreement")">《上学帮内容授权合作协议》</a>、<a href="@Url.Action("PrivilegeUser","Agreement")">《上学帮特权会员服务协议》</a></p>
+        </div>
+        <a id="submit" class="register text-center">注册</a>
+    </div>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/authentication/authentication-home.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileHost/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(Model.PublicKey)';
+        $('#txtRnd').val('');
+        $('#submit').click(function () {
+            var _this = $(this);
+            if (_this.hasClass('can-register')) {
+                _this.removeClass('can-register');
+                if ($('#txtMobile').val() != '') {
+                    $('#mobile').val(do_encrypt($('#txtMobile').val()));
+                } else {
+                    _this.addClass('can-register');
+                    return;
+                }
+                if ($('#txtRnd').val() == '') {
+                    $.prompt('请输入短信验证码');
+                    return;
+                }
+                $.loading();
+                $.ajax({
+                    url:'/Login',
+                    type: 'post',
+                    data: $('#loginForm').serialize(),
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            $.loading('正在跳转...')
+                            var authType = $('#authType span.active').data('type');
+                            location.href='/Verify/InviteSubmit?authType=' + authType;
+                        } else {
+                            $.loading('remove');
+                            $.prompt(json.errorDescription);
+                        }
+                    },
+                    complete: function () {
+                        _this.addClass('can-register');
+                    }
+                });
+            }
+        });
+
+    //====================================================================================
+
+    function do_encrypt(plaintext) {
+        var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+        var doOaepPadding = false;
+        // ------------------------------------------------
+        // Encrypt
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import the RSA Key information.
+        rsa.ImportParameters(GetRsaKey(false));
+        // Encrypt the passed byte array and specify OAEP padding.
+        var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+        var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+        // ------------------------------------------------
+        // Display the encrypted data.
+        //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+        return encryptedString;
+    }
+    function GetRsaKey(includePrivateParameters) {
+        var xmlParams = publickey;
+        // ------------------------------------------------
+        // RSA Keys
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import parameters from xml.
+        rsa.FromXmlString(xmlParams);
+        // Export RSA key to RSAParameters and include:
+        //    false - Only public key required for encryption.
+        //    true  - Private key required for decryption.
+        return rsa.ExportParameters(includePrivateParameters);
+    }
+    function GetNewRsaProvider(dwKeySize) {
+        // Create a new instance of RSACryptoServiceProvider.
+        if (!dwKeySize) dwKeySize = 512;
+        return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+
+
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.Message.MessageModel>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="system-msg-list">
+        @foreach (var message in Model)
+        {
+            <li data-id="@message.Id">
+                <a class="flex">
+                    <div class="mine-icon"><i></i></div>
+                    <div>
+                        <div class="user-msg flex justify-content-between">
+                            <div><span class="notice">通知</span></div>
+                            <span class="time-ago">@message.Time</span>
+                        </div>
+                        <p class="list-content">@message.Content</p>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

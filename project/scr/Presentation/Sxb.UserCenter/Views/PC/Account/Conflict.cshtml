@@ -1,0 +1,58 @@
+﻿@model PMS.UserManage.Application.ModelDto.Account.Conflict
+@{
+    ViewData["Title"] = "账号冲突";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/account-conflict.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">账号冲突</span>
+    <span class=""></span>
+</header>
+
+<section class="account-conflict mt">
+    <div>
+        <h5 class="title">请先验证冲突账号</h5>
+        <!-- 查看冲突 显示 -->
+        @if (Model.dataType > 0)
+        {
+            <p class="msg">请确认冲突账号是否继续使用，如放弃使用可直接点击确定转绑”</p>
+        }
+        else
+        {
+            <p class="msg">请手动登录冲突账号确认是否继续使用，如放弃使用可通过该账号更换手机号释放“@Model.data”</p>
+        }
+    </div>
+    <div class="list">
+        <ul>
+            <li class="flex">
+                <div class="img-box"><img src="@Model.myInfo.HeadImgUrl" alt="@Model.myInfo.NickName"></div>
+                <div class="user-name">当前账号昵称：<span>@Model.myInfo.NickName</span></div>
+            </li>
+            @foreach (var user in Model.list)
+            {
+                <li class="flex">
+                    <div class="img-box"><img src="@user.HeadImgUrl" alt="@user.NickName"></div>
+                    <div>
+                        <div class="user-name">冲突账号昵称：<span>@user.NickName</span></div>
+                        @if (!string.IsNullOrEmpty(Model.data))
+                        {
+                            <div class="phone-num">@Model.data</div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- 查看冲突 显示 -->
+    @if (Model.dataType > 0)
+    {
+        <a href="@Url.Action("Bind", new { dataType=Model.dataType, confirm = true })" class="btn text-center">转绑</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Logout", new { redirect_uri = Url.Action("Index") })" class="btn text-center">切换到冲突账号</a>
+    }
+</section>

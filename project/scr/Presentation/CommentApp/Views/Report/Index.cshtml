@@ -1,0 +1,57 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    
+    <title>complaint</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/complaint.css">
+</head>
+<body>
+    <input id="report" type="hidden" data-DataSourceId="@ViewBag.ReportDataSource["dataSource"]" data-type="@ViewBag.ReportDataSource["reportType"]" data-answerId="@ViewBag.ReportDataSource["answer"]" data-answerReplyId="@ViewBag.ReportDataSource["answerreplyid"]"  />
+    <section>
+        <div class="title">请选择举报的原因</div>
+        <ul class="complaint-reason">
+            @foreach (var item in ViewBag.Reports)
+            {
+                <li class="flex justify-content-between" data-Id="@item.Id">@item.TypeName<span class="round"><i></i></span></li>
+            }
+        </ul>
+        <div class="title">请填写理由（选填）</div>
+        <textarea name="" id="reportContent" cols="30" rows="10" placeholder="可指出引导购买、推广非平台产品的内容"></textarea>
+        <div class="title">请上传图片证据（选填）</div>
+        <div class="upload-img flex">
+            <ul class="img-list flex">
+                <form>
+                    <ul class="img-list flex">
+                        <li class="upload-btn text-center" data-isUploadImage="false">
+                            <img src="" alt="">
+                            <span style="">
+                                <p><i class="icon"></i></p>
+                                <p>上传照片</p>
+                            </span>
+                            <input id="a" type="file" name="image" accept="image/*">
+                        </li>
+                    </ul>
+                </form>
+            </ul>
+        </div>
+        <div class="submit-btn text-center">
+            <a id="commitReport" data-iscommit="false">提交</a>
+        </div>
+    </section>
+</body>
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="@ViewBag.StaticFile/js/exif.js"></script>
+<script src="@ViewBag.StaticFile/js/UploadImager.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+<script src="@ViewBag.StaticFile/js/complaint.js"></script>
+</html>

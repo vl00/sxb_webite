@@ -1,0 +1,906 @@
+﻿@using PMS.School.Domain.Dtos;
+@using PMS.School.Domain.Common;
+@using Sxb.Web.Models.Comment
+@using Sxb.Web.Models.Question
+@using PMS.CommentsManage.Application.Common
+
+@{
+    Layout = null;
+    var fscore = (List<SchoolExtScore>)ViewBag.fScore;
+    var findex = (List<SchoolExtScoreIndex>)ViewBag.fScoreIndex;
+    var lscore = (List<SchoolExtScore>)ViewBag.lScore;
+    var lindex = (List<SchoolExtScoreIndex>)ViewBag.lScoreIndex;
+    CommentList fcommentDto = (CommentList)ViewBag.fSelectedComment;
+    CommentList lcommentDto = (CommentList)ViewBag.lSelectedComment;
+    QuestionVo fquestionDetail = (QuestionVo)ViewBag.fSelectedQuestion;
+    QuestionVo lquestionDetail = (QuestionVo)ViewBag.lSelectedQuestion;
+    var frank = ViewBag.frank as PMS.School.Domain.Dtos.SchoolExtSimpleDto;
+    var lrank = ViewBag.lrank as PMS.School.Domain.Dtos.SchoolExtSimpleDto;
+    var fArticle = ViewBag.fArticle as IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>;
+    var lArticle = ViewBag.lArticle as IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>;
+    var fhightSchoolAchievement = ViewBag.AchData as HighSchoolAchievement;
+    var lhightSchoolAchievement = ViewBag.AchData as HighSchoolAchievement;
+    var fambient = (AmbientScore)ViewBag.fAmbient;
+    var lambient = (AmbientScore)ViewBag.lAmbient;
+    var fViweCountTotal = 0;
+    var lViweCountTotal = 0;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    
+    <title>PK详情</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/pk-detail.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">PK详情</span>
+        <span class=""></span>
+    </header>
+
+    <section class="mt">
+        <div class="school-name flex justify-content-between">
+            <div>
+                <h5>@(ViewBag.fName)</h5>
+                <ul class="tag flex text-center">
+                    <li>@ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)ViewBag.fType)</li>
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.fLodging))
+                    {
+                        <li>@ViewBag.fLodging</li>
+                    }
+
+                    @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+                </ul>
+            </div>
+            <div>
+                <h5>@(ViewBag.lName)</h5>
+                <ul class="tag flex text-center">
+                    <li>@ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)ViewBag.lType)</li>
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.lLodging))
+                    {
+                        <li>@ViewBag.lLodging</li>
+                    }
+
+                    @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+                </ul>
+            </div>
+        </div>
+
+        <div class="school-score text-center">
+            <input type="hidden" data-grade='[{"name":"综合","score":@(fscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)},{"name":"师资","score":@(fscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)},{"name":"硬件","score":@(fscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)},{"name":"课程","score":@(fscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)},{"name":"学术","score":@(fscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)},{"name":"费用","score":@(fscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)},{"name":"周边","score":@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)}]' class="grade-1">
+            <input type="hidden" data-grade='[{"name":"综合","score":@(lscore.FirstOrDefault(p => p.IndexId == 15)?.Score ?? 0)},{"name":"师资","score":@(lscore.FirstOrDefault(p => p.IndexId == 16)?.Score ?? 0)},{"name":"硬件","score":@(lscore.FirstOrDefault(p => p.IndexId == 17)?.Score ?? 0)},{"name":"课程","score":@(lscore.FirstOrDefault(p => p.IndexId == 18)?.Score ?? 0)},{"name":"学术","score":@(lscore.FirstOrDefault(p => p.IndexId == 19)?.Score ?? 0)},{"name":"费用","score":@(lscore.FirstOrDefault(p => p.IndexId == 20)?.Score ?? 0)},{"name":"周边","score":@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)}]' class="grade-2">
+            <h5>学校总评</h5>
+            <div class="flex score-contrast">
+                @if (fscore != null && fscore.Count > 0)
+                {
+                    <span>@(fscore.FirstOrDefault(p => p.IndexId == 22)?.Score ?? 0)</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未评分</span>
+                }
+                <i>总评</i>
+                <!-- <span>75</span> -->
+                @if (lscore != null && lscore.Count > 0)
+                {
+                    <span>@(lscore.FirstOrDefault(p => p.IndexId == 22)?.Score ?? 0)</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未评分</span>
+                }
+            </div>
+            <div id="echearts" style="height: 5rem; margin-top: .8rem; position: relative; bottom: .5rem;"></div>
+            <a href="@Url.Action("ExtScorePK", "PK", new { fextId = ViewBag.fExtId, lextId = ViewBag.lExtId, fsid = ViewBag.fSid, lsid = ViewBag.lSid })" class="check-more">查看更多&gt;</a>
+        </div>
+
+        <div class="school-message text-center">
+            <h5>基本信息</h5>
+            <div class="flex message-list">
+                @if (ViewBag.fDistance == null)
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                else
+                {
+                    <span>@(Math.Round((decimal)(ViewBag.fDistance / 1000), 2) + "km")</span>
+                }
+                <i>距离</i>
+                @if (ViewBag.lDistance == null)
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                else
+                {
+                    <span>@(Math.Round((decimal)(ViewBag.lDistance / 1000), 2) + "km")</span>
+                }
+            </div>
+            <div class="flex message-list">
+                @if (!string.IsNullOrWhiteSpace(ViewBag.fLodging))
+                {
+                    <span>@ViewBag.fLodging</span>
+                }
+                <i>走读/寄宿</i>
+                @if (!string.IsNullOrWhiteSpace(ViewBag.lLodging))
+                {
+                    <span>@ViewBag.lLodging</span>
+                }
+            </div>
+            <div class="flex message-list">
+                @if (ViewBag.fCanteen == true)
+                {
+                    <span>有</span>
+                }
+                else if (ViewBag.fCanteen == false)
+                {
+                    <span>无</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                <i>有无饭堂</i>
+                @if (ViewBag.lCanteen == true)
+                {
+                    <span>有</span>
+                }
+                else if (ViewBag.lCanteen == false)
+                {
+                    <span>无</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+            </div>
+            <div class="flex message-list">
+                @if (ViewBag.fTuition != null)
+                {
+                <span>@(ViewBag.fTuition >= 10000 ? Math.Round((decimal)(ViewBag.fTuition / 10000), 2) + "万" : ViewBag.fTuition.ToString())元/年</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                <i>学费</i>
+                @if (ViewBag.lTuition != null)
+                {
+                    <span>@(ViewBag.fTuition >= 10000 ? Math.Round((decimal)(ViewBag.fTuition / 10000), 2) + "万" : ViewBag.fTuition.ToString())元/年</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+            </div>
+            <div class="flex message-list">
+                @if (ViewBag.fStudentcount == null)
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                else
+                {
+                    <span>@(ViewBag.fStudentcount.ToString())</span>
+                }
+                <i>学生人数</i>
+                @if (ViewBag.lStudentcount == null)
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                else
+                {
+                    <span>@(ViewBag.lStudentcount.ToString())</span>
+                }
+            </div>
+            <div class="flex message-list">
+                @if (ViewBag.fStudentcount != null && ViewBag.fTeachercount != null && ViewBag.fStudentcount != 0)
+                {
+                    <span>@Html.Raw(ViewBag.fTeaProportion)</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+                <i>师生比</i>
+                @if (ViewBag.lStudentcount != null && ViewBag.lTeachercount != null && ViewBag.lStudentcount != 0)
+                {
+                    <span>@Html.Raw(ViewBag.lTeaProportion)</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未收录</span>
+                }
+            </div>
+            <div class="flex message-list">
+                <ul class="flex">
+                    @if (((List<KeyValueDto<string>>)ViewBag.fAuthentication).Count() > 0)
+                    {
+                        @foreach (var item in (List<KeyValueDto<string>>)ViewBag.fAuthentication)
+                        {
+                            <li>@(item.Key)</li>
+                        }
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </ul>
+                <i>学校认证</i>
+                <ul class="flex">
+                    @if (((List<KeyValueDto<string>>)ViewBag.lAuthentication).Count() > 0)
+                    {
+                        @foreach (var item in (List<KeyValueDto<string>>)ViewBag.lAuthentication)
+                        {
+                            <li>@(item.Key)</li>
+                        }
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </ul>
+            </div>
+            <div class="flex message-list">
+                <ul class="flex">
+                    @if (((List<KeyValueDto<string>>)ViewBag.fCharacteristic).Count() > 0)
+                    {
+                        @foreach (var item in (List<KeyValueDto<string>>)ViewBag.fCharacteristic)
+                        {
+                            <li>@(item.Key)</li>
+                        }
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </ul>
+                <i>特色课程</i>
+                <ul class="flex">
+                    @if (((List<KeyValueDto<string>>)ViewBag.lCharacteristic).Count() > 0)
+                    {
+                        @foreach (var item in (List<KeyValueDto<string>>)ViewBag.lCharacteristic)
+                        {
+                            <li>@(item.Key)</li>
+                        }
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="evaluate text-center">
+            <h5>家长评价</h5>
+            <div class="flex evaluate-list total">
+                @if (ViewBag.fscores != null && (int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.AggScore) > 0)
+                {
+                    <span>@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.AggScore))星</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未评分</span>
+                }
+                <i>评价总分</i>
+                @if (ViewBag.lscores != null && (int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.AggScore) > 0)
+                {
+                    <span>@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.AggScore))星</span>
+                }
+                else
+                {
+                    <span class="not-data">暂未评分</span>
+                }
+
+            </div>
+            <div class="flex evaluate-list star">
+                @if (ViewBag.fscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.TeachScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+                <i>师资</i>
+                @if (ViewBag.lscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.TeachScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+            </div>
+            <div class="flex evaluate-list star">
+                @if (ViewBag.fscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.HardScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+                <i>硬件</i>
+                @if (ViewBag.lscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.HardScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+            </div>
+            <div class="flex evaluate-list star">
+                @if (ViewBag.fscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.LifeScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+                <i>校风</i>
+                @if (ViewBag.lscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.LifeScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+            </div>
+            <div class="flex evaluate-list star">
+                @if (ViewBag.fscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.EnvirScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+                <i>环境</i>
+                @if (ViewBag.lscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.EnvirScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+
+            </div>
+            <div class="flex evaluate-list star">
+                @if (ViewBag.fscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.fscores.ManageScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+                <i>活动</i>
+                @if (ViewBag.lscores != null)
+                {
+                    <span class="star-@((int)SchoolScoreToStart.GetCurrentSchoolstart(ViewBag.lscores.ManageScore))"></span>
+                }
+                else
+                {
+                    <span class="star-0"></span>
+                }
+            </div>
+
+            <div class="flex comment-message">
+                <div>
+                    @if (ViewBag.fComments > 0)
+                    {
+                        <h6>@(ViewBag.fComments)条点评</h6>
+                    }
+                    else
+                    {
+                        <h6>0条点评</h6>
+                    }
+                    <ul class="flex">
+                        @if (ViewBag.fcollComments > 0)
+                        {
+                            <li>@(ViewBag.fcollComments)<span>关注</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>关注</span></li>
+                        }
+                        @if (fcommentDto != null && fcommentDto.IsLike)
+                        {
+                            <li>@(ViewBag.fCommentLike)<span>点赞</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>点赞</span></li>
+                        }
+                        @if (ViewBag.fCommentViews > 0)
+                        {
+                            <li>@(ViewBag.fCommentViews)<span>热度</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>热度</span></li>
+                        }
+                        @if (ViewBag.fReplyCount > 0)
+                        {
+                            <li>@(ViewBag.fReplyCount)<span>回复</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>回复</span></li>
+                        }
+                    </ul>
+                    <a href="/SchoolComment/Index?SchoolId=@(ViewBag.fExtId)">查看点评&gt;</a>
+                </div>
+                <div>
+                    @if (ViewBag.lComments > 0)
+                    {
+                        <h6>@(ViewBag.lComments)条点评</h6>
+                    }
+                    else
+                    {
+                        <h6>0条点评</h6>
+                    }
+                    <ul class="flex">
+                        @if (ViewBag.lcollComments > 0)
+                        {
+                            <li>@(ViewBag.lcollComments)<span>关注</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>关注</span></li>
+                        }
+                        @if (lcommentDto != null && lcommentDto.IsLike)
+                        {
+                            <li>@(ViewBag.lCommentLike)<span>点赞</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>点赞</span></li>
+                        }
+                        @if (ViewBag.lCommentViews > 0)
+                        {
+                            <li>@(ViewBag.lCommentViews)<span>热度</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>热度</span></li>
+                        }
+                        @if (ViewBag.lReplyCount > 0)
+                        {
+                            <li>@(ViewBag.lReplyCount)<span>回复</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>回复</span></li>
+                        }
+                    </ul>
+                    <a href="/SchoolComment/Index?SchoolId=@(ViewBag.lExtId)">查看点评&gt;</a>
+                </div>
+            </div>
+
+        </div>
+
+        @if ((frank != null && frank.Ranks != null && frank.Ranks.Count > 0) || (lrank != null && lrank.Ranks != null && lrank.Ranks.Count > 0))
+        {
+            <div class="school-rank">
+                <h5 class="text-center">学校排行</h5>
+                <div class="flex">
+                    @if (frank != null && frank.Ranks != null && frank.Ranks.Count > 0)
+                    {
+                        <div>
+                            <h6 class="text-center">@(frank.Ranks[0].Count)次上榜</h6>
+                            @foreach (var item in frank.Ranks)
+                            {
+                                <p>@item.Title - 第@(item.Ranking)名</p>
+                            }
+                            <a href="@Url.Action("list","schoolrank",new {schoolId=ViewBag.fExtId })" class="text-center">查看榜单&gt;</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未上榜</span>
+                    }
+                    @if (lrank != null && lrank.Ranks != null && lrank.Ranks.Count > 0)
+                    {
+                        <div>
+                            <h6 class="text-center">@(lrank.Ranks[0].Count)次上榜</h6>
+                            @foreach (var item in lrank.Ranks)
+                            {
+                                <p>@item.Title - 第@(item.Ranking)名</p>
+                            }
+                            <a href="@Url.Action("list","schoolrank",new {schoolId=ViewBag.lExtId })" class="text-center">查看榜单&gt;</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未上榜</span>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="school-qa text-center">
+            <h5>学校问答</h5>
+            <div class="flex qa-message">
+                <div>
+                    @if (ViewBag.fQuestionTotalCount > 0)
+                    {
+                        <h6>@(ViewBag.fQuestionTotalCount) 条问题</h6>
+                    }
+                    else
+                    {
+                        <h6>0条问题</h6>
+                    }
+
+                    <ul class="flex">
+                        @if (ViewBag.fcollquestionCount > 0)
+                        {
+                            <li>@(ViewBag.fcollquestionCount)<span>关注</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>关注</span></li>
+                        }
+
+                        @if (ViewBag.fQuestionLikeCount > 0)
+                        {
+                            <li>@(ViewBag.fQuestionLikeCount)<span>点赞</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>点赞</span></li>
+                        }
+                        @if (ViewBag.fQuestionViews > 0)
+                        {
+                            <li>@(ViewBag.fQuestionViews)<span>热度</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>热度</span></li>
+                        }
+                        @if (ViewBag.fQuestionAnswerCount > 0)
+                        {
+                            <li>@(ViewBag.fQuestionAnswerCount)<span>回复</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>回复</span></li>
+                        }
+                    </ul>
+                    <a href="/Question/Index?SchoolId=@(ViewBag.fExtId)">查看问题&gt;</a>
+                </div>
+
+                <div>
+                    @if (ViewBag.lQuestionTotalCount > 0)
+                    {
+                        <h6>@(ViewBag.lQuestionTotalCount) 条问题</h6>
+                    }
+                    else
+                    {
+                        <h6>0条问题</h6>
+                    }
+
+                    <ul class="flex">
+                        @if (ViewBag.lcollquestionCount > 0)
+                        {
+                            <li>@(ViewBag.lcollquestionCount)<span>关注</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>关注</span></li>
+                        }
+                        @if (ViewBag.lQuestionLikeCount > 0)
+                        {
+                            <li>@(ViewBag.lQuestionLikeCount)<span>点赞</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>点赞</span></li>
+                        }
+                        @if (ViewBag.lQuestionViews > 0)
+                        {
+                            <li>@(ViewBag.lQuestionViews)<span>热度</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>热度</span></li>
+                        }
+                        @if (ViewBag.lQuestionAnswerCount > 0)
+                        {
+                            <li>@(ViewBag.lQuestionAnswerCount)<span>回复</span></li>
+                        }
+                        else
+                        {
+                            <li>0<span>回复</span></li>
+                        }
+                    </ul>
+                    <a href="/Question/Index?SchoolId=@(ViewBag.lExtId)">查看问题&gt;</a>
+                </div>
+
+            </div>
+        </div>
+
+        @if (fhightSchoolAchievement != null || lhightSchoolAchievement != null)
+        {
+            <div class="school-up">
+                <h5 class="text-center">升学情况</h5>
+                <div class="flex school-up-list text-center">
+                    @if (fhightSchoolAchievement?.Keyundergraduate != null)
+                    {
+                        <span>@(fhightSchoolAchievement.Keyundergraduate + "%")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                    <i>重本率</i>
+                    @if (lhightSchoolAchievement?.Keyundergraduate != null)
+                    {
+                        <span>@(lhightSchoolAchievement.Keyundergraduate + "%")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </div>
+                <div class="flex school-up-list text-center">
+                    @if (fhightSchoolAchievement?.Undergraduate != null)
+                    {
+                        <span>@(fhightSchoolAchievement.Undergraduate + "%")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                    <i>本科率</i>
+                    @if (lhightSchoolAchievement?.Undergraduate != null)
+                    {
+                        <span>@(lhightSchoolAchievement.Undergraduate + "%")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </div>
+                <div class="flex school-up-list peop-num text-center">
+                    @if (fhightSchoolAchievement?.Count != null)
+                    {
+                        <span>@(fhightSchoolAchievement.Count + "人")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                    <i>高优线录取人数</i>
+                    @if (lhightSchoolAchievement?.Count != null)
+                    {
+                        <span>@(lhightSchoolAchievement.Count + "人")</span>
+                    }
+                    else
+                    {
+                        <span class="not-data">暂未收录</span>
+                    }
+                </div>
+
+                @{
+                    var fAchievement = ViewBag.fAchievement as List<KeyValueDto<Guid, string, double>>;
+                    var lAchievement = ViewBag.lAchievement as List<KeyValueDto<Guid, string, double>>;
+                }
+                @if ((fAchievement != null && fAchievement.Count > 0) || (lAchievement != null && lAchievement.Count > 0))
+                {
+                    <div class="flex graduate-list">
+                        @if (fAchievement != null && fAchievement.Count > 0)
+                        {
+                            <div>
+                                @foreach (var item in fAchievement)
+                                {
+                                    <p>@item.Value<span>@(item.Message)人</span></p>
+                                }
+                                <a href="@Url.Action("ExtAchievement", "School",
+                                new
+                                {
+                                    sid = ViewBag.fSid,
+                                    extId = ViewBag.fExtId,
+                                    grade = ViewBag.fGrade,
+                                    type = ViewBag.fType
+                                })" class="text-center">更多信息&gt;</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="not-data">暂未收录</span>
+                        }
+                        <i>上届学生毕业去向</i>
+                        @if (lAchievement != null && lAchievement.Count > 0)
+                        {
+                            <div>
+                                @foreach (var item in lAchievement)
+                                {
+                                    <p>@item.Value<span>@(item.Message)人</span></p>
+                                }
+                                <a href="@Url.Action("ExtAchievement", "School",
+                                new
+                                {
+                                    sid = ViewBag.lSid,
+                                    extId = ViewBag.lExtId,
+                                    grade = ViewBag.lGrade,
+                                    type = ViewBag.lType
+                                })" class="text-center">更多信息&gt;</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="not-data">暂未收录</span>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        @if (fambient != null || lambient != null)
+        {
+            <div class="ambient text-center">
+                <h5>周边环境<p class="tips">（周边3公里内）</p></h5>
+                <div class="flex score-contrast">
+                    <span>@(fscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                    <i>周边</i>
+                    <span>@(lscore.FirstOrDefault(p => p.IndexId == 21)?.Score ?? 0)</span>
+                </div>
+                <input type="hidden" data-ambient='[{"name":"周边舒适度","score":@(fscore.FirstOrDefault(p => p.IndexId == 5)?.Score ?? 0)},{"name":"周边安全性","score":@(fscore.FirstOrDefault(p => p.IndexId == 7)?.Score ?? 0)},{"name":"交通便利性","score":@(fscore.FirstOrDefault(p => p.IndexId == 6)?.Score ?? 0)}]' class="ambient-1">
+                <input type="hidden" data-ambient='[{"name":"周边舒适度","score":@(lscore.FirstOrDefault(p => p.IndexId == 5)?.Score ?? 0)},{"name":"周边安全性","score":@(lscore.FirstOrDefault(p => p.IndexId == 7)?.Score ?? 0)},{"name":"交通便利性","score":@(lscore.FirstOrDefault(p => p.IndexId == 6)?.Score ?? 0)}]' class="ambient-2">
+                <div id="echearts2" style="height: 4.5rem; margin-top: .5rem;"></div>
+                <div style="margin-top: -.7rem;" class="list-content">
+                    <div class="flex school-up-list text-center">
+                        @if (fambient.Library != 0)
+                        {
+                            <span>@(fambient.Library)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        <i>图书馆</i>
+                        @if (lambient.Library != 0)
+                        {
+                            <span>@(lambient.Library)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </div>
+                    <div class="flex school-up-list text-center">
+                        @if (fambient.BookMarket != 0)
+                        {
+                            <span>@(fambient.BookMarket)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        <i>书店</i>
+                        @if (lambient.BookMarket != 0)
+                        {
+                            <span>@(lambient.BookMarket)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </div>
+                    <div class="flex school-up-list peop-num text-center">
+                        @if (fambient.Poiinfo != 0)
+                        {
+                            <span>@(fambient.Poiinfo)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        <i>机构</i>
+                        @if (lambient.Poiinfo != 0)
+                        {
+                            <span>@(lambient.Poiinfo)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </div>
+                    <div class="flex school-up-list text-center">
+                        @if (fambient.Metro != 0)
+                        {
+                            <span>@(fambient.Metro)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        <i>地图线路数</i>
+                        @if (lambient.Metro != 0)
+                        {
+                            <span>@(lambient.Metro)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </div>
+                    <div class="flex school-up-list peop-num text-center">
+                        @if (fambient.Bus != 0)
+                        {
+                            <span>@(fambient.Bus)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        <i>公交站点数</i>
+                        @if (lambient.Bus != 0)
+                        {
+                            <span>@(lambient.Bus)</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </div>
+                </div>
+                <a href="@Url.Action("ExtAmbientPK","PK",new {fextId=ViewBag.fExtId,lextId=ViewBag.lExtId,fsid=ViewBag.fSid,lsid=ViewBag.lSid })">查看更多&gt;</a>
+            </div>
+        }
+        @if ((fArticle != null && fArticle.Count() > 0) || (lArticle != null && lArticle.Count() > 0))
+        {
+            <div class="article text-center">
+                <h5>学校动态</h5>
+                <div class="flex article-message">
+                    <div>
+                        <h6>@((int)ViewBag.fTotal) 篇攻略</h6>
+                        <ul class="flex">
+                            @foreach (var item in fArticle)
+                            {
+                                fViweCountTotal += item.ViweCount;
+                            }
+                            <li>@ViewBag.fcollArticle<span>关注</span></li>
+                            <li>@fViweCountTotal<span>热度</span></li>
+                        </ul>
+                        @if (fArticle != null && fArticle.Count() > 0)
+                        {
+                            <a href="@Url.Action("ListSchoolDynamic","Article",new {schoolId=ViewBag.fExtId })">查看攻略&gt;</a>
+                        }
+
+                    </div>
+                    <div>
+                        <h6>@((int)ViewBag.lTotal) 篇攻略</h6>
+                        <ul class="flex">
+                            @foreach (var item2 in lArticle)
+                            {
+                                lViweCountTotal += item2.ViweCount;
+                            }
+                            <li>@ViewBag.lcollArticle<span>关注</span></li>
+                            <li>@lViweCountTotal<span>热度</span></li>
+                        </ul>
+                        @if (lArticle != null && lArticle.Count() > 0)
+                        {
+                            <a href="@Url.Action("ListSchoolDynamic","Article",new {schoolId=ViewBag.lExtId })">查看攻略&gt;</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/echarts.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pk-list/pk-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+﻿@using PMS.OperationPlateform.Domain.Enums
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>上学帮排行榜-@ViewBag.GradeString</title>
+    <meta name="keywords" content="胡润学校区域排名分类,国际学校,民办学校,公办学校,排行榜,@(ViewBag.CityName)排名分类-上学帮">
+    <meta name="description" content="上学帮排行榜频道提供@(ViewBag.CityName)胡润学校_国际学校_民办学校_公办学校_排行榜_排名分类信息，方便家长为孩子选择优秀的名校。">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/rank/rank-list.css">
+    <style>
+        nav.page  li{
+        width:auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 4)
+        </div>
+
+        <div class="container d-flex justify-content-between header-content mt-0 mb-0 clearfix">
+            <div class="rank-tab-left">
+                <ul class="grade-list font-20 clearfix">
+                    <li class="@(ViewBag.InitGrade>= SchoolGrade.Kindergarten?"":"selected")">
+                        <a href="/schoolrank/listall">全部</a>
+                    </li>
+                    @{
+                        var Kindergarten = ((Enum)SchoolGrade.Kindergarten);
+                        <li class="@(ViewBag.InitGrade != SchoolGrade.Kindergarten?"":"selected")">
+                            <a href="@Url.Action(SchoolGradePY.YouErYuan.ToString().ToLower(),"schoolrank")">@Kindergarten.GetDescription()</a>
+                        </li>
+                    }
+                    @{
+                        var PrimarySchool = ((Enum)SchoolGrade.PrimarySchool);
+                        <li class="@(ViewBag.InitGrade != SchoolGrade.PrimarySchool?"":"selected")">
+                            <a href="@Url.Action(SchoolGradePY.XiaoXue.ToString().ToLower(),"schoolrank")">@PrimarySchool.GetDescription()</a>
+                        </li>
+                    }
+                    @{
+                        var JuniorMiddleSchool = ((Enum)SchoolGrade.JuniorMiddleSchool);
+                        <li class="@(ViewBag.InitGrade != SchoolGrade.JuniorMiddleSchool?"":"selected")">
+                            <a href="@Url.Action(SchoolGradePY.ChuZhong.ToString().ToLower(),"schoolrank")">@JuniorMiddleSchool.GetDescription()</a>
+                        </li>
+                    }
+                    @{
+                        var SeniorMiddleSchool = ((Enum)SchoolGrade.SeniorMiddleSchool);
+                        <li class="@(ViewBag.InitGrade != SchoolGrade.SeniorMiddleSchool?"":"selected")">
+                            <a href="@Url.Action(SchoolGradePY.GaoZhong.ToString().ToLower(),"schoolrank")">@SeniorMiddleSchool.GetDescription()</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="d-flex justify-content-between rank-select-city rank-tab-right">
+                <div class="sxb-icon d-flex">
+                    <div class="select font-14">
+                        <i class="header-icon">@ViewBag.LocalCity</i>
+                        <div class="city-list position-absolute">
+                            <ul class="d-flex font-12 flex-wrap clearfix">
+                                @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                                {
+                                    @*<li><a href="@Url.Action("ListAll","SchoolRank",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                    <li><a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a></li>
+                                }
+                            </ul>
+                            <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-bar d-flex position-relative">
+                    <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0'>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="rank-list">
+        <div class="container">
+            <div class="kindergarten d-block">
+                <div class="rank-navigation" style="margin-top:-15px;padding-bottom:15px;">
+                    <a href="/">首页</a>
+                    <span class="rank-navigation-span">&gt;</span>
+                    <a href="/schoolrank/list/">排行榜</a>
+                    <span class="rank-navigation-span">&gt;</span>
+                    <a href="#">@(ViewBag.InitGrade == 0?"全部":((SchoolGrade)ViewBag.InitGrade).GetDescription())</a>
+                </div>
+
+                @{
+                    var ranks = ViewBag.RankDatas as IEnumerable<Sxb.PCWeb.ViewModels.SchoolRank.SchoolRankDetailViewModel>;
+
+                }
+
+                @if (ranks == null || !ranks.Any())
+                {
+                    <!-- 新增内容 -->
+                    <div class="not-in-rank text-center">
+                        <h2 class="font-16 d-inline-block">该地区暂未收录相关榜单</h2>
+                    </div>
+                }
+                else
+                {
+                    <ul class="d-flex flex-wrap text-center clearfix">
+                        @foreach (var schoolRank in ranks)
+                        {
+                            <li>
+                                <a href="/schoolrank/detail/@(schoolRank.Base32No).html">
+                                    <div><img src="@schoolRank.Cover" alt=""></div>
+                                    <p>@schoolRank.Title</p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <nav class="page d-flex justify-content-end">
+                        @(await Html.PartialAsync("Pagination"
+                    , new Sxb.PCWeb.ViewModels.Article.PaginationViewModel("ListAll",
+                    "schoolrank",
+                    (int)ViewBag.TotalPage,
+                    (int)ViewBag.PageCount,
+                    (int)ViewBag.CurrentPage,
+                    (_this)=> { return new { page=_this.CurrentPage -1, grade = (int)ViewBag.CurrrentGrade ,city= (int)ViewBag.CurrentCity }; } ,
+                    (_index,_this) => { return new { page = _index, grade = (int)ViewBag.CurrrentGrade, city = (int)ViewBag.CurrentCity }; },
+                    (_this) => { return new { page = _this.CurrentPage + 1, grade = (int)ViewBag.CurrrentGrade, city = (int)ViewBag.CurrentCity }; })
+                    ))
+                    </nav>
+
+                }
+                @*<div class="rank-more position-relative">
+                        <h2 class="font-20 font-weight-bold">热门榜单</h2>
+                        <ul class="rank-more-list clearfix text-center">
+                            <li>
+                                <a href="" class="d-block">
+                                    <div><img src="../../imgs/detail/photo.jpg" alt=""></div>
+                                    <p>2018年胡润百学中国 <br> 国际学校京津地区榜</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="d-block">
+                                    <div><img src="../../imgs/detail/photo.jpg" alt=""></div>
+                                    <p>2018年胡润百学中国 <br> 国际学校京津地区榜</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="d-block">
+                                    <div><img src="../../imgs/detail/photo.jpg" alt=""></div>
+                                    <p>2018年胡润百学中国 <br> 国际学校京津地区榜</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="d-block">
+                                    <div><img src="../../imgs/detail/photo.jpg" alt=""></div>
+                                    <p>2018年胡润百学中国 <br> 国际学校京津地区榜</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>*@
+
+
+
+
+            </div>
+        </div>
+    </section>
+    @await Html.PartialAsync("Right_bar")
+    @await Html.PartialAsync("footer")
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+    <script src="@ViewBag.StaticFile/js/rank/rankList.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+</body>
+
+</html>

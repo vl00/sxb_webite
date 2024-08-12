@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <title>幼儿园,小学,中学,国际,民办,公办学校升学攻略锦集-上学帮</title>
+    <meta name="description" content="上学帮升学攻略频道给家长提供孩子上幼儿园,小学,中学,国际,民办,公办学校升学攻略锦集，选择优秀学校，赢在起跑线">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+
+    @await Html.PartialAsync("~/Views/Article/_Original.cshtml", model: Model)
+</body>
+</html>

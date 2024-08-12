@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>快来围观“今日达人”内容推荐！</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/reply-detail.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/talent-show.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-and-qa.css">
+    @*<link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css">*@
+    @*<link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css">*@
+</head>
+<body>
+    <a style="display:none" class="header-icon share" data-title="快来围观“今日达人”内容推荐！" data-content="每一条真实详细的学校点评对于心系选校的家长来说，都是非常重要的信息参考" data-url="" data-logo="@Uri.EscapeDataString("https://cdn.sxkid.com/images/logo_share_v4.png")"></a>
+
+    <section class="introduce">
+        <div class="introduce-banner"></div>
+        <div class="introduce-content">
+            <div class="teacher-photo">
+                <!--                <img src="@ViewBag.StaticFile/imgs/talent-show/photo2x.png" alt="">-->
+                <img src="@ViewBag.UserInfo.HeadImgUrl" alt="">
+            </div>
+            <div class="flex justify-content-between teacher-card">
+                <p class="name">@ViewBag.UserInfo.NickName</p>
+                <div class="teacher-qrcode">
+                    <img src="@ViewBag.QRCode" alt="">
+                </div>
+            </div>
+            <div class="introduction">
+                <p class="max-line-4">
+                    @ViewBag.Introduce
+                </p>
+                <a class="show-all">更多&gt</a>
+            </div>
+        </div>
+        <p class="teacher-say">
+            每一条真实详细的学校点评对于心系选校的家长来说，都是非常重要的信息参考。为了能使家长们得到更多有用的选校资讯，活动期间，我们每天都会向大家推荐一位升学达人以及相关精选内容，为疫情下无法实地探校的家长们分享宝贵的经验 ！
+        </p>
+    </section>
+    <section class="review">
+        <h2><i></i>点评合辑</h2>
+        <p class="review-card">话不多说，我们一起来看看今天向大家推荐的这位达人的精选点评合辑！如果您认可这位达人的评价，想更深入了解学校，也可关注上学帮公众号，了解更多学校信息！</p>
+        <ul class="review-list">
+            @await Html.PartialAsync("CommentItemsPartialView")
+        </ul>
+        <a href="javascript:;" class="more-review loadMore" data-url="/ActDaRenFristPhase/CommentItemsPartialView" data-offset="0" data-limit="3">加载更多<i></i></a>
+    </section>
+    <section class="arti">
+        <h2><i></i>文章合辑</h2>
+        <p class="review-card">看完了点评，还想更进一步了解达人对学校的了解？来看看这些文章吧！也许能够帮到你哦！</p>
+
+        <ul class="arti-list">
+            @await Html.PartialAsync("ArticleItemsPartialView")
+        </ul>
+        <a href="javascript:;" class="more-review loadMore" data-url="/ActDaRenFristPhase/ArticleItemsPartialView" data-offset="0" data-limit="3">加载更多<i></i></a>
+    </section>
+    <footer class="rules">
+        <div class="about-us flex justify-content-between">
+            <div class="about-sxb"></div>
+            <div class="sxb-qrcode"><img src="@ViewBag.StaticFile/imgs/talent-show/aboutUs3x.png" alt=""></div>
+        </div>
+        <p class="rules-title">活动免责说明：</p>
+        <ul class="rules-content">
+            <li>
+                参与活动前，请详细阅读活动规则及相关条款。
+            </li>
+            <li>
+                凡参与本次活动，则视为同意活动规则及免责声明条款
+            </li>
+            <li>
+                1. 活动过程中，凡以不正当手段（扰乱系统、实施网络攻击等）参与本次活动的用户，上学帮有权终止其参与活动，并取消其获奖资格；
+            </li>
+            <li>
+                2. 如遇不可抗力（包括但不限于重大灾害事件、活动受政府机关指令需要停止举办或调整的、活动中存在大面积作弊行为、活动遭受严重网络攻击或因系统故障导致活动不能正常进行的），上学帮可取消、修改或暂停本活动，则活动主办方可依相关法律法规主张免责
+            </li>
+            <li>
+                3.  本活动最终解释权归上学帮所有。
+            </li>
+        </ul>
+    </footer>
+    <div class="curtain" style="z-index: 2; display: none;"></div>
+    <section class="reply-box" id="reply-box" style="    padding: .36rem .32rem;" data-commentid="">
+        <div class="flex justify-content-between btn-list">
+            <span class="cancel">取消</span>
+            <div>
+                <span class="btn" id="Rumor"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                <span class="btn" id="anonymous"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply_val" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="complaint"><a href="@(ViewBag.UserServiceUrl)/contact/report?type=3&id=b8a9c616-b46c-4d06-ad77-0365c9de2ac7">举报</a></li>
+            <li class="popup-cancel"><a href="javascript:;">取消</a></li>
+        </ul>
+    </section>
+    <section class="no-data">
+        <div>没有更多啦！</div>
+    </section>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/talentShow.js"></script>
+    <script>
+        var _timer = {};
+
+        function delay_excute(id, fn, wait) {
+            if (_timer[id]) {
+                window.clearTimeout(_timer[id]);
+                delete _timer[id];
+            }
+
+            return _timer[id] = window.setTimeout(function () {
+                fn();
+                delete _timer[id];
+            }, wait);
+        }
+
+        $(function () {
+            $('.loadMore').click(function () {
+                var _this = $(this);
+                delay_excute('commentLoadMoreClick', function () {
+                    var parent_ul = _this.prev();
+                    var url = _this.data('url');
+                    var offset = _this.data('offset');
+                    var limit = _this.data('limit');
+                    var next_offset = offset + limit;
+
+                    $.ajax({
+                        url: url,
+                        type: 'get',
+                        data: {
+                            offset: next_offset,
+                            limit: limit
+                        },
+                        success: function (res, state, xhr) {
+                            if (res != 'notfound') {
+                                parent_ul.append(res);
+                                _this.data('offset', next_offset);
+                            } else {
+                                $.noData();
+                                _this.hide();
+                            }
+
+                        },
+                        complete: function (res) {
+
+                        }
+                    })
+
+                }, 300);
+
+            });
+
+            // 举报
+            $('.review-list').on('click', '.report', function () {
+                $.report();
+            });
+            // 评论
+            $(".comments").on("click", function () {
+                var _this = $(this);
+                $.ajax({
+                    url: "/Home/CheckLogin",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.status == 200) {
+                            if (data.data.isLogin == false) {
+                                var path = window.location.href;
+                                window.location.href = data.data.loginUrl + path;
+                            } else {
+                                var commentId = _this.data('commentid');
+                                $('#reply-box').data('commentid', commentId);
+                                $.showComment();
+                            }
+                        }
+                    }
+                });
+
+            })
+            //回复点评
+            $('.submit-reply').click(function () {
+                //点评id
+                let currentCommentId = $('#reply-box').data('commentid');
+                //内容
+                let reply = $('#reply_val').val();
+                //学校辟谣
+                let Rumor = $("#Rumor").is('.active');
+                //匿名
+                let anonymous = $("#anonymous").is('.active');
+                $.ajax({
+                    url: "/SchoolComment/CommentReply", type: "post", data: { IsSchoolPublish: Rumor, IsAnony: anonymous, Content: reply, SchoolCommentId: currentCommentId, IsAttend: false },
+                    beforeSend: function () {
+                        $.loading("数据提交中")
+                    },
+                    complete: function () {
+                        $.loading("remove")
+                    },
+                    success: function (data) {
+                        if (data.status == 200) {
+                            location.href = "/SchoolComment/CommentDetail?CommentId=" + currentCommentId;
+                        }
+                        else if (data.status == 402) {
+                            var path = window.location.href;
+                            window.location.href = data.data.loginUrl + path;
+                        }
+                        else {
+                            console.log(data.msg)
+                        }
+                    }
+                })
+
+            });
+
+            // 点赞
+            $(".nice").on("click", function () {
+                var _this = $(this);
+                $.ajax({
+                    url: "/Home/CheckLogin",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.status == 200) {
+                            if (data.data.isLogin == false) {
+                                var path = window.location.href;
+                                window.location.href = data.data.loginUrl + path;
+                            } else {
+                                var commentId = _this.data('commentid');
+                                $.ajax({
+                                    url: "/SchoolComment/LikeComment", type: "POST", data: { CommentId: commentId, LikeType: 1 }, success: function (data) {
+                                        if (data.status == 200) {
+                                            let num = Number(_this.text())
+                                            if ($(_this).hasClass('click-like')) {
+                                                _this.removeClass('click-like').children('i').css('animation', 'none').next().text(num - 1);
+                                            }
+                                            else {
+                                                _this.addClass('click-like').children('i').css('animation', 'animate .5s').next().text(num + 1);
+                                            }
+                                        }
+                                        else if (data.status == 402) {
+                                            var path = window.location.href;
+                                            window.location.href = data.data.loginUrl + path;
+                                        }
+                                        else {
+                                            //alert(data.msg);
+                                            console.log(data.msg)
+                                        }
+                                    }
+                                })
+
+                            }
+                        }
+                    }
+                });
+
+            })
+
+        });
+    </script>
+</body>
+</html>

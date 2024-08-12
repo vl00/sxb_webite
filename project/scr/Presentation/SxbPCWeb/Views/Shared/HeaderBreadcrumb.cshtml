@@ -1,0 +1,32 @@
+﻿@using Sxb.PCWeb.ViewModels
+@model Sxb.PCWeb.ViewModels.HeaderBreadcrumb
+@{
+    HeaderBreadcrumb nav = Model;
+    var smallClass = nav.IsSmallBorder ? "base-head-logo--small" : "";
+}
+<link rel="stylesheet" href="@(ViewBag.StaticFile)/css/base-head.css">
+<div class="base-head-logo clearfix @smallClass">
+    <div class="container clearfix">
+        <div class="base-head-logo__sxb-logo">
+            <a href="/" title="上学帮">上学帮</a>
+        </div>
+        <div class="base-head-logo__crumbs">
+            @while (nav != null)
+            {
+                <span><a href="@nav.Url">@nav.Name</a></span>
+
+                nav = nav.Child;
+                @if (nav != null)
+                {
+                    <i>></i>
+                }
+            }
+
+            @*<span><a href="/">首页</a></span>
+            <i>></i>
+            <span><a href="/article">攻略</a></span>
+            <i>></i>
+            <span><a href="#">测试的文章详情标题</a></span>*@
+        </div>
+    </div>
+</div>

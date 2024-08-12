@@ -1,0 +1,84 @@
+﻿@model PMS.UserManage.Application.ModelDto.VoBase
+@{
+    Layout = null;
+    var data = new List<PMS.UserManage.Application.ModelDto.ModelVo.CommentVo.CommentReplyAndReplyModel>();
+    if (Model != null && Model.data != null) {
+        data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PMS.UserManage.Application.ModelDto.ModelVo.CommentVo.CommentReplyAndReplyModel>>(Model.data.ToString());
+    }
+}
+@if (data != null && data.Count > 0)
+{
+    <ul class="reply-list">
+        @foreach (var reply in data)
+        {
+            @if (reply.Type == 0)
+            {
+                <li>
+                    <a href="https://m.sxkid.com/ReplyDetail/Index?type=1&DatascoureId=@reply.Id">
+                        <div class="flex justify-content-between">
+                            <div class="user-msg flex">
+                                <div class="img-box"><img src="@reply.replyUserInfoVo.HeadImager" alt="@reply.replyUserInfoVo.NickName" /></div>
+                                <div>
+                                    <h5 class="user-name">@reply.replyUserInfoVo.NickName</h5>
+                                    <span class="time-ago">@reply.ReplyAddTime</span>
+                                </div>
+                            </div>
+                            <div class="like-num">
+                                <i class="comment-icon"></i>
+                                <span>@reply.LikeCount</span>
+                            </div>
+                        </div>
+                        <p class="reply-content">@reply.ReplyContent</p>
+                    </a>
+                    <a href="https://m.sxkid.com/SchoolComment/CommentDetail?CommentId=@reply.SchoolCommentId">
+                        <div class="target">
+                            <p>@reply.Content@*<span class="img-num">共@(reply)张图></span>*@</p>
+                            <div class="other-msg">
+                                <span class="department">@reply.SchoolName</span>
+                                <span>@reply.AddTime</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="https://m.sxkid.com/ReplyDetail/Index?type=1&DatascoureId=@reply.Id">
+                        <div class="flex justify-content-between">
+                            <div class="user-msg flex">
+                                <div class="img-box"><img src="@reply.userInfoVo.HeadImager" alt="@reply.userInfoVo.NickName" /></div>
+                                <div>
+                                    <h5 class="user-name">@reply.userInfoVo.NickName</h5>
+                                    <span class="time-ago">@reply.AddTime</span>
+                                </div>
+                            </div>
+                            <div class="like-num">
+                                <i class="comment-icon"></i>
+                                <span>@reply.LikeCount</span>
+                            </div>
+                        </div>
+                        <p class="reply-content"><span class="reply-target">回复<i>@reply.replyUserInfoVo.NickName：</i></span>@reply.Content</p>
+                        <div class="target">
+                            <div class="user-msg flex">
+                                <div class="img-box"><img src="@reply.replyUserInfoVo.HeadImager" alt="@reply.replyUserInfoVo.NickName" /></div>
+                                <div>
+                                    <h5 class="user-name">@reply.replyUserInfoVo.NickName</h5>
+                                    <span class="time-ago">@reply.ReplyAddTime</span>
+                                </div>
+                            </div>
+                            <p>@reply.ReplyContent</p>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

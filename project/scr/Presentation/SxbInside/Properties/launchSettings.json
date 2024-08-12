@@ -1,0 +1,71 @@
+{
+  "profiles": {
+    "Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "Custom": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:5001",
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "James.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://James.Sxkid.com:5003/swagger",
+      "applicationUrl": "http://0.0.0.0:5002;https://0.0.0.0:5003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Sxb.Inside": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Lonlykids": {
+      "commandName": "Project",
+      "launchUrl": "https://0.0.0.0:5000",
+      "applicationUrl": "http://0.0.0.0:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Lonlykids-Production": {
+      "commandName": "Project",
+      "launchUrl": "https://0.0.0.0:5000",
+      "applicationUrl": "http://0.0.0.0:5000",
+      "environmentVariables": {
+      }
+    },
+    "James.Production.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://James.Sxkid.com:5003/swagger",
+      "applicationUrl": "http://0.0.0.0:5002;https://0.0.0.0:5003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "Dev": {
+      "commandName": "Project",
+      "launchUrl": "http://localhost:5000",
+      "applicationUrl": "http://0.0.0.0:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

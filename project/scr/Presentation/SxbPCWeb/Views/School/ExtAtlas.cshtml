@@ -1,0 +1,211 @@
+﻿@using iSchool;
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Domain.Enum;
+@model PMS.School.Domain.Dtos.SchoolExtRecruitDto
+@{
+    Layout = "layout_school";
+    ViewBag.vCustomContentDiv = true;
+    ViewBag.Title = $"{ViewBag.SchoolName}图册_校园生活照片_师资展示_硬件设施-上学帮";
+    ViewBag.Page_Description = $"上学帮学校频道，为您提供全面的{ViewBag.SchoolName}图册,校园生活照片,师资展示,硬件设施等信息";
+    ViewBag.Page_keywords = $"{ViewBag.SchoolName}图册,{ViewBag.SchoolName}校园生活照片,{ViewBag.SchoolName}师资展示,{ViewBag.SchoolName}硬件设施";
+    var images = new List<SchoolImageDto>();
+    if (ViewBag.SchoolImages != null && ViewBag.SchoolImages is List<SchoolImageDto>)
+    {
+        images = ViewBag.SchoolImages;
+        foreach (var item in images.Where(p => string.IsNullOrWhiteSpace(p.ImageDesc)))
+        {
+            item.ImageDesc = "";
+        }
+    }
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-comments.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-profile.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-message.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+}
+
+@*图册内容*@
+<div>
+    @*学校专访*@
+    <div class="school-interview video" id="video">
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">学校专访</h2>
+        @if (ViewBag.SchoolVideos is List<KeyValueDto<DateTime, string, byte, string, string>> list && list?.Any() == true)
+        {
+            <h3 class="font-16 color-333 font-weight-bold">全部(@list.Count)</h3>
+            <ul class="video-list d-flex flex-wrap">
+                @foreach (var item in list)
+                {
+                    <li>
+                        <video src="@item.Value" controls="controls" @if (!string.IsNullOrWhiteSpace(item.Other)) { WriteLiteral($"poster=\"{item.Other}\""); }></video>
+                        <div class="video-list-name">@item.Data</div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的相关图册</div>
+        }
+    </div>
+
+    @*教学质量*@
+    <div class="quality-teaching">
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">教学质量</h2>
+        @if (images.Any(p => p.Type == SchoolImageType.SchoolHonor || p.Type == SchoolImageType.StudentHonor))
+        {
+            @if (images.Any(p => p.Type == SchoolImageType.SchoolHonor))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">学校荣誉(@images.Count(p => p.Type == SchoolImageType.SchoolHonor))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.SchoolHonor))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+
+            @if (images.Any(p => p.Type == SchoolImageType.StudentHonor))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">学生荣誉(@images.Count(p => p.Type == SchoolImageType.StudentHonor))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.StudentHonor))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的相关图册</div>
+        }
+    </div>
+
+    @*师资展示*@
+    <div class="quality-teaching">
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">师资展示</h2>
+        @if (images.Any(p => p.Type == SchoolImageType.Principal || p.Type == SchoolImageType.Teacher))
+        {
+            @if (images.Any(p => p.Type == SchoolImageType.Principal))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">校长风采(@images.Count(p => p.Type == SchoolImageType.Principal))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.Principal))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+            @if (images.Any(p => p.Type == SchoolImageType.Teacher))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">教师风采(@images.Count(p => p.Type == SchoolImageType.Teacher))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.Teacher))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的相关图册</div>
+        }
+    </div>
+
+    @*硬件设施*@
+    <div class="quality-teaching">
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">硬件设施</h2>
+        @if (images.Any(p => p.Type == SchoolImageType.Hardware))
+        {
+            <h3 class="font-16 color-333 font-weight-bold">硬件设施(@images.Count(p => p.Type == SchoolImageType.Hardware))</h3>
+            <ul class="quality-teaching-photo-list">
+                @foreach (var item in images.Where(p => p.Type == SchoolImageType.Hardware))
+                {
+                    <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的相关图册</div>
+        }
+    </div>
+
+    @*学生生活*@
+    <div class="quality-teaching">
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">学生生活</h2>
+        @if (images.Any(p => p.Type == SchoolImageType.CommunityActivities || p.Type == SchoolImageType.Schedule ||
+p.Type == SchoolImageType.GradeSchedule || p.Type == SchoolImageType.Diagram))
+        {
+            @if (images.Any(p => p.Type == SchoolImageType.CommunityActivities))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">社团活动(@images.Count(p => p.Type == SchoolImageType.CommunityActivities))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.CommunityActivities))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+
+            @if (images.Any(p => p.Type == SchoolImageType.GradeSchedule))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">各年级课程表(@images.Count(p => p.Type == SchoolImageType.GradeSchedule))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.GradeSchedule))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+
+            @if (images.Any(p => p.Type == SchoolImageType.Schedule))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">作息时间表(@images.Count(p => p.Type == SchoolImageType.Schedule))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.Schedule))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+
+            @if (images.Any(p => p.Type == SchoolImageType.Diagram))
+            {
+                <h3 class="font-16 color-333 font-weight-bold">校车路线(@images.Count(p => p.Type == SchoolImageType.Diagram))</h3>
+                <ul class="quality-teaching-photo-list">
+                    @foreach (var item in images.Where(p => p.Type == SchoolImageType.Diagram))
+                    {
+                        <li><a title="图片"><img src="@item.SUrl" alt="@item.ImageDesc" data-img-url="@item.Url" /><div class="school-pic-name">@item.ImageDesc</div></a></li>
+                    }
+                </ul>
+            }
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的相关图册</div>
+        }
+        <div class="clearfix"></div>
+    </div>
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+</div>
+<div class="curtain"></div>
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailAtlas.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script>
+        $(function () {
+            //...
+        });
+    </script>
+}

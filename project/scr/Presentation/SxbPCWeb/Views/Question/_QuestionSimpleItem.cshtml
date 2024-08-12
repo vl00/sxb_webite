@@ -1,0 +1,38 @@
+﻿@model Sxb.PCWeb.ViewModels.Question.QuestionInfoViewModel
+    <li class="d-flex justify-content-between" data-Id="@Model.Id">
+        <i>问</i>
+        <div class="question-right">
+            <a href="@Url.Action("Detail","Question",new {No = Model.No})"><span class="theme">@Model.Content</span></a>
+            <div class="clearfix"></div>
+            @if (Model.Images != null && Model.Images.Count > 0)
+            {
+                <div class="swiper-container answer-question-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach (var img in Model.Images)
+                        {
+                            <div class="swiper-slide"><img src="@img" alt="" data-img-url="@img"></div>
+                        }
+                    </div>
+                    @if (Model.Images.Count > 6)
+                    {
+                        <div class="swiper-button-prev swiper-button-black"></div>
+                        <div class="swiper-button-next"></div>
+                    }
+                </div>
+             }
+            <div class="like">
+                <span class="font-13">@Model.AddTime</span>
+                <a href="javascript:;" class="collection float-right iconReport selected" data-reportType="2" data-reportId="@Model.Id" title="举报">举报</a>
+                <a href="javascript:;" class="collection float-right collect  @(Model.IsCollection?"selected":"")" data-Type="2" data-Id="@Model.Id" title="收藏">收藏</a>
+                @*<a href="#" class="icon-like font-12 float-right @(Model.IsLike?"selected":"")" title="点赞">@Model.LikeCount</a>*@
+                <a href="javascript:;" class="icon-comments font-12 float-right" title="回答">@Model.AnswerCount</a>
+            </div>
+            <div class="textarea">
+                <textarea name="reply-comment" cols="30" rows="10" maxlength="300"
+                          class="reply-textarea"></textarea>
+                <a href="javascript:;" title="发表" data-Id="@Model.Id" data-Type="2" data-ReplyId="" class="release-comments">发表</a>
+                <a href="javascript:;" title="匿名" class="comments-way">匿名</a>
+                <a href="javascript:;" title="在读" class="comments-way">在读</a>
+            </div>
+        </div>
+    </li>

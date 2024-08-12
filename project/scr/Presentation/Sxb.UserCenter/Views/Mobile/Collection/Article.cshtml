@@ -1,0 +1,57 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.ModelVo.Data>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="follow-article-list">
+        @foreach (var article in Model)
+        {
+            if (!article.isShow)
+            {
+                <li data-id="@article.id">
+                    本攻略已下线
+                </li>
+            }
+            else if (!string.IsNullOrEmpty(article.digest) && article.covers != null && article.covers.Length > 0)
+            {
+                <li data-id="@article.id" class="detail">
+                    <a href="https://m.sxkid.com/article/detail/@article.id.ToString("N")">
+                        <h5 class="article-title">@article.title</h5>
+                        <div class="img-box"><img src="@article.covers[0]" alt="" /></div>
+                        <p class="article-content">@article.digest</p>
+                        <div class="article-msg">
+                            <span>@article.time</span>
+                            <span><i class="article-icon"></i>@article.viewCount</span>
+                        </div>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li data-id="@article.id">
+                    <a href="https://m.sxkid.com/article/detail/@article.id.ToString("N")" class="flex justify-content-between">
+                        <div>
+                            <h5 class="article-title">@article.title</h5>
+                            <div class="article-msg">
+                                <span>@article.time</span>
+                                <span><i class="article-icon"></i>@article.viewCount</span>
+                            </div>
+                        </div>
+                        @if (article.covers != null && article.covers.Length > 0)
+                        {
+                            <div class="img-box"><img src="@article.covers[0]" alt="@article.title" /></div>
+                        }
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

@@ -1,0 +1,106 @@
+﻿@section _non_use_ {
+    <div class="hot-school">
+        <h2 class="font-18 font-weight-bold">热门学校</h2>
+        <ul class="school-list">
+            <li>
+                <a href="" title="广州外国语学校 - 国际高中" class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="font-15">广州外国语学校 - 国际高中</h3>
+                        <ul class="tag d-flex font-12">
+                            <li>国际</li>
+                            <li>寄宿</li>
+                            <li class="authentication"><img src="../../imgs/detail/authentication.png" alt="认证"></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="grade text-center font-18">97<i class="font-14">分</i></div>
+                        <p class="font-12">学校总评</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="" title="广州外国语学校 - 国际高中" class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="font-15">广州外国语学校 - 国际高中</h3>
+                        <ul class="tag d-flex font-12">
+                            <li>国际</li>
+                            <li>寄宿</li>
+                            <li class="authentication"><img src="../../imgs/detail/authentication.png" alt="认证"></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="grade text-center font-18">97<i class="font-14">分</i></div>
+                        <p class="font-12">学校总评</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="hot-comment-school">
+        <h2 class="font-18 font-weight-bold">热评学校</h2>
+        <ul class="school-list">
+            <li>
+                <a href="" title="广州市执信中学-高中部" class="d-flex justify-content-between">
+                    <h3 class="font-15"><i class="num">1</i>广州市执信中学-高中部</h3>
+                    <div class="comment-num font-12">1466条点评</div>
+                </a>
+            </li>
+            <li>
+                <a href="" title="广州市执信中学-高中部" class="d-flex justify-content-between">
+                    <h3 class="font-15"><i class="num">2</i>广州市执信中学-高中部</h3>
+                    <div class="comment-num font-12">1466条点评</div>
+                </a>
+            </li>
+            <li>
+                <a href="" title="广州市执信中学-高中部" class="d-flex justify-content-between">
+                    <h3 class="font-15"><i class="num">3</i>广州市执信中学-高中部</h3>
+                    <div class="comment-num font-12">1466条点评</div>
+                </a>
+            </li>
+            <li>
+                <a href="" title="广州市执信中学-高中部" class="d-flex justify-content-between">
+                    <h3 class="font-15"><i class="num">4</i>广州市执信中学-高中部</h3>
+                    <div class="comment-num font-12">1466条点评</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="hot-article">
+        <h2 class="font-18 font-weight-bold">热评学校</h2>
+        <ul class="article-list">
+            <li>
+                <a href="" title="明年小升初，下阶段如何准备？" class="d-flex justify-content-between">
+                    <div>
+                        <h2 class="font-15">明年小升初，下阶段如何准备？</h2>
+                        <div class="article-msg font-12">
+                            <span>2小时前</span>
+                            <span>
+                                    <img src="../../imgs/detail/check-num.png" alt="观看数量">
+                                    <span>2556</span>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="img-box">
+                        <img src="../../imgs/detail/test.png" alt="明年小升初，下阶段如何准备？">
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="" title="明年小升初，下阶段如何准备？" class="d-flex justify-content-between">
+                    <div class="not-img">
+                        <h2 class="font-15">明年小升初，下阶段如何准备？</h2>
+                        <div class="article-msg font-12">
+                            <span>2小时前</span>
+                            <span>
+                                    <img src="../../imgs/detail/check-num.png" alt="观看数量">
+                                    <span>2556</span>
+                                </span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+}

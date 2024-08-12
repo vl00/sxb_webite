@@ -1,0 +1,143 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div>
+    <ul class="comment-list">
+        @*<li>
+            <!-- 校方 -->
+            <div class="list-header flex justify-content-between">
+                <div class="user-msg flex">
+                    <div class="head">
+                        <div><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></div>
+                        <i class="icon school"></i>
+                    </div>
+                    <span class="name">name<i></i></span>
+                </div>
+                <div class="other flex">
+                    <i class="icon"></i>
+                    <div class="other-list-btn text-center">
+                        <div class="flex">
+                            <i class="round"></i>
+                            <i class="round"></i>
+                            <i class="round"></i>
+                        </div>
+                        <span>精华</span>
+                    </div>
+                </div>
+            </div>
+            <a href="./school-comment.html">
+                <p class="content">学校在师资力量这块做得挺好。特级教师及高级教师的数量占比较高。教师普遍态度良好，平易近人。另外，学校的环境优美，交通便利。校风淳朴，学生的生源优秀，基本都是来自名校特级教师及高级教师的数量占比较高。教师普遍态度良好，平易近人。另外，学校的环境优美，交通便利。校风淳朴，学生的生源优秀，基本都是来自名校</p>
+                <div class="img-list">
+                    <ul class="flex justify-content-between">
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                    </ul>
+                    <span class="text-center"><i class="icon"></i>9</span>
+                </div>
+            </a>
+            <div class="comment-msg flex justify-content-between">
+                <div>
+                    <span class="department">国际部</span>
+                    <span class="time">2018-03-04</span>
+                </div>
+                <div class="ctr">
+                    <span class="comment"><i class="icon"></i>123</span>
+                    <span class="like click-like">
+                        <i class="icon"></i>
+                        <span>556</span>
+                    </span>
+                </div>
+            </div>
+            <div class="school-msg">
+                <p>上海协和国际外籍人员子女学校</p>
+                <div class="flex justify-content-between">
+                    <ul class="star flex">
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li><i class="icon"></i></li>
+                        <li>87分</li>
+                    </ul>
+                    <span>1234567条评论</span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <!-- 用户 -->
+            <div class="list-header flex justify-content-between">
+                <div class="user-msg flex">
+                    <div class="head">
+                        <div><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></div>
+                        <i class="icon"></i>
+                    </div>
+                    <span class="name">name<i class="identity">过来人</i></span>
+                </div>
+                <div class="other flex">
+                    <i></i>
+                    <div class="other-list-btn text-center">
+                        <div class="flex">
+                            <i class="round"></i>
+                            <i class="round"></i>
+                            <i class="round"></i>
+                        </div>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <a href="./school-comment.html">
+                <p class="content">学校在师资力量这块做得挺好。特级教师及高级教师的数量占比较高。教师普遍态度良好，平易近人。另外，学校的环境优美，交通便利。校风淳朴，学生的生源优秀，基本都是来自名校特级教师及高级教师的数量占比较高。教师普遍态度良好，平易近人。另外，学校的环境优美，交通便利。校风淳朴，学生的生源优秀，基本都是来自名校</p>
+                <div class="img-list">
+                    <ul class="flex justify-content-between">
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                        <li><img src="/CommentApp//CommentApp/imgs/test.png" alt=""></li>
+                    </ul>
+                    <span class="text-center"><i class="icon"></i>9</span>
+                </div>
+            </a>
+            <div class="comment-msg flex justify-content-between">
+                <div>
+                    <span class="department">国际部</span>
+                    <span class="time">2018-03-04</span>
+                </div>
+                <div class="ctr">
+                    <span class="comment"><i class="icon"></i>123</span>
+                    <span class="like">
+                        <i class="icon"></i>
+                        <span>555</span>
+                    </span>
+                </div>
+            </div>
+            <div class="school-msg">
+                <p>上海协和国际外籍人员子女学校</p>
+                <div class="flex justify-content-between">
+                    <ul class="star flex">
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li class="score-star"><i class="icon"></i></li>
+                        <li><i class="icon"></i></li>
+                        <li><i class="icon"></i></li>
+                        <li><i class="icon"></i></li>
+                        <li>87分</li>
+                    </ul>
+                    <span>1234567条评论</span>
+                </div>
+            </div>
+        </li>*@
+    </ul>
+</div>
+<script>
+	// 点赞
+	$('.like').on('click', function() {
+		let num = Number($(this).text());
+		 if($(this).hasClass('click-like')) {
+		 	$(this).removeClass('click-like').children('i').css('animation', 'none').next().text(num - 1);
+		 }
+		 else {
+	 	 	$(this).addClass('click-like').children('i').css('animation', 'animate .5s').next().text(num + 1);
+		 }
+	})
+</script>

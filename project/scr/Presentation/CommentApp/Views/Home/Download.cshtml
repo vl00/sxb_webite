@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>download</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/download.css" />
+</head>
+<body>
+
+    <section>
+        <img src="@ViewBag.StaticFile/imgs/download.png" alt="">
+        <a href="" target="_blank" class="download text-center">下载上学帮</a>
+    </section>
+    <script>
+        var not_to_pc = true;
+    </script>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script>
+        $('section').height($(document).height());
+        var u = navigator.userAgent, app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isiOS) {
+            $('.download').attr('href', 'https://itunes.apple.com/cn/app/shang-xue-bang/id996973993?l=zh&ls=1&mt=8');
+        }
+        else if (isAndroid) {
+            $('.download').attr('href', 'http://zhushou.360.cn/detail/index/soft_id/2532977');
+        }
+        $('.download').on('click', function() {
+            ST.onEvent({'event':'skipdownload'});
+        });
+    </script>
+</body>
+</html>

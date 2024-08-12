@@ -1,0 +1,196 @@
+﻿@{
+    Layout = "layout_school";
+    ViewBag.Title = $"{ViewBag.SchoolName}攻略_升学政策_动态-上学帮";
+    ViewBag.Page_Description = $"上学帮攻略频道，给家长提供{ViewBag.SchoolName}攻略_{ViewBag.SchoolName}升学政策_{ViewBag.SchoolName}动态信息，全方面的掌握{ViewBag.SchoolName}动态";
+    ViewBag.Page_keywords = $"{ViewBag.SchoolName}攻略,{ViewBag.SchoolName}升学政策,{ViewBag.SchoolName}动态";
+
+
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-profile.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-comments.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+}
+
+@* 左侧内容 *@
+<div class="left-content">
+
+    <div class="school-policy" style="margin-top:0;">
+        @if (((IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.PolicyArticle).Count() > 0)
+        {
+            <h2 class="font-20 font-weight-bold color-333 school-atlas-title">升学政策<a href="@Url.Action("list", "article",new {  city = "",search = ViewBag.SchoolName})" title="更多&gt;">更多攻略&gt;</a></h2>
+            <ul class="article-list">
+                @foreach (var item in (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.PolicyArticle)
+                {
+                    switch (item.Layout)
+                    {
+                        case 0:
+                            <li>
+                                <a href="@Url.Action("detail", "article", new { no = item.No })" title="升学政策">
+                                    <div class="school-dynamic-list font-12">
+                                        <p class="font-17">@item.Title</p>
+                                        <span class="">@item.Time</span><span class="see">@item.ViewCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                            break;
+                        default:
+                            <li>
+                                <a href="@Url.Action("detail", "article", new { no = item.No })" title="升学政策">
+                                    <div class="school-dynamic-list font-12">
+                                        <img src="@item.Covers?.FirstOrDefault()" alt="头像">
+                                        <p class="font-17">@item.Title</p>
+                                        <span class="">@item.Time</span><span class="see">@item.ViewCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                            break;
+                    }
+                }
+            </ul>
+
+            if ((int)ViewBag.Total > 6)
+            {
+                <nav class="page d-flex justify-content-end">
+                    @(await Html.PartialAsync("PaginationEx", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                        "SchoolPolicy",
+                        "School",
+                        (int)ViewBag.TotalPage,
+                        (int)ViewBag.Limit,
+                        (int)((ViewBag.Offset / ViewBag.Limit) + 1),
+                        (_this) => { return new { extId = ViewBag.ExtId, offset = (_this.CurrentPage - 2) * _this.PageCount, limit = _this.PageCount }; },
+                        (_pageItem, _this) => { return new { extId = ViewBag.ExtId, offset = (_pageItem - 1) * _this.PageCount, limit = _this.PageCount }; },
+                        (_this) => { return new { extId = ViewBag.ExtId, offset = (_this.CurrentPage) * _this.PageCount, limit = _this.PageCount }; }
+                        )))
+
+                </nav>
+            }
+
+        }
+        else
+        {
+            <!--                    屏蔽这段是有更多的按钮-->
+            <h2 class="font-20 font-weight-bold color-333 school-atlas-title">升学政策<a class="more-dynamic font-12 color-333 font-weight-normal float-right" href="#" title=""></a></h2>
+            <!--                    如果没有数据删掉下面d-none-->
+            <div class="dynamic-not-data font-14 ">暂未收录当前学校的相关政策</div>
+        }
+    </div>
+    <div class="school-policy">
+        <!--                    屏蔽这段是有更多的按钮-->
+        <!--                    <h2 class="font-20 font-weight-bold color-333 school-atlas-title">升学政策<a class="more-dynamic font-12 color-333 font-weight-normal float-right" href="#" title="更多&gt;">更多&gt;</a></h2>-->
+        <h2 class="font-20 font-weight-bold color-333 school-atlas-title">猜你喜欢<a href="@Url.Action("list", "article",new {  city = "",search = ""})" title="更多&gt;">更多攻略&gt;</a></h2>
+        <!--                    如果没有数据删掉下面d-none-->
+        <div class="dynamic-not-data font-14 d-none">暂未收录当前学校的相关政策</div>
+        <ul class="article-list" id="ithinkyoulikebox">
+            @if (ViewBag.IThinkYouLike != null)
+            {
+                @foreach (var item in (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.IThinkYouLike)
+                {
+                    switch (item.Layout)
+                    {
+                        case 0:
+                            <li>
+                                <a href="@Url.Action("detail", "article", new { no = item.No })" title="升学政策">
+                                    <div class="school-dynamic-list font-12">
+                                        <p class="font-17">@item.Title</p>
+                                        <span class="">@item.Time.ToString()</span><span class="see">@item.ViewCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                            break;
+                        default:
+                            <li>
+                                <a href="@Url.Action("detail", "article", new { no = item.No })" title="升学政策">
+                                    <div class="school-dynamic-list font-12">
+                                        <img src="@item.Covers?.FirstOrDefault()" alt="头像">
+                                        <p class="font-17">@item.Title</p>
+                                        <span class="">@item.Time.ToString()</span><span class="see">@item.ViewCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                            break;
+                    }
+                }
+            }
+        </ul>
+        <a href="@Url.Action("loadmoreithinkyoulike","article",new {offset = 5,limit = 6 })" style="display:none;">welcome spider!</a>
+        <a href="javascript:void(0);" id="loadmoreithinkyoulikebtn" data-offset="5" data-limit="6" title="加载更多" class="font-12 load-more d-block">加载更多</a>
+    </div>
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+</div>
+
+
+@* 右侧内容 *@
+<div class="right-list">
+    @{ await Html.RenderPartialAsync("P_HotPointListItem"); }
+</div>
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailComments.js"></script>
+    <script>
+        var $loadmoreithinkyoulikebtn = $('#loadmoreithinkyoulikebtn');
+        var $ithinkyoulikebox = $('#ithinkyoulikebox');
+        var $searchInput = $('#search-input');
+        var $keywordBox = $('#keyword-box');
+        $(function () {
+            LoadKeyWords();
+            $loadmoreithinkyoulikebtn.on('click', function () {
+                var _this = $(this);
+                var limit = _this.data('limit') || 6;
+                var offset = (_this.data('offset') || 5) + limit;
+                $.ajax({
+                    url: '@Url.Action("LoadMoreIThinkYouLike","Article")',
+                    type: 'get',
+                    data: {
+                        offset: offset,
+                        limit: limit,
+                    },
+                    success: function (res) {
+                        if (res.statu && res.statu == -1) {
+                            _this.text("无更多数据");
+                            return;
+                        }
+                        _this.data('offset', offset);
+                        _this.data('limit', limit);
+                        $ithinkyoulikebox.append(res);
+                    }
+                });
+
+            });
+            $keywordBox.on('click', 'li', function() {
+                var _this = $(this);
+                var name = _this.find('a').text();
+                window.location = '/article/list_search-' + name + '_offset-0_limit-10~'
+            });
+        })
+
+        function LoadKeyWords() {
+            $.ajax({
+                url: '@Url.Action("GetHotwordList","Search")',
+                type: 'get',
+                data: { channel: 4, pageSize: 3 },
+                success: function (res) {
+                    $keywordBox.empty();
+                    if (res.status == 200) {
+                        if (!res.data || res.data.length <= 0) {
+                            $keywordBox.parent().remove();
+                        } else {
+                            $.each(res.data, function(index, value) {
+                                $keywordBox.append('<li><a href="javascript:void(0);" rel="nofollow">' + value.name + '</a></li>')
+                            });
+                        }
+
+                    } else {
+                        console.log(res);
+
+                    }
+                }
+            })
+        }
+    </script>
+}

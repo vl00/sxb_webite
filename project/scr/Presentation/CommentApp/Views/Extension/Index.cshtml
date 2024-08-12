@@ -1,0 +1,82 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    
+    <title>上学帮学校点评官活动</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/job.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="bind-box">
+            <div class="phone-box">
+                <label>电话号码:</label>
+                <div>
+                    @if (ViewBag.UserInfo.Mobile == "" || ViewBag.UserInfo.Mobile == null)
+                    {
+                        <span class="left-content">未绑定</span>
+                        <a class="right-content" href="@ViewBag.UserServiceUrl/Account">马上绑定</a>
+                    }
+                    else
+                    {
+                        <span class="left-content">@ViewBag.UserInfo.Mobile</span>
+                        @*<a class="right-content" href="@ViewBag.UserServiceUrl/Account">切换手机号</a>*@
+                    }
+
+                </div>
+            </div>
+            <div class="wechat-box">
+                <label>微信昵称:</label>
+                <div>
+                    @if (ViewBag.UserInfo.NickName == null)
+                    {
+                        <span class="left-content">请点击右侧授权</span>
+                        <a class="right-content" href="@ViewBag.UserServiceUrl/account/bindwx?ReturnUrl=https://m.sxkid.com/Extension">授权</a>
+                    }
+                    else
+                    {
+                        <span class="left-content">@ViewBag.UserInfo.NickName</span>
+                        if (ViewBag.UserInfo.OpenId == 0)
+                        {
+                            <a class="right-content" href="@ViewBag.UserServiceUrl/account/bindwx?ReturnUrl=https://m.sxkid.com/Extension">授权</a>
+                        }
+                        else
+                        {
+                            @*<a class="right-content" href="@ViewBag.UserServiceUrl/Account">切换微信号</a>*@
+                        }
+                    }
+                </div>
+            </div>
+            <div class="invitecode-box">
+                <label>邀请码:</label>
+                <div>
+                    <span class="left-content"><input id="code" placeholder="请输入您的活动邀请码" type="text" /></span>
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.UserInfo.OpenId == 0 || (ViewBag.UserInfo.Mobile == "" || ViewBag.UserInfo.Mobile == null) || ViewBag.UserInfo.NickName == null)
+        {
+            <div class="btn-box">
+                <span style="color:rgb(179,179,179)">*请绑定您的微信号和手机号后参与活动</span>
+                <div data-isOk="0" class="mark">马上参与</div>
+            </div>
+        }
+        else 
+        {
+            <div class="btn-box">
+                <span style="color:white">*请绑定您的微信号和手机号后参与活动</span>
+                <div data-isOk="@ViewBag.UserInfo.OpenId" class="mark btnOk">马上参与</div>
+            </div>
+        }
+    </div>
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/job-layout.js"></script>
+</body>
+</html>

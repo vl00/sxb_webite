@@ -1,0 +1,87 @@
+﻿@model List<PMS.OperationPlateform.Domain.DTOs.SchoolActivityRegisteExtensionDto>
+@using PMS.OperationPlateform.Domain.Enums;
+@{
+    var prefix = ViewBag.Prefix;
+}
+
+@if (Model != null && Model.Any())
+{
+
+    @foreach (var item in Model)
+    {
+        var itemType = (SchoolActivityExtensionType)item.Type;
+        @if (itemType == SchoolActivityExtensionType.Text)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                <div class="inputBox">
+                    <input type="text" name="name" placeholder="@(item.Name)">
+                </div>
+            </div>
+        }
+        else if (itemType == SchoolActivityExtensionType.Phone)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                <div class="phoneBox">
+                    <div class="inputBox">
+                        <input name="phone" type="tel" maxlength="11" placeholder="@(item.Name)">
+                        <span>获取验证码</span>
+                        <i class="txt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="moduleBox" data-id="@item.Id" data-name="验证码">
+                <div class="phoneBox">
+                    <div class="inputBox">
+                        <input name='qrCode' type="text" maxlength="6" placeholder="请输入手机验证码">
+                    </div>
+                </div>
+            </div>
+        }
+        else if (itemType == SchoolActivityExtensionType.DropdownList)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                @if (!string.IsNullOrWhiteSpace(prefix))
+                {
+                    <div id="id_@(prefix + "_"+ item.Id)" class="selectBox" data-id="@item.Id" data-source='@Json.Serialize(item.DataSource)'></div>
+                }
+                else
+                {
+                    <div id="id_@(item.Id)" class="selectBox" data-id="@item.Id" data-source='@Json.Serialize(item.DataSource)'></div>
+                }
+            </div>
+        }
+        else if (itemType == SchoolActivityExtensionType.CheckBox)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                <div class="checkBox">
+                    <h3 class="reserved-capital-form-title">@(item.Name)：</h3>
+                    @foreach (var value in item.DataSource)
+                    {
+                        <label> <input class="check_type" type="checkbox" name="checkVal@(item.Id)" value="@value" />@value</label>
+                    }
+                </div>
+            </div>
+        }
+        else if (itemType == SchoolActivityExtensionType.Radio)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                <div class="radioBox">
+                    <h3 class="reserved-capital-form-title">@(item.Name)：</h3>
+                    @foreach (var value in item.DataSource)
+                    {
+                        <label> <input name="radioVal@(item.Id)" class="radio_type" type="radio" value="@value" />@value</label>
+                    }
+                </div>
+            </div>
+        }
+        else if (itemType == SchoolActivityExtensionType.Textarea)
+        {
+            <div class="moduleBox" data-id="@item.Id" data-name="@item.Name">
+                <div class="textareaBox">
+                    <textarea class="textVal" placeholder="@(item.Name)"></textarea>
+                </div>
+            </div>
+        }
+    }
+
+}

@@ -1,0 +1,70 @@
+﻿@{
+    IEnumerable<Sxb.Web.Models.Comment.CommentList> comments = ViewBag.Comments;
+
+}
+
+@if (comments != null)
+{
+    foreach (var item in comments)
+    {
+
+        <li>
+            <div class="flex justify-content-between">
+                <div class="flex justify-content-between">
+                    <div class="review-photo">
+                        <img src="@item.UserInfo.HeadImager" alt="">
+
+                        @if (item.UserInfo.IsTalent)
+                        {
+                            //达人认证标
+                            <img src="@Url.SxbStaticFile("/imgs/talent-show/certification.png")" alt="" class="certification">
+                        }
+                    </div>
+                    <div>
+                        <span class="client-name">@item.UserInfo.NickName</span>
+                        @if (item.Score.IsAttend)
+                        {
+                            <span class="client-tab">过来人</span>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <a href="javascript:;" class="report"><img src="@Url.SxbStaticFile("/imgs/talent-show/report.png")" alt=""></a>
+                    @if (item.IsSelected)
+                    {
+                        <p class="review-tab">精华</p>
+                    }
+                </div>
+            </div>
+            <a href="/comment/@(item.No).html">
+                <p class="review-content">
+                    @item.Content
+                </p>
+                @if (item.Images.Any())
+                {
+                    <div class="photograph">
+                        @foreach (var img in item.Images)
+                        {
+                            <img src="@img" alt="">
+                        }
+                        <div class="photograph-number">
+                            <img src="@Url.SxbStaticFile("/imgs/talent-show/photographNumber.png")" alt="">
+                            <span>@item.Images.Count</span>
+                        </div>
+                    </div>
+                }
+            </a>
+
+            <div class="flex justify-content-between comment-nice-time">
+                <span class="time">@item.CreateTime</span>
+                <p>
+                    <span class="comments" data-commentid="@item.Id"><i></i>@item.ReplyCount</span>
+                    <span class="nice" data-commentid="@item.Id"><i></i><span>@item.LikeCount</span></span>
+                    <!--                        <a href="javascript:;" class="comments">16</a>-->
+                    <!--                        <a href="#">2</a>-->
+                </p>
+            </div>
+        </li>
+
+    }
+}

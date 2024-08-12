@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewData["Title"] = "GetCommentAndAnswerByJob";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_LayoutLayer.cshtml";
+}
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+
+        #SettlementTime {
+            height: calc(2.25rem + 2px);
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .SettlementType:hover {
+            cursor: pointer;
+        }
+
+        #title_group span {
+            padding: 0px 15px;
+            padding-bottom: 15px;
+        }
+
+            #title_group span:hover {
+                cursor: pointer;
+            }
+
+        .questionInfo{
+            cursor:pointer;
+        }
+    </style>
+}
+<input type="hidden" id="job" value="@ViewBag.JobId" />
+<input type="hidden" id="isExaminerAdmin" value="@ViewBag.isExaminerAdmin" />
+<div class="sufee-login d-flex align-content-center flex-wrap">
+    <div class="container breadcrumbs">
+        <div class="content mt-12">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card container">
+                            <div class="row" style="margin-top:50px;">
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="search" class="float-right btn btn-dark" type="button" value="检索" />
+                                    <span class="float-right ">
+                                        <input type="text" id="school" class="form-control" placeholder="请输入学校名称" />
+                                    </span>
+
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid gray;padding-bottom: 15px;">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="col-sm-12" id="title_group">
+                                            <span data-check="true" data-query="1">点评</span>
+                                            <span data-check="" data-query="2">问答</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="col-sm-12">
+                                            <div id="commentBox" style="display:none;">
+                                                <table id="comment" style="table-layout:fixed" class="table"></table>
+                                            </div>
+                                            <div id="answerBox" style="display:none;">
+                                                <table id="answer" style="table-layout:fixed" class="table"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            Switch(1)
+            $("#title_group span").click(function () {
+                var query = $(this).attr("data-query")
+                $("#title_group span").attr("data-check", "")
+                $(this).attr("data-check","true")
+                Switch(query)
+            })
+
+            $("#comment").on("click", ".commentInfo", function () {
+                let commentId = $(this).attr("data-id")
+                layer.open({
+                    type: 2,
+                    area: [470 + 'px', 520 + 'px'],
+                    fix: false, //不固定
+                    title: '点评详情',
+                    content: '/PartTimeJob/Statistics/CommentInfo?CommentId=' + commentId,
+                    btn: ["确定"]
+                });
+            })
+
+            $("#answer").on('click', ".questionInfo", function () {
+                var id = $(this).attr("data-id")
+                layer.open({
+                    type: 2,
+                    area: [470 + 'px', 520 + 'px'],
+                    fix: false, //不固定
+                    title: '问答详情',
+                    content: '/PartTimeJob/Statistics/AnswerInfo?answerId=' + id,
+                    btn: ["确定"]
+                });
+            })
+
+            $("#search").click(function () {
+                var search = $("#title_group span[data-check=true]").attr("data-query")
+                Switch(search)
+            })
+        })
+
+        function Switch(query)
+        {
+            var jobId = $("#job").val();
+            //点评
+            if (query == 1)
+            {
+                $("#title_group span[data-query=1]").css({ "border-bottom": "2px solid black" })
+                $("#title_group span[data-query=2]").css({ "border-bottom": "none" })
+                $("#commentBox").show();
+                $("#answerBox").hide();
+                $("#comment").bootstrapTable('destroy'); 
+                $('#comment').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/Statistics/GetAllCommentByJob",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    cache: false,
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            Id: jobId,
+                            type: $("#isExaminerAdmin").val(),
+                            school: $("#school").val(),
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page : (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            Tel: $('#search_tel').val()
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        title: '点评内容',
+                        field: 'content',
+                        width: '15%',
+                        cellStyle: formatTableUnit,
+                        formatter: CommentMatter
+                    }, {
+                        title: '学校',
+                        field: 'schoolName'
+                    }, {
+                        title: '审核状态',
+                        field: 'examineStatus',
+                    }, {
+                        title: '审核人',
+                        field: 'examineAdmin'
+                    }, {
+                        title: '时间',
+                        field: 'addTime'
+                    }]
+                })
+            }
+            else
+            {
+                $("#commentBox").hide();
+                $("#answerBox").show();
+                $("#title_group span[data-query=2]").css({ "border-bottom": "2px solid black" })
+                $("#title_group span[data-query=1]").css({ "border-bottom": "none" })
+                $("#answer").bootstrapTable('destroy'); 
+                $('#answer').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/Statistics/GetAllAnswerByJob",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    cache: false,
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            Id: jobId,
+                            school: $("#school").val(),
+                            type: $("#isExaminerAdmin").val(),
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page : (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            Tel: $('#search_tel').val()
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        title: '问题',
+                        field: 'question',
+                        width: '10%',
+                        cellStyle: formatTableUnit,
+                        formatter: paramsMatter
+                    }, {
+                        title: '答复',
+                        field: 'answer',
+                            width: '15%',
+                            cellStyle: formatTableUnit,
+                            formatter: paramsMatter
+                    }, {
+                        title: '学校',
+                        field: 'school'
+                    }, {
+                        title: '审核状态',
+                        field: 'examineStatus'
+                    }, {
+                        title: '审核人',
+                        field: 'examineAdmin'
+                    }, {
+                        title: '时间',
+                        field: 'addTime'
+                        }]
+                })
+            }
+        }
+
+        function ShowAnswer(value, row, index)
+        {
+            console.log(row)
+            debugger;
+            return "<span class='questionInfo' data-Id='" + row["id"] + "'>" + row["question"] + "</span>";
+        }
+
+        function CommentMatter(value, row, index)
+        {
+            var span = document.createElement('span');
+            span.setAttribute('title', value);
+            //debugger;
+            span.setAttribute("data-id", row.id)
+            span.setAttribute("class", "commentInfo")
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+
+        function paramsMatter(value, row, index) {
+            var span = document.createElement('span');
+            
+            span.setAttribute("class", "questionInfo")
+            span.setAttribute("data-AnswerWrite", row["answerWrite"])
+            span.setAttribute("data-id", row["id"])
+            
+            span.setAttribute('title', value);
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+
+        function formatTableUnit(value, row, index) {
+            return {
+                css: {
+                    "overflow": 'hidden', "white-space": 'nowrap', "text-overflow": 'ellipsis'
+                }
+            }
+        }
+    </script>
+}

@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "点赞";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/mine-list.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">点赞</span>
+    <span></span>
+</header>
+
+<ul class="tab flex justify-content-between text-center">
+    <li data-url="@Url.Action("Comment")">点评</li>
+    <li data-url="@Url.Action("QA")">问答</li>
+</ul>
+
+<section class="mt">
+    <div class="content"></div>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/mine-list.js"></script>
+}
+

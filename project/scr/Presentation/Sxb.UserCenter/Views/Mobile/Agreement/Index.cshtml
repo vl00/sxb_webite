@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "协议及声明";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/agreement.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">协议及声明</span>
+    <span class=""></span>
+</header>
+
+<section class="mt list">
+    <ul>
+        <li><a href="@Url.Action("Privacy")">隐私协议<i class="arrow"></i></a></li>
+        <li><a href="@Url.Action("TermsOfService")">服务条款<i class="arrow"></i></a></li>
+        <li><a href="@Url.Action("Disclaimer")">免责声明<i class="arrow"></i></a></li>
+    </ul>
+</section>

@@ -1,0 +1,283 @@
+@{
+    ViewData["Title"] = $"{ViewBag.School.SchoolName}学校答疑_常见问题-上学帮";
+    ViewData["keywords"] = $"{ViewBag.School.SchoolName}学校答疑,{ViewBag.School.SchoolName}常见问题";
+    ViewData["description"] = ViewBag.QuestionUser?.NickName + "邀请你回答：" + ViewBag.Question.QuestionContent;
+
+    ViewBag.ShareTimeLineTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareDesc = ViewBag.QuestionUser?.NickName + "邀请你回答：" + ViewBag.Question.QuestionContent;
+    //ViewBag.ShareLink = "/Question/QuestionDetail?QuestionId=" + ViewBag.Question.Id;
+    Layout = "~/Views/Layout/_layout.cshtml";
+
+}
+
+@using Sxb.Web.Models.Answer;
+@using Sxb.Web.Models.Question;
+@using PMS.UserManage.Domain.Common;
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-comment.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-list.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-qa.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-detail.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/viewer.min.css" />
+    <style>
+        .header .btn-list .header-icon.share1 {
+            margin-left: .3rem;
+            background-position: -.48rem .02rem;
+        }
+    </style>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+}
+@*
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">问答详情</span>
+        <span></span>
+        <span class="btn-list flex">
+            <a class="header-icon  @(ViewBag.isCollected ? " collection":"")"></a>
+            <a class="header-icon share" href="/Question/QuestionSuccess?SchoolId=@(ViewBag.School.Id)&QuestionId=@(ViewBag.Question.Id)&isSuccessQuestion=false" class="invite"></a>
+            <a class="header-icon share checkLogin" data-title="@ViewBag.School.SchoolName" data-content="@(ViewBag.QuestionUser?.NickName)邀请你回答：@(ViewBag.Question.QuestionContent)" data-url="@(ViewBag.ShareLink)" data-logo="@(ViewBag.ShareImgLink)"></a>
+        </span>
+    </header>
+*@
+
+<section class="Question mt">
+    <a href="/Question/school-@ViewBag.School.ShortSchoolNo/">
+        <div class="school-msg">
+            <h5 class="school-name">
+                @ViewBag.School.SchoolName
+                <span class="question-num">共@(ViewBag.QuestionTotal)个问题</span>
+            </h5>
+            <ul class="tag flex">
+                @if (ViewBag.School.SchoolType == 3)
+                {
+                    <li>国际</li>
+                }
+                else if (ViewBag.School.SchoolType == 4)
+                {
+                    <li>外籍</li>
+                }
+                else if (ViewBag.School.SchoolType == 2)
+                {
+                    <li>民办</li>
+                }
+                else if (ViewBag.School.SchoolType == 1)
+                {
+                    <li>公办</li>
+                }
+
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.School.LodgingReason))
+                {
+                    <li>@ViewBag.School.LodgingReason</li>
+                }
+
+                @if (ViewBag.School.IsAuth)
+                {
+                    <li class="bcg-none"><i class="icon"></i></li>
+                }
+            </ul>
+        </div>
+    </a>
+    @{
+        QuestionVo question = ViewBag.Question;
+
+    }
+    <div class="qa-list qa-detail" data-questionId="@question.Id">
+        <div class="question flex">
+            <div class="q-icon"><span>问</span></div>
+            <div class="@(question.Images.Count <= 0 ? "noneQuestionImager" : "") QuestionImagerBox">
+                <h5 class="question-title">@question.QuestionContent</h5>
+                @if (question.Images.Count > 0)
+                {
+                    <div class="img-list">
+                        <ul class="flex justify-content-between" id="imgList">
+                            @for (int i = 0; i < question.Images.Count; i++)
+                            {
+                                if (i < 3)
+                                {
+                                    <li><img src="@question.Images[i]" alt="" /></li>
+                                }
+                                else
+                                {
+                                    <li style="display:none;"><img src="@question.Images[i]" alt="" /></li>
+                                }
+                            }
+
+                            @if (question.Images.Count == 2)
+                            {
+                                <li></li>
+                            }
+                        </ul>
+                        @if (question.Images.Count > 3)
+                        {
+                            <span class="text-center"><i class="icon"></i>@question.Images.Count</span>
+                        }
+                    </div>
+                }
+                <span class="department">@ViewBag.School.SchoolSectionName</span>
+                <span class="time">@question.QuestionCreateTime</span>
+                <span class="reply-num"><i>@question.AnswerCount</i>个回复</span>
+                <div class="que-collect @(ViewBag.isCollected ? "collect" : "")"></div>
+            </div>
+            <span class="other-list-btn flex round" data-id="@question.Id" data-type="2" data-report="2">
+                <i></i>
+                <i></i>
+                <i></i>
+            </span>
+        </div>
+    </div>
+</section>
+<section class="hot-reply" style="display:@(ViewBag.NewAnswers != null ? "block" : "none")">
+    <h5 class="title">热门回复</h5>
+    <ul class="comment-list">
+        @if (ViewBag.HotAnswers != null)
+        {
+            @foreach (AnswerInfoVo item in ViewBag.HotAnswers)
+            {
+                <li>
+                    <a href="/ReplyDetail/Index?type=2&DatascoureId=@item.Id">
+                        <div class="list-header flex justify-content-between">
+                            <div class="user-msg flex">
+                                <div class="head  login-head">
+                                    <div class="headimager"><img src="@item.UserInfo.HeadImager" alt="" /></div>
+                                    @if (item.UserInfo.IsSchool && item.UserInfo.IsTalent)
+                                    {
+                                        @if (item.UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                        {
+                                            <i class="icon"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon talent"></i>
+                                        }
+                                        <i class="icon school"></i>
+                                    }
+                                    else if (item.UserInfo.IsTalent)
+                                    {
+                                        @if (item.UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                        {
+                                            <i class="icon"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon talent"></i>
+                                        }
+                                    }
+                                    else if (item.UserInfo.IsSchool)
+                                    {
+                                        <i class="icon school"></i>
+                                    }
+                                    @*<i class="icon school"></i>*@
+                                </div>
+                                <div>
+                                    <div>
+                                        <span class="name">@item.UserInfo.NickName</span>
+                                    </div>
+                                    <div class="reply-time">@(item.AddTime)</div>
+                                </div>
+                            </div>
+                            <div class="other">
+                                <div class="other-list-btn text-center" data-id="@item.Id" data-type="4" data-report="4">
+                                    <div class="flex">
+                                        <i class="round"></i>
+                                        <i class="round"></i>
+                                        <i class="round"></i>
+                                    </div>
+                                </div>
+                                @if (item.IsSelected)
+                                {
+                                    <span class="best">精华</span>
+                                }
+                            </div>
+                        </div>
+
+                        <p class="content">@item.AnswerContent</p>
+                    </a>
+                    <div class="comment-msg flex justify-content-between">
+                        @if (item.ReplyCount > 0)
+                        {
+                            <a href="/ReplyDetail/Index?type=2&DatascoureId=@item.Id" class="reply-num">共@(item.ReplyCount)条回复></a>
+                        }
+                        else
+                        {
+                            <a></a>
+                        }
+
+                        <div class="ctr">
+                            <span data-answerId="@item.Id" class="like @(item.IsLike ? "click-like" : "")">
+                                <i class="icon"></i>
+                                <span>@item.LikeCount</span>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</section>
+<section class="new-reply" style="display:@(ViewBag.NewAnswers != null ? " block" : "none" )">
+    <h5 class="title">最新回复</h5>
+    <ul class="comment-list"></ul>
+    <div style="display:none;" class="load-more text-center">正在努力加载</div>
+    <div style="display:none;" class="not-more-data">没有更多数据</div>
+</section>
+
+<!-- 如果没有评论 则显示出来 -->
+<section class="all-comment" style="display:@(ViewBag.NewAnswers == null ? " block" : "none" )">
+    <h5 class="title">全部回复</h5>
+    <div class="not-comment text-center">
+        <div><i class="icon"></i></div>
+        <p>暂无回复，快来抢沙发</p>
+        @*<a href="/Question/QuestionSuccess?SchoolId=@(ViewBag.School.Id)&QuestionId=@(ViewBag.Question.Id)&isSuccessQuestion=false" class="invite"><span><i class="arrow"></i></span>邀请大家来回复</a>*@
+        <a href="/wechat/index?type=4&schoolId=@(ViewBag.School.Id)&dataSource=@(ViewBag.Question.Id)" class="invite"><span><i class="arrow"></i></span>邀请大家来回复</a>
+    </div>
+</section>
+
+
+<!-- 回复框 -->
+<section class="botton-reply-input">
+    <input class="answerReply" readonly="readonly" type="text" placeholder="@if (!question.IsAnony) { WriteLiteral("回复"+question.UserInfo.NickName); } else { WriteLiteral("回复匿名用户"); }:" />
+</section>
+
+<section class="popup-box">
+    <ul class="text-center">
+        <li class="reply-btn"><a>回复</a></li>
+        <li class="complaint"><a href="./complaint.html">举报</a></li>
+        <li class="cancel"><a>取消</a></li>
+    </ul>
+</section>
+
+<section class="reply-box">
+    <div class="flex justify-content-between btn-list">
+        <span class="cancel">取消</span>
+        <div>
+            @if (ViewBag.isSchoolRole)
+            {
+                <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+            }
+            else
+            {
+                <span id="Student" class="btn"><i class="round"></i>在读</span>
+            }
+
+            <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+            <span class="submit-reply">发布</span>
+        </div>
+    </div>
+<textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+</section>
+<div class="curtain"></div>
+@section script
+    {
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js?v=0.05325821"></script>
+    <script src="@ViewBag.StaticFile/js/viewer.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/collection.js"></script>
+    <script src="@ViewBag.StaticFile/js/qa-detail.js"></script>
+
+}

@@ -1,0 +1,227 @@
+﻿@model PMS.School.Domain.Dtos.SchoolExtensionDto
+@using PMS.OperationPlateform.Domain.Enums;
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+@{
+    var principals = Model.SchoolImages.Where(s => s.Type == PMS.School.Domain.Enum.SchoolImageType.Principal).ToList();
+    var teachers = Model.SchoolImages.Where(s => s.Type == PMS.School.Domain.Enum.SchoolImageType.Teacher).ToList();
+    var hardwares = Model.SchoolImages.Where(s => s.Type == PMS.School.Domain.Enum.SchoolImageType.Hardware).ToList();
+    var students = Model.SchoolImages.Where(s => s.Type == PMS.School.Domain.Enum.SchoolImageType.CommunityActivities).ToList();
+
+    var defaultText = "暂未收录";
+    var schoolType = (SchoolType)Model.Type;
+}
+
+<!-- 这是学校信息部分的开始 -->
+<div class="schoolInfo container">
+    <div class="schoolTitle">
+        <span></span>
+        <h1>@(Model.SchoolName + "-" + Model.ExtName)</h1>
+    </div>
+    <div class="schoolAddress">
+        <span class="infoTitle">学校地址:</span>
+        <span class="infoTxt">@Model.Address</span>
+        <!-- 判断显示 -->
+        <!-- <span class="infoTxt">暂未收录</span> -->
+    </div>
+    <div class="schoolType">
+        <span class="infoTitle">办学类型:</span>
+        <span class="infoTxt">@(schoolType.GetDescription())学校</span>
+    </div>
+    @* 国际学校,  显示出国方向 *@
+    @if (schoolType == SchoolType.International)
+    {
+        <div class="schoolDirection">
+            <span class="infoTitle">出国方向:</span>
+            <span class="infoTxt">@(Model.AbroadList.Any() ? string.Join('、', Model.AbroadList.Select(s => s.Key)) : defaultText)</span>
+        </div>
+    }
+    <div class="schoolApprove">
+        <span class="infoTitle">学校认证:</span>
+        @if (Model.AuthenticationList.Any())
+        {
+            <div class="tagBox">
+                @foreach (var item in Model.AuthenticationList)
+                {
+                    <span>@item.Key</span>
+                }
+            </div>
+        }
+        else
+        {
+            <span class="infoTxt">@(defaultText)</span>
+        }
+    </div>
+    @* 国际学校,  显示课程设置 *@
+    @if (schoolType == SchoolType.International)
+    {
+        <div class="schoolCourse">
+            <span class="infoTitle">课程设置:</span>
+            @if (Model.CoursesList.Any())
+            {
+                <div class="tagBox">
+                    @foreach (var item in Model.CoursesList)
+                    {
+                        <span>@item.Key</span>
+                    }
+                </div>
+            }
+            else
+            {
+                <span class="infoTxt">@(defaultText)</span>
+            }
+        </div>
+    }
+    <div class="schoolAbstract">
+        <span class="infoTitle">学校简介:</span>
+        <p>
+            @(Html.Raw(Model.Intro.Replace("\r\n", "</br>").Replace("\n", "</br>")))
+            <span class="closeMore">收起</span>
+        </p>
+        <span class="getMore"><i></i> 展开更多></span>
+    </div>
+</div>
+<!-- 这是学校信息部分的结束 -->
+<!-- 这是招生简章部分的开始 -->
+<div class="schoolRecruit container">
+    <div class="schoolTitle">
+        <span></span>
+        <h1>学校招生简章</h1>
+    </div>
+    <div class="recruitContent">
+        <div class="picBox">
+            <img src="@Model.SchoolImageUrl" alt="">
+        </div>
+        <div class="messageBox">
+            <h2>@Model.ExtName</h2>
+            <div class="schoolEnrollment">
+                <span class="infoTitle">招生人数:</span>
+                <span class="infoTxt">@(Model.Count != null ? Model.Count + "人" : defaultText)</span>
+            </div>
+            <div class="schoolProspects">
+                <span class="infoTitle">招生对象:</span>
+                @if (Model.TargetList.Any())
+                {
+                    <div class="tagBox">
+                        @foreach (var item in Model.TargetList)
+                        {
+                            <span>@item.Key</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <span class="infoTxt">@(defaultText)</span>
+                }
+            </div>
+            <div class="schoolSubject">
+                <span class="infoTitle">考试科目:</span>
+                <span class="infoTxt">@(Model.SubjectsList.Any() ? string.Join('、', Model.SubjectsList.Select(s => s.Key)) : defaultText)</span>
+            </div>
+            <div class="schoolLodge">
+                <span class="infoTitle">走读寄宿:</span>
+                <span class="infoTxt">@Model.LodgingType.GetDescription()</span>
+            </div>
+            <div class="schoolTuition">
+                <span class="infoTitle">学年学费:</span>
+                <span class="infoTxt">@Model.TuitionPerYearFee</span>
+            </div>
+        </div>
+        <div class="realizeMoreBtn">了解更多招生详情</div>
+    </div>
+</div>
+<!-- 这是招生简章部分的开始 -->
+<!-- 这是学校师资展示部分的开始 -->
+
+@if (principals.Any() || teachers.Any())
+{
+    <div class="teachers container">
+        <div class="schoolTitle">
+            <span></span>
+            <h1>学校师资展示</h1>
+        </div>
+
+        @if (principals.Any())
+        {
+            <div class="principalPictures picturesBox">
+                <h2>校长风采<span>(@principals.Count)</span></h2>
+                <ul>
+                    @foreach (var item in principals)
+                    {
+                        <li>
+                            <img src="@item.Url" alt="@item.ImageDesc">
+                            @if (!string.IsNullOrWhiteSpace(@item.ImageDesc))
+                            {
+                                <span>@item.ImageDesc</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>}
+
+        @if (teachers.Any())
+        {
+            <div class="principalPictures picturesBox">
+                <h2>教师风采<span>(@teachers.Count)</span></h2>
+                <ul>
+                    @foreach (var item in teachers)
+                    {
+                        <li>
+                            <img src="@item.Url" alt="@item.ImageDesc">
+                            @if (!string.IsNullOrWhiteSpace(@item.ImageDesc))
+                            {
+                                <span>@item.ImageDesc</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+}
+@if (hardwares.Any() || students.Any())
+{
+    <!-- 这是学校环境展示部分的结束 -->
+    <div class="teachers container">
+        <div class="schoolTitle">
+            <span></span>
+            <h1>学校环境展示</h1>
+        </div>
+        @if (hardwares.Any())
+        {
+            <div class="principalPictures picturesBox">
+                <h2>硬件设施<span>(@hardwares.Count)</span></h2>
+                <ul>
+                    @foreach (var item in hardwares)
+                    {
+                        <li>
+                            <img src="@item.Url" alt="@item.ImageDesc">
+                            @if (!string.IsNullOrWhiteSpace(@item.ImageDesc))
+                            {
+                                <span>@item.ImageDesc</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (students.Any())
+        {
+            <div class="principalPictures picturesBox">
+                <h2>学生生活<span>(@students.Count)</span></h2>
+                <ul>
+                    @foreach (var item in students)
+                    {
+                        <li>
+                            <img src="@item.Url" alt="@item.ImageDesc">
+                            @if (!string.IsNullOrWhiteSpace(@item.ImageDesc))
+                            {
+                                <span>@item.ImageDesc</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+}

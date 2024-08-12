@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = null;
+}
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>兼职平台管理登录</title>
+    <meta name="description" content="Sufee Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+
+
+    <link rel="stylesheet" href="/Content/vendors/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/vendors/themify-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/Content/vendors/selectFX/css/cs-skin-elastic.css">
+
+    <link rel="stylesheet" href="/Content/assets/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+</head>
+
+<body class="bg-dark">
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                <div class="login-logo">
+                    <a href="index.html">
+                        @*<img class="align-content" src="images/logo.png" alt="">*@
+                    </a>
+                </div>
+                <div class="login-form">
+                    <form>
+                        <div class="form-group" style="text-align:center; ">
+                            <text style="font-size: 25px; font-weight: bold;">兼职平台管理登录</text>
+                        </div>
+                        <div class="form-group">
+                            <label>账号</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="手机号码">
+                        </div>
+                        <div class="form-group">
+                            <label>密码</label>
+                            <input type="password"  name="pwd" class="form-control" placeholder="默认为邀请码">
+                        </div>
+                        <button id="login" type="button" class="form-group btn btn-success btn-flat m-b-30 m-t-30">登录</button>
+                        <div class=" register-link m-t-15 text-center">
+                            <p>忘记密码请致电：<text style="color:#d34836;">02089623079</text></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/Content/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/Content/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/Content/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/Content/assets/js/main.js"></script>
+    <script src="~/lib/layer-v3.1.1/layer/layer.js"></script>
+    <script type="text/javascript">var $ = jQuery;
+
+        $(function () {
+            //登录
+            $("#login").click(function () {
+                var phone = $("input[name='phone']").val();
+                var pwd = $("input[name='pwd']").val();
+
+                if (phone == "") {
+                    layer.alert("请填写账号");
+                    return false;
+                }
+
+                if (pwd == "") {
+                    layer.alert("请填写密码")
+                    return false;
+                }
+
+                $.ajax({
+                    url: "/PartTimeJob/Home/Login",
+                    type: "Post",
+                    data: {
+                        phone: phone,
+                        pwd: pwd,
+                    },
+                    success: function (data) {
+                        //密码错误
+                        if (data.statusCode == -1) {
+                            $("input[name='phone']").val("");
+                            $("input[name='pwd']").val("");
+                            layer.alert("账号或密码错误");
+                        }
+                        else if (data.statusCode == 2)
+                        {
+                            //已经重置过密码
+                            location.href = "/PartTimeJob/Home/Welcome";
+                        }
+                        else
+                        {
+                            //强制用户填写新密码
+                            location.href = "/PartTimeJob/Home/Self?isFirst=true";
+                        }
+                    }
+                })
+
+            })
+        })</script>
+</body>
+
+</html>

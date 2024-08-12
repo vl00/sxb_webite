@@ -1,0 +1,145 @@
+﻿@using PMS.School.Domain.Dtos;
+
+@{
+    Layout = null;
+    var index = ((List<SchoolExtScoreIndex>)ViewBag.ScoreIndex);
+}
+@model List<SchoolExtScore>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>评价细项</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/fraction-detail.css">
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">评价细项</span>
+        <span class=""></span>
+        <span class="btn-list flex">
+            @if (ViewBag.CollectStatus == true)
+            {
+                <a class="header-icon collection"></a>
+            }
+            else
+            {
+                <a class="header-icon "></a>
+            }
+            <a class="header-icon share" data-title="@($"{ViewBag.UserName}向您推荐了一所学校快来了解一下呗")" data-content="@($"{ViewBag.SchoolName}-{ViewBag.ExtName}")" data-url="@Url.Action("Detail", "School", new { extId = ViewBag.ExtId, sid = ViewBag.Sid })" data-logo="@Uri.EscapeDataString("https://cdn.sxkid.com/images/logo_share_v4.png")"></a>
+
+            <a class="other">
+                <i></i>
+                <i></i>
+                <i></i>
+            </a>
+        </span>
+    </header>
+
+    <section class="fraction-list mt">
+        <ul>
+            @foreach (var index_lv1 in index.Where(p => p.Level == 1))
+            {
+                <li class="flex justify-content-between">
+                    <h5>@index_lv1.Index_Name<span>@(Math.Round((decimal)(Model.FirstOrDefault(p => p.IndexId == index_lv1.Id)?.Score ?? 0), 0)) </span></h5>
+                    <div>
+                        @foreach (var index_lv2 in index.Where(p => p.ParentId == index_lv1.Id))
+                        {
+                            <p>@index_lv2.Index_Name<span>@(Math.Round((decimal)(Model.FirstOrDefault(p => p.IndexId == index_lv2.Id)?.Score ?? 0), 0))</span></p>
+                        }
+                    </div>
+                </li>
+            }
+
+            @*<li class="flex justify-content-between">
+                    <h5>综合<span>@((character.SchoolCredentials + character.EnterEasy) / 2)</span></h5>
+                    <div>
+                        <p>学校资质<span>@character.SchoolCredentials</span></p>
+                        <p>入学难度<span>@character.EnterEasy</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>师资<span>@(character.TeacherPower)</span></h5>
+                    <div>
+                        <p>师资力量<span>@(character.TeacherPower)</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>硬件<span>@((character.Hardware + character.Edufund + character.RegionaleConomic) / 3)</span></h5>
+                    <div>
+                        <p>硬件设施<span>@character.Hardware</span></p>
+                        <p>家长教育投入<span>@character.RegionaleConomic</span></p>
+                        <p>区域教育投入<span>@character.Edufund</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>课程<span>@character.CoureType</span></h5>
+                    <div>
+                        <p>课程种类<span>@character.CoureType</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>学术<span>@((character.UpgradeEasy + character.PopulationDensity) / 2)</span></h5>
+                    <div>
+                        <p>升学情况<span>@character.UpgradeEasy</span></p>
+                        <p>学位价值预测<span>@character.PopulationDensity</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>费用<span>@character.Cost</span></h5>
+                    <div>
+                        <p>费用负担<span>@character.Cost</span></p>
+                    </div>
+                </li>
+                <li class="flex justify-content-between">
+                    <h5>周边<span>@((character.Comfort + character.Safety + character.TrafficEasy) / 3)</span></h5>
+                    <div>
+                        <p>周边舒适度<span>@character.Comfort</span></p>
+                        <p>周边安全性<span>@character.Safety</span></p>
+                        <p>交通便利性<span>@character.TrafficEasy</span></p>
+                    </div>
+                </li>*@
+        </ul>
+    </section>
+
+    <!-- 头部其他内容按钮 -->
+    <div class="popup-other text-center">
+        <ul>
+            <li class="correct"><a href="@Url.Action("SchCorrection","Home",new {eid=ViewBag.ExtId })">纠错</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </div>
+    <div class="curtain"></div>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/collection.js"></script>
+
+    <script>
+        @*// 检测是否收藏
+        $.isCollection("@Model.ExtId", "");*@
+
+        //点击收藏
+        jQuery(".header .btn-list a:first-child").on("click", function () {
+            // 收藏
+            $.collection("@ViewBag.ExtId", 1, "");
+        });
+
+        // 关闭弹窗
+        $('.curtain, .cancel').on('click', function () {
+            $('.curtain').fadeOut();
+            $('.popup-other').animate({ 'bottom': '-30%' });
+            $('body, html').css({ 'overflow': 'visible', 'height': 'unset', 'position': 'relative' });
+        });
+        // 弹窗 纠错
+        $('.header .other').on('click', function () {
+            $('.curtain').fadeIn();
+            $('.popup-other').animate({ 'bottom': 0 });
+            $('body, html').css({ 'overflow': 'hidden', 'height': '100%', 'position': 'fixed', 'width': '100%' });
+        });
+    </script>
+</body>
+</html>

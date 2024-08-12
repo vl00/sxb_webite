@@ -1,0 +1,1822 @@
+﻿@using PMS.School.Application.ModelDto
+@using iSchool;
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Domain.Common;
+@using PMS.School.Infrastructure.Common;
+@using Sxb.Web.Models.Comment
+@using Sxb.Web.Models.Question
+@using SchoolType = PMS.School.Domain.Common.SchoolType
+@using PMS.UserManage.Domain.Common;
+@model PMS.School.Domain.Dtos.SchoolExtSimpleDto
+@{ Layout = null;
+    var schtype = (SchFType0)ViewBag.SchFType;
+    var brandImages = new List<SchoolImageDto>();
+    var schoolType = new iSchool.SchFType0(Model.Grade, Model.Type, Model.Discount, Model.Diglossia, Model.Chinese).GetDesc();
+    if (ViewBag.BrandImages != null && ViewBag.BrandImages.Count > 0)
+    {
+        brandImages = ViewBag.BrandImages as List<SchoolImageDto>;
+    }
+    }
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <title>@($"{Model.SchoolName}学校概况_招生简介_家长点评_常见问题_学校攻略_学校照片-上学帮")</title>
+    <meta name="keywords" content="@($"{Model.SchoolName}学校概况,{Model.SchoolName}招生简介,{Model.SchoolName}家长点评,{Model.SchoolName}常见问题,{Model.SchoolName}学校攻略,{Model.SchoolName}学校照片")">
+    <meta name="description" content="@(ViewBag.Page_Description)">
+    <link href="@ViewBag.StaticFile/css/achievement-msg.css" rel="stylesheet" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/viewer.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/iconfont.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-list.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-detail.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-registration.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/mobileSelect/mobileSelect.css" />
+    <script type="text/javascript">
+        var user = "@ViewBag.UserServiceUrl"
+        var designWidth = 750;
+        if (window.innerWidth < designWidth) {
+            document.getElementsByTagName('html').item(0).style.fontSize = parseInt(window.innerWidth / designWidth * 100, 10) + 'px';
+        }
+    </script>
+    <style type="text/css">
+        * {
+            touch-action: unset !important;
+        }
+
+        .school-detail li {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    @*<header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title" style="display: none;">@Model.SchoolName - @Model.ExtName</span>
+        <span class=""></span>
+        <span class="btn-list flex">
+            @if (ViewBag.CollectStatus == true)
+            {
+                <a class="header-icon collection"></a> }
+            else
+            {
+                <a class="header-icon "></a>}*@
+
+    @*<a class="header-icon share" data-title="@($"{ViewBag.UserName}向您推荐了一所学校快来了解一下呗")" data-content="@($"{Model.SchoolName}-{Model.ExtName}")" data-url="@Url.Action("Detail", "School", new { extId = Model.ExtId, sid = Model.Sid })" data-logo="@Uri.EscapeDataString("https://cdn.sxkid.com/images/logo_share_v4.png")"></a>*@
+    @*<a href="/pk/screeningSchool.html?extid=@Model.ExtId" class="pk-icon"></a>
+
+                <a class="other">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </a>
+            </span>
+        </header>*@
+
+    @*学校品牌图片*@
+    @if (brandImages.Any())
+    {
+        <div class="school-detail-toppic">
+            <ul class="img-content">
+                <li class="img_li">
+                    <span class="reader-title" style="display:none;">学校品牌图片</span>
+                    <ul class="img-list" id="@Guid.NewGuid()">
+                        @{ var printIndex = 1; }
+                        @foreach (var item in brandImages)
+                        {
+                            <li @if (printIndex > 1) { WriteLiteral("style=\"display:none;\""); }><img src="@item.SUrl" num="@printIndex" alt="@item.ImageDesc" data-img-url="@item.Url" /></li>
+                            printIndex++;
+                        }
+                    </ul>
+                    @if (brandImages.Count() > 1)
+                    {
+                        <span class="img-num"><i class="icon"></i>@brandImages.Count()</span>}
+                </li>
+            </ul>
+            <div class="toppic-background"></div>
+        </div>}
+
+    <div class="map-select" style="width: 20.5%;">
+        <i style="width: 100%; right: 0;"></i>
+        <ul class="flex text-center">
+            @*<li><a>划片区域</a></li>*@
+            <li class="active build-btn" style="width: 100%;"><a>附近楼盘</a></li>
+        </ul>
+    </div>
+
+    <section class="school-detail">
+        <div>
+            <div class="school-name">
+                <h5>@Model.Name</h5>
+                <p class="english-name">@Model.EName</p>
+                <ul class="flex school-tag-list">
+                    <li>
+                        @schoolType
+                    </li>
+                    @foreach (var item in Model.Tags.Take(5))
+                    {
+                        <li>@item</li>
+                    }
+                    @if ((schoolType == "双语小学" || schoolType == "双语初中" || schoolType == "双语高中") && Model.Tags.Count <= 4)
+                    {
+                        <li>国际化</li>
+                    } @*<li>国际</li>
+                        <li>省一级</li>
+                        <li>WASC</li>*@
+                </ul>
+                <div class="btn-list-2">
+                    <div class="collect-content">
+                        @if (ViewBag.CollectStatus == true)
+                        {
+                            <i class="collec-icon collect"></i>
+                        }
+                        else
+                        {
+                            <i class="collec-icon"></i>
+                        }
+                        学校收藏
+                    </div>
+                    <div>
+                        <a href="@Url.Action("SchCorrection", "Home", new { eid = Model.ExtId })">
+                            <i class="sch-bug"></i>
+                            学校纠错
+                        </a>
+                    </div>
+                    <div>
+                        <a href="/pk/screeningSchool.html?extid=@Model.ExtId">
+                            <i class="sch-pk"></i>
+                            学校对比
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- 广告开始 -->
+            <div class="mkt-box" style="background: #fff;padding-bottom: .16rem;">
+                <div class="swiper-container swiper-mkt swiperSchoolAd" data-id="@Model.ExtId" alt="25" id="swiperSchoolAd-25" style="margin: 0 .32rem;background: #fff;border-radius: .08rem;">
+                    <div class="swiper-wrapper">
+                    </div>
+                    <div class="swiper-pagination mkt-pagination"></div>
+                </div>
+            </div>
+            <!-- 广告结束 -->
+
+            @if (Model.Type != (byte)SchoolType.Other)
+            {
+                <div class="school-msg">
+                    <ul class="flex justify-content-between msg">
+                        <li>
+                            <span class="title">学费</span><br />
+                            <span>
+                                @if (!SchUtils.Canshow2("学费", schtype))
+                                {
+                                    //公办学校
+                                    @:-
+                                }
+                                else if (Model.Tuition == null)
+                                {
+                                    @:<span class="not-data">暂未收录</span>
+                                }
+                                else
+                                {
+                                    @:<i>@(Model.Tuition >= 10000 ? Math.Round((decimal)(Model.Tuition / 10000), 2) + "万" : Model.Tuition.ToString())</i>元/年
+                                }
+                            </span>
+                        </li>
+
+                        <li>
+                            <span class="title">学校总评</span><br />
+                            <span>
+                                @if (ViewBag.Score == null)
+                                {
+                                    @:<span class="not-data">暂无评分</span>
+                                }
+                                else
+                                {
+                                    @:<a href="/school-@Model.ShortSchoolNo/data/"><i class="private-score-grading">@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(ViewBag.Score))</i></a>
+                                }
+                            </span>
+                        </li>
+                        <li>
+                            <span class="title">距离</span><br />
+                            <span>
+                                @if (Model.Distance != 999999999)
+                                {
+                                    @:<i>@Math.Round((decimal)(Model.Distance / 1000))</i>km
+                                }
+                                else
+                                {
+                                    @:<span class="not-data">暂未收录</span>
+                                }
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="other-list">
+                        <ul class="justify-content-between flex">
+                            <li>
+                                <span class="title">走读寄宿：</span>
+                                <span>
+                                    @{ var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(Model.LodgingType); }
+                                    @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                    {
+                                        @lodgingDesc }
+                                    else
+                                    {
+                                        @:暂未收录
+                                    }
+                                </span>
+                            </li>
+                            <li>
+                                <span class="title">有无饭堂：</span>
+                                <span>
+                                    @if (Model.Canteen == true)
+                                    {
+                                        @:有
+                                    }
+                                    else if (Model.Canteen == false)
+                                    {
+                                        @:无
+                                    }
+                                    else
+                                    {
+                                        @:暂未收录
+                                    }
+                                </span>
+                            </li>
+                            <li>
+                                <span class="title">学生人数：</span>
+                                <span>@(Model.Studentcount == null ? "暂未收录" : Model.Studentcount.ToString())</span>
+                            </li>
+                            <li>
+                                <span class="title">师生比：</span>
+                                <span>
+                                    @(ViewBag.TeaProportion == null ? "暂未收录" : ViewBag.TeaProportion)
+                                </span>
+                            </li>
+
+                        </ul>
+
+                        @*<!-- 普通民办/公办初中、高中、机构幼儿园不显示以下内容 -->*@
+
+                        <ul>
+                            @if (SchUtils.Canshow2("外教占比", schtype))
+                            {
+
+                                <li>
+                                    <span class="title">外教占比：</span>
+                                    <span>
+                                        @(ViewBag.ForeignTea == null ? "暂未收录" : ViewBag.ForeignTea)
+                                    </span>
+                                </li>
+                            }
+
+                            @if (SchUtils.Canshow2("出国方向", schtype))
+                            {
+
+                                <li>
+                                    <span class="title">出国方向：</span>
+                                    <span>
+                                        @if (Model.Abroad.Count() > 0)
+                                        {
+                                            var kvsList = Model.Abroad.Select(p => p.Key).ToList();
+                                            if (kvsList.Any(k => k == "其他"))
+                                            {
+                                                kvsList.Remove("其他");
+                                                kvsList.Add("其他");
+                                            }@(string.Join("、", kvsList)) }
+                                        else
+                                        {
+                                            @:暂未收录
+                                        }
+                                    </span>
+                                </li>
+                            } @*@if (SchUtils.Canshow2("课后管理", schtype))
+                                {
+                                    <li>
+                                        @if (string.IsNullOrEmpty(Model.AfterClass))
+                                        {
+                                            <span class="title">课后管理：</span>
+                                            <span>@(!string.IsNullOrEmpty(Model.AfterClass) ? StrHelper.GetHtmlText(Model.AfterClass) : "暂未收录")</span>
+                                            @if (!string.IsNullOrEmpty(Model.AfterClass))
+                                            {
+                                                <i class="arrow"></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a class="manage" data-notdata="@(string.IsNullOrEmpty(Model.AfterClass)?"1":"0")">
+                                                <span>课后管理：</span>
+                                                <span>@(!string.IsNullOrEmpty(Model.AfterClass) ? StrHelper.GetHtmlText(Model.AfterClass) : "暂未收录")</span>
+                                                @if (!string.IsNullOrEmpty(Model.AfterClass))
+                                                {
+                                                    <i class="arrow"></i>
+                                                }
+                                            </a>
+                                        }
+                                    </li>
+                                }*@
+                        </ul>
+                    </div>
+
+                    <!-- 对口学校 -->
+                    <div class="school">
+                        @if (SchUtils.Canshow2("对口学校", schtype))
+                        {
+                            @if (((List<KeyValueDto<Guid>>)ViewBag.CounterPart).Count > 0)
+                            {
+                                <h6>对口学校：<a class="total">共@(((List<KeyValueDto<Guid>>)ViewBag.CounterPart).Count)所<i class="arrow"></i></a></h6>
+                                <ul class="school-list">
+                                    @foreach (var item in (List<KeyValueDto<Guid>>)ViewBag.CounterPart)
+                                    {
+                                        <li>
+                                            @*<a href="@Url.Action("Detail","School",new {id=item.Value.ToString("N") })">*@
+                                            <a href="/school-@item.Year/">
+                                                <div class="name">@item.Key</div>
+                                                <p class="address"><i class="iconfont icon-map"></i>@item.Message</p>
+                                                <i class="arrow"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>} } @*@if (SchUtils.Canshow2("课后管理", schtype))
+                            {
+                                <a class="manage">
+                                    <p><span>课后管理：</span>@Model.AfterClass</p>
+                                    <i class="arrow"></i>
+                                </a>
+                            }*@
+
+                    </div>
+                    @if (((List<KeyValueDto<Guid>>)ViewBag.CounterPart).Count > 0)
+                    {
+                        <div class="text-center more">展开></div> } @*<a href="@Url.Action("Data",new {Id=ViewBag.ExtId.ToString("N")})" class="text-center more-school-msg">更多学校信息></a>*@
+                    <a href="/school-@Model.ShortSchoolNo/data/" class="text-center more-school-msg">更多学校信息></a>
+                </div>}
+        </div>
+        @if (ViewBag.SchoolScores != null)
+        {
+            var schoolScores = (ViewBag.SchoolScores as IEnumerable<SchoolExtScore>);
+            var areaScores = (ViewBag.AreaScores as Dictionary<int, double>);
+
+            <!-- 升学价值分析报告 start -->
+            <div class="value-report">
+                <div class="value-report-title">
+                    <h2>升学价值分析报告</h2>
+                    <a class="more-counselor" href="/value-report/index.html?eid=@Model.ExtId&score=@((schoolScores.FirstOrDefault(p => p.IndexId == 22)?.Score/10).Value.ToString("F1"))">
+                        <span>查看报告</span>
+                        <i class="arrow"></i>
+                    </a>
+                </div>
+
+                <div class="value-report-content">
+                    <div class="report-content-left">
+                        <h2>@((schoolScores.FirstOrDefault(p => p.IndexId == 22)?.Score/10).Value.ToString("F1"))</h2>
+                        <span class="report-rank-tips">全市排名前@(ViewBag.SchoolTotalScoreRanking)%</span>
+                    </div>
+                    <div class="report-content-right">
+                        <ul class="report-list">
+                            @if (ViewBag.TeachingLevel != null)
+                            {
+                                <li>
+                                    <span class="report-name">教学</span>
+                                    <progress value='@(((double)ViewBag.TeachingLevel / 10).ToString("F1"))' max='10'></progress>
+                                    <span class="report-score">@(((double)ViewBag.TeachingLevel / 10).ToString("F1"))</span>
+                                </li>
+                            }
+                            @if (schoolScores.Any(p => p.IndexId == 23) || areaScores.ContainsKey(23))
+                            {
+                                double score = 0;
+                                if (schoolScores.Any(p => p.IndexId == 23)) score = schoolScores.FirstOrDefault(p => p.IndexId == 23).Score.GetValueOrDefault();
+                                if (score < 1) score = areaScores.GetValueOrDefault(23);
+                                <li>
+                                    <span class="report-name">生源</span>
+                                    <progress value='@((score / 10).ToString("F1"))' max='10'></progress>
+                                    <span class="report-score">@((score / 10).ToString("F1"))</span>
+                                </li>
+                            }
+                            @if (schoolScores.Any(p => p.IndexId == 21))
+                            {
+                                <li>
+                                    <span class="report-name">周边</span>
+                                    <progress value='@((schoolScores.FirstOrDefault(p => p.IndexId == 21).Score.GetValueOrDefault() / 10).ToString("F1"))' max='10'></progress>
+                                    <span class="report-score">@((schoolScores.FirstOrDefault(p => p.IndexId == 21).Score.GetValueOrDefault() / 10).ToString("F1"))</span>
+                                </li>
+                            }
+                            @if (schoolScores.Any(p => p.IndexId == 25) || areaScores.ContainsKey(25))
+                            {
+                                double score = 0;
+                                if (schoolScores.Any(p => p.IndexId == 25)) score = schoolScores.FirstOrDefault(p => p.IndexId == 25).Score.GetValueOrDefault();
+                                if (score < 1) score = areaScores.GetValueOrDefault(25);
+                                <li>
+                                    <span class="report-name">口碑</span>
+                                    <progress value='@((score / 10).ToString("F1"))' max='10'></progress>
+                                    <span class="report-score">@((score / 10).ToString("F1"))</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 升学价值分析报告 end -->
+        }
+
+        @if (!(ViewBag.UAText.Contains("swan-baiduboxapp") && ViewBag.UAText.Contains("iphone")))
+        {
+            @await Component.InvokeAsync("PaidQA", new { grade = ViewBag.Grade, schoolExtId = Model.ExtId });
+            @*@await Component.InvokeAsync("OrgLesson", ViewBag.Grade)*@
+        }
+        <div class="parent-comment">
+            @if (ViewBag.SelectedComment != null)
+            {
+                CommentList commentDto = (CommentList)ViewBag.SelectedComment;
+
+                <div class="title">
+                    <h5>家长点评<a href="/comment/school-@Model.ShortSchoolNo/" class="more-comment">更多点评<i class="arrow"></i></a></h5>
+                    <div class="flex">
+                        <ul class="flex star-list">
+                            @{ decimal TotalScore = ViewBag.CommentSchoolScore?.AggScore;
+                                int AggScore = ViewBag.CommentSchoolScore?.StarScore; }
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (AggScore >= i)
+                                {
+                                    <li class="score-star"><i class="icon"></i></li>
+                                }
+                                else
+                                {
+                                    <li><i class="icon"></i></li>
+                                }
+                            }
+                        </ul>
+                        <div class="num">@(TotalScore)</div>
+                    </div>
+                    @*@if ((ViewBag.CommentSchoolScore?.TeachScore +
+                           ViewBag.CommentSchoolScore?.HardScore +
+                           ViewBag.CommentSchoolScore?.EnvirScore +
+                           ViewBag.CommentSchoolScore?.LifeScore +
+                           ViewBag.CommentSchoolScore?.ManageScore) > 0)
+                        {
+                            <ul class="flex justify-content-between num-list">
+                                <li>师资<span>@((int)ViewBag.CommentSchoolScore.TeachScore)星</span></li>
+                                <li>硬件<span>@((int)ViewBag.CommentSchoolScore.HardScore)星</span></li>
+                                <li>环境<span>@((int)ViewBag.CommentSchoolScore.EnvirScore)星</span></li>
+                                <li>校风<span>@((int)ViewBag.CommentSchoolScore.LifeScore)星</span></li>
+                                <li>生活<span>@((int)ViewBag.CommentSchoolScore.ManageScore)星</span></li>
+                            </ul>
+                        }*@
+                </div>
+                <div class="comment-list">
+                    <div class="list-header flex justify-content-between">
+                        <div class="user-msg flex">
+                            <div class="head">
+                                <div><img src="@commentDto.UserInfo.HeadImager" alt="" /></div>
+                                @if (commentDto.UserInfo.IsSchool && commentDto.UserInfo.IsTalent)
+                                {
+                                    @if (commentDto.UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                    {
+                                        <i class="icon"></i> }
+                                    else
+                                    {
+                                        <i class="icon talent"></i>}
+                                    <i class="icon school"></i> }
+                                else if (commentDto.UserInfo.IsTalent)
+                                {
+                                    @if (commentDto.UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                    {
+                                        <i class="icon"></i> }
+                                    else
+                                    {
+                                        <i class="icon talent"></i>} }
+                                else if (commentDto.UserInfo.IsSchool)
+                                {
+                                    <i class="icon school"></i>
+                                }
+                            </div>
+                            <span class="name">
+                                @commentDto.UserInfo.NickName
+                                @if (commentDto.Score?.IsAttend == true)
+                                {
+                                    <i class="identity">过来人</i>}
+                            </span>
+                        </div>
+                        <div class="other flex">
+                            <i></i>
+                            <div class="other-list-btn text-center" data-id="@commentDto.Id" data-report="3" data-type="1">
+                                <div class="flex">
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                    <i class="round"></i>
+                                </div>
+                                @if (commentDto.IsSelected)
+                                {
+                                    <span>精华</span>}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/comment/@(commentDto.No).html">
+                        <p class="content">@commentDto.Content</p>
+                        @if (commentDto.Images.Count() > 0)
+                        {
+                            <div class="img-list">
+                                <ul class="flex justify-content-between" id="imgList">
+                                    @if (commentDto.Images.Count() > 2)
+                                    {
+                                        @for (int i = 0; i < 3; i++)
+                                        {
+                                            <li><img src="@commentDto.Images[i]" alt="" /></li>
+                                        } }
+                                    else
+                                    {
+                                        @for (int i = 0; i < commentDto.Images.Count(); i++)
+                                        {
+                                            <li><img src="@commentDto.Images[i]" alt="" /></li>
+                                        }}
+                                </ul>
+                                @if (@commentDto.Images.Count() > 3)
+                                {
+                                    <span class="text-center"><i class="icon"></i>@commentDto.Images.Count()</span>}
+                            </div>}
+                    </a>
+                    <div class="comment-msg flex justify-content-between">
+                        <div>
+                            <span class="department">@Model.ExtName</span>
+                            <span class="time">@commentDto.CreateTime</span>
+                        </div>
+                        <div class="ctr">
+                            <span class="comment"><i class="icon"></i>@commentDto.ReplyCount</span>
+                            @if (commentDto.IsLike)
+                            {
+                                <span data-type="1" data-id="@commentDto.Id" class="like click-like">
+                                    <i class="icon"></i>
+                                    <span>@commentDto.LikeCount</span>
+                                </span> }
+                            else
+                            {
+                                <span data-type="1" data-id="@commentDto.Id" class="like">
+                                    <i class="icon"></i>
+                                    <span>@commentDto.LikeCount</span>
+                                </span>}
+                        </div>
+                    </div>
+                </div>
+                <a href="/comment/write?eid=@(Model.ExtId)" class="writeComment text-center">我要点评</a> }
+            else
+            {
+                <div style="border-bottom: none;" class="title">
+                    <h5>家长点评</h5>
+                </div> <!-- 如果没有评论 则显示出来 -->
+                <div class="not-comment text-center">
+                    <div><i class="icon"></i></div>
+                    <p>暂无评论，快来抢沙发</p>
+                    <a href="/Wechat?type=1&SchoolId=@Model.ExtId" class="invite">
+                        <i class="sofa-array"></i>好友邀请来点评
+                    </a>
+                </div>}
+        </div>
+
+        <div class="school-qa">
+            @if (ViewBag.SelectedQuestion != null)
+            {
+                QuestionVo questionDetail = (QuestionVo)ViewBag.SelectedQuestion;
+                <div class="title">
+                    <h5>学校问答<a href="/question/school-@Model.ShortSchoolNo/" class="more-qa">更多问答<i class="arrow"></i></a></h5>
+                </div>
+                <div class="qa-list">
+                    <div class="question flex">
+                        <div class="q-icon"><span>问</span></div>
+                        <a href="/question/@(questionDetail.No).html">
+                            <div>
+                                <h5 class="question-title">@questionDetail.QuestionContent</h5>
+                                <div class="img-list">
+                                    <ul class="flex justify-content-between" id="imgList">
+                                        @if (questionDetail.Images.Count() > 2)
+                                        {
+                                            @for (int i = 0; i < 3; i++)
+                                            {
+                                                <li><img src="@questionDetail.Images[i]" alt="" /></li>
+                                            } }
+                                        else
+                                        {
+                                            @for (int i = 0; i < questionDetail.Images.Count(); i++)
+                                            {
+                                                <li><img src="@questionDetail.Images[i]" alt="" /></li>
+                                            }}
+                                    </ul>
+                                    @if (questionDetail.Images.Count() > 3)
+                                    {
+                                        <span class="text-center"><i class="icon"></i>@questionDetail.Images.Count()</span>}
+                                </div>
+                                <span class="department">@Model.ExtName</span>
+                                <span class="time">@questionDetail.QuestionCreateTime</span>
+                            </div>
+                        </a>
+                        <span class="other-list-btn flex round" data-id="@questionDetail.Id" data-type="3" data-report="2">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
+                    </div>
+                    @if (questionDetail.Answer.Any())
+                    {
+                        <div class="answer flex">
+                            <div class="a-icon"><span>答</span></div>
+                            <div>
+                                <div class="user-msg flex">
+                                    <div class="head">
+                                        <div><img src="@questionDetail.Answer[0].UserInfo.HeadImager" alt="" /></div>
+                                        @if (questionDetail.Answer[0].UserInfo.IsTalent && questionDetail.Answer[0].UserInfo.IsSchool)
+                                        {
+                                            @if (questionDetail.Answer[0].UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                            {
+                                                <i class="icon"></i> }
+                                            else
+                                            {
+                                                <i class="icon talent"></i>}
+                                            <i class="icon school"></i> }
+                                        else if (questionDetail.Answer[0].UserInfo.IsTalent)
+                                        {
+                                            @if (questionDetail.Answer[0].UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                            {
+                                                <i class="icon"></i> }
+                                            else
+                                            {
+                                                <i class="icon talent"></i>} }
+                                        else if (questionDetail.Answer[0].UserInfo.IsSchool)
+                                        {
+                                            <i class="icon school"></i>}
+                                    </div>
+                                    <div>
+                                        <div class="name">@questionDetail.Answer[0].UserInfo.NickName<i></i></div>
+                                        <div class="time">@questionDetail.Answer[0].AddTime</div>
+                                    </div>
+                                </div>
+                                <p class="content">@questionDetail.Answer[0].AnswerContent</p>
+                                <div class="flex justify-content-between">
+                                    <a href="/question/@(questionDetail.No).html"><span class="reply-num">共@(questionDetail.Answer[0].ReplyCount)条回复></span></a>
+                                    @if (questionDetail.Answer[0].IsLike)
+                                    {
+                                        <span class="like click-like" data-id="@questionDetail.Answer[0].Id" data-type="4">
+                                            <i class="icon"></i>
+                                            <span>@questionDetail.Answer[0].LikeCount</span>
+                                        </span> }
+                                    else
+                                    {
+                                        <span class="like" data-id="@questionDetail.Answer[0].Id" data-type="4">
+                                            <i class="icon"></i>
+                                            <span>@questionDetail.Answer[0].LikeCount</span>
+                                        </span>}
+                                </div>
+                            </div>
+                        </div>}
+                </div>
+                <a href="/question/write?eid=@(Model.ExtId)" class="writeQA text-center">我要提问</a> }
+            else
+            {
+                <div class="title">
+                    <h5>学校问答</h5>
+                </div> <!-- 如果没有问答 则显示出来 -->
+                <div class="not-qa text-center">
+                    <div><i class="icon"></i></div>
+                    <p>暂无问答，快来抢沙发</p>
+                    <a href="/Wechat?type=3&SchoolId=@Model.ExtId" class="invite">
+                        <i class="sofa-array"></i>邀请大家来提问
+                    </a>
+                </div>}
+        </div>
+
+        @if (Model.Type != (byte)SchoolType.Other)
+        {@*升学成绩*@
+        @if (Model.Grade != (byte)SchoolGrade.Kindergarten && (byte)SchoolType.SAR != Model.Type)
+        {
+
+            if (Model.Achievement?.Any() == true || ViewBag.AchData != null)
+            {
+
+                <div class="achievement">
+                    <div class="title">
+                        <h5>
+                            升学成绩
+                            @if (Model.Grade > 2) //初中以下没有年份选择
+                            {
+                                <a href="javascript:(0);" class="more-rank" style="color:rgb(30, 160, 241);" id="btn_test">@Model.AchYear 年<i class="achievement-arrow"></i></a>}
+                        </h5>
+                    </div>
+
+
+                    @if (Model.Grade == (byte)SchoolGrade.Kindergarten)
+                    {@*幼儿园*@
+                    @if (ViewBag.AchData != null)
+                    {
+
+                        <div class="achievement">
+                            <div class="title">
+                                <h5>升学成绩</h5>
+                            </div>
+                            @foreach (var item in (IEnumerable<KindergartenAchievement>)ViewBag.AchData)
+                            {
+                                <a href="@item.Link" class="link">
+                                    <p><span>详细内容：</span>@item.Link</p>
+                                    <i class="arrow"></i>
+                                </a>
+                            }
+                        </div>
+
+                    }
+                }
+                else if (Model.Grade == (byte)SchoolGrade.PrimarySchool && new byte[] { (byte)SchoolType.Public, (byte)SchoolType.Private }.Contains(Model.Type))
+                {
+                    @if (ViewBag.AchData != null)
+                    {
+                        //民办/公办小学
+                        @foreach (var item in ((IEnumerable<PrimarySchoolAchievement>)ViewBag.AchData)?.Take(3))
+                        {
+                            <a href="@item.Link" class="link">
+                                <p><span>详细内容：</span>@item.Link</p>
+                                <i class="arrow"></i>
+                            </a>
+                        }
+                    }
+                }
+                else if (Model.Grade == (byte)SchoolGrade.JuniorMiddleSchool && (Model.Type == (byte)SchoolType.International || Model.Type == (byte)SchoolType.ForeignNationality))
+                {
+                    @if (Model.Achievement != null && Model.Achievement.Any())
+                    {
+                        //国际初中
+                        var juniorMiddleSchool = ViewBag.AchData == null ? new MiddleSchoolAchievement() : (MiddleSchoolAchievement)ViewBag.AchData;
+
+                        <ul class="achievement-data flex justify-content-between">
+                            <li><span>最高分：</span>@(juniorMiddleSchool?.Highest != null ? juniorMiddleSchool.Highest + "分" : "暂未收录")</li>
+                            <li><span>平均分：</span>@(juniorMiddleSchool?.Average != null ? juniorMiddleSchool.Average + "分" : "暂未收录")</li>
+                            <li><span>重点率：</span>@(juniorMiddleSchool?.Keyrate != null ? juniorMiddleSchool.Keyrate + "%" : "暂未收录")</li>
+                        </ul>
+                        <p>@(Model.Achievement[0].Data)上届学生毕业去向：</p>
+                        <ul class="list">
+                            @foreach (var item in Model.Achievement?.Take(3))
+                            {
+                                <li>@item.Value<span>@(item.Message)人</span></li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("ExtAchievement", "school",new{ sid = ViewBag.Sid, extId = ViewBag.ExtId, grade = Model.Grade, type = Model.Type })" class="more-list text-center" rel="nofollow">更多毕业去向信息></a>
+                    }
+                }
+                else if (Model.Grade == (byte)SchoolGrade.JuniorMiddleSchool && new byte[] { (byte)SchoolType.Public, (byte)SchoolType.Private }.Contains(Model.Type))
+                {
+                    @if (Model.Achievement != null && Model.Achievement.Any() || ViewBag.AchData?.Keyrate != null || ViewBag.AchData?.Average != null || ViewBag.AchData?.Highest != null)
+                    {@*民办/公办初中*@ <!-- 民办/公办初中则显示 -->
+                    var juniorMiddleSchool = ViewBag.AchData == null ? new MiddleSchoolAchievement() : (MiddleSchoolAchievement)ViewBag.AchData;
+
+                    <ul class="achievement-data flex justify-content-between">
+                        <li><span>最高分：</span>@(juniorMiddleSchool?.Highest != null ? juniorMiddleSchool.Highest + "分" : "暂未收录")</li>
+                        <li><span>平均分：</span>@(juniorMiddleSchool?.Average != null ? juniorMiddleSchool.Average + "分" : "暂未收录")</li>
+                        <li><span>重点率：</span>@(juniorMiddleSchool?.Keyrate != null ? juniorMiddleSchool.Keyrate + "%" : "暂未收录")</li>
+                    </ul>
+                    @if (Model.Achievement != null && Model.Achievement.Any())
+                    {
+                        <p>上届学生毕业去向：</p>
+                        <ul class="list">
+                            @foreach (var item in Model.Achievement?.Take(3))
+                            {
+                                <li>@item.Value<span>@(item.Message)人</span></li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("ExtAchievement", "school", new { sid = ViewBag.Sid, extId = ViewBag.ExtId, grade = Model.Grade, type = Model.Type })" class="more-list text-center" rel="nofollow">更多毕业去向信息></a>
+                    }
+                    else
+                    {
+                        <p>学生毕业去向：<span style="color:black;">暂未收录</span></p>
+                    }
+                }
+                }
+                else if (Model.Grade == (byte)SchoolGrade.SeniorMiddleSchool && new byte[] { (byte)SchoolType.Public, (byte)SchoolType.Private }.Contains(Model.Type))
+                { @*民办/公办高中*@
+                @if (Model.Achievement != null && Model.Achievement.Any() || ViewBag.AchData?.Keyundergraduate != null || ViewBag.AchData?.Undergraduate != null || ViewBag.AchData?.Count != null)
+                {
+
+                    var hightSchoolAchievement = ViewBag.AchData == null ? new HighSchoolAchievement() : (HighSchoolAchievement)ViewBag.AchData;<!-- 民办/公办高中则显示 -->
+                    <ul class="achievement-data height-school flex justify-content-between">
+                        <li><span>重本率：</span>@(hightSchoolAchievement?.Keyundergraduate != null ? hightSchoolAchievement.Keyundergraduate + "%" : "暂未收录")</li>
+                        <li><span>本科率：</span>@(hightSchoolAchievement?.Undergraduate != null ? hightSchoolAchievement.Undergraduate + "%" : "暂未收录")</li>
+                    </ul>
+                    @if (Model.Achievement?.Any() == true)
+                    {
+                        <p>上届学生毕业去向：</p>
+                        <ul class="list">
+                            @foreach (var item in Model.Achievement?.Take(3))
+                            {
+                                <li>@item.Value<span>@(item.Message)人</span></li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("ExtAchievement", "School", new { sid = ViewBag.Sid, extId = ViewBag.ExtId, grade = Model.Grade, type = Model.Type })" class="more-list text-center" rel="nofollow">更多毕业去向信息></a>
+                    }
+                    else
+                    {
+                        <p>@(Model.AchYear)学生毕业去向：<span style="color:black;">暂未收录</span></p>
+                    }
+                }
+            }
+            else if (Model.Grade == (byte)SchoolGrade.SeniorMiddleSchool && Model.Type == (byte)SchoolType.International || Model.Type == (byte)SchoolType.ForeignNationality)
+            { @*国际高中*@
+            @if (Model.Achievement != null && Model.Achievement.Any())
+            {
+
+                <p>@(Model.Achievement[0].Data)上届学生毕业去向：</p>
+                <ul class="list">
+                    @foreach (var item in Model.Achievement?.Take(3))
+                    {
+                        <li>@item.Value<span>@(item.Message)人</span></li>
+                    }
+                </ul>
+                <a href="@Url.Action("ExtAchievement", "School",new{sid = ViewBag.Sid, extId = ViewBag.ExtId, grade = Model.Grade, type = Model.Type })" class="more-list text-center" rel="nofollow">更多毕业去向信息></a>
+            }
+        }
+                </div>
+            }
+        }
+
+
+        @if (Model.Ranks.Count > 0)
+        {
+            <div class="school-rank">
+                <div class="title">
+                    <h5>学校排行<a href="@Url.Action("listall", "schoolrank", new { schoolId = Model.ExtId })" class="more-rank">更多榜单<i class="arrow"></i></a></h5>
+                </div>
+                <ul class="rank-list">
+                    @foreach (var item in Model.Ranks)
+                    {
+                        <li><a href="@Url.Action("detail", "schoolrank", new { id = item.RankId })"><p>@item.Title</p><span>第@(item.Ranking)名</span></a></li>
+                    }
+                    @*<li>2018剑桥中国区录取榜<span>第8名</span></li>
+                        <li>2018胡润百学百强名单<span>第10名</span></li>*@
+                </ul>
+            </div>}
+
+        <div class="enrolment">
+            <div class="title">
+                <h5>招生简章</h5>
+            </div>
+            <div class="submenu">
+                <h6>招生计划</h6>
+                <ul class="list-msg recruit-msg">
+                    @*@if (!(Model.Grade == (byte)SchoolGrade.Kindergarten && Model.Type == (byte)SchoolType.Public))
+                        {
+
+                        }*@
+                    <li>
+                        招生年龄：<span>
+                            @if (Model.Age == null && Model.MaxAge != null)
+                            {@("0-" + Model.MaxAge) }
+                            else if (Model.Age != null && Model.MaxAge == null)
+                            { @(Model.MaxAge) }
+                            else if (Model.Age == null && Model.MaxAge == null)
+                            {
+                                @:暂未收录
+                            }
+                            else
+                            { @($"{Model.Age}-{Model.MaxAge}")}
+                        </span>
+                    </li>
+                    <li>招生人数：<span>@(Model.Count == null ? "暂未收录" : Model.Count + "人")</span></li>
+                    <li>
+                        招生对象：
+                        @if (Model.Target.Count > 0)
+                        {
+                            <span>
+                                @foreach (var item in Model.Target)
+                                {
+                                    <i>@item.Key</i>}
+                                @*<i>全国统招初中生</i>*@
+                            </span> }
+                        else
+                        {
+                            <span>暂未收录</span>}
+                    </li>
+                    @if (SchUtils.Canshow2("招录比例", schtype))
+                    {
+                        <li>
+                            招录比例：
+                            @if (Model.Proportion == null)
+                            {
+                                <span>暂无数据</span> }
+                            else
+                            {
+                                <span>@ViewBag.Proportion</span>}
+                        </li>
+                    }
+                    @if (SchUtils.Canshow2("录取分数线", schtype))
+                    {
+                        <li>
+                            录取分数：
+                            @if (Model.Point.Count > 0)
+                            {
+                                <div class="required-score">
+                                    @foreach (var item in Model.Point)
+                                    {
+                                        <span>@(item.Key) @(item.Value)分</span>}
+                                </div> }
+                            else
+                            {
+                                <span>暂未收录</span>}
+                            @*<span>广州普通考生</span><span>583分</span>*@
+                        </li>
+                    }
+                </ul>
+                <a href="/school-@Model.ShortSchoolNo/extrecruit/" class="more-school-msg text-center">更多招生信息></a>
+            </div>
+            @if ((Model.Courses.Count() > 0 || Model.CourseAuthentication.Count > 0 || !string.IsNullOrEmpty(Model.CourseCharacteristic)) && SchUtils.Canshow2("课程设置", schtype))
+            {
+
+                <div class="submenu">
+                    <h6>课程体系</h6>
+                    <ul class="list-msg">
+                        <li>
+                            课程设置：
+                            @if (Model.Courses.Count() > 0)
+                            {
+                                foreach (var item in Model.Courses)
+                                {
+                                    <i>@item.Key</i> }
+                            }
+                            else
+                            {
+                                <span>暂未收录</span>}
+                            @*<i>IB</i>
+                                <i>A-LEVEI</i>*@
+                        </li>
+                        @if (SchUtils.Canshow2("课程认证", schtype))
+                        {
+                            <li>
+                                课程认证：
+                                @if (Model.CourseAuthentication.Count > 0)
+                                {
+                                    foreach (var item in Model.CourseAuthentication)
+                                    {
+                                        <i>@item.Key</i> }
+                                }
+                                else
+                                {
+                                    <span>暂未收录</span>}
+                            </li>
+                        }
+
+                    </ul>
+
+                    <a class="synopsis" data-notdata="@(string.IsNullOrEmpty(Model.CourseCharacteristic) ? "1" : "0")">
+                        <p>
+                            <span>课程简介：</span>
+                            @if (SchUtils.Canshow2("课程特色", schtype))
+                            {@(!string.IsNullOrEmpty(Model.CourseCharacteristic) ? StrHelper.GetHtmlText(Model.CourseCharacteristic.Replace("<h2>", "").Replace("</h2>", "").Replace("</br>", "").Replace("\r\n", "").Replace("\n", ""), false) : "暂未收录")
+                                @if (!string.IsNullOrEmpty(Model.CourseCharacteristic))
+                                {
+                                    <i class="arrow"></i>}}
+                        </p>
+                    </a>
+
+                </div>}
+            @if (!(Model.Type == (int)SchoolType.Public && new byte[] { (byte)SchoolGrade.PrimarySchool, (byte)SchoolGrade.JuniorMiddleSchool }.Contains(Model.Grade)))
+            {
+
+                <div class="submenu tuition-box" style="border:none; padding:0;">
+                    <h6>收费标准</h6>
+                    <ul class="list-msg flex justify-content-between">
+                        @if (SchUtils.Canshow2("申请费用", schtype))
+                        {
+
+                            <li>申请费用：<span class="tuition">@(Model.Applicationfee == null ? "暂未收录" : Model.Applicationfee + "元/学年")</span></li>
+                        }
+                        @if (SchUtils.Canshow2("学费", schtype))
+                        {
+                            <li>学费：<span class="tuition">@(Model.Tuition == null ? "暂未收录" : Model.Tuition + "元/学年")</span></li>
+                        }
+                    </ul>
+                    @if (SchUtils.Canshow2("其它费用", schtype))
+                    {
+                        @if (Model.Otherfee.Count > 0)
+                        {
+                            <a class="more-school-msg text-center price-msg" data-notdata="@(Model.Otherfee.Count > 0 ? "0" : "1")">更多费用信息></a>}}
+
+                </div>}
+        </div>
+        @if (ViewBag.SchoolVideo != null || Model.SchoolPhotos?.Any() == true)
+        {@*<div class="visit">
+                    <div class="title">
+                        <h5>学校专访<a href="@Url.Action("ExtVideos", "School", new { extId = Model.ExtId })" class="more-rank">查看全部<i class="arrow"></i></a></h5>
+                    </div>
+                    <div class="video">
+                        @if (Model.InterviewVideos.Count > 0)
+                        {
+                            <video src="@((Model.InterviewVideos.FirstOrDefault()).Value)" controls width="100%"></video>
+                        }
+                        else
+                        {
+                            @:暂未收录
+                        }
+                    </div>
+                </div>*@
+
+        <div class="visit">
+            <div class="title">
+                <h5>
+                    学校图册
+                </h5>
+            </div>
+
+            @if (ViewBag.SchoolVideo != null)
+            {
+                <div class="video">
+                    <video src="@(ViewBag.SchoolVideo.Value)" controls width="100%"
+                           style="object-fit:fill"
+                           webkit-playsinline="true"
+                           x-webkit-airplay="true"
+                           playsinline="true"
+                           x5-video-player-type="h5"
+                           x5-video-orientation="h5"
+                           x5-video-player-fullscreen="true"
+                           @if (!string.IsNullOrWhiteSpace(ViewBag.SchoolVideo.Other)) { WriteLiteral($"poster=\"{ViewBag.SchoolVideo.Other}\""); }
+                           preload="auto"></video>
+                </div> }
+            else
+            {
+                var printIndex = 1;
+                <div class="picture">
+                    <ul class="img-content" style="position: relative;">
+                        <li class="img_li">
+                            <span class="reader-title">学校图册</span>
+                            <ul class="img-list flex text-center" id="@Guid.NewGuid()">
+                                @foreach (var item in Model.SchoolPhotos)
+                                {
+                                    <li>
+                                        <img src="@item.Message" alt="@item.Value" num="@printIndex" data-img-url="@item.Key" />
+                                        <div class="picture-name">@item.Value</div>
+                                    </li>
+                                    printIndex++;
+                                }
+                            </ul>
+                            @*<span class="img-num text-center"><i class="icon"></i>9</span>*@
+                        </li>
+                    </ul>
+                </div>}
+            <a href="/school-@Model.ShortSchoolNo/extatlas/" class="more-school-msg text-center price-msg">更多图册信息></a>
+        </div>
+    }
+
+        @if (!(ViewBag.UAText.Contains("swan-baiduboxapp") && ViewBag.UAText.Contains("iphone")))
+        {
+            @await Component.InvokeAsync("OrgLesson", ViewBag.Grade);
+        }
+
+
+        @if (((IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.ExtArticles).Count() > 0)
+        {
+            <div class="dynamic">
+                <div class="title">
+                    <h5><a href="@Url.Action("SchoolDynamic", "school", new { schoolNo  = Model.ShortSchoolNo})">学校动态<i class="arrow"></i></a></h5>
+                </div>
+                <ul class="dynamic-list">
+                    @foreach (var item in (IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.ExtArticles)
+                    {
+                        <li>
+                            <a href="@Url.Action("detail", "article", new { no = item.No })">
+                                <h6>
+                                    @item.Title
+                                </h6>
+                                <span class="date">@item.Time</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>}
+        @if (((IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.PolicyArticles).Count() > 0)
+        {
+            <div class="policy">
+                <div class="title">
+                    <h5>
+                        <a href="@Url.Action("SchoolPolicy", "school", new { schoolNo  = Model.ShortSchoolNo})">升学政策<i class="arrow"></i></a>
+                    </h5>
+                </div>
+                <ul class="policy-list">
+                    @foreach (var item in (IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.PolicyArticles)
+                    {
+                        <li>
+                            <a href="@Url.Action("detail", "article", new { no = item.No })">
+                                <h6>
+                                    @item.Title
+                                </h6>
+                                <span class="date">@item.Time</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>}}
+
+
+        <!-- D类学校 显示相关资讯 -->
+        @if (Model.Type == (byte)SchoolType.Other)
+        {
+            <div class="other-msg">
+                <div class="title">
+                    <h5>相关资讯</h5>
+                </div>
+                <a class="wechat-msg text-center">微信内容信息</a>
+                <div class="search-msg">
+                    <div class="swiper-container">
+                        <ul class="search-msg-list flex swiper-wrapper">
+                            <li class="swiper-slide active">百度</li>
+                            <li class="swiper-slide">知乎</li>
+                            <li class="swiper-slide">搜狗</li>
+                            <li class="swiper-slide">必应</li>
+                            <li class="swiper-slide">360</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="search-msg-content">
+                <input type="hidden" value="@Model.SchoolName">
+                <div>
+                    <iframe src="https://www.baidu.com/s?wd=@Model.SchoolName" class="baidu selected" frameborder="0" width="100%" height="1000"></iframe>
+                </div>
+            </div>}
+
+        @if (((List<KeyValueDto<Guid>>)ViewBag.SchoolExts).Count(p => p.Value != Model.ExtId) > 0)
+        {
+            <div class="other-msg">
+                <div class="title">
+                    <h5>其它分部</h5>
+                </div>
+                <ul class="other-list">
+                    @foreach (var item in ((List<KeyValueDto<Guid>>)ViewBag.SchoolExts).Where(p => p.Value != Model.ExtId))
+                    {
+                        <li>
+                            <a href="/school-@ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(Convert.ToInt32(item.Year)).ToLower()/">@Model.SchoolName - @item.Key<i class="arrow"></i></a>
+                            @*<a href="/school/detail/@item.Value.ToString("N")/">@Model.SchoolName - @item.Key<i class="arrow"></i></a>*@
+                        </li>
+                    }
+                    @*<li>
+                            <a href="./school-detail.html">广州市执信中学 - 国际班<i class="arrow"></i></a>
+                        </li>*@
+                </ul>
+            </div>}
+        <div class="other-msg recommend">
+            <div class="title">
+                <h5>相关推荐</h5>
+            </div>
+            <ul class="other-list">
+                @foreach (var item in (List<SchoolNameDto>)ViewBag.Recommend)
+                {
+                    <li>
+                        <a href="/school-@item.ShortId/">@item.SchoolName<i class="arrow"></i></a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+    </section>
+
+    @*<section class="bottom-btn text-center">
+            <div class="flex justify-content-between">
+                <a href="/Question/CommentQuestionView?currentId=@Model.ExtId&SchoolId=@Model.Sid">提问</a>
+                <a href="@Url.Action("CommitCommentView", "CommentWriter", new { currentId = Model.ExtId, SchoolId = Model.Sid })">点评</a>
+            </div>
+        </section>*@
+
+    @*<section class="tab">
+            <div class="swiper-container">
+                <ul class="swiper-wrapper tab-list text-center">
+                    <li class="swiper-slide active">基本信息</li>
+                    <li class="swiper-slide">家长点评</li>
+                    <li class="swiper-slide">学校问答</li>
+                    @if (Model.Type != (byte)SchoolType.Other)
+                    {
+                        @if (Model.Grade != (byte)SchoolGrade.Kindergarten && (byte)SchoolType.SAR != Model.Type)
+                        {
+                            @if (((Model.Grade == (byte)SchoolGrade.Kindergarten) ||
+                          (Model.Grade == (byte)SchoolGrade.PrimarySchool &&
+                          new byte[] { (byte)SchoolType.Public, (byte)SchoolType.Private }.Contains(Model.Type))
+                          ) && ViewBag.AchData == null)
+                            { }
+                            else
+                            {
+                                if (Model.Achievement?.Any() == true || ViewBag.AchData != null)
+                                {
+                                    <li class="swiper-slide">升学成绩</li>
+                                }
+                            }}
+                        @if (Model.Ranks.Count > 0)
+                        {
+                            <li class="swiper-slide">学校排行</li>
+                        }
+                        <li class="swiper-slide">招生简章</li>
+                        @if (Model.InterviewVideos?.Any() == true || Model.SchoolPhotos?.Any() == true)
+                        {
+                            <li class="swiper-slide">学校图册</li>
+                        }
+                        @if (((IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.ExtArticles).Count() > 0)
+                        {
+                            <li class="swiper-slide">学校动态</li>
+                        }
+                        @if (((IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.PolicyArticles).Count() > 0)
+                        {
+                            <li class="swiper-slide">升学政策</li>
+                        }}
+                    @if (((List<KeyValueDto<Guid>>)ViewBag.SchoolExts).Count(p => p.Value != Model.ExtId) > 0)
+                    {
+                        <li class="swiper-slide">其他分部</li>
+                    }
+                    <li class="swiper-slide">相关推荐</li>
+                </ul>
+            </div>
+        </section>*@
+
+    <!-- 弹窗 -->
+    <section class="school-detail-popup">
+        <div>
+            <h5 class="title text-center">其它费用</h5><!-- 课程简介 -->
+            <div class="content" style="display: none;">
+                <!-- 学费 -->
+                <ul>
+                    @foreach (var item in Model.Otherfee)
+                    {
+                        <li class="flex justify-content-between">
+                            <span>@item.Key</span>
+                            <span class="price">@(item.Value)元</span>
+                        </li>
+                    }
+
+                    @*
+                        <li class="flex justify-content-between">
+                            <span>校服费</span>
+                            <span class="price">500元</span>
+                        </li>
+                    *@
+                </ul>
+            </div>
+            <div class="content">
+                <p>分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。用户主动点击分享 绝...分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。用户主动点击分享 绝...分享时机，在不同的时机分析用户是否有分享的意愿，提供给他们合适的分享内容，能让分享的效果更好。用户主动点击分享 绝...</p>
+            </div>
+        </div>
+        <a class="cancel text-center">取消</a>
+    </section>
+
+    <!-- 幕布 -->
+    <div class="curtain"></div>
+
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="../comment-and-qa/complaint.html">举报</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </section>
+
+    @*回复框*@
+    <section class="reply-box" style="padding: 4pt 14pt;">
+        <div class="flex justify-content-between btn-list">
+            <span class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" --> }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>}
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+
+    <!-- 地图 -->
+    <div id="container" class="map"></div>
+    <!-- 未收录的时候显示 -->
+    <div class="not-included text-center" style="display: none;">暂未收录周边位置信息</div>
+
+
+    @*其他收费弹窗内容*@
+    <div id="OtherFeeContent" style="display:none">
+        <ul>
+            @foreach (var item in Model.Otherfee)
+            {
+                <li class="flex justify-content-between">
+                    <span>@item.Key</span>
+                    <span class="price">@(item.Value)元</span>
+                </li>
+            }
+
+            @*<li class="flex justify-content-between">
+                    <span>校服费</span>
+                    <span class="price">500元</span>
+                </li>*@
+        </ul>
+    </div>
+
+    @*课程简介弹窗内容*@
+    <div id="CourseCharacteristicContent" style="display:none">
+        @if (!string.IsNullOrEmpty(Model.CourseCharacteristic))
+        {
+            @Html.Raw(StrHelper.GetHtmlText(Model.CourseCharacteristic.Replace("<h2>", "").Replace("</h2>", "</br>"))) }
+        else
+        {
+            @:暂未收录
+        }
+    </div>
+
+    @*课后管理弹窗内容*@
+    <div id="AfterClassContent" style="display:none">
+        @if (!string.IsNullOrEmpty(Model.AfterClass))
+        {
+            @Html.Raw(StrHelper.GetHtmlText(Model.AfterClass)) }
+        else
+        {
+            @:暂未收录
+        }
+    </div>
+
+    <!-- 头部其他内容按钮 -->
+    <div class="popup-other text-center">
+        <ul>
+            <li><a data-title="@($"{ViewBag.UserName}向您推荐了一所学校快来了解一下呗")" data-content="@($"{Model.SchoolName}-{Model.ExtName}")" data-url="@Url.Action("Detail", "School", new { extId = Model.ExtId, sid = Model.Sid })" data-logo="@Uri.EscapeDataString("https://cdn.sxkid.com/images/logo_share_v4.png")">分享</a></li>
+            <li class="correct"><a href="@Url.Action("SchCorrection", "Home", new { eid = Model.ExtId })">纠错</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </div>
+
+    @if (ViewBag.IsSignSchool)
+    {
+        <div class="regis-box">
+            <div class="top-btn" style="display: none;">
+                <i class="consult-icon"></i>
+                <i class="regis-icon"></i>
+            </div>
+            <i class="click-icon"></i>
+            <i class="close-icon" style="display: none;"></i>
+        </div>}
+
+    <!-- 报名弹窗 -->
+    <div class="reg-box" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="content">
+            <h1 class="title">广东国际高中招生报名中</h1>
+            <form action="" class="data">
+                <div class="group">
+                    <input type="text" name="name" id="name" placeholder="您的称呼">
+                </div>
+                <div class="group">
+                    <input type="text" name="phone" id="phone" placeholder="您的电话">
+                </div>
+                <div class="tips">
+                    <span class="mycheckbox"></span>
+                    <span>同意上学帮为您推荐其他国际高中</span>
+                </div>
+            </form>
+            <div class="submit-btn">
+                <button type="submit" id="submit">立即报名</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 群二维码弹窗 -->
+    @*<div class="QRcode-box" style="display: none;">
+            <span class="close-btn">+</span>
+            <div class="text-center">
+                <h1 class="title">加入微信群面对面咨询了解</h1>
+                <div class="QRcode-img">
+                    <img src="@ViewBag.StaticFile/imgs/school-registration/img6515bd7a0ac38.png" />
+                    <div>保存图片后关注加入<br />上学帮报名咨询群</div>
+                </div>
+                <div class="submit-btn"><a>我知道了</a></div>
+            </div>
+        </div>*@
+
+    <!-- 报名成功 -->
+    <div class="success-alert" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="text-center">
+            <div>
+                <img src="@ViewBag.StaticFile/imgs/school-registration/822.png" />
+                <span class="alert-text">您已成功报名</span>
+            </div>
+            <div class="qrcode"></div>
+            <span>上学帮小助手</span>
+            <p>您可扫码添加上学帮小助手微信，或稍后通过上学帮小助手微信号的好友添加，在线咨询了解学校</p>
+            <a class="btn-ok">确定</a>
+        </div>
+    </div>
+
+    <!-- 报名失败 -->
+    <div class="fail-alert" style="display: none;">
+        <span class="close-btn"></span>
+        <div class="text-center">
+            <img src="@ViewBag.StaticFile/imgs/school-registration/3475.png" />
+            <div class="alert-text">抱歉，信息提交失败<br>请尝试再次提交</div>
+            <a>确定</a>
+        </div>
+    </div>
+
+    <!--画廊模式-->
+    <div class="show_pic_content">
+        <div class="show_pic_content_top">
+            <div class="show_pic_content_close"></div>
+            <div class="show_pic_content_title" id="show_pic_content_title"></div>
+        </div>
+        <img class="show_pic_content_pic" id="show_pic_content_pic" src="" />
+        <div class="show_pic_content_foot">
+            <div class="show_pic_name" id="show_pic_name"></div>
+        </div>
+    </div>
+
+    <div class="WarningBox">
+        <i class="warning-i"></i>
+        <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+        <a class="btn">确认</a>
+        <a class="btn" style="display:none;" href="#">绑定手机</a>
+    </div>
+
+    <!--小程序商城悬浮按钮-->
+    <div class="mall-btn">
+    </div>
+
+    @*隐藏input*@
+    <input id="selectedSchool" value="@Model.ExtId" type="hidden" />
+    <input id="signType" value="2" type="hidden" />
+    <input id="courseType" type="hidden" value="@ViewBag.ActiveCourseType" />
+    <input id="currentPostForm" value="0" type="hidden" />
+
+    <input type="hidden" id="Latitude" value="@Model.Latitude" />
+    <input type="hidden" id="Longitude" value="@Model.Longitude" />
+    @*<input type="hidden" id="Range" value="@Model.Range" />*@
+    <input type="hidden" id="Range" value="" />
+    @*<input type="hidden" id="Build" value="@ViewBag.Build" />*@
+    <input type="hidden" id="Build" value="" />
+    <input type="hidden" value="100, 80, 60, 50, 40" class="grade">
+    <input type="hidden" value="@Model.ExtId" class="dataId">
+    <input type="hidden" value="1" class="dataType">
+</body>
+</html>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=61ce686ba30069e6801cda4be2f719a2"></script>
+<script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+<script src="@ViewBag.StaticFile/js/loading.js"></script>
+<script src="@ViewBag.StaticFile/js/viewer.min.js"></script>
+<script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+<script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+<script src="@ViewBag.StaticFile/js/school-detail.js"></script>
+<script src="@ViewBag.StaticFile/js/collection.js"></script>
+<script src="@ViewBag.StaticFile/js/school-registration.js"></script>
+<script src="@ViewBag.StaticFile/js/mobileSelect/mobileSelect.js"></script>
+<script src="@ViewBag.StaticFile/js/swiperAd.js"></script>
+<script type="text/javascript">
+    var currentType = 0;
+
+    @if (Model.Grade > 2 && Model.Achievement?.Any() == true && ViewBag.AchYears != null) {
+        <text>
+        var mobileSelect1 = new MobileSelect({
+            trigger: '#btn_test',
+            title: '年份选择',
+            triggerDisplayData: false,
+            jsonType: true,
+            wheels:[
+                { data:@Html.Raw(ViewBag.AchYears) }
+            ],
+            callback: function (index, data) {
+                $('#btn_test').html(data[0].value + ' 年<i class="achievement-arrow"></i>');
+                $.post('/school/getachdatahtml', {
+                    extId: '@ViewBag.ExtId',
+                    grade: '@Model.Grade',
+                    type: '@Model.Type',
+                    year: data[0].value
+                }, function (e) {
+                        if (e.succeed) {
+                            $('.achievement .achievement-data').html(e.data.achData);
+                            $('.achievement').find('ul[class="list"]').html(e.data.achievementData);
+                            if (e.data.hasAchievement) {
+                                $('.achievement p').html('上届学生毕业去向：');
+                                $('.achievement .more-list').show();
+                            } else {
+                                $('.achievement p').html('上届学生毕业去向：<span style="color:black;">暂未收录</span>');
+                                $('.achievement .more-list').hide();
+                            }
+                        }
+                });
+            }
+        });
+    </text>
+    }
+    jQuery(function () {
+
+        @*console.log("@Model.SchFType.Code", 'Model.SchFtype')*@
+        $.ajax({
+            url: "https://m3.sxkid.com"+"/api/Adv/GetAdvs?location=99&dataId=" +  "@Model.SchFType.Code",
+            type: "GET",
+            success: function (data) {
+                if (data.status == 0 && data.Advs && data.Advs[0] && data.Advs[0].Items && data.Advs[0].Items.length > 0) {
+                    var html = "";
+                    //0小程序 1 H5 2PC
+                    for (var n = 0; n < data.Advs[0].Items.length; n++) {
+                        if (data.Advs[0].Items[n].Id == 1) {
+                            html += `
+                                <a href="` + data.Advs[0].Items[n].Url + `">
+                                    <img src="` + data.Advs[0].Items[n].PicUrl + `"
+                                         alt="" />
+                                </a>`
+                            $(".mall-btn").html(html)
+                        }
+                    }
+                } else {
+                    $(".mall-btn").hide()
+                }
+            }
+        })
+
+
+        //点评写完后直接退出页
+        localStorage.setItem("CommentEntrance", document.location.href)
+        //写完回答之后退出
+        localStorage.setItem("QuestionEntrance", document.location.href)
+
+        //alert(sessionStorage.getItem("CommentEntrance"))
+        @*// 检测是否收藏
+        $.isCollection("@Model.ExtId", "");*@
+
+        //点击收藏
+        jQuery(".header .btn-list a:first-child").on("click", function () {
+            // 收藏
+            $.collection("@Model.ExtId", 1, "");
+        });
+
+        //点击收藏2
+        jQuery(".collect-content").on("click", function () {
+            // 收藏
+            $.collection("@Model.ExtId", 1, "");
+        });
+
+
+        //课程简介
+        jQuery(".enrolment .synopsis").on("click", function () {
+            console.log("课程简介");
+            jQuery(".school-detail-popup .title").html("课程简介");
+            var html = jQuery("#CourseCharacteristicContent").html();
+            jQuery(".school-detail-popup  .content").html(html);
+        });
+        //其他收费
+        jQuery(".price-msg").on("click", function () {
+            console.log("其他收费");
+            jQuery(".school-detail-popup .title").html("其他收费");
+            var html = jQuery("#OtherFeeContent").html();
+            jQuery(".school-detail-popup  .content").html(html);
+        });
+        //课后管理
+        jQuery(".manage").on("click", function () {
+            console.log("课后管理");
+            jQuery(".school-detail-popup .title").html("课后管理");
+            var html = jQuery("#AfterClassContent").html();
+            jQuery(".school-detail-popup  .content").html(html);
+        });
+
+        //回复弹框勾选
+        $('.reply-box .btn').on('click', function () {
+            $(this).hasClass('active') ? $(this).removeClass('active') : $(this).addClass('active');
+        })
+
+        //举报标识
+        @*$('.other-list-btn .round, .round').on('click', function() {
+		    $(".popup-box .complaint a").attr("href","@ViewBag.UserServiceUrl/contact/report?type="+$(this).attr("data-report")+"&id="+$(this).attr("data-id"))
+	    })*@
+        //点评回复框弹出
+        $(".parent-comment .comment-list .ctr .comment").click(function () {
+            let that = $(this).parent().parent().prev().prev().find(".other-list-btn")
+
+            $.ajax({
+                url: "/Home/CheckLogin",
+                type: "GET",
+                success: function (data) {
+                    if (data.status == 200) {
+                        if (data.data.isLogin == false) {
+                            var path = window.location.href;
+                            window.location.href = data.data.loginUrl + path;
+                        }
+                        else {
+                            $('.curtain').fadeIn();
+                            $('.reply-box .btn').removeClass('active');
+                            $('.reply-box textarea').val('');
+                            $('body').css('overflow', 'hidden');
+                            $('.reply-box').animate({ 'bottom': 0, }, 'normal');
+                            $('.submit-reply').css('color', 'rgb(153, 153, 153)')
+
+                            $('.popup-box').animate({ 'bottom': '-30%' }, 300);
+                            $(".popup-box").attr("id", that.attr("data-id"))
+                            $(".popup-box").attr("dataType", 1)
+                        }
+                    }
+                }
+            })
+        })
+
+        //问答回复
+        $('.reply-btn').on('click', function () {
+            $.ajax({
+                url: "/Home/CheckLogin",
+                type: "GET",
+                success: function (data) {
+                    if (data.status == 200) {
+                        if (data.data.isLogin == false) {
+                            var path = window.location.href;
+                            window.location.href = data.data.loginUrl + path;
+                        }
+                        else {
+                            $('.curtain').fadeIn();
+                            $('.reply-box .btn').removeClass('active');
+                            $('.reply-box textarea').val('');
+                            $('body').css('overflow', 'hidden');
+                            $('.reply-box').animate({ 'bottom': 0, }, 'normal');
+                            $('.submit-reply').css('color', 'rgb(153, 153, 153)')
+
+                            //$('.curtain').fadeOut(300);
+                            $('.popup-box').animate({ 'bottom': '-30%' }, 300);
+                            //$(".popup-box").attr("dataType",2)
+                            //$('.botton-reply-input').css('display', 'block').children('input').focus();
+                        }
+                    }
+                }
+            })
+        })
+
+        $(".submit-reply").click(function () {
+            if ($(".popup-box").attr("datatype") == 1) {
+                let reply = $("#reply").val();
+                if (reply != "") {
+                    debugger;
+                    //点评id
+                    let currentCommentId = $(".popup-box").attr("id")
+                    //学校辟谣
+                    let Rumor = $("#Rumor").is('.active');
+                    //是否在读
+                    let Student = $("#Student").is('.active');
+                    //匿名
+                    let anonymous = $("#anonymous").is('.active');
+                    $.ajax({
+                        url: "/SchoolComment/CommentReply", type: "post", data: { IsSchoolPublish: Rumor, IsAnony: anonymous, Content: reply, SchoolCommentId: currentCommentId, IsAttend: Student },
+                        beforeSend: function () {
+                            $.loading("数据提交中")
+                        },
+                        complete: function () {
+                            $.loading("remove")
+                        },
+                        success: function (data)
+                        {
+                            if (data.succeed)
+                            {
+                                if (data.status == 200) {
+
+                                    //清空回答
+                                    $(".curtain").click()
+                                    $("#reply").val("")
+                                    $(".writeComment").val("")
+
+                                    location.href = "/SchoolComment/CommentDetail?CommentId=" + currentCommentId;
+                                    //that.parent().parent().next().next().find(".ctr .comment").html('<i class="icon"></i>' + data.data.successRow)
+                                }
+                                else if (data.status == 402) {
+                                    var path = window.location.href;
+                                    window.location.href = data.data.loginUrl + path;
+                                }
+                                else {
+                                    console.log(data.msg)
+                                }
+                            }
+                            else
+                            {
+                                if (data.data.errorCode === 40004) {
+                                    $(".WarningBox .btn").last().removeAttr('style').attr('href', data.data.bindUrl);
+                                }
+                                $(".reply-box").hide()
+                                $(".WarningBox .content").empty().append(data.msg)
+								$(".curtain,.WarningBox").show()
+                            }
+                        }
+                    })
+                }
+            }
+            else {
+                let reply = $("#reply").val();
+                if (reply != "") {
+                    debugger;
+                    //问题id
+                    let currentQuestionId = $(".popup-box").attr("id")
+                    //学校辟谣
+                    let Rumor = $("#Rumor").is('.active');
+                    //匿名
+                    let anonymous = $("#anonymous").is('.active');
+                    //是否在读
+                    let Student = $("#Student").is('.active');
+                    $.ajax({
+                        url: "/Question/QuestionAnswer", type: "POST", data: { QuestionInfoId: currentQuestionId, IsSchoolPublish: Rumor, IsAttend: Student, IsAnony: anonymous, Content: reply },
+                        beforeSend: function () {
+                            $.loading("数据提交中")
+                        },
+                        complete: function () {
+                            $.loading("remove")
+                        },
+                        success: function (data)
+                        {
+                            if (data.succeed) {
+                                if (data.status == 200) {
+                                    $(".curtain").click()
+                                    $("#reply").val("")
+                                    $(".writeComment").val("")
+
+                                    //let questionId = $(that).parent().parent().find(".other-list-btn").attr("data-id");
+                                    location.href = "/Question/QuestionDetail?QuestionId=" + currentQuestionId;
+                                }
+                                else if (data.status == 402) {
+                                    var path = window.location.href;
+                                    window.location.href = data.data.loginUrl + path;
+                                }
+                                else {
+                                    //alert(data.msg);
+                                    console.log(data.msg)
+                                }
+                            } else
+                            {
+                                if (data.data.errorCode === 40004) {
+                                    $(".WarningBox .btn").last().removeAttr('style').attr('href', data.data.bindUrl);
+                                }
+                                $(".reply-box").hide()
+                                $(".WarningBox .content").empty().append(data.msg)
+								$(".curtain,.WarningBox").show()
+                            }
+                        }
+                    })
+                }
+            }
+        })
+
+        //点评点赞
+        // 点赞
+        $('.like').on('click', function () {
+            let currentType = $(".tab").find("li[class='active']").attr("data-query");
+            var that = $(this);
+
+            let likeType = 0;
+            let commentId = "";
+
+            likeType = $(that).attr("data-type");
+            commentId = $(that).attr("data-id");
+
+            $.ajax({
+                url: "/SchoolComment/LikeComment", type: "POST", data: { CommentId: commentId, LikeType: likeType }, success: function (data) {
+                    if (data.status == 200) {
+                        //let num = Number($(that).text())
+                        //if ($(that).hasClass('click-like')) {
+                        //    that.removeClass('click-like').children('i').css('animation', 'none').next().text(num - 1);
+                        //}
+                        //else {
+                        //    that.addClass('click-like').children('i').css('animation', 'animate .5s').next().text(num + 1);
+                        //}
+                    }
+                    else if (data.status == 402) {
+                        var path = window.location.href;
+                        window.location.href = data.data.loginUrl + path;
+                    }
+                    else {
+                        //alert(data.msg);
+                        console.log(data.msg)
+                    }
+                }
+            })
+        })
+
+    });
+</script>
+<style>
+.mall-btn {
+  position: fixed;
+  z-index: 9;
+  right: 20px;
+  bottom: 152px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0.5px solid rgb(246, 246, 246);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+  background: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mall-btn a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mall-btn img {
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s;
+}
+</style>

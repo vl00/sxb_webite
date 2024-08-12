@@ -1,0 +1,744 @@
+﻿
+@{
+    ViewData["Title"] = "统计";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+
+        #statistics{
+            color:#fff !important;
+        }
+
+        #examiner{
+            color:#8b939b;
+        }
+    </style>
+}
+<div id="container">
+    <!-- 统计-所有的供应商 -->
+    <div id="SupplierBox" class="container breadcrumbs">
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                <div class="col-sm-8">
+                                    <h5 style="font-weight:bold;">统计列表列表</h5>
+                                    <span style="font-size:13px;color: gray;">显示当前系统中的供应商概况</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <spann><input placeholder="时间筛选" id="AllSupplierTime" type="text" /></spann>
+                                    <span><button class="btn btn-dark" id="AllSupplierTimeBtn">筛选</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="AllSupplierTimeData" class="table">
+                                        
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                <div class="col-sm-12">
+                                    <h5 style="font-weight:bold;">供应商列表</h5>
+                                    <span style="font-size:13px;color: gray;">显示当前系统中的供应商概况</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="AllSupplier" class="table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计-兼职领队 -->
+    <div id="leaderBox" class="container breadcrumbs" style="display:none;">
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                    <div class="row"  style="border-bottom:1px solid black;padding-bottom: 15px;">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h5 style="font-weight:bold;">领队统计</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="timeSearch" />
+                            <button id="leaderTimeSearchBtn" class="btn btn-dark">筛选</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body" style="padding:0px; margin-top:20px;">
+                            <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div>
+                                    <div class="col-sm-12">
+                                        <table style="text-align:center;" id="jobData" class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>兼职总人数</td>
+                                                    <td>总提交点评数</td>
+                                                    <td>总提交回答数</td>
+                                                    <td>已审核点评数</td>
+                                                    <td>已审核问答</td>
+                                                    <td>已审核加精点评</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>已审核加精回答</td>
+                                                    <td>屏蔽用户数</td>
+                                                    <td>屏蔽用户提交点评</td>
+                                                    <td>屏蔽用户提交回答</td>
+                                                    <td>屏蔽失效点评</td>
+                                                    <td>屏蔽问答数据</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                <div class="col-sm-7">
+                                    <h5 style="font-weight:bold;">兼职领队列表</h5>
+                                    <span style="font-size:13px;color: gray;">显示当前系统中的兼职领队概况</span>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="button" data-code="" id="supplierCode" class="seeCode float-right btn btn-dark" value="兼职邀请码" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="Allleader" class="table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 兼职列表 -->
+    <div id="jobBox" style="display:none;">
+        <div class="container breadcrumbs">
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                    <div class="col-sm-6">
+                                        <h5 style="font-weight:bold;">数据概况</h5>
+                                        <span style="font-size:13px;color: gray;">显示当前系统统计的数据概况</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" style="width:120px;" id="JobTimeSearch" />
+                                        <button id="JobTimeSearchBtn" class="btn-dark">筛选</button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="button" id="leaderCode" data-code="" class="seeCode float-right btn btn-dark" value="兼职邀请码" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body" style="padding:0px; margin-top:20px;">
+                            <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div>
+                                    <div class="col-sm-12">
+                                        <table style="text-align:center;" id="jobData" class="table">
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" container breadcrumbs">
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                    <div class="col-sm-7">
+                                        <h5 style="font-weight:bold;">兼职人员列表</h5>
+                                        <span style="font-size:13px;color: gray;">显示当前系统中的兼职人员概况</span>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <h6 style="font-weight:bold;">检索</h6>
+                                        <span><input id="phoneSearch" placeholder="输入手机号码" type="text"></span>
+                                        <button class="btn btn-dark" id="searchBtn">手机号码检索</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body" style="padding:0px; margin-top:20px;">
+                            <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div>
+                                    <div class="col-sm-12">
+                                        <table id="AllJob" class="table"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="parentId" />
+
+
+
+@section scripts{
+<script type="text/javascript">
+    var adminRole = '@ViewBag._admin.Role'
+    var adminId = '@ViewBag._admin.Id'
+    var code = '@ViewBag.Code'
+
+    $(function () {
+
+        laydate.render({
+            elem: '#AllSupplierTime',
+            type: 'month'
+        });
+
+        laydate.render({
+            elem: '#timeSearch',
+            type: 'month'
+        });
+
+        laydate.render({
+            elem: '#JobTimeSearch',
+            type: 'month'
+        });
+
+
+        $(".nav").find("li[class='active']").removeClass("active")
+        //$(".nav li:eq(1)").addClass("active")
+
+       
+        //校验当前账号身份，管理员、供应商、兼职领队
+
+        // 1：兼职，2：兼职领队，3：供应商，4：审核，5：管理员
+        if (adminRole == "5") {
+            GetAllSupplier();
+            LoadGetSysAdminQuerySupplier()
+        }
+        else if (adminRole == "3") {
+            GetAllLeaderBysupplier(adminId)
+            LoadCurrentSupplierParentTotal(adminId)
+            $("#supplierCode").attr("data-code", code)
+            $("#SupplierBox").hide();
+            $("#leaderBox").show();
+        }
+        else if (adminRole == "2") {
+            $("#leaderBox").hide()
+            $("#jobBox").show()
+            $("#SupplierBox").hide()
+            $("#leaderCode").attr("data-code", code)
+            GetFindAllJobEntityByLeader(adminId);
+            LoadCurrentSupplierTotal(adminId,2);
+        }
+
+        $("#container").on("click", ".seeCode", function () {
+            var code = $(this).attr("data-code");
+            layer.alert(code, { title: "邀请码" })
+        })
+
+
+        //供应商时间筛选按钮
+        $("#AllSupplierTimeBtn").click(function () {
+            if (adminRole == 5)
+            {
+                GetAllSupplier()
+                LoadGetSysAdminQuerySupplier()
+            }
+            else
+            {
+                GetAllLeaderBysupplier(adminId)
+                LoadCurrentSupplierParentTotal(adminId)
+            }
+        })
+
+        //兼职领队时间筛选框
+        $("#leaderTimeSearchBtn").click(function () {
+            GetAllLeaderBysupplier(adminId);
+            LoadCurrentSupplierParentTotal(adminId);
+        })
+
+        //兼职领队筛选兼职筛选
+        $("#JobTimeSearchBtn").click(function () {
+            GetFindAllJobEntityByLeader($("#parentId").val());
+            LoadCurrentSupplierTotal($("#parentId").val(),2);
+        })
+
+            //查看所有的兼职领队
+            $("#container").on("click", ".SeeCurrentAllleader", function () {
+                var total = $(this).attr("data-total")
+
+                //取出当前供应商的邀请码
+                var ParentSupplierCode = $(this).next().attr("data-code")
+                if (total > 0)
+                {
+                    //将该兼职领队的供应商id赋值弹出层
+                    $("#supplierCode").attr("data-code", ParentSupplierCode)
+                    adminId = $(this).attr("data-id")
+                    LoadCurrentSupplierParentTotal($(this).attr("data-id"))
+                    GetAllLeaderBysupplier($(this).attr("data-id"))
+                    $("#SupplierBox").hide();
+                    $("#leaderBox").show();
+                }
+                else
+                {
+                    layer.alert("暂无人员")
+                }
+            })
+
+        $("#searchBtn").click(function () {
+            GetFindAllJobEntityByLeader($("#parentId").val());
+            LoadCurrentSupplierTotal($("#parentId").val());
+        })
+
+            //查看所有的兼职
+            $("#container").on("click", ".SeeCurrentAllJob", function () {
+                var AllJob = $(this).attr("data-total")
+                var code = $(this).next().attr("data-code")
+
+                if (AllJob > 0)
+                {
+                    $("#leaderCode").attr("data-code",code)
+                    $("#leaderBox").hide()
+                    $("#jobBox").show()
+                    var parentId = $(this).attr("data-id")
+                    $("#parentId").val(parentId)
+                    GetFindAllJobEntityByLeader(parentId);
+                    LoadCurrentSupplierTotal(parentId);
+                }
+                else
+                {
+                    layer.alert("暂无人员")
+                }
+            })
+
+            //查看所有的兼职
+            $("#container").on("click", ".JobCommentAndAnswer", function () {
+                var jobId = $(this).attr("data-id")
+                layer.open({
+                    type: 2,
+                    area: [500 + 'px', 600 + 'px'],
+                    fix: false, //不固定
+                    title: '详细 - 相关人员工作记录的详细情况',
+                    content: '/PartTimeJob/Statistics/GetCommentAndAnswerByJob?JobId=' + jobId +"&isExaminerAdmin=1",
+                    maxmin: true,
+                    btn: ["确定"]
+                })
+                $(".layui-layer-max").click();
+            })
+        })
+
+
+        //获取所有的供应商
+        function GetAllSupplier()
+        {
+            $("#AllSupplier").bootstrapTable('destroy');
+            $('#AllSupplier').bootstrapTable({
+                method: 'get',
+                url: "/PartTimeJob/Statistics/GetEntityListByRoleType",//请求路径
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        limit: params.limit, // 每页显示数量
+                        offset: params.offset, // SQL语句起始索引
+                        page: (params.offset / params.limit) + 1, //当前页码
+                        parentId: "00000000-0000-0000-0000-000000000000",
+                        type: 3,
+                        date:$("#AllSupplierTime").val()
+                    };
+                    return temp;
+                },
+                columns: [{
+                    title: '昵称',
+                    field: 'name'
+                }, {
+                    title: '手机号',
+                    field: 'phone'
+                }, {
+                    title: '结算方式',
+                    field: 'settlementType',
+                }, {
+                    title: '兼职领队人数',
+                    field: 'total'
+                },
+                {
+                    title: '操作',
+                    formatter: operation,//对资源进行操作
+                }]
+            })
+        }
+
+        //根据兼职领队获取所有的兼职
+        function GetAllLeaderBysupplier(parentId)
+        {
+            $("#Allleader").bootstrapTable('destroy');
+            $('#Allleader').bootstrapTable({
+                method: 'get',
+                url: "/PartTimeJob/Statistics/GetEntityListByRoleType",//请求路径
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        limit: params.limit, // 每页显示数量
+                        offset: params.offset, // SQL语句起始索引
+                        page: (params.offset / params.limit) + 1, //当前页码
+                        parentId: parentId,
+                        type: 2,
+                        date:$("#timeSearch").val()
+
+                    };
+                    return temp;
+                },
+                columns: [{
+                    title: '昵称',
+                    field: 'name'
+                }, {
+                    title: '手机号',
+                    field: 'phone'
+                }, {
+                    title: '结算方式',
+                    field: 'settlementType',
+                }, {
+                    title: '兼职人数',
+                    field: 'total'
+                },
+                {
+                    title: '操作',
+                    formatter: leaderoperation,//对资源进行操作
+                }]
+            })
+        }
+
+
+        //获取兼职领队页统计数据
+        function LoadCurrentSupplierParentTotal(parentId)
+        {
+            $.ajax({
+                url: "/PartTimeJob/Statistics/GetSupplierTotalDtoBySupplier?parentId=" + parentId + "&date=" + $("#timeSearch").val(), type: "GET", success: function (data) {
+
+                    //debugger;
+                    var html = "";
+                    //html += "<tr>";
+                    //html += "<td>" + data.data.jobTotal+"人</td>";
+                    //html += "<td>" + data.data.totalSchoolComment +"条</td>";
+                    //html += "<td>" + data.data.totalSchoolCommentsSelected +"条</td>";
+                    //html += "<td>" + data.data.totalAnswer +"条</td>";
+                    //html += "<td>" + data.data.totalAnswerSelected +"条</td>";
+                    //html += "</tr>"
+
+                    html+="<tr>"
+                    html+="<td>兼职总人数</td>"
+                    html+="<td>总提交点评数</td>"
+                    html+="<td>总提交回答数</td>"
+                    html+="<td>已审核点评数</td>"
+                    html+="<td>已审核问答</td>"
+                    html+="<td>已审核加精点评</td>"
+                    html+="</tr>"
+                    html += "<tr>"
+                    html += "<td >"+data.data.partTimeJobAdminTotal + "</td >"
+                    html+="<td >"+data.data.commitCommentTotal+"</td >"
+                    html+="<td >"+data.data.commitAnswerTotal+"</td >"
+                    html+="<td >"+data.data.examinerCommentTotal+"</td >"
+                    html+="<td >"+data.data.examinerAnswerTotal+"</td >"
+                    html+="<td >"+data.data.selectedCommentTotal+"</td >"
+                    html+="</tr >"
+                    html+="<tr >"
+                    html+="<td > 已审核加精回答</td >"
+                    html+="<td > 屏蔽用户数</td >"
+                    html+="<td > 屏蔽用户提交点评</td >"
+                    html+="<td > 屏蔽用户提交回答</td >"
+                    html+="<td > 屏蔽失效点评</td >"
+                    html+="<td > 屏蔽问答数据</td >"
+                    html+="</tr>"
+                    html+="<tr >"
+                    html+="<td >"+data.data.selectedAnswerTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobCommentTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobAnswerTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobSelectedCommentTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobSelectedAnswerTotal+"</td>"
+                    html+="</tr >"
+                    $("#jobData tbody").empty()
+                    $("#jobData tbody").append(html)
+                }
+            })
+    }
+
+
+        function LoadGetSysAdminQuerySupplier()
+        {
+            $.ajax({
+                url: "/PartTimeJob/Statistics/GetSysAdminQuerySupplier?date=" + $("#AllSupplierTime").val(),
+                type: "GET",
+                success: function (data)
+                {
+                    var html = "";
+                    html+="<tbody>"
+                    html+="<tr>"
+                    html+="<td>已审核点评数</td>"
+                    html+="<td>已审核问答数</td>"
+                    html+="<td>审核通过点评数</td>"
+                    html+="<td>审核通过问答数</td>"
+                    html+="<td></td>"
+                    html+="</tr>"
+                    html+="<tr>"
+                    html+="<td>"+data.data.examinerCommentTotal+"</td>"
+                    html+="<td>"+data.data.examinerAnswerTotal+"</td>"
+                    html+="<td>"+data.data.selectedCommentTotal+"</td>"
+                    html+="<td>"+data.data.selectedAnswerTotal +"</td>"
+                    html+="<td></td>"
+                    html+="</tr>"
+                    html+="<tr>"
+                    html+="<td>屏蔽用户数</td>"
+                    html+="<td>屏蔽用户提交点评数</td>"
+                    html+="<td>屏蔽用户提交回答数</td>"
+                    html+="<td>屏蔽失效点评数</td>"
+                    html+="<td>屏蔽问答点评数</td>"
+                    html+="</tr>"
+                    html+="<tr>"
+                    html+="<td>"+data.data.shieldJobTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobCommentTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobAnswerTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobSelectedCommentTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobSelectedAnswerTotal+"</td>"
+                    html+="</tr>"
+                    html += "</tbody>"
+
+                    $("#AllSupplierTimeData").empty()
+                    $("#AllSupplierTimeData").append(html)
+                }
+            })
+        }
+
+        //获取兼职页统计数据
+        function LoadCurrentSupplierTotal(parentId,flag)
+        {
+            var url="/PartTimeJob/Statistics/GetFindAllJobTotal?parentId=" + parentId + "&phone=" + $("#phoneSearch").val() + "&date=" + $("#JobTimeSearch").val()
+
+            $.ajax({
+                url: url, type: "GET", success: function (data) {
+
+                    //debugger;
+                    var html = "";
+                    //html += "<tr>";
+                    //html += "<td>" + data.data.jobTotal+"人</td>";
+                    //html += "<td>" + data.data.totalSchoolComment +"条</td>";
+                    //html += "<td>" + data.data.totalSchoolCommentsSelected +"条</td>";
+                    //html += "<td>" + data.data.totalAnswer +"条</td>";
+                    //html += "<td>" + data.data.totalAnswerSelected +"条</td>";
+                    //html += "</tr>"
+
+                    html+="<tr>"
+                    html+="<td>当前领队兼职人数</td>"
+                    html+="<td>总提交点评数</td>"
+                    html+="<td>总提交回答数</td>"
+                    html+="<td>已审核点评数</td>"
+                    html+="<td>已审核问答</td>"
+                    html+="<td>已审核加精点评</td>"
+                    html+="</tr>"
+                    html += "<tr>"
+                    html += "<td >"+data.data.partTimeJobAdminTotal + "</td >"
+                    html+="<td >"+data.data.commitCommentTotal+"</td >"
+                    html+="<td >"+data.data.commitAnswerTotal+"</td >"
+                    html+="<td >"+data.data.examinerCommentTotal+"</td >"
+                    html+="<td >"+data.data.examinerAnswerTotal+"</td >"
+                    html+="<td >"+data.data.selectedCommentTotal+"</td >"
+                    html+="</tr >"
+                    html+="<tr >"
+                    html+="<td > 已审核加精回答</td >"
+                    html+="<td > 屏蔽用户数</td >"
+                    html+="<td > 屏蔽用户提交点评</td >"
+                    html+="<td > 屏蔽用户提交回答</td >"
+                    html+="<td > 屏蔽失效点评</td >"
+                    html+="<td > 屏蔽问答数据</td >"
+                    html+="</tr>"
+                    html+="<tr >"
+                    html+="<td >"+data.data.selectedAnswerTotal+"</td>"
+                    html+="<td>"+data.data.shieldJobTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobCommentTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobAnswerTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobSelectedCommentTotal+"</td>"
+                    html+="<td >"+data.data.shieldJobSelectedAnswerTotal+"</td>"
+                    html+="</tr >"
+                    $("#jobData tbody").empty()
+                    $("#jobData tbody").append(html)
+                }
+            })
+        }
+
+        //根据兼职领队id获取兼职者的填写数据
+        function GetFindAllJobEntityByLeader(parentId)
+        {
+            $("#AllJob").bootstrapTable('destroy');
+            $('#AllJob').bootstrapTable({
+                method: 'get',
+                url: "/PartTimeJob/Statistics/FindAllJobEntityList",//请求路径
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        parentId: parentId,
+                        limit: params.limit, // 每页显示数量
+                        offset: params.offset, // SQL语句起始索引
+                        page: (params.offset / params.limit) + 1, //当前页码
+                        phone: $("#phoneSearch").val(),
+                        date:$("#JobTimeSearch").val()
+                    };
+                    return temp;
+                },
+                columns: [{
+                    title: '昵称',
+                    field: 'name'
+                },{
+                    title: '手机号',
+                    field: 'phone'
+                },{
+                    title: '结算方式',
+                    field: 'settlementType',
+                },{
+                    title: '点评数',
+                    field: 'totalSchoolComment'
+                },{
+                    title: '精选点评数',
+                    field: 'totalSchoolCommentsSelected'
+                },{
+                     title: '问答数',
+                     field: 'totalAnswer'
+                },{
+                    title: '精选问答数',
+                    field: 'totalAnswerSelected'
+                    },
+                    {
+                    title: '是否禁用',
+                   formatter: JobShield,//对资源进行操作
+                    }
+                    ,
+                {
+                    title: '操作',
+                    formatter: Job,//对资源进行操作
+                }]
+            })
+        }
+
+    function JobShield(value, row, index)
+    {
+        var htm = "";
+             if (row["shield"])
+                    {
+                        htm += "<button disabled='disabled' class='Checkshield btn btn-danger' >屏蔽</button>"
+                    }
+                    else
+                    {
+                        htm += "<button disabled='disabled' class='Checkshield btn btn-dark' >正常</button>"
+        }
+        return htm;
+    }
+
+        //供应商
+        function operation(value, row, index) {
+            var htm = "<button class='SeeCurrentAllleader btn btn-dark' data-id='" + row.id + "' data-total='" + row.total+"'>查看所有兼职领队</button><button style='margin-left: 10px;'  class='seeCode btn btn-dark' data-code='" + row.invitationCode + "'>查看邀请码</button>"
+            return htm;
+        }
+
+        //兼职领队
+        function leaderoperation(value, row, index) {
+            var htm = "<button class='SeeCurrentAllJob btn btn-dark' data-id='" + row.id + "'  data-total='" + row.total +"'>查看所有兼职</button><button style='margin-left: 10px;'  class='seeCode btn btn-dark' data-code='" + row.invitationCode + "'>查看邀请码</button>"
+            return htm;
+        }
+
+        //兼职领队
+        function Job(value, row, index) {
+            var htm = "<button class='JobCommentAndAnswer btn btn-dark' data-id='" + row.id + "'>查看</button>"
+            return htm;
+        }
+
+</script>
+}
+

@@ -1,0 +1,744 @@
+﻿@using PMS.School.Domain.Dtos;
+@using PMS.School.Infrastructure.Common
+@using iSchool;
+@{
+    Layout = null;
+    var schtype = (SchFType0)ViewBag.SchFType;
+}
+@model SchoolExtRecruitDto
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <title>@($"{Model.SchoolName}招生简介_录取条件-上学帮")</title>
+    <meta name="keywords" content="@($"{Model.SchoolName}招生简介_{Model.SchoolName}录取条件")">
+    <meta name="description" content="@($"上学帮学校频道，为您提供全面的{Model.SchoolName}招生简介、录取条件等信息")">
+
+    <style type="text/css">
+        * {
+            touch-action: unset !important;
+        }
+    </style>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-more-msg.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/more-recruit-students.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/viewer.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/mobileSelect/mobileSelect.css" />
+</head>
+<body>
+
+    @*<header class="header flex justify-content-between">
+            <a class="arrow"></a>
+            <span class="header-title">@Model.SchoolName - @Model.ExtName</span>
+            <span class=""></span>
+            <span class="btn-list flex">
+                @if (ViewBag.CollectStatus == true)
+                {
+                    <a class="header-icon collection"></a>
+                }
+                else
+                {
+                    <a class="header-icon"></a>
+                }
+                <a class="header-icon share" data-title="@($"{ViewBag.UserName}向您推荐了一所学校快来了解一下呗")" data-content="@($"{Model.SchoolName}-{Model.ExtName}")" data-url="@Url.Action("Detail", "School", new { extId = ViewBag.ExtId, sid =  ViewBag.Sid  })" data-logo="@Uri.EscapeDataString("https://cdn.sxkid.com/images/logo_share_v4.png")"></a>
+
+                <a class="other">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </a>
+            </span>
+        </header>*@
+
+    <section class="recruit-students-msg mt">
+        @if (Model.Age != null
+|| Model.MaxAge != null
+|| Model.Count != null
+|| !string.IsNullOrEmpty(Model.Target)
+|| (((List<KeyValueDto<string>>)ViewBag.Point).Count > 0)
+|| !string.IsNullOrEmpty(Model.ScholarShip)
+|| !string.IsNullOrEmpty(Model.Date))
+        {
+            <div>
+                <h5 class="title">招生计划</h5>
+                <ul class="msg-list">
+                    <li>
+                        <span>招生年龄：</span>@if (Model.Age == null && Model.MaxAge != null)
+                        {
+                            @("0-" + Model.MaxAge)
+                        }
+                        else if (Model.Age != null && Model.MaxAge == null)
+                        {
+                            @(Model.MaxAge)
+                        }
+                        else if (Model.Age == null && Model.MaxAge == null)
+                        {
+                            @:暂未收录
+                        }
+                        else
+                        {
+                            @($"{Model.Age}-{Model.MaxAge}")
+                        }
+                    </li>
+                    <li><span>招生人数：</span>@(Model.Count == null ? "暂未收录" : Model.Count + "人")</li>
+                    <li>
+                        @{ var content = (string.IsNullOrEmpty(Model.Target) ? "暂未收录" : string.Join("、", ((List<KeyValueDto<string>>)ViewBag.Target).Select(p => p.Key)));}
+                        <a class="common-popup" title="招生对象" data="@content">
+                            <p class="content-cell"><span class="list-title">招生对象：</span><span class="common-popup-text">@content</span></p><i class="arrow"></i>
+                        </a>
+                    </li>
+                    @if (SchUtils.Canshow2("招录比例", schtype))
+                    {
+                        <li><span>招录比例：</span>@(Model.Proportion == null ? "暂未收录" : ViewBag.Proportion)</li>
+                    }
+                    @if (SchUtils.Canshow2("录取分数线", schtype))
+                    {
+                        <li>
+                            <a class="common-popup" title="录取分数" data="@Model.Point">
+                                <p class="content-cell">
+                                    <span class="list-title">录取分数：</span>
+                                    <span class="common-popup-text">@(((List<KeyValueDto<string>>)ViewBag.Point).Count == 0 ? "暂未收录" : ((List<KeyValueDto<string>>)ViewBag.Point).FirstOrDefault()?.Key)</span>
+                                </p><i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (SchUtils.Canshow2("奖学金计划", schtype))
+                    {
+                        <li>
+                            @{var scholarShip = string.IsNullOrEmpty(Model.ScholarShip) ? "暂未收录" : StrHelper.GetHtmlText(Model.ScholarShip); }
+                            <a class="common-popup" title="奖学金" data="@scholarShip" data-years="@ViewBag.scholarShipYears" data-Type="ScholarShip">
+                                <p class="content-cell">
+                                    <span class="list-title">奖学金　：</span><span class="common-popup-text">@scholarShip</span>
+                                </p> <i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (SchUtils.Canshow2("招生日期", schtype))
+                    {
+                        <li>
+                            @{var date = ((List<KeyValueDto<string>>)ViewBag.Date).Count == 0 ? "暂未收录" : ((List<KeyValueDto<string>>)ViewBag.Date).FirstOrDefault()?.Key; }
+                            <a class="common-popup" title="招生日期" data="@Model.Date" data-years="@ViewBag.dataYears" data-Type="Date">
+                                <p class="content-cell"><span class="list-title">招生日期：</span><span class="common-popup-text">@date</span></p><i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Contact)
+|| !string.IsNullOrEmpty(Model.Subjects)
+|| !string.IsNullOrEmpty(Model.Data)
+|| !string.IsNullOrEmpty(Model.Pastexam))
+        {
+            <div>
+                <h5 class="title">入学流程</h5>
+                <ul class="msg-list">
+                    <li>
+                        @{var contact = Model?.Contact?.Replace("\r\n", "</br>").Replace("\n", "</br>"); }
+                        <a class="common-popup" title="报名方式" data="@contact">
+                            <p class="content-cell">
+                                <span class="list-title">报名方式：</span>
+                                <span class="common-popup-text">@(Html.Raw(string.IsNullOrEmpty(Model.Contact) ? "暂未收录" : Model.Contact))</span>
+                            </p> <i class="arrow"></i>
+                        </a>
+                    </li>
+                    @if (SchUtils.Canshow2("考试科目", schtype))
+                    {
+                        var subjects = (string.IsNullOrEmpty(Model.Subjects) ? "暂未收录" : string.Join("、", ((List<KeyValueDto<string>>)ViewBag.Subjects).Select(p => p.Key)));
+                        <li>
+                            <a class="common-popup" title="考试科目" data="@subjects">
+                                <p class="content-cell">
+                                    <span class="list-title">考试科目：</span>
+                                    <span class="common-popup-text">@subjects</span>
+                                </p><i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (SchUtils.Canshow2("报名所需资料", schtype))
+                    {
+                        var data = Html.Raw(string.IsNullOrEmpty(Model.Data) ? "暂未收录" : Model.Data.Replace("\r\n", "</br>").Replace("\n", "</br>"));
+                        <li>
+                            <a class="common-popup" title="报名资料" data="@data" data-years="@ViewBag.dataYears" data-Type="Data">
+                                <p class="content-cell">
+                                    <span class="list-title">报名资料：</span>
+                                    <span class="common-popup-text">@(Html.Raw(string.IsNullOrEmpty(Model.Data) ? "暂未收录" : Model.Data))</span>
+                                </p> <i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+                    @if (SchUtils.Canshow2("往期入学考试内容", schtype))
+                    {
+                        <li>
+                            @{var pastexam = string.IsNullOrEmpty(Model.Pastexam) ? "暂未收录" : !string.IsNullOrEmpty(StrHelper.GetHtmlText(Model.Pastexam, false).Replace("\r", "").Replace("\n", "")) ? StrHelper.GetHtmlText(Model.Pastexam, false) : "查看详情";}
+                            <a class="common-popup" title="考试内容" data="@Model.Pastexam" data-years="@ViewBag.ExamYears" data-Type="Pastexam">
+                                <p class="content-cell">
+                                    <span class="list-title">考试内容：</span>
+                                    <span class="common-popup-text">@pastexam</span>
+                                </p><i class="arrow"></i>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        }
+        @*@if (((string[])ViewBag.Schoolhonor).Count() > 0 || ((string[])ViewBag.Studenthonor).Count() > 0)
+                    {
+                        <div>
+                            <h5 class="title">教学质量</h5>
+                            <ul class="img-content">
+                                @if (((string[])ViewBag.Schoolhonor).Count() > 0)
+                                {
+                                    <li>
+                                        <span>学校荣誉</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+
+                                            @for (int i = 0; i < ((string[])ViewBag.Schoolhonor).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Schoolhonor)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Schoolhonor)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Schoolhonor).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Schoolhonor).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Schoolhonor).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Schoolhonor).Count())</span>
+                                        }
+                                    </li>
+                                }
+                                @if (((string[])ViewBag.Studenthonor).Count() > 0)
+                                {
+                                    <li>
+                                        <span>学生荣誉</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Studenthonor).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Studenthonor)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Studenthonor)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Studenthonor).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Studenthonor).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Studenthonor).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Studenthonor).Count())</span>
+                                        }
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    }
+
+                    @if (((string[])ViewBag.Principal).Count() > 0 || ((string[])ViewBag.Teacher).Count() > 0)
+                    {
+                        <div>
+                            <h5 class="title">师资展示</h5>
+                            <ul class="img-content">
+                                @if (((string[])ViewBag.Principal).Count() > 0)
+                                {
+                                    <li>
+                                        <span>校长风采</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Principal).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Principal)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Principal)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Principal).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Principal).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+
+                                        </ul>
+                                        @if (((string[])ViewBag.Principal).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Principal).Count())</span>
+                                        }
+                                    </li>
+                                }
+                                @if (((string[])ViewBag.Teacher).Count() > 0)
+                                {
+                                    <li>
+                                        <span>教师风采</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Teacher).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Teacher)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Teacher)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Teacher).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Teacher).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Teacher).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Teacher).Count())</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (((string[])ViewBag.Hardware).Count() > 0)
+                    {
+                        <div>
+                            <h5 class="title">硬件设施</h5>
+                            <div style="position: relative;">
+                                <ul class="img-list flex justify-content-between text-center">
+                                    @for (int i = 0; i < ((string[])ViewBag.Hardware).Length; i++)
+                                    {
+                                        if (i + 1 <= 3)
+                                        {
+                                            <li><img src="@(((string[])ViewBag.Hardware)[i])" alt="" /></li>
+                                        }
+                                        else
+                                        {
+                                            <li style="display:none"><img src="@(((string[])ViewBag.Hardware)[i])" alt="" /></li>
+                                        }
+                                    }
+                                    @if (((string[])ViewBag.Hardware).Length < 3)
+                                    {
+                                        for (int i = 0; i < 3 - (((string[])ViewBag.Hardware).Length); i++)
+                                        {
+                                            <li></li>
+                                        }
+                                    }
+                                </ul>
+                                @if (((string[])ViewBag.Hardware).Count() > 3)
+                                {
+                                    <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Hardware).Count())</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (((string[])ViewBag.Community).Count() > 0
+            || ((string[])ViewBag.TimeTables).Count() > 0
+            || ((string[])ViewBag.Schedule).Count() > 0
+            || ((string[])ViewBag.Diagram).Count() > 0)
+                    {
+                        <div>
+                            <h5 class="title">学生生活</h5>
+                            <ul class="img-content">
+                                @if (((string[])ViewBag.Community).Count() > 0)
+                                {
+                                    <li>
+                                        <span>社团活动</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Community).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Community)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Community)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Community).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Community).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Community).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Community).Count())</span>
+                                        }
+                                    </li>
+                                }
+                                @if (((string[])ViewBag.TimeTables).Count() > 0)
+                                {
+                                    <li>
+                                        <span>各年级课程表</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.TimeTables).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.TimeTables)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.TimeTables)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.TimeTables).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.TimeTables).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+
+                                        </ul>
+                                        @if (((string[])ViewBag.TimeTables).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.TimeTables).Count())</span>
+                                        }
+                                    </li>
+                                }
+                                @if (((string[])ViewBag.Schedule).Count() > 0)
+                                {
+                                    <li>
+                                        <span>作息时间表</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Schedule).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Schedule)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Schedule)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Schedule).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Schedule).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Schedule).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Schedule).Count())</span>
+                                        }
+                                    </li>
+                                }
+                                @if (((string[])ViewBag.Diagram).Count() > 0)
+                                {
+                                    <li>
+                                        <span>校车路线</span>
+                                        <ul class="img-list flex justify-content-between text-center">
+                                            @for (int i = 0; i < ((string[])ViewBag.Diagram).Length; i++)
+                                            {
+                                                if (i + 1 <= 3)
+                                                {
+                                                    <li><img src="@(((string[])ViewBag.Diagram)[i])" alt="" /></li>
+                                                }
+                                                else
+                                                {
+                                                    <li style="display:none"><img src="@(((string[])ViewBag.Diagram)[i])" alt="" /></li>
+                                                }
+                                            }
+                                            @if (((string[])ViewBag.Diagram).Length < 3)
+                                            {
+                                                for (int i = 0; i < 3 - (((string[])ViewBag.Diagram).Length); i++)
+                                                {
+                                                    <li></li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (((string[])ViewBag.Diagram).Count() > 3)
+                                        {
+                                            <span class="img-num text-center"><i class="icon"></i>@(((string[])ViewBag.Diagram).Count())</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }*@
+    </section>
+
+    <section class="tab">
+        <div class="swiper-container">
+            <ul class="tab-list swiper-wrapper text-center">
+                @if (Model.Age != null
+|| Model.MaxAge != null
+|| Model.Count != null
+|| !string.IsNullOrEmpty(Model.Target)
+|| (((List<KeyValueDto<string>>)ViewBag.Point).Count > 0)
+|| !string.IsNullOrEmpty(Model.ScholarShip)
+|| !string.IsNullOrEmpty(Model.Date))
+                {
+                    <li class="active swiper-slide">招生计划</li>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Contact)
+|| !string.IsNullOrEmpty(Model.Subjects)
+|| !string.IsNullOrEmpty(Model.Data)
+|| !string.IsNullOrEmpty(Model.Pastexam))
+                {
+                    <li class="swiper-slide">入学流程</li>
+                }
+                @*@if (((string[])ViewBag.Schoolhonor).Count() > 0
+                    || ((string[])ViewBag.Studenthonor).Count() > 0)
+                                    {
+                                        <li class="swiper-slide">教学质量</li>
+                                    }
+                                    @if (((string[])ViewBag.Principal).Count() > 0 || ((string[])ViewBag.Teacher).Count() > 0)
+                                    {
+                                        <li class="swiper-slide">师资展示</li>
+                                    }
+                                    @if (((string[])ViewBag.Hardware).Count() > 0)
+                                    {
+                                        <li class="swiper-slide">硬件设施</li>
+                                    }
+                                    @if (((string[])ViewBag.Community).Count() > 0
+                    || ((string[])ViewBag.TimeTables).Count() > 0
+                    || ((string[])ViewBag.Schedule).Count() > 0
+                    || ((string[])ViewBag.Diagram).Count() > 0)
+                                    {
+                                        <li class="swiper-slide">学生生活</li>
+                                    }*@
+            </ul>
+        </div>
+    </section>
+
+    <section class="popup">
+        <div>
+            <!-- 招生日期、往期入学考试内容 -->
+            <h5 class="title text-center">奖学金</h5>
+            <div class="more-recruit-select" id="btn_test1">
+                2020年<i class="arrow"></i>
+            </div>
+            <div class="content">
+            </div>
+        </div>
+        <a class="cancel text-center">取消</a>
+
+    </section>
+    <!-- 幕布 -->
+    <div class="curtain"></div>
+    @*奖学金弹出框内容*@
+    <div id="ScholarShipContent" style="display:none">
+        @Html.Raw("<pre>" + Model.ScholarShip + "</pre>")
+    </div>
+    @*招生日期弹出框内容*@
+    <div id="DateContent" style="display:none">
+        <ul>
+            @foreach (var item in (List<KeyValueDto<string>>)ViewBag.Date)
+            {
+                <li class="flex justify-content-between">@item.Key<span>@item.Value</span></li>
+            }
+        </ul>
+    </div>
+    @*往期入学考试内容弹出框内容*@
+    <div id="PastexamContent" style="display:none">
+        @Html.Raw(Model.Pastexam)
+    </div>
+    <!-- 头部其他内容按钮 -->
+    <div class="popup-other text-center">
+        <ul>
+            <li class="correct"><a href="@Url.Action("SchCorrection","Home",new {eid=ViewBag.ExtId })">纠错</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </div>
+
+    <input type="hidden" value="@ViewBag.ExtId" class="dataId">
+    <input type="hidden" value="1" class="dataType">
+
+    <div id="attend-targetContainer" style="z-index:9999;"></div>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/viewer.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/more-recruit-students.js"></script>
+    <script src="@ViewBag.StaticFile/js/collection.js"></script>
+    <script src="@ViewBag.StaticFile/js/mobileSelect/mobileSelect.js"></script>
+    <script type="text/javascript">
+        var currentFieldType = '';
+        var mobileSelect1 = new MobileSelect({
+            trigger: '#btn_test1',
+            title: '年份选择',
+            triggerDisplayData: false,
+            jsonType: true,
+            wheels: [
+                { data: [{ id: '2019', value: '2019' }, { id: '2020', value: '2020' }] }
+            ],
+            callback: function (index, data) {
+                $.post('/school/getschoolfieldyearcontent', {
+                    eid: '@ViewBag.ExtId',
+                    field: currentFieldType,
+                    year: data[0].value
+                }, function (e) {
+                        $(".popup .content").html('');
+                        if (e.succeed) {
+                            var target = $('a[data-Type="' + currentFieldType + '"]');
+                            target.attr("data-currentIndex", index);
+                            $(".popup .more-recruit-select").html(data[0].value + '年<i class="arrow"></i>');
+                            target.attr("data", e.data).trigger('click');
+                        }
+                });
+            }
+        });
+        jQuery(function () {
+            //动态显示展开标识(箭头)
+            let cells = $('.common-popup .content-cell');
+            cells.map((index, value) => {
+                let contentWidth = $(value).outerWidth();
+                let titleWidth = $($('.common-popup .list-title')[index]).outerWidth();
+                let textWidth = $($('.common-popup .common-popup-text')[index]).outerWidth();
+                let maxWidth = contentWidth - titleWidth;
+                if (textWidth >= maxWidth) {
+                    $($('.common-popup .arrow')[index]).css({
+                        display: 'block'
+                    })
+                    $($('.common-popup')[index]).attr("data-notdata", "0");
+                } else {
+                    $($('.common-popup .arrow')[index]).css({
+                        display: 'none'
+                    })
+                    $($('.common-popup')[index]).attr("data-notdata", "1");
+                }
+                //匹配图片（g表示匹配所有结果i表示区分大小写）
+                var data = $($('.common-popup')[index]).attr("data");
+                if (data !== undefined) {
+                    var reg = new RegExp("(<img.*src=\"\.*?\>)");  //正则表达式
+                    var arr = data.match(reg);
+                    if (null != arr && arr.length > 0) {
+                        $($('.common-popup .arrow')[index]).css({ display: 'block' })
+                        $($('.common-popup')[index]).attr("data-notdata", "0");
+                    }
+                    else {
+                        try {
+                            var obj = JSON.parse(data);
+                            if (typeof obj == 'object' && obj) {
+                                $($('.common-popup .arrow')[index]).css({ display: 'block' })
+                                $($('.common-popup')[index]).attr("data-notdata", "0");
+                            }
+                            if (Array.isArray(obj) && obj.length == 0) {
+                                $($('.common-popup .arrow')[index]).css({ display: 'none' })
+                                $($('.common-popup')[index]).attr("data-notdata", "1");
+                            }
+                        } catch (e) {
+
+                        }
+                    }
+                }
+            });
+
+            @*// 检测是否收藏
+            $.isCollection("@ViewBag.ExtId", "");*@
+
+            //点击收藏
+            jQuery(".header .btn-list a:first-child").on("click", function () {
+                // 收藏
+                $.collection("@ViewBag.ExtId", 1, "");
+            });
+            //通用布幕
+            jQuery(".common-popup").on("click", function () {
+                $('#btn_test1').hide();
+                var title = $(this).attr("title");
+                var text = $(this).attr("data");
+                var years = $(this).attr("data-years");
+                var dataType = $(this).attr("data-Type");
+                var html = '';
+                //匹配图片（g表示匹配所有结果i表示区分大小写）
+                var reg = new RegExp("(<img.*src=\"\.*?\>)");  //正则表达式
+                if (text !== undefined && text != null) {
+                    var arr = text.match(reg);
+                    if (null != arr && arr.length > 0) {
+                        html = text;
+                    }
+                    else {
+                        try {
+                            var obj = JSON.parse(text);
+                            if (typeof obj == 'object' && obj) {
+                                html = '<ul> '
+                                for (var i = 0; i < obj.length; i++) {
+                                    html += '<li class="flex justify-content-between">' + obj[i].Key + '<span>' + obj[i].Value + '</span></li> ';
+                                }
+                                html += '</ul> ';
+                            }
+                        } catch (e) {
+                            html = '<pre>' + text + '</pre>';
+                        }
+                    }
+                }
+                jQuery(".popup .title").html(title);
+                jQuery(".popup .content").html(html);
+                if (dataType) {
+                    $('#btn_test1').show();
+                    if (currentFieldType != dataType) {
+                        var obj_Years = JSON.parse(years);
+                        currentFieldType = dataType;
+                        mobileSelect1.updateWheel(0, obj_Years);
+                        var index = 0;
+                        var currentIndex = $(this).attr('data-currentIndex');
+                        if (currentIndex) {
+                            index = currentIndex;
+                        }
+                        $(".popup .more-recruit-select").html(obj_Years[index].value + '年<i class="arrow"></i>');
+                        mobileSelect1.locatePosition(0, index);
+                    }
+                }
+            });
+            //奖学金
+            //jQuery(".scholarship").on("click", function () {
+            //    console.log("奖学金");
+            //    jQuery(".popup .title").html("奖学金");
+            //    var html = jQuery("#ScholarShipContent").html();
+            //    jQuery(".popup  .content").html(html);
+            //});
+            //招生日期
+            //jQuery(".date-list").on("click", function () {
+            //    console.log("招生日期");
+            //    jQuery(".popup .title").html("招生日期");
+            //    var html = jQuery("#DateContent").html();
+            //    console.log(html);
+            //    jQuery(".popup  .content").html(html);
+            //});
+            //往期入学考试内容
+            jQuery(".exam-content").on("click", function () {
+                console.log("往期入学考试内容");
+                jQuery(".popup .title").html("往期入学考试内容");
+                var html = jQuery("#PastexamContent").html();
+                jQuery(".popup  .content").html(html);
+            });
+        });
+    </script>
+</body>
+</html>

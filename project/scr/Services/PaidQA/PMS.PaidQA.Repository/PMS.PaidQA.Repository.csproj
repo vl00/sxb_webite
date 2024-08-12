@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MediatRManage\PMS.MediatR.Events\PMS.MediatR.Events.csproj" />
+    <ProjectReference Include="..\..\MediatRManage\PMS.MediatR.Request\PMS.MediatR.Request.csproj" />
+    <ProjectReference Include="..\PMS.PaidQA.Domain\PMS.PaidQA.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+  </ItemGroup>
+
+</Project>

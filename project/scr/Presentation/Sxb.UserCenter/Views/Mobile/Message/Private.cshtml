@@ -1,0 +1,285 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.Message.MessageModel>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="msg-list">
+        @foreach (var message in Model)
+        {
+            if (message.Type == 1 && message.DataType == 2)
+            {
+                <li data-id="@message.Id">
+                    <a href="https://m.sxkid.com/question/Reply/@(message.DataID)" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">回答了你：</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (message.Type == 1 && message.DataType == 3)
+            {
+                <li data-id="@message.Id">
+                    <a href="https://m.sxkid.com/comment/Reply/@(message.DataID)" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">回复了你：</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (message.Type == 4)
+            {
+                <li data-id="@message.Id">
+                    <a href="https://m.sxkid.com/question/detail/@(message.DataID)" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">邀请你回答：</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                            <div class="school">
+                                <h5 class="school-name">@message.SchoolModel.SchoolName<span class="total-qa">共@(message.SchoolModel.QuestionCount)个问题</span></h5>
+                                <ul class="tag-list flex">
+                                    @*@if (message.SchoolModel.Tags != null)
+        {
+            foreach (var tag in message.SchoolModel.Tags)
+            {
+                <li>@tag</li>
+            }
+        }*@
+                                    @if ((int)message.SchoolModel.Type == 1)
+                                    {
+                                        <li>公办</li>
+                                    }
+                                    else if ((int)message.SchoolModel.Type == 2)
+                                    {
+                                        <li>民办</li>
+                                    }
+                                    else
+                                    {
+                                        <li>国际</li>
+                                    }
+
+                                    @if (message.SchoolModel.LodgingType > 0)
+                                    {
+                                        <li>@message.SchoolModel.LodgingReason</li>
+                                    }
+                                    @*<li><i class="comment-icon"></i></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if ((message.DataType == 2 && message.Type == 8) || (message.DataType == 2 && message.Type == 7))
+            {
+                <li data-id="@message.Id">
+                    <a href="https://m.sxkid.com/question/Reply/@(message.DataID)" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">邀请你回复：</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                            <div class="school">
+                                <h5 class="school-name">@message.SchoolModel.SchoolName<span class="total-qa">共@(message.SchoolModel.QuestionCount)个问题</span></h5>
+                                <ul class="tag-list flex">
+                                    @*@if (message.SchoolModel.Tags != null)
+        {
+            foreach (var tag in message.SchoolModel.Tags)
+            {
+                <li>@tag</li>
+            }
+        }*@
+                                    @if ((int)message.SchoolModel.Type == 1)
+                                    {
+                                        <li>公办</li>
+                                    }
+                                    else if ((int)message.SchoolModel.Type == 2)
+                                    {
+                                        <li>民办</li>
+                                    }
+                                    else
+                                    {
+                                        <li>国际</li>
+                                    }
+
+                                    @if (message.SchoolModel.LodgingType > 0)
+                                    {
+                                        <li>@message.SchoolModel.LodgingReason</li>
+                                    }
+                                    @*<li><i class="comment-icon"></i></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (message.Type == 2 || message.Type == 3)
+            {
+                <li data-id="@message.Id" class="invite-comment">
+                    @{
+                        string url = "https://m.sxkid.com/";
+                        url += message.Type == 2 ? "comment/school/" : "question/school/";
+                        url += message.SchoolModel.ExtId;
+                    }
+                    <a href="@url" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">邀请你@(message.Type == 2 ? "点评" : "提问")：</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <div class="school flex justify-content-between">
+                                <div>
+                                    <h5 class="school-name">@message.SchoolModel.SchoolName</h5>
+                                    <ul class="tag-list flex">
+                                        @*@if (message.SchoolModel.Tags != null)
+        {
+            foreach (var tag in message.SchoolModel.Tags)
+            {
+                <li>@tag</li>
+            }
+        }*@
+                                        @*<li class="invite-icon"><i></i></li>*@
+                                        @if ((int)message.SchoolModel.Type == 1)
+                                        {
+                                            <li>公办</li>
+                                        }
+                                        else if ((int)message.SchoolModel.Type == 2)
+                                        {
+                                            <li>民办</li>
+                                        }
+                                        else
+                                        {
+                                            <li>国际</li>
+                                        }
+                                        @if (message.SchoolModel.LodgingType > 0)
+                                        {
+                                            <li>@message.SchoolModel.LodgingReason</li>
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="school-grade text-center">
+                                    <div class="score">@(message.SchoolModel.SchoolAvgScore / 2 / 10)<span>星</span></div>
+                                    <ul class="star flex justify-content-between">
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 20) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 40) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 60) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 80) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 100) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if ((message.DataType == 3 & message.Type == 8)|| (message.DataType == 3 & message.Type == 7))
+            {
+                <li data-id="@message.Id" class="invite-comment">
+                    <a href="https://m.sxkid.com/comment/Reply/@(message.DataID)" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">邀请你回复</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                            <div class="school flex justify-content-between">
+                                <div>
+                                    <h5 class="school-name">@message.SchoolModel.SchoolName</h5>
+                                    <ul class="tag-list flex">
+                                        @*@if (message.SchoolModel.Tags != null)
+        {
+            foreach (var tag in message.SchoolModel.Tags)
+            {
+                <li>@tag</li>
+            }
+        }*@
+                                        @if ((int)message.SchoolModel.Type == 1)
+                                        {
+                                            <li>公办</li>
+                                        }
+                                        else if ((int)message.SchoolModel.Type == 2)
+                                        {
+                                            <li>民办</li>
+                                        }
+                                        else
+                                        {
+                                            <li>国际</li>
+                                        }
+                                        @if (message.SchoolModel.LodgingType > 0)
+                                        {
+                                            <li>@message.SchoolModel.LodgingReason</li>
+                                        }
+                                        @*<li class="invite-icon"><i></i></li>*@
+                                    </ul>
+                                </div>
+                                <div class="school-grade text-center">
+                                    <div class="score">@(message.SchoolModel.SchoolAvgScore / 2 / 10)<span>星</span></div>
+                                    <ul class="star flex justify-content-between">
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 20) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 40) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 60) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 80) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.SchoolAvgScore >= 100) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

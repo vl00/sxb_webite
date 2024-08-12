@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">Message</div>
+            <div class="col-4"><input type="text" id="messageInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-6">
+                <input type="button" id="sendButton" value="发送消息 " />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <input type="button" id="changeOrderButton" value="订单变更" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        "use strict";
+        var orderID = "F0000CD6-3D5F-4B45-BFAC-019066AAA2B9";
+        var connection = new signalR.HubConnectionBuilder().withUrl("/paidqa/orderchathub?orderId=" + orderID).build();
+
+        //Disable send button until connection is established
+        document.getElementById("sendButton").disabled = true;
+        connection.on("ReceiveMessage", function (user, message) {
+            console.log(user + " say：" + message);
+        });
+        connection.on("ReceiveOrderChange", function (order) {
+            console.log('订单变更：',order);
+        });
+
+        connection.start().then(function () {
+            document.getElementById("sendButton").disabled = false;
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("sendButton").addEventListener("click", function (event) {
+            var message = document.getElementById("messageInput").value;
+            connection.invoke("SendMessage", {}).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+        document.getElementById("changeOrderButton").addEventListener("click", function (event) {
+          
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+﻿@using PMS.School.Application.ModelDto;
+@{
+    var auth = User.Identity as System.Security.Claims.ClaimsIdentity;
+    ViewBag.Nickname = auth.FindFirst(IdentityModel.JwtClaimTypes.Name)?.Value;
+    ViewBag.RequestUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path + Context.Request.QueryString;
+}
+<html lang="zh">
+
+<head>
+    <title>上学帮联系方式</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/principle/principle.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>帮助中心</span>
+            </div>
+        </div>
+    </header>
+    <section class="principle-content">
+        <div class="container d-flex clearfix">
+            <div class="left-content">
+                <h4 class="font-16 ">联系我们</h4>
+                <ul>
+                    <li><a href="javascript:;" title="联系方式" data-classname="common-problems">联系方式</a></li>
+                </ul>
+            </div>
+            <div class="right-content">
+                <!-- 联系方式 -->
+                <div class="common-problems">
+                    <div class="contact-service">
+                        <h2 class="font-20 font-weight-bold color-333">联系方式</h2>
+                        <div class="number">删帖（文章）、注册、账号、学校信息纠错等问题可向以下渠道咨询</div>
+                        <div class="number">
+                            <span>上学帮客服热线</span>
+                            <span>
+                                <p>020-89623079</p><br>
+                                <p>020-89623090</p>
+                            </span>
+                        </div>
+                        <div class="email">
+                            <span>上学帮客服邮箱</span>
+                            <span>
+                                <p>service@sxkid.com</p>
+                            </span>
+                        </div>
+                        <div class="email">
+                            <span>上学帮官网/APP/H5、上学帮微信公众号广告投放与宣传活动合作等<br />可发邮件至以下邮箱咨询：market@sxkid.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @{await Html.RenderPartialAsync("Right_bar");}
+
+    @{await Html.RenderPartialAsync("Footer"); }
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/principle/principle.js"></script>
+</body>
+
+</html>

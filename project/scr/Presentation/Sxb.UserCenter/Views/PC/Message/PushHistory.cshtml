@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "推送记录";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/push-setting.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">推送记录</span>
+    <span class=""></span>
+</header>
+
+<section class="mt">
+    <ul class="push-setting-list">
+        <li>
+            <a href="@Url.Action("PushArticle")">
+                <i class="icon"></i>
+                推荐攻略
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("PushSchool")">
+                <i class="icon"></i>
+                学校动态
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("PushInvite")">
+                <i class="icon"></i>
+                邀请推送
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("PushReply")">
+                <i class="icon"></i>
+                回复推送
+                <i class="arrow"></i>
+            </a>
+        </li>
+    </ul>
+</section>

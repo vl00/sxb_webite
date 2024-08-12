@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C269DDBC-4C7E-4510-B5AA-4EC6F8D9A0EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{34E39D45-6283-4185-8557-30BBA78BE74B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{907173D7-C652-4545-9839-3ACDCB93D678}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.RabbitMQ.Consumer", "example\ProductManagement.Framework.RabbitMQ.Consumer\ProductManagement.Framework.RabbitMQ.Consumer.csproj", "{4F798200-DDB3-4053-BB52-14696A894FBD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.RabbitMQ.Publisher", "example\ProductManagement.Framework.RabbitMQ.Publisher\ProductManagement.Framework.RabbitMQ.Publisher.csproj", "{AF613719-1B4D-4B49-BB19-9C294520D70A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.RabbitMQ.Test", "test\ProductManagement.Framework.RabbitMQ.Test.csproj", "{509AC673-0522-4BDE-8872-032DDBB5B6BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.RabbitMQ", "src\ProductManagement.Framework.RabbitMQ\ProductManagement.Framework.RabbitMQ.csproj", "{985DC31C-B8CF-4ABA-B918-FA69FA68F43F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.Serialize.Json", "src\ProductManagement.Framework.Serialize.Json\ProductManagement.Framework.Serialize.Json.csproj", "{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Framework.RabbitMQ.Di", "src\ProductManagement.Framework.RabbitMQ.Di\ProductManagement.Framework.RabbitMQ.Di.csproj", "{BE49A684-DE3C-48B0-B87C-8CD53317DD46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Framework.RabbitMQ.Web", "example\ProductManagement.Framework.RabbitMQ.Web\ProductManagement.Framework.RabbitMQ.Web.csproj", "{869853DF-77D7-4BDB-BB43-3216EC399563}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F798200-DDB3-4053-BB52-14696A894FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F798200-DDB3-4053-BB52-14696A894FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F798200-DDB3-4053-BB52-14696A894FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F798200-DDB3-4053-BB52-14696A894FBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF613719-1B4D-4B49-BB19-9C294520D70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF613719-1B4D-4B49-BB19-9C294520D70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF613719-1B4D-4B49-BB19-9C294520D70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF613719-1B4D-4B49-BB19-9C294520D70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509AC673-0522-4BDE-8872-032DDBB5B6BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509AC673-0522-4BDE-8872-032DDBB5B6BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509AC673-0522-4BDE-8872-032DDBB5B6BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509AC673-0522-4BDE-8872-032DDBB5B6BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985DC31C-B8CF-4ABA-B918-FA69FA68F43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985DC31C-B8CF-4ABA-B918-FA69FA68F43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985DC31C-B8CF-4ABA-B918-FA69FA68F43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985DC31C-B8CF-4ABA-B918-FA69FA68F43F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE49A684-DE3C-48B0-B87C-8CD53317DD46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE49A684-DE3C-48B0-B87C-8CD53317DD46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE49A684-DE3C-48B0-B87C-8CD53317DD46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE49A684-DE3C-48B0-B87C-8CD53317DD46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869853DF-77D7-4BDB-BB43-3216EC399563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869853DF-77D7-4BDB-BB43-3216EC399563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869853DF-77D7-4BDB-BB43-3216EC399563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869853DF-77D7-4BDB-BB43-3216EC399563}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F798200-DDB3-4053-BB52-14696A894FBD} = {907173D7-C652-4545-9839-3ACDCB93D678}
+		{AF613719-1B4D-4B49-BB19-9C294520D70A} = {907173D7-C652-4545-9839-3ACDCB93D678}
+		{509AC673-0522-4BDE-8872-032DDBB5B6BF} = {34E39D45-6283-4185-8557-30BBA78BE74B}
+		{985DC31C-B8CF-4ABA-B918-FA69FA68F43F} = {C269DDBC-4C7E-4510-B5AA-4EC6F8D9A0EC}
+		{B1C9A8B9-B9F0-4BEB-A4B8-1A0CB3330F5D} = {C269DDBC-4C7E-4510-B5AA-4EC6F8D9A0EC}
+		{BE49A684-DE3C-48B0-B87C-8CD53317DD46} = {C269DDBC-4C7E-4510-B5AA-4EC6F8D9A0EC}
+		{869853DF-77D7-4BDB-BB43-3216EC399563} = {907173D7-C652-4545-9839-3ACDCB93D678}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F0C2B07-060B-40D3-A114-34294D8AEE3B}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.0.0.238:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = example\\ProductManagement.Framework.RabbitMQ.Consumer\\ProductManagement.Framework.RabbitMQ.Consumer.csproj
+		SccProjectTopLevelParentUniqueName1 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName1 = example/ProductManagement.Framework.RabbitMQ.Consumer
+		SccLocalPath1 = example\\ProductManagement.Framework.RabbitMQ.Consumer
+		SccProjectUniqueName2 = example\\ProductManagement.Framework.RabbitMQ.Publisher\\ProductManagement.Framework.RabbitMQ.Publisher.csproj
+		SccProjectTopLevelParentUniqueName2 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName2 = example/ProductManagement.Framework.RabbitMQ.Publisher
+		SccLocalPath2 = example\\ProductManagement.Framework.RabbitMQ.Publisher
+		SccProjectUniqueName3 = test\\ProductManagement.Framework.RabbitMQ.Test.csproj
+		SccProjectTopLevelParentUniqueName3 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName3 = test
+		SccLocalPath3 = test
+		SccProjectUniqueName4 = src\\ProductManagement.Framework.RabbitMQ\\ProductManagement.Framework.RabbitMQ.csproj
+		SccProjectTopLevelParentUniqueName4 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName4 = src/ProductManagement.Framework.RabbitMQ
+		SccLocalPath4 = src\\ProductManagement.Framework.RabbitMQ
+		SccProjectUniqueName5 = src\\ProductManagement.Framework.Serialize.Json\\ProductManagement.Framework.Serialize.Json.csproj
+		SccProjectTopLevelParentUniqueName5 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName5 = src/ProductManagement.Framework.Serialize.Json
+		SccLocalPath5 = src\\ProductManagement.Framework.Serialize.Json
+		SccProjectUniqueName6 = src\\ProductManagement.Framework.RabbitMQ.Di\\ProductManagement.Framework.RabbitMQ.Di.csproj
+		SccProjectTopLevelParentUniqueName6 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName6 = src/ProductManagement.Framework.RabbitMQ.Di
+		SccLocalPath6 = src\\ProductManagement.Framework.RabbitMQ.Di
+		SccProjectUniqueName7 = example\\ProductManagement.Framework.RabbitMQ.Web\\ProductManagement.Framework.RabbitMQ.Web.csproj
+		SccProjectTopLevelParentUniqueName7 = ProductManagement.Framework.RabbitMQ.sln
+		SccProjectName7 = example/ProductManagement.Framework.RabbitMQ.Web
+		SccLocalPath7 = example\\ProductManagement.Framework.RabbitMQ.Web
+	EndGlobalSection
+EndGlobal

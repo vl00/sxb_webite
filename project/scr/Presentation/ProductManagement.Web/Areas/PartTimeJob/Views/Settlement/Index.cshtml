@@ -1,0 +1,770 @@
+﻿
+@{
+    ViewData["Title"] = "结算";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+
+        #SettlementTime {
+            height: calc(2.25rem + 2px);
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .SettlementType:hover {
+            cursor: pointer;
+        }
+
+        .bs-checkbox {
+            display: none;
+        }
+
+        #settlementStatus {
+            height: calc(2.25rem + 2px);
+            width:208px;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        
+        #statistics,#examiner{
+            color:#8b939b;
+        }
+    </style>
+}
+
+
+<div class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="row" style="border-bottom:1px solid gray;padding-bottom: 15px;">
+                            <div class="col-sm-7">
+                                <h5 style="font-weight:bold;">结算周期</h5>
+                                <span style="font-size:13px;color: gray;">固定结算时间为每个月月底</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-2">
+                                    <label>筛选结算周期：</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <input id="SettlementTime" class="date" name="SettlementTime" placeholder="请选择日期" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-sm-12">
+                                <div class="col-sm-2">
+                                    <label>状态筛选：</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <select id="settlementStatus">
+                                        @*<option value="0">进行中</option>
+                                        <option value="1">未结算</option>
+                                        <option value="2">结算中</option>
+                                        <option value="3">已结算</option>
+                                        <option value="4">已延期</option>
+                                        <option value="-1">未完成</option>*@
+                                        <option value="7">待结算</option>
+                                        <option value="8">已结算</option>
+                                        <option value="9">结算中</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="container">
+    <!-- 统计-所有的供应商 -->
+    <div id="SupplierBox" class="container breadcrumbs">
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                <div class="col-sm-12">
+                                    <h5 style="font-weight:bold;">供应商列表</h5>
+                                    <span style="font-size:13px;color: gray;">显示当前系统中的供应商结算概况</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="AllSupplier" class="table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计-兼职领队 -->
+    <div id="leaderBox" class="container breadcrumbs" style="display:none;">
+        <div class="content mt-3">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                <div class="col-sm-7">
+                                    <h5 style="font-weight:bold;">兼职领队列表</h5>
+                                    <span style="font-size:13px;color: gray;">显示当前系统中的兼职领队结算概况</span>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="button" data-checked="1" data-isSettlement="0" id="leaderSettlement" class="seeCode float-right btn btn-dark" value="结算" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="Allleader" class="table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 兼职列表 -->
+    <div id="jobBox" style="display:none;">
+        <div class=" container breadcrumbs">
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                    <div class="col-sm-7">
+                                        <h5 style="font-weight:bold;">兼职人员列表</h5>
+                                        <span style="font-size:13px;color: gray;">显示当前系统中的兼职人员概况</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span>条数筛选：</span>
+                                        <select id="TotalSearch">
+                                            <option data-searchTotal="0">All</option>
+                                            <option data-searchTotal="5">5条及以上</option>
+                                            <option data-searchTotal="10">10条及以上</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="button" data-checked="0" data-isSettlement="0" id="jobSettlement" class="float-right btn btn-dark" value="结算" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card-body" style="padding:0px; margin-top:20px;">
+                        <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div>
+                                <div class="col-sm-12">
+                                    <table id="AllJob" class="table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container breadcrumbs"  id="Operation" style="display:none;">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="card-body" style="padding:0px; margin-top:20px;">
+                    <div>
+                        <table>
+                            <tr>
+                                @*<td><button id="Settled" value="3" class="btn btn-dark">已结算</button></td>*@
+                                <td>@*<button id="Settlement" value="2" class="btn btn-dark">结算中</button>*@</td>
+                                <td>@*<button id="Unsettled" value="1" class="btn btn-dark">未结算</button>*@</td>
+                                <td><button id="Settlement" value="4" class="btn btn-dark">结算</button></td>
+                                <td><button id="Cancel" class="btn btn-default">取消</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            @section scripts{
+                <script type="text/javascript">
+                    var currentId = "";
+                    var opp = 0; 
+
+                    $(function () {
+
+                        $(".nav").find("li[class='active']").removeClass("active")
+                        $(".nav li:eq(3)").addClass("active")
+
+                        laydate.render({
+                            elem: "#SettlementTime",
+                            theme: "#272c33",
+                            type: 'month',
+                            done: function (value, date, endDate) {
+                                if ($("#AllSupplier").is(":visible"))
+                                {
+                                    GetAllSupplier(value);
+                                }
+                                else
+                                {
+                                    var rez = $("#leaderSettlement").attr("data-checked")
+                                    console.log(value)
+                                    if (rez == 1)
+                                    {
+                                        //兼职领队
+                                        GetAllLeaderBysupplier(currentId, value)
+                                    }
+                                    else
+                                    {
+                                        GetFindAllJobEntityByLeader(currentId, value)
+                                    }
+                                }
+                            }
+                        });
+
+                        GetAllSupplier();
+                        
+                        //查看所有的兼职领队
+                        $("#container").on("click", ".SeeCurrentAllleader", function () {
+                            var total = $(this).attr("data-total")
+
+                            $("#leaderSettlement").attr("data-checked",1)
+                            //取出当前供应商的邀请码
+                            var ParentSupplierCode = $(this).next().attr("data-code")
+                            if (total > 0) {
+                                //将该兼职领队的供应商id赋值弹出层
+                                $("#supplierCode").attr("data-code", ParentSupplierCode)
+
+                                GetAllLeaderBysupplier($(this).attr("data-id"))
+                                currentId = $(this).attr("data-id")
+                                opp = 1;
+                                $("#SupplierBox").hide();
+                                $("#leaderBox").show();
+                            }
+                            else {
+                                layer.alert("暂无人员")
+                            }
+                        })
+
+                        //审核通过条数筛选
+                        $("#TotalSearch").change(function () {
+                            var rez = $("#leaderSettlement").attr("data-checked")
+                            //debugger;
+                            var value = $("#SettlementTime").val()
+                            if (rez == 1) {
+                                //兼职领队
+                                GetAllLeaderBysupplier(currentId, value)
+                            }
+                            else {
+                                GetFindAllJobEntityByLeader(currentId, value)
+                            }
+                            //debugger;
+                            $("#Cancel").click()
+                        })
+
+                        //查看所有的兼职
+                        $("#container").on("click", ".SeeCurrentAllJob", function () {
+                            var AllJob = $(this).attr("data-total")
+                            var code = $(this).next().attr("data-code")
+                            $("#leaderSettlement").attr("data-checked",0)
+                            if (AllJob > 0) {
+                                $("#leaderCode").attr("data-code", code)
+                                $("#leaderBox").hide()
+                                $("#jobBox").show()
+                                var parentId = $(this).attr("data-id")
+                                GetFindAllJobEntityByLeader(parentId);
+                                currentId = parentId
+                                opp = 2;
+                            }
+                            else {
+                                layer.alert("暂无人员")
+                            }
+                        })
+
+                        //结算
+                        $("#Settled").click(function () {
+                            UpdateSettlementStatus(3)
+                        })
+
+                        //结算中
+                        //$("#Settlement").click(function () {
+                        //    UpdateSettlementStatus(2)
+                        //})
+
+                        //未结算
+                        $("#Unsettled").click(function () {
+                            UpdateSettlementStatus(1)
+                        })
+
+                        //结算
+                        $("#Settlement").click(function () {
+
+                            var rez = $("#leaderSettlement").attr("data-checked")
+                            var element;
+                        //检测当前是否操作兼职领队数据
+                        if (rez == 1) {
+                            element = $("#Allleader")
+                        }
+                        else
+                        {
+                            element = $("#AllJob")
+                        }
+
+                        var ids = [];
+
+                        element.find("input[name='btSelectItem']").each(function (index, element) {
+                            if ($(this).is(':checked')) {
+                                //ids.push($(this).parent().parent().find("td:eq(1)").find(".settlementId").attr("data-settlement"))
+                                var commentTotal = parseInt($(this).parent().parent().find("td:eq(4)").text())
+                                var answerTotal = parseInt($(this).parent().parent().find("td:eq(5)").text())
+
+                                if (commentTotal + answerTotal < 5)
+                                {
+                                    ids.push($(this).parent().parent().find("td:eq(1)").find(".settlementId").attr("data-settlement"))
+                                }
+                            }
+                        })
+
+                            if (ids.length > 0) {
+                                alert("结算勾选中存在未达到结算要求数据："+ids.length + "条，请取消勾选！")
+                            }
+                            else
+                            {
+                                UpdateSettlementStatus(2)
+                            }
+                        })
+
+                        //查看所有的兼职
+                        $("#container").on("click", ".JobCommentAndAnswer", function () {
+                            var jobId = $(this).attr("data-id")
+                            layer.open({
+                                type: 2,
+                                area: [500 + 'px', 700 + 'px'],
+                                fix: false, //不固定
+                                title: '详细 - 相关人员工作记录的详细情况',
+                                content: '/PartTimeJob/Statistics/GetCommentAndAnswerByJob?JobId=' + jobId + "&isExaminerAdmin=1",
+                                maxmin: true,
+                                btn: ["确定"]
+                            })
+                            $(".layui-layer-max").click();
+                        })
+                    })
+
+
+                    //取消结算
+                    $("#Cancel").click(function () {
+                        //检测当前是否操作兼职领队数据
+                        var rez = $("#leaderSettlement").attr("data-checked")
+                        if (rez == 1)
+                        {
+                            $("#Allleader .bs-checkbox").hide()
+                            $("#Allleader").find("input[name='btSelectAll']").prop('checked', false)
+                            $("#Allleader").each(function (index, element) { $(this).find("input[name='btSelectItem']").prop('checked', false) })
+                            $("#leaderSettlement").attr("data-isSettlement", 0)
+                        }
+                        else
+                        {
+                            $("#AllJob .bs-checkbox").hide()
+                            $("#AllJob").find("input[name='btSelectAll']").prop('checked', false)
+                            $("#AllJob").each(function (index, element) { $(this).find("input[name='btSelectItem']").prop('checked', false) })
+                            $("#jobSettlement").attr("data-isSettlement", 0)
+                        }
+
+                        $("#Operation").hide()
+                    })
+
+                    //兼职批量结算
+                    $("#jobSettlement").click(function () {
+                        var status = Number($("#settlementStatus option:selected").val())
+                        if (status == 7) {
+                            var operation = $(this).attr("data-isSettlement")
+                            if (operation == 0 && $("#AllJob").find("tr[class='no-records-found']").length == 0) {
+
+                                //需要显示
+                                $("#AllJob .bs-checkbox").show()
+
+                                //排除不可结算数据
+                                $("#AllJob tr").each(function (index, e) {
+
+                                    if (index > 0) {
+                                        if ($(e).find("td:eq(1)").find("span[class='settlementId']").attr("data-issettlement") == "false") {
+                                            $(e).find("td:eq(0) input").attr("disabled", "disabled")
+                                        }
+                                    }
+                                })
+
+                                $("#Operation").show()
+                                $(this).attr("data-isSettlement", 1)
+                                $(this).attr("data-checked", 1)
+                                $("#leaderSettlement").attr("data-checked", 0)
+                            }
+                            else if ($("#AllJob").find("tr[class='no-records-found']").length == 1) {
+                                layer.alert("暂无可操作的数据")
+                            }
+                        }
+                        else
+                        {
+                            layer.alert("当前状态数据不可操作")        
+                        }
+                    })
+
+                    //兼职领队结算
+                    $("#leaderSettlement").click(function () {
+                        var operation = $(this).attr("data-isSettlement")
+                        if (operation == 0 &&  $("#Allleader").find("tr[class='no-records-found']").length == 0) {
+                            //需要显示
+                            $("#Allleader .bs-checkbox").show()
+
+                            //排除不可结算数据
+                            $("#Allleader tr").each(function (index, e) {
+
+                                if (index > 0)
+                                {
+                                    if ($(e).find("td:eq(1)").find("span[class='settlementId']").attr("data-issettlement") == "false" || $(e).find("td:eq(3)").text() == "合同")
+                                    {
+                                        $(e).find("td:eq(0) input").attr("disabled","disabled")
+                                    }
+                                }
+                            })
+
+                            $("#Operation").show()
+                            $(this).attr("data-isSettlement", 1)
+                            $(this).attr("data-checked", 1)
+                            $("#jobSettlement").attr("data-checked", 0)
+                        } else if ($("#Allleader").find("tr[class='no-records-found']").length == 1)
+                        {
+                            layer.alert("暂无可操作的数据")
+                        }
+                    })
+
+                    //状态查询
+                    $("#settlementStatus").change(function () {
+                        var rez = $("#leaderSettlement").attr("data-checked")
+                        //debugger;
+                        var value = $("#SettlementTime").val()
+                        if (rez == 1) {
+                            //兼职领队
+                            GetAllLeaderBysupplier(currentId, value)
+                        }
+                        else {
+                            GetFindAllJobEntityByLeader(currentId, value)
+                        }
+                        //debugger;
+                        $("#Cancel").click()
+                    })
+
+                    //状态修改
+                    function UpdateSettlementStatus(status)
+                    {
+                        var mask = "";
+                        var rez = $("#leaderSettlement").attr("data-checked")
+                        var ids = [];
+                        var element;
+                        //检测当前是否操作兼职领队数据
+                        if (rez == 1) {
+                            element = $("#Allleader")
+                        }
+                        else {
+                            element = $("#AllJob")
+                        }
+
+                        element.find("input[name='btSelectItem']").each(function (index, element) {
+                            if ($(this).is(':checked')) {
+                                ids.push($(this).parent().parent().find("td:eq(1)").find(".settlementId").attr("data-settlement"))
+                            }
+                        })
+
+                        $.ajax({
+                            url: "/PartTimeJob/Settlement/UpdateSettlemetStatus",
+                            type: "GET",
+                            data: { Ids: ids.toString(), status: status },
+                            beforeSend: function ()
+                            {
+                                mask = layer.msg('结算中，请稍后...', {
+                                    icon: 16
+                                    , shade: 0.2,
+                                    time: false
+                                })
+                            },
+                            complete: function ()
+                            {
+                                layer.close(mask);
+                            },
+                            success: function (data) {
+                                if (data.statusCode == 200) {
+                                    layer.alert("修改成功")
+                                    if (opp == 1)
+                                    {
+                                        GetAllLeaderBysupplier(currentId)
+                                    } else
+                                    {
+                                        GetFindAllJobEntityByLeader(currentId)
+                                    }
+                                } else
+                                {
+                                    layer.alert("修改失败")
+                                }
+                            }
+                        })
+                        $("#Cancel").click()
+                    }
+
+
+                    //获取所有的供应商
+                    function GetAllSupplier(value)
+                    {
+                        $("#AllSupplier").bootstrapTable('destroy');
+                        $('#AllSupplier').bootstrapTable({
+                            method: 'get',
+                            url: "/PartTimeJob/Settlement/GetSettlement",//请求路径
+                            striped: true, //是否显示行间隔色
+                            pageNumber: 1, //初始化加载第一页
+                            pagination: true,//是否分页
+                            sidePagination: 'server',//server:服务器端分页|client：前端分页
+                            pageSize: 5,//单页记录数
+                            pageList: [5, 10, 20, 30],//可选择单页记录数
+                            queryParams: function (params) {//上传服务器的参数
+                                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                                    limit: params.limit, // 每页显示数量
+                                    offset: params.offset, // SQL语句起始索引
+                                    page: (params.offset / params.limit) + 1, //当前页码
+                                    parentId: "",
+                                    type: 2,
+                                    date: value,
+                                    Status:7
+                                };
+                                return temp;
+                            },
+                            columns: [{
+                                title: '昵称',
+                                field: 'adminNmae'
+                            }, {
+                                title: '手机号',
+                                field: 'phone'
+                            }, {
+                                title: '结算方式',
+                                field: 'settlementType',
+                            }, {
+                                title: '兼职领队人数',
+                                field: 'jobTotal'
+                            },
+                            {
+                                title: '操作',
+                                formatter: operation,//对资源进行操作
+                            }]
+                        })
+                    }
+
+                    //根据供应商获取所有的兼职领队
+                    function GetAllLeaderBysupplier(parentId, date) {
+                        
+                        $("#Allleader").bootstrapTable('destroy');
+                        $('#Allleader').bootstrapTable({
+                            method: 'get',
+                            url: "/PartTimeJob/Settlement/GetSettlement",//请求路径
+                            striped: true, //是否显示行间隔色
+                            pageNumber: 1, //初始化加载第一页
+                            pagination: true,//是否分页
+                            sidePagination: 'server',//server:服务器端分页|client：前端分页
+                            pageSize: 5,//单页记录数
+                            pageList: [5, 10, 20, 30],//可选择单页记录数
+                            queryParams: function (params) {//上传服务器的参数
+                                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                                    limit: params.limit, // 每页显示数量
+                                    offset: params.offset, // SQL语句起始索引
+                                    page: (params.offset / params.limit) + 1, //当前页码
+                                    parentId: parentId,
+                                    Status: $("#settlementStatus").find("option:selected").val(),
+                                    TotalSearch: $("#TotalSearch option:selected").attr("data-searchTotal"),
+                                    date: date,
+                                    type: 2
+                                };
+                                return temp;
+                            },
+                            columns: [
+                                {
+                                    checkbox: true,
+                                    visible: true                  //是否显示复选框
+                                },
+                                {
+                                    title: '昵称',
+                                    field: 'adminNmae',
+                                    formatter: settlementId
+                                }, {
+                                    title: '手机号',
+                                    field: 'phone'
+                                }, {
+                                    title: '结算方式',
+                                    field: 'settlementType',
+                                }, {
+                                    title: '兼职人数',
+                                    field: 'jobTotal'
+                                }, {
+                                    title: '精选点评数',
+                                    field: 'totalSchoolCommentsSelected'
+                                }, {
+                                    title: '精选问答数',
+                                    field: 'totalAnswerSelected'
+                                }, {
+                                    title: '金额',
+                                    field: 'settlementAmount'
+                                },
+                                {
+                                    title: '状态',
+                                    field: 'settlementStatus'
+                                },
+                                {
+                                    title: '开始日期',
+                                    field: 'beginTime'
+                                },
+                                {
+                                    title: '结算日期',
+                                    field: 'endTime'
+                                },
+                                {
+                                    title: '操作',
+                                    formatter: leaderoperation,//对资源进行操作
+                                }]
+                        })
+                    }
+
+                    //根据兼职领队id获取兼职者的填写数据
+                    function GetFindAllJobEntityByLeader(parentId, date)
+                    {
+                        $("#AllJob").bootstrapTable('destroy');
+                        $('#AllJob').bootstrapTable({
+                            method: 'get',
+                            url: "/PartTimeJob/Settlement/GetSettlement",//请求路径
+                            striped: true, //是否显示行间隔色
+                            pageNumber: 1, //初始化加载第一页
+                            pagination: true,//是否分页
+                            sidePagination: 'server',//server:服务器端分页|client：前端分页
+                            pageSize: 5,//单页记录数
+                            pageList: [5, 10, 20, 30],//可选择单页记录数
+                            queryParams: function (params) {//上传服务器的参数
+                                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                                    parentId: parentId,
+                                    limit: params.limit, // 每页显示数量
+                                    offset: params.offset, // SQL语句起始索引
+                                    page: (params.offset / params.limit) + 1, //当前页码
+                                    Status: $("#settlementStatus").find("option:selected").val(),
+                                    date: date,
+                                    TotalSearch: $("#TotalSearch option:selected").attr("data-searchTotal")
+                                };
+                                return temp;
+                            },
+                            columns: [
+                                {
+                                    checkbox: true,
+                                    visible: true                  //是否显示复选框
+                                },
+                                {
+                                    title: '昵称',
+                                    field: 'adminNmae',
+                                    formatter: settlementId
+                                }, {
+                                    title: '手机号',
+                                    field: 'phone'
+                                }, {
+                                    title: '结算方式',
+                                    field: 'settlementType',
+                                }, {
+                                    title: '精选点评数',
+                                    field: 'totalSchoolCommentsSelected'
+                                }, {
+                                    title: '精选问答数',
+                                    field: 'totalAnswerSelected'
+                                }, {
+                                    title: '金额',
+                                    field: 'settlementAmount'
+                                },
+                                {
+                                    title: '开始日期',
+                                    field: 'beginTime'
+                                },
+                                {
+                                    title: '结算日期',
+                                    field: 'endTime'
+                                },
+                                {
+                                    title: '状态',
+                                    field: 'settlementStatus'
+                                }]
+                        })
+                    }
+
+                    //供应商
+                    function operation(value, row, index) {
+                        var htm = "<button class='SeeCurrentAllleader btn btn-dark' data-id='" + row.adminId + "' data-total='" + row.jobTotal + "'>查看所有兼职领队</button>"
+                        return htm;
+                    }
+
+                    //兼职领队
+                    function leaderoperation(value, row, index) {
+                        var htm = "<button class='SeeCurrentAllJob btn btn-dark'  data-id='" + row.adminId + "'  data-total='" + row.jobTotal + "'>查看所有兼职</button>"
+                        return htm;
+                    }
+
+                    function settlementId(value, row, index) {
+                        return "<span class='settlementId' data-settlement='" + row.settlementId + "' data-issettlement='" + row.isSettlement + "'>" + row.adminNmae + "</span>";
+                    }
+
+                    //兼职
+                    function Job(value, row, index) {
+                        var htm = "<button class='JobCommentAndAnswer btn btn-dark' data-id='" + row.id + "'>查看</button>"
+                        return htm;
+                    }
+
+                </script>
+            }
+

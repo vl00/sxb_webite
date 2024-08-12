@@ -1,0 +1,194 @@
+﻿    <div id="report">
+        <div  style="display:none;" class="report-content">
+            <!-- 举报内容 -->
+            <div class="select-content">
+                <div class="cencel-report clearfix">
+                    <a href="javascript:;" title="取消举报">取消举报</a>
+                </div>
+                <h5 class="font-17 text-center">举报内容</h5>
+                <ul id="reportCQ" style="display:none" class="report-options font-14">
+                    <li class="checkbox">
+                        <a href="javascript:;" title="低俗色情">低俗色情</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                         alt="" class="select-report">
+                    </li>
+                    <li class="checkbox">
+                        <a href="javascript:;" title="违法信息">违法信息</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                         alt="" class="select-report">
+                    </li>
+                    <li class="checkbox">
+                        <a href="javascript:;" title="营销广告">营销广告</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                         alt="" class="select-report">
+                    </li>
+                    <li class="checkbox">
+                        <a href="javascript:;" title="恶意攻击谩骂">恶意攻击谩骂</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                    </li>
+                    <li class="write checkbox" data-description="textarea-value2" data-more-report="report-other"><a href="javascript:;" title="其他问题">其他问题</a></li>
+                </ul>
+                <ul id="reportArticle" style="display:none;" class="report-options font-14">
+                        <li class="checkbox">
+                            <a href="javascript:;" title="标题夸张">标题夸张</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png" alt="" class="select-report">
+                        </li>
+                        <li class="checkbox">
+                            <a href="javascript:;" title="低俗色情">低俗色情</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                        </li>
+                        <li class="checkbox">
+                            <a href="javascript:;" title="错别字多">错别字多</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                        </li>
+                        <li class="checkbox">
+                            <a href="javascript:;" title="旧闻重复">旧闻重复</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                        </li>
+                        <li class="checkbox">
+                            <a href="javascript:;" title="广告软文">广告软文</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                        </li>
+                        <li class="checkbox">
+                            <a href="javascript:;" title="内容不实">内容不实</a><img src="@(ViewBag.StaticFile)/imgs/selectReport.png"
+                                                                             alt="" class="select-report">
+                        </li>
+                        <li class="write checkbox" data-description="textarea-value"  data-more-report="plagiarism-show">
+                            <a href="javascript:;" title="内容涉嫌抄袭">内容涉嫌抄袭</a>
+                        </li>
+                        <li class="write checkbox" data-description="textarea-value1"  data-more-report="infringement">
+                            <a href="javascript:;"
+                               title="内容涉嫌侵犯名誉/商誉/肖像/隐私权">内容涉嫌侵犯名誉/商誉/肖像/隐私权</a>
+                        </li>
+                        <li class="write checkbox" data-description="textarea-value2"  data-more-report="report-other"><a href="javascript:;" title="其他问题">其他问题</a></li>
+                </ul>
+                <a href="#" title="提交" class="report-submit">提交</a>
+            </div>
+            <!-- 抄袭 -->
+            <div class="plagiarism plagiarism-show">
+                <div class="cencel-report clearfix">
+                    <a href="javascript:;" title="取消举报">取消举报</a>
+                </div>
+                <h5 class="font-17 text-center">内容涉嫌抄袭</h5>
+                <ul>
+                    <li>
+                        <div class="d-flex">
+                            <img class="arti-img"
+                                 src="https://cdn.sxkid.com/images/school_v3/b1c58683-1be3-45f3-8116-2113e35f6613/c5acb619-eb6a-4130-85b2-7470b522ca12.png"
+                                 alt="">
+                            <div class="report-arti-content position-relative">
+                                <p>
+                                    学者唐世平：自信和骄傲的时候，我们如何清醒地认识世界对我们…sdfasdfasdfasdfasdfas
+                                </p>
+                                <div class="position-absolute bottom-0">
+                                    <span>2小时钱</span><span class="look">2556</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="plagiarism-link">
+                        <h6 class="font-14 color-333"><i>*</i>原创链接</h6>
+                        <input type="text" id="evidenceURL" placeholder="输入对应原创内容链接">
+                    </li>
+                    <li class="position-relative">
+                        <h6 class="font-14 color-333"><i>*</i>投诉描述</h6>
+                        <div class="textarea-border">
+                            <textarea name="describe" id="textarea-value" cols="30" rows="10" class="plagiarism-desc"
+                                      placeholder="请简单描述信息有误的内容" maxlength="300" data-length-number="wordLimit"></textarea>
+                            <p class="textarea-limit position-absolute">
+                                <span id="wordLimit">0</span> / 300
+                            </p>
+                        </div>
+                    </li>
+                    <li class="prove-photo">
+                        <h6 class="font-14 color-333"><i>*</i>证明材料</h6>
+                        <p class="font-12">请将您认为被抄袭的内容资料以照片方式上传</p>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="plagiarism-tip font-12 text-center">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+                <a href="#" title="提交" class="report-submit">提交</a>
+            </div>
+            <!-- 侵权 -->
+            <div class="plagiarism infringement">
+                <div class="cencel-report clearfix">
+                    <a href="javascript:;" title="取消举报">取消举报</a>
+                </div>
+                <h5 class="font-17 text-center">内容涉嫌侵权</h5>
+                <ul>
+                    <li>
+                        <div class="d-flex">
+                            <img class="arti-img"
+                                 src="https://cdn.sxkid.com/images/school_v3/b1c58683-1be3-45f3-8116-2113e35f6613/c5acb619-eb6a-4130-85b2-7470b522ca12.png"
+                                 alt="">
+                            <div class="report-arti-content position-relative">
+                                <p>
+                                    学者唐世平：自信和骄傲的时候，我们如何清醒地认识世界对我们…sdfasdfasdfasdfasdfas
+                                </p>
+                                <div class="position-absolute bottom-0">
+                                    <span>2小时钱</span><span class="look">2556</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="position-relative">
+                        <h6 class="font-14 color-333"><i>*</i>投诉描述</h6>
+                        <div class="textarea-border">
+                            <textarea name="describe" id="textarea-value1" cols="30" rows="10" class="plagiarism-desc"
+                                      placeholder="请简单描述信息有误的内容" maxlength="300" data-length-number="wordLimit1"></textarea>
+                            <p class="textarea-limit position-absolute">
+                                <span id="wordLimit1">0</span> / 300
+                            </p>
+                        </div>
+                    </li>
+                    <li class="prove-photo">
+                        <h6 class="font-14 color-333"><i>*</i>证明材料</h6>
+                        <p class="font-12">请将您认为被抄袭的内容资料以照片方式上传</p>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="plagiarism-tip font-12 text-center">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+                <a href="#" title="提交" class="report-submit">提交</a>
+            </div>
+            <!-- 其他问题 -->
+            <div class="plagiarism report-other">
+                <div class="cencel-report clearfix">
+                    <a href="javascript:;" title="取消举报">取消举报</a>
+                </div>
+                <h5 class="font-17 text-center">其他问题</h5>
+                <ul>
+                    <li class="position-relative">
+                        <h6 class="font-14 color-333"><i>*</i>投诉描述</h6>
+                        <div class="textarea-border">
+                            <textarea name="describe" id="textarea-value2" cols="30" rows="10" class="plagiarism-desc"
+                                      placeholder="请简单描述信息有误的内容" maxlength="300" data-length-number="wordLimit2"></textarea>
+                            <p class="textarea-limit position-absolute">
+                                <span id="wordLimit2">0</span> / 300
+                            </p>
+                        </div>
+                    </li>
+                    <li class="prove-photo">
+                        <h6 class="font-14 color-333"><i>*</i>证明材料</h6>
+                        <p class="font-12">请将您认为被抄袭的内容资料以照片方式上传</p>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="plagiarism-tip font-12 text-center">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+                <a href="#" title="提交" class="report-submit">提交</a>
+            </div>
+        </div>
+    </div>
+
+<input type="hidden" id="reportType" />
+<input type="hidden" id="reportId" />

@@ -1,0 +1,310 @@
+﻿@using iSchool;
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Infrastructure.Common;
+
+@model PMS.School.Domain.Dtos.SchoolExtRecruitDto
+@{
+    Layout = "layout_school";
+    ViewBag.Title = $"{ViewBag.SchoolName}招生简介_录取条件-上学帮";
+    ViewBag.Page_Description = $"上学帮学校频道，为您提供全面的{ViewBag.SchoolName}招生简介、录取条件等信息";
+    ViewBag.Page_keywords = $"{ViewBag.SchoolName}招生简介_{ViewBag.SchoolName}录取条件";
+
+    const string NullData = "暂未收录";
+    var schtype = (SchFType0)ViewBag.SchFType;
+
+    KeyValueDto<T>[] GetKVs<T>(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return new KeyValueDto<T>[0];
+        try { return PMS.School.Infrastructure.Common.JsonHelper.JSONToObject<KeyValueDto<T>[]>(json); }
+        catch { return new KeyValueDto<T>[0]; }
+    }
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-comments.css">
+    <style>
+        i, span {
+            font-style: normal;
+            display: inline !important;
+        }
+    </style>
+
+}
+
+@* 左侧内容 *@
+<div class="left-content">
+    <div class="admissions-project">
+        <h2 class="font-20 font-weight-bold">招生计划</h2>
+        @if (Model.Age != null
+        || Model.MaxAge != null
+        || Model.Count != null
+        || (((List<KeyValueDto<string>>)ViewBag.Target).Count > 0)
+        || (((List<KeyValueDto<string>>)ViewBag.Point).Count > 0)
+        || (((List<KeyValueDto<string>>)ViewBag.Date).Count > 0)
+        || !string.IsNullOrEmpty(Model.ScholarShip))
+        {
+            <ul class='d-flex flex-wrap admission-message-list font-15 school-detail-admissions'>
+                <li>
+                    <div class="css-td"><span class="title">招生年龄：</span></div>
+                    <div class="css-td"><span>@(!SchUtils.Canshow2("招生年龄", schtype) ? NullData : Model.Age == null ? NullData : Model.MaxAge == null ? $"{Model.Age}" : $"{Model.Age} 至 {Model.MaxAge}")</span></div>
+                </li>
+                <li>
+                    <div class="css-td"><span class="title">招生人数：</span></div>
+                    <div class="css-td"><span>@(Model.Count == null ? NullData : $"{Model.Count}人")</span></div>
+                </li>
+                <li>
+                    <div class="css-td"><span class="title">招生对象：</span></div>
+                    @{
+                        var targets = ViewBag.Target as List<KeyValueDto<string>>;
+                        if ((targets?.Count ?? 0) <= 0)
+                        {
+                            <div class="css-td"><span>@(NullData)</span></div>
+                        }
+                        else
+                        {
+                            <div class="css-td">
+                                @foreach (var kv in targets)
+                                {
+                                    <span class="have-blue-bg font-12">@(kv.Key)</span>
+                                }
+                            </div>
+                        }
+                    }
+                </li>
+                @*@if (SchUtils.Canshow2("招录比例", schtype))
+                    {
+                        <li>
+                            <span class="title">招录比例：</span>
+                            <span>@(!SchUtils.Canshow2("招录比例", schtype) ? NullData : $"{ViewBag.Proportion}")</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <span class="title">招录比例：</span>
+                            <span>@(NullData)</span>
+                        </li>
+                    }*@
+                @if (SchUtils.Canshow2("录取分数线", schtype))
+                {
+                    <li>
+                        @{
+                            var points = ViewBag.Point as List<KeyValueDto<string>>;
+                            if ((points?.Count ?? 0) <= 0)
+                            {
+                                <div class="css-td"><span class="title">录取分数：</span></div>
+                                <div class="css-td"><span>@(NullData)</span></div>
+                            }
+                            else
+                            {
+                                <div class="css-td"><span class="title">录取分数：</span></div>
+                                <div class="css-td">
+                                    @foreach (var kv in points)
+                                    {
+                                        <i>
+                                            <samp class="css-td" style="width: 200px;">
+                                                <span>@(kv.Key)</span>
+                                            </samp>
+                                            <samp class="css-td">
+                                                <span style="color:#999999;">@(kv.Value)分</span>
+                                            </samp>
+                                        </i>
+                                    }
+                                </div>
+                            }
+                        }
+                    </li>
+                }
+                @if (SchUtils.Canshow2("招生日期", schtype))
+                {
+                    <li>
+                        <div class="css-td"><span class="title">招生日期：</span></div>
+                        @{
+                            var dates = ViewBag.Date as List<KeyValueDto<string>>;
+                            if ((dates?.Count ?? 0) <= 0)
+                            {
+                                <div class="css-td"><span>@(NullData)</span></div>
+                            }
+                            else
+                            {
+                                <div class="css-td">
+                                    @foreach (var kv in dates)
+                                    {
+                                        <i>
+                                            <samp class="css-td" style="width: 150px;">
+                                                <span>@(kv.Key)</span>
+                                            </samp>
+                                            <samp class="css-td">
+                                                <span style="color:#999999;">@(kv.Value)</span>
+                                            </samp>
+                                        </i>
+                                    }
+                                </div>
+                            }
+                        }
+                    </li>
+                }
+                @if (SchUtils.Canshow2("奖学金计划", schtype))
+                {
+                    <li class="reward">
+                        <div class="css-td"><span class="title">奖学金　：</span></div>
+                        <div class="css-td"><span>@(Html.Raw(!SchUtils.Canshow2("奖学金计划", schtype) ? NullData : Model.ScholarShip == null ? NullData : $"{Model.ScholarShip.Replace("\r\n", "</br>").Replace("\n", "</br>")}"))</span></div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="dynamic-not-data font-14">暂未收录当前学校的招生计划</div>
+        }
+    </div>
+    @if (true)
+    {
+        var canshow_e3Contact = SchUtils.Canshow2("报名方式", schtype);
+        var canshow_e3Subjects = SchUtils.Canshow2("考试科目", schtype);
+        var canshow_e3data = SchUtils.Canshow2("报名所需资料", schtype);
+        var canshow_e3Pastexam = SchUtils.Canshow2("往期入学考试内容", schtype);
+        <text>
+            <div class="process">
+                <h2 class="font-20 font-weight-bold">入学流程</h2>
+                @if (!string.IsNullOrEmpty(Model.Contact)
+                 || (!string.IsNullOrEmpty(Model.Subjects) && Model.Subjects != "[]")
+                 || !string.IsNullOrEmpty(Model.Data)
+                 || !string.IsNullOrEmpty(Model.Pastexam))
+                {
+                    <ul class='font-15 process-list'>
+                        @if (canshow_e3Contact)
+                        {
+                            <li class="registration">
+                                <div class="css-table">
+                                    <div class="css-tr">
+                                        <div class="css-td">
+                                            <span class="title">报名方式：</span>
+                                        </div>
+                                        <div class="css-td">
+                                            <span>@Html.Raw(!canshow_e3Contact ? NullData : Model.Contact == null ? NullData : $"{Model.Contact.Replace("\r\n", "</br>").Replace("\n", "</br>")}")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (canshow_e3Subjects)
+                        {
+                            <li class="registration">
+                                <div class="css-table">
+                                    <div class="css-tr">
+                                        <div class="css-td">
+                                            <span class="title">考试科目：</span>
+                                        </div>
+                                        <div class="css-td">
+                                            <span>@Html.Raw(!canshow_e3Subjects ? NullData : string.IsNullOrEmpty(Model.Subjects) || Model.Subjects == "[]" ? NullData : string.Join("、", GetKVs<string>(Model.Subjects.Replace("\r\n", "</br>").Replace("\n", "</br>")).Select(_ => _.Key)))</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (canshow_e3data)
+                        {
+                            <li class="registration-information">
+                                <div class="css-table">
+                                    <div class="css-tr">
+                                        <div class="css-td">
+                                            <span class="title">报名资料：</span>
+                                        </div>
+                                        <div class="css-td">
+                                            <span>@Html.Raw(!canshow_e3data ? NullData : string.IsNullOrEmpty(Model.Data?.Trim()) ? NullData : Model.Data.Replace("\r\n", "</br>").Replace("\n", "</br>"))</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        @if (canshow_e3Pastexam)
+                        {
+                            <li class="registration">
+                                <div class="css-table">
+                                    <div class="css-tr entrance-content">
+                                        <div class="css-td"><span class="title">考试内容：</span></div>
+                                        @if (!string.IsNullOrEmpty(Model.Pastexam?.Trim()))
+                                        {
+                                            <span id="e3Pastexam">@Html.Raw(StrHelper.GetHtmlText(Model.Pastexam))</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@NullData</span>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div class="dynamic-not-data font-14">暂未收录当前学校的入学流程</div>
+                }
+            </div>
+        </text>
+    }
+
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+
+</div>
+@* 右侧内容 *@
+<div class="right-list">
+    <!-- 课程卡片广告 start -->
+    <div class="course-adv-wrapper"></div>
+    <!-- 课程卡片广告 end -->
+    <!-- 广告开始 -->
+    <div class="mkt-box" id="rightBanner">
+        <div class="swiper-container swiper-mkt swiperSchoolAd" data-id="@(ViewBag.ExtId)" alt="24" data-autos="24" id="swiperSchoolAd-24" style="height: 205px;">
+            <div class="swiper-wrapper">
+            </div>
+            <div class="swiper-pagination mkt-pagination"></div>
+        </div>
+    </div>
+    <!-- 广告结束 -->
+    <!-- 这是预约探校表单部分的开始 -->
+    @await Component.InvokeAsync("SchoolActivity", ViewBag.ExtId)
+    <!-- 这是预约探校表单部分的结束 -->
+    <div class="hot-goods"></div>
+    @await Component.InvokeAsync("OrgLesson", ViewBag.Grade)
+    @await Component.InvokeAsync("PaidQA", ViewBag.Grade)
+    @await Component.InvokeAsync("RelatedSchool", ViewBag.ExtId)
+</div>
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script>
+        function rmStyle(str) {
+            var m, str = str.replace(/(style|class)=\"(.*)\"/gi, '');
+            /**
+            while (m = /(?<h>\<(?<end>\/*)(?<ele>h\d|em|b|strong|small|s)((?<nbsp>\s+)|>))/gi.exec(str)) {
+                var has_nbsp = !!m.groups['nbsp'], has_end = !!m.groups['end'];
+                var h = m.groups['h'], ele = m.groups['ele'];
+                // js regex named-groups 貌似只有谷歌核的浏览器才支持！！！
+             */
+            while (m = /(\<(\/*)(h\d|em|b|strong|small|s)((\s+)|>))/gi.exec(str)) {
+                var has_nbsp = !!m[5], has_end = !!m[2];
+                var h = m[1], ele = m[3];
+                str = (!m.index ? '' : str.substring(0, m.index))
+                    + (has_end ? '</' : '<') + (ele[0] == 'h' || ele[0] == 'H' ? 'p' : 'span') + (has_nbsp ? ' ' : '>')
+                    + str.substring(m.index + h.length);
+            }
+            return str;
+        }
+
+        $(function () {
+            var ids = ['#e3Pastexam'];
+            for (var i = 0, len = ids.length; i < len; i++) {
+                var div = $(ids[i]);
+                div.html(rmStyle(div.html()));
+            }
+        });
+    </script>
+}

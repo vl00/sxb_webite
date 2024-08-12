@@ -1,0 +1,38 @@
+﻿
+@model PMS.OperationPlateform.Application.Dtos.SchoolActivityDetailDto
+@using PMS.OperationPlateform.Domain.Enums;
+@{
+    var activity = Model;
+    var tips = activity.Category == (byte)SchoolActivityCategory.Single ? "您已成功报名" : "您已成功提交";
+}
+
+<!-- 报名成功弹层的开始 -->
+<div class="applySuccess">
+    <span class="closeBtn"></span>
+    <h1><span></span>@tips</h1>
+    @if (!string.IsNullOrWhiteSpace(Model.QRcodeUrl))
+    {
+        <div class="qrCodeBox">
+            <img src="@Model.QRcodeUrl" alt="公众号二维码">
+            @if (!string.IsNullOrWhiteSpace(Model.QRcodeTitle))
+            {
+                <span>@Model.QRcodeTitle</span>
+            }
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.RegisteSuccessNote))
+    {
+        <div class="messageBox">@Model.RegisteSuccessNote</div>
+    }
+    <div class="checkBtn">确定</div>
+</div>
+<!-- 报名成功弹层的结束 -->
+<!-- 验证码错误和活动已结束弹层的开始 -->
+<div class="codeError timeout">
+    <span class="closeBtn"></span>
+    <h1>提示</h1>
+    <h2 class="errorTxt">您输入的验证码有误，请重新输入</h2>
+    <!-- <h2>抱歉！该活动已结束</h2> -->
+    <div class="checkBtn">确定</div>
+</div>
+<!-- 验证码错误和活动已结束弹层的结束 -->

@@ -1,0 +1,1701 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <title>搜索-上学帮</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/jquery.range.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-and-qa.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-rank.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/article/article-and-subscribe.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home-search.css" />
+    <script>
+        var user = "@ViewBag.UserServiceUrl"
+    </script>
+</head>
+<body>
+    <section class="fixed-search flex justify-content-between">
+        <div class="search-input">
+            <i class="search-icon"></i>
+            <input type="text" placeholder="请输入你想了解的学校">
+            <i class="reset-input"></i>
+        </div>
+        <a class="search-cancel  text-center">取消</a>
+    </section>
+
+    <input type="hidden" id="selectedChannel" value="@ViewBag.SelectedChannel" />
+
+
+    <section class="search-content">
+        <div class="search-content-tab">
+            <div class="swiper-container">
+                <ul class="swiper-wrapper tab-list text-center">
+                    @*<li class="swiper-slide active"><i class="search-icon"></i>学校<span>hot</span></li>
+                        <li class="swiper-slide hot"><i class="search-icon"></i>话题圈<span>hot</span></li>
+                        <li class="swiper-slide hot"><i class="search-icon"></i>点评<span>hot</span></li>
+                        <li class="swiper-slide"><i class="search-icon"></i>问答<span>hot</span></li>
+                        <li class="swiper-slide"><i class="search-icon"></i>排行榜<span>hot</span></li>
+                        <li class="swiper-slide"><i class="search-icon"></i>攻略<span>hot</span></li>
+                        <li class="swiper-slide"><i class="search-icon"></i>直播<span>hot</span></li>*@
+                </ul>
+            </div>
+        </div>
+        <div class="record">
+            <div class="recently-search">
+                <!-- <h5>最近搜索<i class="search-icon"></i></h5>
+                <ul class="recently-search-list flex">
+                    <li>路程</li>
+                    <li><i class="search-icon"></i>执信中学-高中部</li>
+                    <li>真光中学</li>
+                    <li>中考成绩</li>
+                    <li>胡澜</li>
+                    <li>幼升小</li>
+                </ul> -->
+            </div>
+            <div class="hot-search">
+                <!-- <h5>热门搜索</h5>
+                <ul class="recently-search-list flex">
+                    <li>中考成绩</li>
+                    <li>胡澜</li>
+                    <li>幼升小</li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="search-list" style="display: none;">
+            <!-- <div>
+                <h5>
+                    <i class="search-icon"></i>
+                    <span class="keyword">学校</span>
+                    <span class="result">约435990个结果</span>
+                </h5>
+                <div class="history-search">
+                    <i class="search-icon"></i>
+                    <span class="keyword">国际<i>学校</i></span>
+                    <span class="result">约435个结果</span>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- 搜索结果 -->
+        <div class="search-result" style="display: none;">
+            <div class="top-screen">
+                <!-- 学校列显示 -->
+                <div class="btn-list-school" style="display: none;">
+                    <ul class="filtrate-btn-list flex justify-content-between">
+                        <li>区域<i class="arrow"></i></li>
+                        <li class="">类型<i class="arrow"></i></li>
+                        <li class="">费用<i class="arrow"></i></li>
+                        <li class="">筛选<i class="arrow"></i></li>
+                        <li class=""><i class="filtrate-icon"></i></li>
+                    </ul>
+                    <div class="top-screen-content">
+                        <div class="area text-center" style="display: none;">
+                            <div class="flex">
+                                <ul class="left-list">
+                                    <li value="0" class="active">城区</li>
+                                    <li value="1">地铁</li>
+                                    <li value="2">附近</li>
+                                </ul>
+                                <div class="area-content">
+                                    <!-- 城区 -->
+                                    <ul class="city-area">
+                                        <li class="active">不限<i></i></li>
+                                        @foreach (var area in ViewBag.Areas)
+                                        {
+                                            <li value="@area.AdCode">@area.AreaName<i></i></li>
+                                        }
+                                    </ul>
+                                    <!-- 地铁 -->
+                                    <div style="display: none;">
+                                        <div class="flex justify-content-between">
+                                            <ul class="metro-line">
+                                                <li value="">
+                                                    <span>不限</span>
+                                                </li>
+                                                @foreach (var metro in ViewBag.Metros)
+                                                {
+                                                    <li value="@(metro.MetroId)">
+                                                        <span>@metro.MetroName</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                            <div class="metro-station">
+                                                <ul style="display: none;">
+                                                    <li value="">
+                                                        <span>不限</span>
+                                                        <i></i>
+                                                    </li>
+                                                </ul>
+                                                @foreach (var metro in ViewBag.Metros)
+                                                {
+                                                    <ul style="display: none;">
+                                                        <li value="">
+                                                            <span>不限</span>
+                                                            <i></i>
+                                                        </li>
+                                                        @foreach (var line in metro.MetroStations)
+                                                        {
+                                                            <li value="@(line.Id)">
+                                                                <span>@line.Name</span>
+                                                                <i></i>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 附近 -->
+                                    <ul class="range" style="display: none;">
+                                        <li value="1000" class="active">1000米<i></i></li>
+                                        <li value="2000">2000米<i></i></li>
+                                        <li value="3000">3000米<i></i></li>
+                                        <li value="4000">4000米<i></i></li>
+                                        <li value="5000">5000米<i></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="btn-list flex">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <div class="school-type text-center" style="display: none;">
+                            <div class="flex">
+                                <ul class="left-list">
+                                    <li class="active">不限</li>
+                                    @foreach (var type in ViewBag.Types)
+                                    {
+                                        <li>
+                                            <span>@type.GradeDesc</span>
+                                        </li>
+                                    }
+                                </ul>
+                                <div class="school-type school-type-content">
+                                    <ul>
+                                        <li class="active">不限<i></i></li>
+                                    </ul>
+                                    @foreach (var type in ViewBag.Types)
+                                    {
+                                        <ul style="display: none;">
+                                            <li value="@type.GradeId">不限<i></i></li>
+                                            @foreach (var t in type.Types)
+                                            {
+                                                <li data-international="@t.International" value="@t.TypeValue">@t.TypeName<i></i></li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            </div>
+                            <div class="btn-list flex">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <div class="expenses" style="display: none;">
+                            <div>
+                                <div class="screen-price flex justify-content-between">
+                                    <input type="number" placeholder="最低价" class="text-center">
+                                    <span>—</span>
+                                    <input type="number" placeholder="最高价" class="text-center">
+                                </div>
+                                <ul class="price-list flex justify-content-between text-center">
+                                    <li value="0,9999">1万以下</li>
+                                    <li value="10000,49999">1-5万</li>
+                                    <li value="50000,99999">5-10万</li>
+                                    <li value="100000,99999999">10万以上</li>
+                                </ul>
+                                <p class="tips">*以上为一年的总费用</p>
+                            </div>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <div class="screen-attr" style="display: none;">
+                            <div>
+                                <div class="screen-attr-list school-tag-courses">
+                                    <div class="screen-attr-title">课程设置</div>
+                                    <ul class="flex text-center">
+                                        @for (int i = 0; i < 8; i++)
+                                        {
+                                            <li value="@ViewBag.Courses[i].Id">@ViewBag.Courses[i].Name</li>
+                                        }
+                                        @if (ViewBag.Courses.Count > 8)
+                                        {
+                                            <li class="more">+</li>
+                                        }
+                                    </ul>
+                                    <div class="more-box">
+                                        <h5 class="more-box-title"><i class="arrow"></i>课程设置</h5>
+                                        <ul class="flex text-center">
+                                            @foreach (var item in ViewBag.Courses)
+                                            {
+                                                <li value="@item.Id">@item.Name</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="screen-attr-list school-tag-abroads">
+                                    <div class="screen-attr-title">出国方向</div>
+                                    <ul class="flex text-center">
+                                        @for (int i = 0; i < 8; i++)
+                                        {
+                                            <li value="@ViewBag.Abroads[i].Id">@ViewBag.Abroads[i].Name</li>
+                                        }
+                                        @if (ViewBag.Abroads.Count > 8)
+                                        {
+                                            <li class="more">+</li>
+                                        }
+                                    </ul>
+                                    <div class="more-box">
+                                        <h5 class="more-box-title"><i class="arrow"></i>出国方向</h5>
+                                        <ul class="flex text-center">
+                                            @foreach (var item in ViewBag.Abroads)
+                                            {
+                                                <li value="@item.Id">@item.Name</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="screen-attr-list school-tag-characteristics">
+                                    <div class="screen-attr-title">特色课程或项目</div>
+                                    <ul class="flex text-center">
+                                        @for (int i = 0; i < 8; i++)
+                                        {
+                                            <li data-International="@ViewBag.Characteristics[i].International" value="@ViewBag.Characteristics[i].Id">@ViewBag.Characteristics[i].Name</li>
+                                        }
+                                        @if (ViewBag.Characteristics.Count > 8)
+                                        {
+                                            <li class="more">+</li>
+                                        }
+                                    </ul>
+                                    <div class="more-box">
+                                        <h5 class="more-box-title"><i class="arrow"></i>特色课程或项目</h5>
+                                        <ul class="flex text-center">
+                                            @foreach (var item in ViewBag.Characteristics)
+                                            {
+                                                <li data-International="@item.International" value="@item.Id">@item.Name</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="screen-attr-list school-tag-authentications">
+                                    <div class="screen-attr-title">学校认证</div>
+                                    <ul class="flex text-center">
+                                        @for (int i = 0; i < 8; i++)
+                                        {
+                                            <li data-International="@ViewBag.Authentications[i].International" value="@ViewBag.Authentications[i].Id">@ViewBag.Authentications[i].Name</li>
+                                        }
+                                        @if (ViewBag.Authentications.Count > 8)
+                                        {
+                                            <li class="more">+</li>
+                                        }
+                                    </ul>
+                                    <div class="more-box">
+                                        <h5 class="more-box-title"><i class="arrow"></i>学校认证</h5>
+                                        <ul class="flex text-center">
+                                            @foreach (var item in ViewBag.Authentications)
+                                            {
+                                                <li data-International="@item.International" value="@item.Id">@item.Name</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="screen-attr-list school-lodging lodging">
+                                    <div class="screen-attr-title">是否住宿</div>
+                                    <ul class="flex text-center">
+                                        <li value="1" class="active">住宿</li>
+                                        <li value="0" class="active">走读</li>
+                                    </ul>
+                                </div>
+                                <div style="display: none;">
+                                    <div class="screen-attr-title">学校评分</div>
+                                    <ul class="flex text-center justify-content-between school-score">
+                                        <li class="active">
+                                            <div>毕业成绩</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                        <li>
+                                            <div>口碑评价</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                        <li>
+                                            <div>师资力量</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                        <li>
+                                            <div>硬件设施</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                        <li>
+                                            <div>交通配置</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                        <li>
+                                            <div>学生生源</div>
+                                            <div class="num">0-100分</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="slider" style="display: none;">
+                                    <input type="hidden" id="screen-slider" value="130, 628" />
+                                </div>
+                            </div>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <ul class="screen" style="display: none;">
+                            <li value="0" class="active">默认排序</li>
+                            <li value="1">距离从远到近</li>
+                            <li value="2">距离从近到远</li>
+                            <li value="3">学年总费用从高到低</li>
+                            <li value="4">学年总费用从低到高</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 点评列、问答列显示 -->
+                <div class="filter-btn-list btn-list-comment" style="display: none;">
+                    <ul class="flex justify-content-between text-center">
+                        <li class="">附近<i class="arrow"></i></li>
+                        <li>智能排序<i class="arrow"></i></li>
+                        <li>筛选<i class="arrow"></i></li>
+                    </ul>
+                    <div class="screen">
+                        <!-- 附近 -->
+                        <div class="nearby">
+                            <ul class="area city-area">
+                                <li class="active">不限<i></i></li>
+                                @foreach (var areaitem in ViewBag.Areas)
+                                {
+                                    <li value="@areaitem.AdCode">@areaitem.AreaName<i></i></li>
+                                }
+                            </ul>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <!-- 智能排序 -->
+                        <ul class="sort">
+                            <li value="0" class="active">智能排序</li>
+                            <li value="1">时间优先</li>
+                            <li value="2">口碑评级优先</li>
+                            <li value="3">评论数优先</li>
+                        </ul>
+                        <!-- 筛选 -->
+                        <div class="screen-attr">
+                            <div>
+                                <div class="title">学段</div>
+                                <ul class="flex text-center justify-content-between school">
+                                    <li value="1">幼儿园</li>
+                                    <li value="2">小学</li>
+                                    <li value="3">初中</li>
+                                    <li value="4">高中</li>
+                                </ul>
+                                <div class="title">学校类型</div>
+                                <ul class="flex text-center justify-content-between school-type">
+                                    <li value="3">国际</li>
+                                    <li value="2">民办</li>
+                                    <li value="1">公办</li>
+                                    <li></li>
+                                </ul>
+                                <div class="title">寄宿</div>
+                                <ul class="flex text-center justify-content-between lodging">
+                                    <li value="1">寄宿</li>
+                                    <li value="0">非寄宿</li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-btn-list btn-list-qa" style="display: none;">
+                    <ul class="flex justify-content-between text-center">
+                        <li class="">附近<i class="arrow"></i></li>
+                        <li>智能排序<i class="arrow"></i></li>
+                        <li>筛选<i class="arrow"></i></li>
+                    </ul>
+                    <div class="screen">
+                        <!-- 附近 -->
+                        <div class="nearby">
+                            <ul class="area city-area">
+                                <li class="active">不限<i></i></li>
+                                @foreach (var areaitem in ViewBag.Areas)
+                                {
+                                    <li value="@areaitem.AdCode">@areaitem.AreaName<i></i></li>
+                                }
+                            </ul>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                        <!-- 智能排序 -->
+                        <ul class="sort">
+                            <li value="0" class="active">智能排序</li>
+                            <li value="1">时间优先</li>
+                            <li value="3">评论数优先</li>
+                        </ul>
+                        <!-- 筛选 -->
+                        <div class="screen-attr">
+                            <div>
+                                <div class="title">学段</div>
+                                <ul class="flex text-center justify-content-between school">
+                                    <li value="1">幼儿园</li>
+                                    <li value="2">小学</li>
+                                    <li value="3">初中</li>
+                                    <li value="4">高中</li>
+                                </ul>
+                                <div class="title">学校类型</div>
+                                <ul class="flex text-center justify-content-between school-type">
+                                    <li value="3">国际</li>
+                                    <li value="2">民办</li>
+                                    <li value="1">公办</li>
+                                    <li></li>
+                                </ul>
+                                <div class="title">寄宿</div>
+                                <ul class="flex text-center justify-content-between lodging">
+                                    <li value="1">寄宿</li>
+                                    <li value="0">非寄宿</li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                            <div class="btn-list flex text-center">
+                                <a class="reset">重置</a>
+                                <a class="confirm">确认</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 学校列 -->
+            <div class="search-result-school" style="display: none;">
+                @*<ul class="type-list text-center flex justify-content-between">
+                        <li class="active">成绩高</li>
+                        <li>师资好</li>
+                        <li>口碑优</li>
+                        <li>住宿</li>
+                    </ul>*@
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="@ViewBag.UserServiceUrl/Contact/Feedback?type=99" class="add-school"><i class="search-icon"></i>添加学校</a>
+                        <a href="/Search/Propose?Channel=0"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <ul class="content-list content-ul">
+                </ul>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 话题圈列 -->
+            <div class="search-result-circle" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                </div>
+                <div class="circle-list">
+                    <ul class="content-ul subject-circle">
+                    </ul>
+                </div>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list subject-circle">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 点评列 -->
+            <div class="search-result-comment" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="/CommentAndQustion" class="write-comment"><i class="search-icon"></i>写点评</a>
+                        <a href="/Search/Propose?Channel=1"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <div class="comment-list">
+                    <ul class="content-ul">
+                    </ul>
+                </div>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 问答列 -->
+            <div class="search-result-qa" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="/CommentAndQustion" class="write-qa"><i class="search-icon"></i>马上提问</a>
+                        <a href="/Search/Propose?Channel=2"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <div class="qa-list">
+                    <ul class="content-ul">
+                    </ul>
+                </div>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 排行榜列 -->
+            <div class="search-result-rank rank" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="/Search/Propose?Channel=3" style="width: 100%;"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <div class="rank-list">
+                    <ul class="content-ul">
+                    </ul>
+                </div>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 文章列 -->
+            <div class="search-result-article" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="/Search/Propose?Channel=4" style="width: 100%;"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <div class="article-list">
+                    <ul class="content-ul">
+                    </ul>
+                </div>
+                <div class="guess" style="display: none;">
+                    <h5 class="title">猜你喜欢</h5>
+                    <ul class="content-list">
+                    </ul>
+                </div>
+                <div class="load-more text-center" style="display: none;">正在努力加载</div>
+                <div class="not-more-data" style="display: none;">没有更多数据</div>
+            </div>
+            <!-- 直播列 -->
+            <div class="search-result-live" style="display: none;">
+                <div class="not-data text-center" style="display: none;">
+                    <p><i class="search-icon"></i>没有找到相关内容</p>
+                    <div class="flex">
+                        <a href="/Search/Propose?Channel=4" style="width: 100%;"><i class="search-icon"></i>搜索建议</a>
+                    </div>
+                </div>
+                <div class="live-list">
+                    <ul class="content-ul">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="popup-box" style="background: rgba(0, 0, 0, 0);">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="/Report">举报</a></li>
+            <li class="cancelBox" style="display:block;"><a>取消</a></li>
+        </ul>
+    </section>
+
+    <section class="reply-box" style="padding: 14pt 14pt;">
+        <div class="flex justify-content-between btn-list">
+            <span class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>
+                }
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+
+
+    <div class="curtain"></div>
+    <div class="curtain2"></div>
+    <div class="WarningBox">
+        <i class="warning-i"></i>
+        <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+        <a class="btn">确认</a>
+        <a class="btn" style="display:none;" href="#">绑定手机</a>
+    </div>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.range-min.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.mark.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/prompt.js"></script>
+    <script src="@ViewBag.StaticFile/js/home-search-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/home-search.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/css/iconfont/iconfont.js"></script>
+    @* 数据加载对象 DataLoader *@
+    <script>
+        var DataLoader = function (page) {
+            //this.channel = channel;
+            //this.page = getPage(channel);
+
+            this.channel = page.channel;
+            this.page = page;
+
+            let dataClass = this.page.dataClass || 'content-ul';
+            this.page.dataClass = dataClass;
+            this.url = page.dataUrl;
+            this.guessUrl = page.guessUrl;
+        }
+
+        //数据过滤
+        DataLoader.prototype.FilterData = function (orderby, pageIndex, pageSize) {
+            let page = this.page;
+            if (!page) return;
+
+            var $filter = $(`.${page.filterClass}`);
+            let querydata = {};
+
+            var keywords = $('.search-input input').val();
+            querydata.keyWords = keywords;
+
+            //没有筛选框, 直接返回
+            if (!page.filterClass) {
+                querydata.PageNo = pageIndex;
+                querydata.PageSize = pageSize;
+                return querydata;
+            }
+
+            //默认仅查询地区
+            var area_query = "0";
+            //如果是学校, 则根据选择查询地区, 地铁, 附近
+            if (page.filterClass == 'btn-list-school') {
+                area_query = $filter.find(".area .left-list .active")[0].getAttribute("value");
+            }
+            if (area_query == "0") {
+                //地区
+                var areas = $filter.find(".city-area .active");
+                var areaIds = [];
+                for (var i = 0; i < areas.length; i++) {
+                    if (areas[i].getAttribute("value") == null || areas[i].getAttribute("value") == "") {
+                        break;
+                    }
+                    areaIds.push(areas[i].getAttribute("value"));
+                }
+                querydata.AreaCodes = areaIds;
+            }
+            else if (area_query == "1") {
+                //地铁
+                metroline = $filter.find(".metro-line .active");
+                metrostation = $filter.find(".metro-station .active");
+                var metroLineIds = [];
+                var metroStationIds = [];
+                if (metroline[0].getAttribute("value") != "") {
+                    metroLineIds.push(metroline[0].getAttribute("value"));
+
+                    for (var i = 0; i < metrostation.length; i++) {
+                        if (metrostation[i].getAttribute("value") == "" || metrostation[i].getAttribute("value") == null) {
+                            break;
+                        }
+                        metroStationIds.push(metrostation[i].getAttribute("value"));
+                    }
+                }
+                //console.log(metroLineIds);
+                //console.log(metroStationIds);
+                querydata.MetroLineIds = metroLineIds;
+                querydata.MetroStationIds = metroStationIds;
+            }
+            else {
+                //距离
+                range = $filter.find(".range .active")[0].getAttribute("value");
+                //console.log(range);
+                querydata.Distance = range;
+            }
+            //学校类型
+            schooltype = $filter.find(".school-type .active");
+            var types = [];
+            for (var i = 0; i < schooltype.length; i++) {
+                if (schooltype[i].getAttribute("value") == "" || schooltype[i].getAttribute("value") == null) {
+                    break;
+                }
+                types.push(schooltype[i].getAttribute("value"));
+            }
+            //console.log(types);
+
+            //如果是学校, 则更多筛选
+            if (page.filterClass == 'btn-list-school') {
+                querydata.Type = types;
+
+                //费用
+                var minCost = 0;
+                var maxCost = 0;
+                var price = $filter.find(".price-list .active");
+                if (price.length > 0) {
+                    var cost = $filter.find(".price-list .active")[0].getAttribute("value");
+                    var c = cost.split(",");
+                    minCost = c[0];
+                    maxCost = c[1];
+                }
+                else {
+                    minCost = $(".screen-price .mincost").val() == '' ? 0 : $(".screen-price .mincost").val();
+                    maxCost = $(".screen-price .maxcost").val() == '' ? 0 : $(".screen-price .maxcost").val();
+                }
+                querydata.MinCost = minCost;
+                querydata.MaxCost = maxCost;
+                //console.log(minCost+","+maxCost);
+
+
+                //特色课程
+                var coursestag = $(".school-tag-courses .more-box .active");
+                var courses = [];
+                for (var i = 0; i < coursestag.length; i++) {
+                    courses.push(coursestag[i].getAttribute("value"));
+                }
+                querydata.CourseIds = courses;
+                //出国方向
+                var abroadstag = $(".school-tag-abroads .more-box .active");
+                var abroads = [];
+                for (var i = 0; i < abroadstag.length; i++) {
+                    abroads.push(abroadstag[i].getAttribute("value"));
+                }
+                querydata.AbroadIds = abroads;
+                //特色课程或项目
+                var characteristicstag = $(".school-tag-characteristics .more-box .active");
+                var characteristics = [];
+                for (var i = 0; i < characteristicstag.length; i++) {
+                    characteristics.push(characteristicstag[i].getAttribute("value"));
+                }
+                querydata.CharacIds = characteristics;
+                //学校认证
+                var authenticationstag = $(".school-tag-authentications .more-box .active");
+                var authentications = [];
+                for (var i = 0; i < authenticationstag.length; i++) {
+                    authentications.push(authenticationstag[i].getAttribute("value"));
+                }
+                querydata.AuthIds = authentications;
+            }
+            else {
+                //点评和问题
+                querydata.TypeIds = types;
+                var grade = $filter.find(".school .active");
+                var gradeIds = [];
+                for (var i = 0; i < grade.length; i++) {
+                    if (grade[i].getAttribute("value") == null) {
+                        break;
+                    }
+                    gradeIds.push(grade[i].getAttribute("value"));
+                }
+                querydata.GradeIds = gradeIds;
+            }
+
+            //是否住宿
+            var schoollodging = $filter.find(".lodging .active");
+            var lodging = [];
+            for (var i = 0; i < schoollodging.length; i++) {
+                lodging.push(schoollodging[i].getAttribute("value"));
+            }
+            if (lodging.length == 1) {
+                querydata.Lodging = lodging[0] == "1" ? true : false;
+            }
+
+            querydata.Orderby = orderby;
+            querydata.PageNo = pageIndex;
+            querydata.PageSize = pageSize;
+
+            //console.log(querydata);
+            return querydata;
+        }
+
+        //数据加载
+        DataLoader.prototype.LoadData = function (querydata) {
+            let that = this,
+                page = that.page,
+                url = that.url;
+            if (page.loading) return;
+            page.loading = true;
+            page.loadStart = true;
+            querydata.PageNo = page.pageIndex;
+            querydata.PageSize = page.pageSize;
+
+            let $page = $(`.${page.pageClass}`);
+            let $data = $page.find(`.${page.dataClass}`);
+
+            $page.find(".load-more").show();
+            $page.find(".not-more-data").hide();
+            //$page.find(">.not-data").hide();
+            //$page.find(">.guess").hide();
+            $.ajax({
+                url: url,
+                type: "Get",
+                data: querydata,
+                traditional: true,//这里设置为true
+                complete(XHR, TS) {
+                    page.loading = false;
+                    $page.find(".load-more").hide();
+
+                    if (page.notData) {
+                        $data.hide();
+                        $page.find(".not-more-data").hide();
+                        $page.find(">.not-data").show();
+                        //this.LoadSchoolGuessData();
+                    }
+                    else if (page.loadEnd) {
+                        $page.find(".not-more-data").show();
+                        $page.find(">.not-data").hide();
+
+                    }
+
+                    var bodyHeight = $('body').height();
+                    var windowHeight = $(window).height();
+
+                    //已加载完成,   或者第一页就加载完,  并且没有滚动条, 则主动触发一次
+                    if (page.loadEnd || (page.pageIndex == 2 && bodyHeight < windowHeight)) {
+                        $page.find(">.guess").show();
+                        that.LoadGuessData();
+                    }
+
+                },
+                error(data, textStatus, jqXHR) {
+                    page.loadEnd = true;
+
+                    if (page.pageIndex == 1) {
+                        page.notData = true;
+                    }
+                },
+                success(data, textStatus, jqXHR) {
+                    var statusCode = jqXHR.status;
+                    var statusText = jqXHR.statusText;
+                    //innerHtml = FillSchoolExtData(data.data);
+                    //console.log(data.length);
+                    if (data.length < 100) {
+                        page.loadEnd = true;
+                        if (page.pageIndex == 1) {
+                            page.notData = true;
+                        }
+                    }
+                    else {
+                        if (page.pageIndex == 1) {
+                            $page.show();
+                            $data.show();
+                            $page.find(">.not-data").hide();
+                            $page.find(">.guess").hide();
+                        }
+                        $data.append(data);
+                        page.pageIndex++;
+                    }
+                }
+            });
+        }
+
+        //清空数据
+        DataLoader.prototype.CleanData = function () {
+            let page = this.page;
+            let $page = $(`.${page.pageClass}`);
+            let $data = $page.find(`.${page.dataClass}`);
+            $data.html("");
+        }
+
+        //数据排序
+        DataLoader.prototype.GetOrderby = function () {
+            let page = this.page;
+            let $filter = $(`.${page.filterClass}`);
+
+            //default 0
+            var orderby = 0;
+
+            //学校, 点评, 问答 排序
+            switch (page.channel) {
+                case 0:
+                    $filter.find(".screen li.active")[0].getAttribute("value")
+                    break;
+                case 1:
+                case 2:
+                    $filter.find(".sort li.active")[0].getAttribute("value")
+                    break;
+            }
+            return orderby;
+        }
+
+        //猜你喜欢
+        DataLoader.prototype.LoadGuessData = function () {
+            let that = this,
+                page = that.page,
+                guessUrl = that.guessUrl;
+            //未配置url
+            if (!guessUrl) return;
+            //加载中
+            if (page.loading) return;
+
+            let $page = $(`.${page.pageClass}`);
+
+            page.loading = true;
+            $page.find(".load-more").show();
+            $page.find(".not-more-data").hide();
+            $.ajax({
+                url: guessUrl,
+                type: "Get",
+                data: { index: page.pageIndex },
+                traditional: true,//这里设置为true
+                complete(XHR, TS) {
+                    page.loading = false;
+                    $page.find(".load-more").hide();
+                },
+                error(data, textStatus, jqXHR) {
+                    page.guessEnd = true;
+                    $page.find(".not-more-data").show();
+                },
+                success(data, textStatus, jqXHR) {
+                    var statusCode = jqXHR.status;
+                    var statusText = jqXHR.statusText;
+                    //innerHtml = FillSchoolExtData(data.data);
+                    if (data.length < 100) {
+                        page.guessEnd = true;
+                        $page.find(".not-more-data").show();
+                    }
+                    else {
+                        if (page.pageIndex == 1) {
+                            $page.find(">.guess").show();
+                        }
+                        if (page.channel == 7) {
+                            //话题圈没有分页
+                            $page.find(">.guess>.content-list").empty();
+                        }
+                        $page.find(">.guess>.content-list").append(data);
+                        page.pageIndex++;
+                    }
+                }
+            });
+        }
+
+        //热门搜索
+        DataLoader.prototype.LoadHotwordData = function () {
+            let channel = this.channel;
+            $.ajax({
+                url: "/Search/GetHotwordList?channel=" + channel,
+                type: "Get",
+                complete(XHR, TS) {
+                },
+                error(data, textStatus, jqXHR) {
+                },
+                success(data, textStatus, jqXHR) {
+                    innerHtml = FillHotwordData(data.data);
+                    $(".hot-search").html("");
+                    $(".hot-search").append(innerHtml);
+                }
+            });
+        }
+    </script>
+
+    @* 初始化js, 在 $.ready 之前加载 *@
+    <script>
+        //标签对象
+        var tabs = [
+            { channel: 0, title: '学校', icon: 'search-icon', class: 'school', active: true },
+            { channel: 7, title: '话题圈', symbolIcon: "#iconhuatiquan-moren", symbolActiveIcon: "#iconhuatiquan-dianji", hot: true },
+            { channel: 1, title: '点评', icon: 'search-icon' },
+            { channel: 2, title: '问答', icon: 'search-icon' },
+            { channel: 3, title: '排行榜', icon: 'search-icon' },
+            { channel: 4, title: '攻略', icon: 'search-icon' },
+            { channel: 5, title: '直播', icon: 'search-icon' },
+        ];
+
+        //channel页对象
+        var pages = [
+            //{ channel: 0, notData: false, loadStart: false, loadEnd: false, guessEnd: false, loading: false, pageIndex: 1, pageSize: 10, pageClass: 'search-result-school', filterClass: 'btn-list-school' },
+            { channel: 0, pageClass: 'search-result-school', filterClass: 'btn-list-school', dataUrl: '/Search/SearchSchoolPage', guessUrl: '/Search/GuessSchoolPage' },
+            { channel: 7, pageClass: 'search-result-circle', dataUrl: '/Search/SearchCirclePage', guessUrl: '/Search/GuessCirclePage' },
+            { channel: 1, pageClass: 'search-result-comment', filterClass: 'btn-list-comment', dataUrl: '/Search/SearchCommentPage' },
+            { channel: 2, pageClass: 'search-result-qa', filterClass: 'btn-list-qa', dataUrl: '/Search/SearchQuestionPage' },
+            { channel: 3, pageClass: 'search-result-rank', dataUrl: '/Search/SearchSchoolRankPage' },
+            { channel: 4, pageClass: 'search-result-article', dataUrl: '/Search/SearchArticlePage' },
+            { channel: 5, pageClass: 'search-result-live', dataUrl: '/Search/SearchLivePage' }
+        ];
+
+        function init() {
+            //初始化标签
+            renderTab();
+        }
+        init();
+
+        function renderTab() {
+            var $list = $('.search-content-tab .tab-list');
+            $list.empty();
+            for (var i = 0; i < tabs.length; i++) {
+                var tab = tabs[i];
+                var tabHtml = buildTabHtml(tab);
+                $list.append(tabHtml);
+            }
+        }
+
+        function buildTabHtml(tab) {
+            var activeClass = tab.active ? 'active' : '';
+            var hotClass = tab.hot ? 'hot' : '';
+
+            var iconHtml = tab.icon ? `<i class="${tab.icon || ''}"></i>`
+                : `<svg class="icon normal" aria-hidden="true"><use xlink:href="${tab.symbolIcon}" ></use></svg> <svg class="icon active" aria-hidden="true"><use xlink:href="${tab.symbolActiveIcon}" ></use></svg>`;
+
+            var html = `<li class="swiper-slide ${tab.class || ''} ${activeClass} ${hotClass} channel-${tab.channel}" data-channel='${tab.channel}'>` +
+                `${iconHtml} ${tab.title}<span>hot</span>` +
+                `</li>`;
+            return html;
+        }
+
+
+        //重置指定页面
+        function initPage(page) {
+            if (!page) return;
+
+            page.notData = false;
+            page.loadStart = false;
+            page.loadEnd = false;
+            page.guessEnd = false;
+            page.loading = false;
+            page.pageIndex = 1;
+            page.pageSize = 10;
+
+            if (!page.dataLoader) {
+
+                //let clone = Object.assign({}, page);
+                //clone.dataLoader = undefined;
+                //会循环引用
+                page.dataLoader = new DataLoader(page);
+            }
+        }
+
+        //重置所有页面
+        function initPages() {
+            for (var i = 0; i < pages.length; i++)
+                initPage(pages[i]);
+        }
+
+        function cleanPagesData() {
+            for (var i = 0; i < pages.length; i++)
+                pages[i].dataLoader.CleanData();
+        }
+
+        //根绝channel获取页面
+        function getPage(channel) {
+            let page;
+            for (var i = 0; i < pages.length; i++) {
+                page = pages[i];
+                if (page.channel == channel) return page;
+            }
+        }
+    </script>
+    <script>
+        var SingleCourseObj = [];
+        $(function () {
+            var btn = true;
+
+            //初始化标签页面
+            initPages();
+
+            LoadHistoryData();
+            // 监听搜索栏
+            $('.search-input input').on('input propertychange', function () {
+                if (timer) {
+                    clearTimeout(timer)
+                }
+                if (!btn) {
+                    return;
+                }
+                btn = false;
+                var that = this;
+                var timer = setTimeout(function () {
+                    btn = true;
+                    var keyword = $(that).val();
+                    var channel = $('.search-content-tab li.active').data('channel');
+                    if (channel == 0)
+                        channel = -1;
+                    //console.log(channel);
+                    if (keyword != '') {
+                        LoadSuggestData(keyword, channel);
+                    }
+                }, 500);
+            });
+
+
+            // 判断是否滚动到页面底部 加载更多数据
+            $(window).scroll(function () {
+
+                if ($('.record').is(':hidden') || $('.search-list').is(':hidden')) {
+                    var channel = $('.search-content-tab li.active').data('channel');
+                    LoadMoreData(channel);
+                }
+            });
+            // 点击查询全部
+            $('body').on('click', '.all-search-content', function (e) {
+                var channel = $('.search-content-tab li.active').data('channel') || 0;
+
+                initPages();
+                cleanPagesData();
+                LoadPage(channel);
+            });
+            $('.search-content').on('click', '.recently-search-list li', function () {
+                var channel = $('.search-content-tab li.active').data('channel');
+
+                initPages();
+                cleanPagesData();
+                LoadPage(channel);
+            });
+
+
+            function initTabHotword() {
+                var channel = $('#selectedChannel').val();
+                var page = getPage(channel);
+                if (page)
+                    page.dataLoader.LoadHotwordData();
+            }
+            initTabHotword();
+
+            // 切换tab
+            $('.tab-list').on('click', 'li', function () {
+                var channel = $('.search-content-tab li.active').data('channel');
+
+                var page = getPage(channel);
+                page.dataLoader.LoadHotwordData();
+
+                if (!$('.search-result').is(':visible') || page.loadStart || page.notData)
+                    return;
+                page.loadStart = true;
+
+                LoadPage(channel);
+            });
+
+            // 删除搜索记录
+            $('body').on('click', '.prompt-confirm', function () {
+                RemoveHistory();
+            });
+
+            // 点击重置
+            $('.reset').on('click', function (e) {
+                var channel = $('.search-content-tab li.active').data('channel');
+                console.log(channel);
+                if (channel == 0) {
+                    $('.btn-list-school .area .left-list li').eq(0).addClass('active').siblings().removeClass('active');
+                    $('.btn-list-school .area-content').children().eq(0).css('display', 'block').siblings().css('display', 'none');
+                    $('.btn-list-school .area-content ul li').eq(0).addClass('active').siblings().removeClass('active');
+                    $('.btn-list-school .area-content .metro-line li').eq(0).addClass('active');
+
+                    $('.btn-list-school .school-type .left-list li').eq(0).addClass('active').siblings().removeClass('active');
+                    $('.btn-list-school .school-type-content').children().eq(0).css('display', 'block').siblings().css('display', 'none');
+                    $('.btn-list-school .school-type-content li').removeClass('active').eq(0).addClass('active');
+
+                    $('.expenses input').val("");
+                    $('.price-list li').removeClass('active');
+
+                    $('.btn-list-school .screen-attr li').removeClass('active');
+                    $('.btn-list-school .school-lodging li').addClass('active');
+
+                    $('.btn-list-school .screen li').eq(0).addClass('active').siblings().removeClass('active');
+                }
+                else if (channel == 1) {
+                    $('.btn-list-comment .area li').eq(0).addClass('active').siblings().removeClass('active');
+                    $('.btn-list-comment .sort li').eq(0).addClass('active').siblings().removeClass('active');
+
+                    $('.btn-list-comment .screen-attr li').removeClass('active');
+                }
+                else if (channel == 2) {
+                    $('.btn-list-qa .area li').eq(0).addClass('active').siblings().removeClass('active');
+                    $('.btn-list-qa .sort li').eq(0).addClass('active').siblings().removeClass('active');
+
+                    $('.btn-list-qa .screen-attr li').removeClass('active');
+                }
+
+                Reload(channel);
+            });
+            // 点击确定
+            $('.confirm').on('click', function () {
+                var channel = $('.search-content-tab li.active').data('channel');
+                Reload(channel);
+            });
+            // 点击关键词
+            $('.search-list').on('click', 'div', function () {
+                var channel = $('.search-content-tab li.active').data('channel');
+                var keyWords = $(this).find(".keyword").text();
+
+                ReloadAll(keyWords, channel);
+            });
+            $('.record li').on('click', function () {
+                var channel = $('.search-content-tab li.active').data('channel');
+
+                var keyWords = $(this).text();
+
+                ReloadAll(keyWords, channel);
+            });
+            //学校排序
+            $('.btn-list-school .screen li').on('click', function () {
+                var channel = 0;
+                var orderby = $(this)[0].getAttribute("value");
+                ReloadSortPage(channel, orderby);
+            });
+            //点评排序
+            $(".btn-list-comment .sort li").on('click', function () {
+                var channel = 1;
+                var orderby = $(this)[0].getAttribute("value");
+                ReloadSortPage(channel, orderby);
+            });
+            //问答排序
+            $(".btn-list-qa .sort li").on('click', function () {
+                var channel = 2;
+                var orderby = $(this)[0].getAttribute("value");
+                ReloadSortPage(channel, orderby);
+            });
+
+            function LoadPage(channel) {
+                var page = getPage(channel);
+                var func = page.dataLoader;
+
+                var orderby = func.GetOrderby();
+                var querydata = func.FilterData(orderby, page.pageIndex, page.pageSize);
+                func.LoadData(querydata);
+            }
+
+            //使用排序重新加载页面
+            function ReloadSortPage(channel, orderby) {
+                let page = getPage(channel);
+                initPage(page);
+
+                var func = page.dataLoader;
+                func.CleanData();
+                if (!orderby)
+                    orderby = func.GetOrderby();
+
+                var querydata = func.FilterData(orderby, page.pageIndex, page.pageSize);
+                func.LoadData(querydata);
+            }
+
+            //使用默认排序重新加载页面
+            function Reload(channel) {
+                ReloadSortPage(channel);
+            }
+
+            function ReloadAll(keyWords, channel) {
+                let page = getPage(channel);
+
+                initPages();
+                cleanPagesData();
+
+                var func = page.dataLoader;
+                var orderby = func.GetOrderby();
+                var querydata = func.FilterData(orderby, page.pageIndex, page.pageSize);
+                querydata.KeyWords = keyWords;
+                func.LoadData(querydata);
+            }
+
+
+
+            setInterval(() => {
+                SingleCourseObj.map((obj, index) => {
+                    //console.log(obj);
+                    if (obj.status == 3 || obj.status == 2) {
+                        timeStr = initTime(obj.time)
+                        $('.live-item[data-id="' + obj.id + '"] span').eq(0).text("还有" + timeStr + "开课");
+                    }
+                })
+            }, 1000);
+
+            function initTime(endtime) {
+                // 定义结束时间戳
+                const end = endtime;
+                // 定义当前时间戳
+                const now = Date.parse(new Date())
+                // 做判断当倒计时结束时都为0
+                if (now >= end) {
+                    this.day = 0
+                    this.hr = 0
+                    this.min = 0
+                    this.sec = 0
+                    return
+                }
+                // 用结束时间减去当前时间获得倒计时时间戳
+                const msec = end - now
+                let day = parseInt(msec / 1000 / 60 / 60 / 24) //算出天数
+                let hr = parseInt(msec / 1000 / 60 / 60 % 24)//算出小时数
+                let min = parseInt(msec / 1000 / 60 % 60)//算出分钟数
+                let sec = parseInt(msec / 1000 % 60)//算出秒数
+                //给数据赋值
+                if (day > 0) {
+                    this.hr = day * 12 + hr;
+                } else {
+                    this.hr = hr > 9 ? hr : '0' + hr
+                }
+                this.min = min > 9 ? min : '0' + min;
+                this.sec = sec > 9 ? sec : '0' + sec;
+                //`['+day+']:`
+                //console.log('day',day)
+                return '' + this.hr + ':' + this.min + ':' + this.sec + '';
+            }
+
+
+            //关注（取消关注）
+            $('.live-list').on('click', ' .live-item .photo i', function () {
+                userid = $(this).parent().parent().data("userid");
+                if ($(this).hasClass("focused")) {
+                    $(this).removeClass("focused");
+                    $(this).text("关注");
+                    $.ajax({
+                        url: global.baseUserUrl + '/Talent/CancleAttention',
+                        type: 'post',
+                        data: "attionUserId=" + userid,
+                        complete: function (res) {
+                        },
+                        success: function (res) {
+                            if (res.code == 200) {
+
+                            }
+                        }
+                    })
+                }
+                else {
+                    $(this).addClass("focused");
+                    $(this).text("已关注");
+                    $.ajax({
+                        url: global.baseUserUrl + '/Talent/AttentionUser',
+                        type: 'post',
+                        data: "attionUserId=" + userid,
+                        complete: function (res) {
+                        },
+                        success: function (res) {
+                            if (res.code == 200) {
+
+                            }
+                        }
+                    })
+                }
+
+            });
+
+        });
+        function RemoveHistory() {
+            $.ajax({
+                url: "/Search/RemoveHistoryList",
+                type: "Post",
+                complete(XHR, TS) {
+                },
+                error(data, textStatus, jqXHR) {
+                },
+                success(data, textStatus, jqXHR) {
+                    LoadHistoryData();
+                }
+            });
+        }
+
+        function LoadMoreData(channel) {
+            let page = getPage(channel);
+            func = page.dataLoader;
+
+            if (!page.dataLoader) return;
+            if (page.loading) return;
+
+            if (!page.loadEnd) {
+                var ele = document.body;
+                var a = $(window).scrollTop();//滚动条y轴上的距离
+                var b = $(window).height();//可视区域的高度
+                var c = $(document).height();//可视化的高度与溢出的距离（总高度）
+                if (a + b >= c - 120) {
+                    //console.log(a + b ,a,b, c);
+
+                    var orderby = func.GetOrderby();
+                    var querydata = func.FilterData(orderby, page.pageIndex, page.pageSize);
+                    func.LoadData(querydata);
+                }
+            }
+            else if (!page.guessEnd && page.notData && channel == 0) {
+
+                var ele = document.body;
+                var a = $(window).scrollTop();//滚动条y轴上的距离
+                var b = $(window).height();//可视区域的高度
+                var c = $(document).height();//可视化的高度与溢出的距离（总高度）
+                if (a + b >= c - 120) {
+                    //加载猜你喜欢
+                    func.LoadGuessData();
+                }
+            }
+        }
+        function FillHotwordData(data) {
+            InnerHtml = "";
+            if (data.length > 0) {
+                InnerHtml += "<h5>热门搜索</h5>";
+                InnerHtml += '<ul class="recently-search-list flex">';
+
+                data.forEach(value => {
+                    InnerHtml += '<li>' + value.name + '</li>';
+                });
+                InnerHtml += "</ul>";
+            }
+            return InnerHtml;
+        }
+        function LoadHistoryData() {
+            $.ajax({
+                url: "/Search/GetHistoryList",
+                type: "Get",
+                complete(XHR, TS) {
+                },
+                error(data, textStatus, jqXHR) {
+                },
+                success(data, textStatus, jqXHR) {
+                    innerHtml = FillHistoryData(data.data);
+                    $(".recently-search").html("");
+                    $(".recently-search").append(innerHtml);
+
+                    // 热门搜索不显示时 其上方的最近搜索div的border-bottom不显示
+                    if ($('.hot-search .recently-search-list').length == 0 || $('.hot-search .recently-search-list li').length == 0) {
+                        //最近搜索border-bottom
+                        $('.recently-search-list').css('border-bottom', 'none');
+                    }
+                }
+            });
+        }
+        function FillHistoryData(data) {
+            InnerHtml = "";
+            if (data.length > 0) {
+                InnerHtml += '<h5>最近搜索<i class="search-icon"></i></h5>';
+                InnerHtml += '<ul class="recently-search-list flex">';
+
+                data.forEach(value => {
+                    InnerHtml += '<li>' + value.name + '</li>';
+                });
+                InnerHtml += "</ul>";
+            }
+            else {
+                //最近搜索border-bottom
+                $('.recently-search-list').css('border-bottom', 'none');
+            }
+            return InnerHtml;
+        }
+        function LoadSuggestData(keyword, channel) {
+            $.ajax({
+                url: "/Search/GetSuggestList",
+                type: "Get",
+                data: { "keyWords": keyword, "channel": channel },
+                traditional: true,//这里设置为true
+                complete(XHR, TS) {
+                },
+                error(data, textStatus, jqXHR) {
+                },
+                success(data, textStatus, jqXHR) {
+                    innerHtml = FillSuggestData(data.data);
+                    $(".search-list").html("");
+                    $(".search-list").append(innerHtml);
+                    // Read the keyword
+                    var keyword = $('.search-input input').val();;
+
+                    // Determine selected options
+                    var options = { "className": "match" };
+
+                    // Mark the keyword inside the context
+                    $(".search-list .name").removeMark();
+                    $(".search-list .name").mark(keyword, options);
+                }
+            });
+        }
+        function FillSuggestData(data) {
+            InnerHtml = "";
+
+            InnerHtml += '<div>' +
+                `<h5><i class="search-icon"></i>` +
+                '<span class="keyword">' + data.keyWords + '</span>' +
+                '<span class="result">约' + data.total + '个结果</span>' +
+                '</h5></div>';
+
+            data.list.forEach(value => {
+                var tips = '';
+                var url = '';
+                var unit = '';
+                if (value.groupType == 1) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-school" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-school">';
+                    }
+                    tips = '学校';
+                    url = '/School-';
+                    unit = '条点评';
+                }
+                else if (value.groupType == 2) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-comment" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-comment">';
+                    }
+                    tips = '点评';
+                    url = '/comment/';
+                    unit = '条回复';
+                }
+                else if (value.groupType == 3) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-qa" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-qa">';
+                    }
+                    tips = '问题';
+                    url = '/question/';
+                    unit = '条回答';
+                }
+                else if (value.groupType == 4) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-rank" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-rank">';
+                    }
+                    tips = '排行榜';
+                    url = '/schoolrank/detail/'
+                }
+                else if (value.groupType == 5) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-article" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-article">';
+                    }
+                    tips = '攻略';
+                    url = '/article/';
+                    unit = '个阅读';
+                }
+                else if (value.groupType == 6) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-live" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-live">';
+                    }
+                    tips = '直播';
+                    url = '/live/client/livedetail.html?showtype=1&contentid=';
+                    unit = '个收听数';
+                }
+                else if (value.groupType == 7) {
+                    if (value.items.length == 0) {
+                        InnerHtml += '<ul class="search-circle" style="display: none;">';
+                    } else {
+                        InnerHtml += '<ul class="search-circle">';
+                    }
+                    tips = '话题圈';
+                    url = '/topic/subject-details.html?circleId=';
+                    unit = '个圈粉';
+                }
+
+                if (value.groupType == 1) {
+                    value.items.forEach(item => {
+                        InnerHtml += '<li><a href="' + url + item.value.no + '/">';
+                        InnerHtml += '<i class="search-icon"></i>';
+                        InnerHtml += '<span class="name">' + item.keyWord + '</span>';
+
+                        if (item.show) {
+                            showDetail = item.show.count + unit;
+                            InnerHtml += '<span class="num">' + showDetail + '</span>';
+                        }
+                        InnerHtml += '</a></li>';
+                    });
+                }
+                else if (value.groupType == 2 || value.groupType == 3) {
+                    value.items.forEach(item => {
+                        InnerHtml += '<li><a href="' + url + item.value.no + '.html">';
+                        InnerHtml += '<i class="search-icon"></i>';
+                        InnerHtml += '<span class="name">' + item.keyWord + '</span>';
+
+                        if (item.show) {
+                            showDetail = item.show.count + unit;
+                            InnerHtml += '<span class="num">' + showDetail + '</span>';
+                        }
+                        InnerHtml += '</a></li>';
+                    });
+                }
+                else if (value.groupType == 5) {
+                    value.items.forEach(item => {
+                        InnerHtml += '<li><a href="' + url + item.value.no.toLowerCase() + '.html">';
+                        InnerHtml += '<i class="search-icon"></i>';
+                        InnerHtml += '<span class="name">' + item.keyWord + '</span>';
+
+                        if (item.show) {
+                            showDetail = item.show.count + unit;
+                            InnerHtml += '<span class="num">' + showDetail + '</span>';
+                        }
+                        InnerHtml += '</a></li>';
+                    });
+                }
+                else if (value.groupType == 7) {
+                    value.items.forEach(item => {
+                        InnerHtml += '<li><a href="' + url + item.value.id + '">';
+                        InnerHtml += '<i class="search-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#iconhuatiquan-moren" ></use></svg></i>';
+
+                        var words = item.keyWord.split('-');
+                        if (words.length == 2) {
+                            let circleName = words[0], userName = words[1];
+                            InnerHtml += `<span class="name"><span class="circle-name">${circleName}</span><span class="user-name">圈主：${userName}</span></span>`;
+                        } else {
+                            InnerHtml += '<span class="name">' + item.keyWord + '</span>';
+                        }
+
+                        if (item.show) {
+                            showDetail = item.show.count + unit;
+                            InnerHtml += '<span class="num">' + showDetail + '</span>';
+                        }
+                        InnerHtml += '</a></li>';
+                    });
+                }
+                else {
+                    value.items.forEach(item => {
+                        InnerHtml += '<li><a href="' + url + item.value.id + '">';
+                        InnerHtml += '<i class="search-icon"></i>';
+                        InnerHtml += '<span class="name">' + item.keyWord + '</span>';
+
+                        if (item.show) {
+                            showDetail = item.show.count + unit;
+                            InnerHtml += '<span class="num">' + showDetail + '</span>';
+                        }
+                        InnerHtml += '</a></li>';
+                    });
+                }
+
+                InnerHtml += `<li class="all-search-content" data-channel="${value.groupType}">`;
+                InnerHtml += '<i class="search-icon"></i>';
+                InnerHtml += '<span>搜索全部相关' + tips + '</span>';
+                InnerHtml += '<i class="arrow"></i>';
+                InnerHtml += '</li>';
+
+                InnerHtml += '</ul>';
+            });
+            return InnerHtml;
+        }
+
+    </script>
+</body>
+</html>

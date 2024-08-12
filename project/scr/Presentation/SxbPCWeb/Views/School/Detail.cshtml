@@ -1,0 +1,755 @@
+﻿@using iSchool;
+@using PMS.School.Domain.Dtos;
+@using PMS.School.Domain.Common
+@using PMS.School.Infrastructure;
+@using PMS.School.Infrastructure.Common;
+@using SchoolGrade = PMS.School.Domain.Common.SchoolGrade;
+@using SchoolType = PMS.School.Domain.Common.SchoolType;
+@model PMS.School.Domain.Dtos.SchoolExtDto
+@{
+    Layout = "layout_school";
+    //ViewBag.Title = $"{ViewBag.SchoolName}学校概况_招生简介_家长点评_常见问题_学校攻略_学校照片-上学帮";
+    ViewBag.Page_keywords = $"{ViewBag.SchoolName}学校概况,招生简介,家长点评,常见问题,{ViewBag.SchoolName}学校攻略,学校照片";
+    ViewBag.Page_Description = string.IsNullOrWhiteSpace(ViewBag.Page_Description) ? ViewBag.Page_keywords : ViewBag.Page_Description;
+    //ViewBag.Page_keywords = string.Format("{0}学校概况,{0}招生简介,{0}家长点评,{0}常见问题,{0}学校攻略,{0}学校照片", ViewBag.SchoolName);
+    ViewBag.Title = $"{ViewBag.SchoolName}招生简介 -上学帮";
+    const string NullData = "暂未收录";
+    var schtype = (SchFType0)ViewBag.SchFType;
+
+    ViewBag.TeaProportion = NullData;
+    if (Model.TsPercent != null)
+    {
+        //var teaNumber = NumberHelper.ConvertToFraction(Model.Teachercount.Value, Model.Studentcount.Value);
+        ViewBag.TeaProportion = $"1:{Convert.ToInt32(Model.TsPercent)}";
+    }
+
+    KeyValueDto<T>[] GetKVs<T>(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return new KeyValueDto<T>[0];
+        try { return PMS.School.Infrastructure.Common.JsonHelper.JSONToObject<KeyValueDto<T>[]>(json); }
+        catch { return new KeyValueDto<T>[0]; }
+    }
+
+    string fmtWebSite(string str)
+    {
+        if (string.IsNullOrEmpty(str)) return str;
+        if (str.StartsWith("http://", StringComparison.OrdinalIgnoreCase)) return str;
+        if (str.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) return str;
+        return "http://" + str;
+    }
+
+    string Url_gid(object gid)
+    {
+        var id = gid is Guid g ? g.ToString("n") : gid?.ToString().ToLower();
+        return id;
+    }
+
+    bool In<T>(T item, params T[] collection)
+    {
+        return collection.Contains(item);
+    }
+    var schoolType = schtype.GetDesc();
+}
+
+@section css{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/viewer.min.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/js/baseFun/gallery.css">
+
+    <style>
+        .span-title-CourseCharacteristic {
+            min-width: 80px;
+        }
+    </style>
+}
+
+@* 左侧内容 *@
+<div class="left-content">
+    @if (true)
+    {
+        <div class="school-message">
+            <h2 class="font-20 font-weight-bold">基本信息</h2>
+            <ul class="top-message d-flex font-12">
+                <li>
+                    <div class="title">学年总费用</div>
+                    @if (!SchUtils.Canshow2("学费", schtype))
+                    {
+                        <div class="not-data font-15">--</div>
+                    }
+                    else if (Model.Tuition == null)
+                    {
+                        <div class="not-data font-15">@NullData</div>
+                    }
+                    else
+                    {
+                        <div><span>@(Model.Tuition.Value / 10000.0)</span>万元/年</div>
+                    }
+                </li>
+                <li class="position-relative">
+                    <div class="title">学校总评</div>
+                    @if (ViewBag.Score == null)
+                    {
+                        @*<div class="font-15">- -</div>*@
+                        <span class="not-data font-15">暂无评分</span>
+                    }
+                    else
+                    {
+                        <div><span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(ViewBag.Score))</span></div>
+                    }
+                </li>
+            </ul>
+            <div class="tag d-flex font-12">
+                <span>@schoolType</span>
+                @if (schoolType == "双语小学" || schoolType == "双语初中" || schoolType == "双语高中")
+                {
+                    <span>国际化</span>
+                }
+                @*<span>国家级示范性小学</span>*@
+                @foreach (var item in Model.Tags)
+                {
+                    <span>@item</span>
+                }
+            </div>
+            <ul class="message-list d-flex flex-wrap font-15">
+                <li>
+                    <span class="title">官方网站：</span>
+                    @if (Model.WebSite == null)
+                    {
+                        <span>@(NullData)</span>
+                    }
+                    else
+                    {
+                        <a href="@fmtWebSite(Model.WebSite)" title="@fmtWebSite(Model.WebSite)" target="_blank" rel="nofollow">@fmtWebSite(Model.WebSite)</a>
+                    }
+                </li>
+                <li>
+                    <span class="title">走读寄宿：</span>
+                    @{
+                        var lodgingType = LodgingUtil.Reason(Model.Lodging, Model.Sdextern);
+                        var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                    }
+                    @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                    {
+                        <span>@lodgingDesc</span>
+                    }
+                </li>
+                <li class="school-address"><span class="title">学校地址：</span><span>@(Model.Address == null ? NullData : Model.Address)</span></li>
+                <li><span class="title">有无饭堂：</span><span>@(Model.Canteen == null ? NullData : Model.Canteen == true ? "有" : "无")</span></li>
+                <li><span class="title">咨询电话：</span><span>@(Model.Tel == null ? NullData : Model.Tel)</span></li>
+                <li><span class="title">学生人数：</span><span>@(Model.Studentcount == null ? NullData : $"{Model.Studentcount}人")</span></li>
+                @if (SchUtils.Canshow2("出国方向", schtype))
+                {
+                    <li>
+                        <span class="title">出国方向：</span>
+                        @if (!SchUtils.Canshow2("出国方向", schtype))
+                        {
+                            <span>--</span>
+                        }
+                        else
+                        {
+                            var kvs = GetKVs<string>(Model.Abroad);
+                            if (kvs.Length <= 0)
+                            {
+                                <span>@NullData</span>
+                            }
+                            else
+                            {
+                                var kvsList = kvs.Select(p => p.Key).ToList();
+                                if (kvsList.Any(k => k == "其他"))
+                                {
+                                    kvsList.Remove("其他");
+                                    kvsList.Add("其他");
+                                }
+                                <span>@(string.Join("、", kvsList))</span>
+                            }
+                        }
+                    </li>
+                }
+                <li><span class="title">师生比例：</span><span>@(ViewBag.TeaProportion)</span></li>
+                @if (SchUtils.Canshow2("学校特色课程或项目", schtype))
+                {
+                    <li>
+                        <span class="title">特色课程：</span>
+                        @if (!SchUtils.Canshow2("学校特色课程或项目", schtype))
+                        {
+                            <span>--</span>
+                        }
+                        else
+                        {
+                            var kvs = GetKVs<string>(Model.Characteristic);
+                            if (kvs.Length <= 0)
+                            {
+                                <span>@NullData</span>
+                            }
+                            else
+                            {
+                                <span>
+                                    @foreach (var kv in kvs)
+                                    {
+                                        <i class="font-12">@(kv.Key)</i>
+                                    }
+                                </span>
+                            }
+                        }
+                    </li>
+                }
+                @if (SchUtils.Canshow2("外教占比", schtype))
+                {
+                    <li>
+                        <span class="title">外教占比：</span><span>@(ViewBag.ForeignTea == null ? "暂未收录" : ViewBag.ForeignTea)</span>
+                    </li>
+                }
+                @if (SchUtils.Canshow2("学校认证", schtype))
+                {
+                    <li>
+                        <span class="title">学校认证：</span>
+                        @*<i class="font-12">国家级示范性小学</i>*@
+                        @if (!SchUtils.Canshow2("学校认证", schtype))
+                        {
+                            <span>--</span>
+                        }
+                        else
+                        {
+                            var kvs = GetKVs<string>(Model.Authentication);
+                            if (kvs.Length <= 0)
+                            {
+                                <span>@NullData</span>
+                            }
+                            else
+                            {
+                                <span>
+                                    @foreach (var kv in kvs)
+                                    {
+                                        <i class="font-12">@(kv.Key)</i>
+                                    }
+                                </span>
+                            }
+                        }
+                    </li>
+                }
+            </ul>
+
+            <div class="schedule d-flex">
+                @if (SchUtils.Canshow2("学校行事历", schtype))
+                {
+                    <div>
+                        <span class="title">学校行事历</span>
+                        @if (!SchUtils.Canshow2("学校行事历", schtype))
+                        {
+                            <div class="schedule-list not-data text-center">--</div>
+                        }
+                        else
+                        {
+                            var kvs = GetKVs<string>(Model.Calendar).OrderByDescending(k => k.Value).ToList();
+                            if (kvs.Count <= 0)
+                            {
+                                <div class="schedule-list not-data text-center">@NullData</div>
+                            }
+                            else
+                            {
+                                <text>
+                                    <ul class="schedule-list font-12">
+                                        @for (var i = 0; i < kvs.Count; i++)
+                                        {
+                                            <li class="d-flex @(Convert.ToDateTime(kvs[i].Value)>DateTime.Now ? "active" : "") justify-content-between">
+                                                <div class="date text-center">@(kvs[i].Value)</div>
+                                                <div class="schedule-content">@(kvs[i].Key)</div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </text>
+                            }
+                        }
+                    </div>
+                }
+                @if (SchUtils.Canshow2("开放日", schtype))
+                {
+                    <div>
+                        <span class="title">探校活动及开放日</span>
+                        @if (!SchUtils.Canshow2("开放日", schtype))
+                        {
+                            <div class="schedule-list not-data text-center">--</div>
+                        }
+                        else
+                        {
+                            var kvs = GetKVs<string>(Model.OpenHours).OrderByDescending(k => k.Value).ToList();
+                            if (kvs.Count <= 0)
+                            {
+                                <div class="schedule-list not-data text-center">@NullData</div>
+                            }
+                            else
+                            {
+                                <text>
+                                    <ul class="schedule-list font-12">
+                                        @for (var i = 0; i < kvs.Count; i++)
+                                        {
+                                            <li class="d-flex @(Convert.ToDateTime(kvs[i].Value)>DateTime.Now ? "active" : "") justify-content-between">
+                                                <div class="date text-center">@(kvs[i].Value)</div>
+                                                <div class="schedule-content">@(kvs[i].Key)</div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </text>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    @if (true)
+    {
+        <div class="text-content">
+            <h2 class="font-20 font-weight-bold">学校简介</h2>
+            @if (!string.IsNullOrEmpty(Model.Intro))
+            {
+                <p class="font-15">@(Html.Raw(Model.Intro.Replace("\r\n", "</br>").Replace("\n", "</br>")))</p>
+            }
+            else
+            {
+                <div class="not-data text-center font-14">@(NullData)</div>
+            }
+        </div>
+    }
+    @if (true)
+    {
+        <div class="text-content">
+            <h2 class="font-20 font-weight-bold">伙食情况</h2>
+            @if (!string.IsNullOrEmpty(Model.Meal))
+            {
+                <p id="e2meal" class="font-15">@Html.Raw(StrHelper.GetHtmlText(Model.Meal.Replace("</h2>", "</br>").Replace("<h2>", "</br>")))</p>
+            }
+            else
+            {
+                <div class="not-data text-center font-14">@(NullData)</div>
+            }
+        </div>
+    }
+    @if (true)
+    {
+        <text>
+            <div class="achievement">
+                <h2 class="font-20 font-weight-bold">升学成绩</h2>
+                @if (schtype.Type != (byte)SchoolType.Other && schtype.Type != (byte)SchoolType.SAR)
+                {
+                    //幼儿园
+                    @if (schtype.Grade == (byte)SchoolGrade.Kindergarten)
+                    {
+                        var achdata = ViewBag.AchData as IEnumerable<KindergartenAchievement>;
+                        if ((achdata?.Count() ?? -1) <= 0)
+                        {
+                            <div class="not-data text-center font-14">@(NullData)</div>
+                        }
+                        else
+                        {
+                            <text>
+                            <div class="link font-14">
+                                @foreach (var item in achdata)
+                                {
+                                    <a href="@(item.Link)" title="@(item.Link) >" class="d-block" nofollow>@(item.Link) &gt;</a>
+                                }
+                            </div>
+        </text>
+    }
+}
+else if (schtype.Grade == (byte)SchoolGrade.PrimarySchool)
+{
+    var achdata = ViewBag.AchData as IEnumerable<PrimarySchoolAchievement>;
+    if ((achdata?.Count() ?? -1) <= 0)
+    {
+        <div class="not-data text-center font-14">@(NullData)</div>
+    }
+    else
+    {
+        <text>
+            <div class="link font-14">
+                @foreach (var item in achdata)
+                {
+                    <a href="@(item.Link)" title="@(item.Link) >" class="d-block" nofollow>@(item.Link) &gt;</a>
+                }
+            </div>
+        </text>
+    }
+}
+else if (schtype.Grade == (byte)SchoolGrade.JuniorMiddleSchool)
+{
+    var ach = ViewBag.AchData == null ? new MiddleSchoolAchievement() : (MiddleSchoolAchievement)ViewBag.AchData;
+    <text>
+        <ul class="message-list d-flex flex-wrap font-15">
+            <li><span class="title">最高分：</span>@(!SchUtils.Canshow2("升学成绩(初中)-当年最高分", schtype) ? "--" : ach.Highest == null ? NullData : $"{ach.Highest}分")</li>
+            <li><span class="title">平均分：</span>@(!SchUtils.Canshow2("升学成绩(初中)-中考平均分", schtype) ? "--" : ach.Average == null ? NullData : $"{ach.Average}分")</li>
+            <li><span class="title">重点率：</span>@(!SchUtils.Canshow2("升学成绩(初中)-重点率", schtype) ? "--" : ach.Keyrate == null ? NullData : $"{ach.Keyrate}%")</li>
+            @*<li><span class="title">高优线录取比：</span>@(!SchUtils.Canshow2("升学成绩(初中)-高优线录取比例", schtype) ? "--" : ach.Ratio == null ? NullData : $"{ach.Ratio}%")</li>*@
+        </ul>
+        <div class="table-content">
+            <div class="title font-15">@((ViewBag.AchYear == null || ViewBag.AchYear == 0) ? "上" : ViewBag.AchYear)届学生毕业去向：</div>
+            @if ((Model.Achievement?.Count() ?? 0) > 0)
+            {
+                <div class="d-flex justify-content-between font-14">
+                    <div class="table-list">
+                        <div class="d-flex justify-content-between">
+                            <span>全部</span>
+                            @if (ViewBag.AchYear != null)
+                            {
+                                <a href="/school-@ViewBag.SchoolNo/extachievement/" title="更多毕业去向" class="font-12" rel="nofollow">更多毕业去向&gt;</a>
+                            }
+                        </div>
+                        <table width="348" class="text-center">
+                            <tbody>
+                                @for (int i = 0, len = Math.Min(3, Model.Achievement.Count); i < len; i++) //Model.Achievement.Count
+                                {
+                                    <tr>
+                                        <td>@(Model.Achievement[i].Value)</td>
+                                        <td>@(Model.Achievement[i].Message)人</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="not-data text-center font-14">@(NullData)</div>
+            }
+        </div>
+    </text>
+}
+else if (schtype.Grade == (byte)SchoolGrade.SeniorMiddleSchool)
+{
+    var ach = ViewBag.AchData == null ? new HighSchoolAchievement() : (HighSchoolAchievement)ViewBag.AchData;
+    <text>
+        @if (Model.Grade == (byte)SchoolGrade.SeniorMiddleSchool &&
+new byte[] { (byte)SchoolType.Public, (byte)SchoolType.Private }.Contains(schtype.Type))
+        {
+            <ul class="message-list d-flex flex-wrap font-15">
+                <li><span class="title">本科率：</span>@(!SchUtils.Canshow2("升学成绩(高中)-本科率", schtype) ? "--" : ach.Undergraduate == null ? NullData : $"{ach.Undergraduate}%")</li>
+                <li><span class="title">重本率：</span>@(!SchUtils.Canshow2("升学成绩(高中)-重本率", schtype) ? "--" : ach.Keyundergraduate == null ? NullData : $"{ach.Keyundergraduate}%")</li>
+                @*<li><span class="title">高优线录取人数：</span>@(!SchUtils.Canshow2("升学成绩(高中)-高优线录取人数", schtype) ? "--" : ach.Count == null ? NullData : $"{ach.Count}人")</li>*@
+            </ul>
+        }
+        <div class="table-content">
+            <div class="title font-15">@((ViewBag.AchYear == null || ViewBag.AchYear == 0) ? "上" : ViewBag.AchYear)届学生毕业去向：</div>
+            @if (schtype.Type == (byte)SchoolType.International)
+            {
+                <div class="d-flex justify-content-between font-14">
+                    <div class="table-list" style="width: 45%;">
+                        <div class="d-flex justify-content-between">
+                            <span>国际</span>
+                            @{ var iranks = ViewBag.iRanks as IEnumerable<KeyValueDto<Guid, string, double, int, int>>;}
+                            @if (iranks != null && iranks.Count() > 0)
+                            {
+                                <a href="/school-@ViewBag.SchoolNo/extachievement/?g=1" title="更多毕业去向" class="font-12" rel="nofollow">更多毕业去向&gt;</a>
+                            }
+                        </div>
+                        @{
+                            if (iranks != null && iranks.Count() > 0)
+                            {
+                                <text>
+                                @*<pre style="display:none;">@(Model.Achievement.ToJson())</pre>*@
+                                <table width="348" class="text-center">
+                                    <thead>
+                                        <tr><td colspan="2">@(iranks.ToList()[0].Other == 1 ? "QS" : iranks.ToList()[0].Other == 2 ? "US News" : "Times")榜</td></tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ var irankList = iranks.ToList();}
+                                        @for (int i = 0, len = Math.Min(3, irankList.Count()); i < len; i++)
+                                        {
+                                            <tr>
+                                                <td>@(irankList[i].Value)</td>
+                                                <td>@((int)irankList[i].Message)人</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+    </text>
+}
+else
+{
+    <div class="not-data text-center font-14">@(NullData)</div>
+}
+                        }
+                    </div>
+                    <div class="table-list" style="width: 43.5%;">
+                        <div class="d-flex justify-content-between">
+                            <span>国内</span>
+                            @{ var lranks = ViewBag.LRanks as IEnumerable<KeyValueDto<Guid, string, double, int, int>>;}
+                            @if (lranks != null && lranks.Count() > 0)
+                            {
+                                <a href="/school-@ViewBag.SchoolNo/extachievement/?g=2" title="更多毕业去向" class="font-12" rel="nofollow">更多毕业去向&gt;</a>
+                            }
+
+                        </div>
+                        @{
+
+                            if (lranks != null && lranks.Count() > 0)
+                            {
+                                <text>
+                                    <table width="348" class="text-center">
+                                        <thead>
+                                            <tr><td colspan="2">全部</td></tr>
+                                        </thead>
+                                        <tbody>
+                                            @{ var lrankList = lranks.ToList();}
+                                            @for (int i = 0, len = Math.Min(3, lrankList.Count()); i < len; i++)
+                                            {
+                                                <tr>
+                                                    <td>@(lrankList[i].Value)</td>
+                                                    <td>@(lrankList[i].Message)人</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </text>
+                            }
+                            else
+                            {
+                                <div class="not-data text-center font-14">@(NullData)</div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else //if (schtype.Type == (byte)SchoolType.Public || schtype.Type == (byte)SchoolType.Private || schtype.Type == (byte)SchoolType.ForeignNationality)
+            {
+                @if ((Model.Achievement?.Count() ?? 0) > 0)
+                {
+                    <div class="d-flex justify-content-between font-14">
+                        <div class="table-list" style="width: 50%;">
+                            <div class="d-flex justify-content-between">
+                                <span>全部</span>
+
+                                <a href="/school-@ViewBag.SchoolNo/extachievement/" title="更多毕业去向" class="font-12" rel="nofollow">更多毕业去向&gt;</a>
+                            </div>
+                            <table width="348" class="text-center">
+                                <tbody>
+                                    @for (int i = 0, len = Math.Min(3, Model.Achievement.Count); i < len; i++)
+                                    {
+                                        <tr>
+                                            <td>@(Model.Achievement[i].Value)</td>
+                                            <td>@(Model.Achievement[i].Message)人</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="not-data text-center font-14">@(NullData)</div>
+                }
+            }
+        </div>
+        </text>
+    }
+    else
+    {
+        <div class="not-data text-center font-14">@(NullData)</div>
+    }
+                }
+                else
+                {
+                    <div class="not-data text-center font-14">@(NullData)</div>
+                }
+            </div>
+            </text>
+        }
+    @if (ViewBag.Ranks is List<PMS.OperationPlateform.Domain.DTOs.H5SchoolRankInfoDto> ranks)
+    {
+        <div class="rank position-relative">
+            <h2 class="font-20 font-weight-bold">学校排行</h2>
+            <a href="@Url.Action("list", "schoolrank", new {schoolId = Model.ExtId})" title="更多榜单" class="more-rank position-absolute font-12">更多榜单&gt;</a>
+            @if (ranks.Count > 0)
+            {
+                <ul class="rank-list font-18">
+                    @foreach (var item in ranks)
+                    {
+                        <li class="position-relative">
+                            <a href="@Url.Action("detail","schoolrank",new { base32No = item.Base32No})" title="@item.Title" class="d-flex">
+                                <div class="img-box"><img src="@(item.Cover)" alt="@item.Title"></div>
+                                <div class="rank-name">@item.Title</div>
+                                <span class="font-14 font-weight-bold position-absolute">第@(item.Ranking)名</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                @*<div class="schedule-list not-data text-center">暂无排名</div>*@
+                <div class="not-data text-center font-14">暂无排名</div>
+            }
+        </div>
+    }
+    @if (true)
+    {
+        var courses = GetKVs<string>(Model.Courses);
+        var courseAuthentications = GetKVs<string>(Model.CourseAuthentication);
+        var canshow_e4Courses = SchUtils.Canshow2("课程设置", schtype);
+        var canshow_e4Authentication = SchUtils.Canshow2("课程认证", schtype);
+        var canshow_e4Characteristic = SchUtils.Canshow2("课程特色", schtype);
+        <text>
+            @if (canshow_e4Courses || canshow_e4Authentication || canshow_e4Characteristic)
+            {
+                <div class="basic-message font-15">
+                    <h2 class="font-20 font-weight-bold">课程体系</h2>
+                    @if (canshow_e4Courses || canshow_e4Authentication)
+                    {
+                        <div class="d-flex top-line">
+                            @if (canshow_e4Courses)
+                            {
+                                <div class="d-flex ">
+                                    <span class="title span-title-CourseCharacteristic">课程设置：</span>
+                                    @if (!canshow_e4Courses)
+                                    {
+                                        <span>--</span>
+                                    }
+                                    else if (courses.Length <= 0)
+                                    {
+                                        <span>@NullData</span>
+                                    }
+                                    else
+                                    {
+                                        <ul class="font-12 d-flex flex-wrap">
+                                            @foreach (var kv in courses)
+                                            {
+                                                <li>@(kv.Key)</li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                            @if (canshow_e4Authentication)
+                            {
+                                <div class="d-flex">
+                                    <span class="title span-title-CourseCharacteristic">课程认证：</span>
+                                    @if (!canshow_e4Authentication)
+                                    {
+                                        <span>--</span>
+                                    }
+                                    else if (courseAuthentications.Length <= 0)
+                                    {
+                                        <span>@NullData</span>
+                                    }
+                                    else
+                                    {
+                                        <ul class="font-12 d-flex flex-wrap">
+                                            @foreach (var kv in courseAuthentications)
+                                            {
+                                                <li>@(kv.Key)</li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if (canshow_e4Characteristic)
+                    {
+                        <div class="d-flex course-intro-line">
+                            <span class="title span-title-CourseCharacteristic">课程简介：</span>
+                            <div id="e4Characteristic">@Html.Raw(!canshow_e4Characteristic ? "--" : string.IsNullOrEmpty(Model.CourseCharacteristic) ? NullData : StrHelper.GetHtmlText(Model.CourseCharacteristic))</div>
+                        </div>
+                    }
+                </div>
+            }
+        </text>
+    }
+    @if (true)
+    {
+        var otherfees = GetKVs<double>(Model.Otherfee)?.OrderByDescending(g => g.Year)?.GroupBy(g => g.Year).FirstOrDefault();
+        <text>
+            <div class="price">
+                <h2 class="font-20 font-weight-bold">收费标准</h2>
+                <ul class="d-flex flex-wrap">
+                    @if (SchUtils.Canshow2("申请费用", schtype))
+                    {
+                        <li><span class="title">申请费用：</span>@(!SchUtils.Canshow2("申请费用", schtype) ? "--" : Model.Applicationfee == null ? NullData : $"{Model.Applicationfee}元")</li>
+                    }
+                    <li><span class="title">学费：</span>@(!SchUtils.Canshow2("学费", schtype) ? (schtype.Type == (byte)SchoolType.Public && In((SchoolGrade)schtype.Grade, SchoolGrade.PrimarySchool, SchoolGrade.JuniorMiddleSchool) ? "义务教育免学费" : "--") : Model.Tuition == null ? NullData : Model.Tuition >= 10000 ? (Math.Round((decimal)(Model.Tuition / 10000), 2) + "万元/年") : (Model.Tuition.ToString() + "元/年"))</li>
+                    @if (!SchUtils.Canshow2("其它费用", schtype))
+                    {
+                        @*<li><span class="title">其它费用：</span>--</li>*@
+                    }
+                    else if (otherfees == null || otherfees.Count() <= 0)
+                    {
+                        <li><span class="title">其它费用：</span>@(NullData)</li>
+                    }
+                    else
+                    {
+                        @foreach (var kv in otherfees)
+                        {
+                            <li><span class="title">@(kv.Key)：</span>@(kv.Value)元</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </text>
+    }
+
+    @await Component.InvokeAsync("OtherSchoolExts", ViewBag.ExtId)
+    @await Component.InvokeAsync("RecommendSchool", ViewBag.ExtId)
+    @*导航栏*@
+    @{ await Html.RenderPartialAsync("QuickNavigation");}
+</div>
+@* 右侧内容 *@
+<div class="right-list">
+    <!-- 课程卡片广告 start -->
+    <div class="course-adv-wrapper"></div>
+    <!-- 课程卡片广告 end -->
+    <!-- 广告开始 -->
+    <div class="mkt-box" id="rightBanner">
+        <div class="swiper-container swiper-mkt swiperSchoolAd" data-id="@Model.ExtId" alt="24" data-autos="24" id="swiperSchoolAd-24" style="height: 205px;">
+            <div class="swiper-wrapper">
+            </div>
+            <div class="swiper-pagination mkt-pagination"></div>
+        </div>
+    </div>
+    <!-- 广告结束 -->
+    <!-- 这是预约探校表单部分的开始 -->
+    @await Component.InvokeAsync("SchoolActivity", ViewBag.ExtId)
+    <!-- 这是预约探校表单部分的结束 -->
+    <div class="hot-goods"></div>
+    <a href="/theme" title="主题商城" class="theme-icon-fixed"><img src="https://cos.sxkid.com/images/miniprogram/theme_pc/themeicon.png" title="主题商城" /></a>
+    @await Component.InvokeAsync("OrgLesson", ViewBag.Grade)
+    @await Component.InvokeAsync("PaidQA", ViewBag.Grade)
+    @await Component.InvokeAsync("RelatedSchool", ViewBag.ExtId)
+
+</div>
+
+@section script{
+    <script src="@(ViewBag.StaticFile)/js/viewer.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/baseFun/gallery.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailMessage.js"></script>
+    <script>
+        /// 用于移除ue文本style
+        function rmStyle(str) {
+            var m, str = str.replace(/(style|class)=\"[^\"]*\"/gi, '');
+            /**
+            while (m = /(?<h>\<(<end>\/*)(?<ele>h\d|em|b|strong|small|s)((?<nbsp>\s+)|>))/gi.exec(str)) {
+                var has_nbsp = !!m.groups['nbsp'], has_end = !!m.groups['end'];
+                var h = m.groups['h'], ele = m.groups['ele'];
+                // js regex named-groups 貌似只有谷歌核的浏览器才支持！！！
+             */
+            while (m = /(\<(\/*)(h\d|em|b|strong|small|s)((\s+)|>))/gi.exec(str)) {
+                var has_nbsp = !!m[5], has_end = !!m[2];
+                var h = m[1], ele = m[3];
+                str = (!m.index ? '' : str.substring(0, m.index))
+                    + (has_end ? '</' : '<') + (ele[0] == 'h' || ele[0] == 'H' ? 'p' : 'span') + (has_nbsp ? ' ' : '>')
+                    + str.substring(m.index + h.length);
+            }
+            return str;
+        }
+
+        $(function () {
+            var ids = ['#e2meal', '#e4Characteristic'];
+            for (var i = 0, len = ids.length; i < len; i++) {
+                var div = $(ids[i]);
+                //console.log(div.html());
+                //console.log(rmStyle(div.html()));
+                div.html() && div.html(rmStyle(div.html()));
+            }
+        });
+    </script>
+}

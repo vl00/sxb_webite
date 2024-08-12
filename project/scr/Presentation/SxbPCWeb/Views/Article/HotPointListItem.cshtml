@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>
+
+@foreach (var item in Model)
+{
+    switch (item.Layout)
+    {
+        case 0:
+            <li>
+                <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title" class="d-flex justify-content-between">
+                    <div class="not-img">
+                        <h2 class="font-15">@item.Title</h2>
+                        <div class="article-msg font-12">
+                            <span>@item.Time</span>
+                            <span>
+                                <img src="@ViewBag.StaticFile/imgs/detail/check-num.png" alt="观看数量">
+                                <span>@item.ViewCount</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            break;
+        default:
+            <li>
+                <a href="@Url.Action("detail","article",new { no = item.No})" title="@item.Title" class="d-flex justify-content-between">
+                    <div class="img-box">
+                        <img src="@item.Covers?.FirstOrDefault()?.Replace("file","cdn")" alt="@item.Title">
+                    </div>
+                    <div style="flex:1;">
+                        <h2 class="font-15">@item.Title</h2>
+                        <div class="article-msg font-12">
+                            <span>@item.Time</span>
+                            <span>
+                                <img src="@ViewBag.StaticFile/imgs/detail/check-num.png" alt="观看数量">
+                                <span>@item.ViewCount</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            break;
+    }
+}
+
+

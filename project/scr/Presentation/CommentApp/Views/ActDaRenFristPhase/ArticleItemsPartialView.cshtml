@@ -1,0 +1,44 @@
+﻿@{
+
+    var articles = ViewBag.Articles as IEnumerable<PMS.OperationPlateform.Domain.Entitys.article>;
+}
+
+@if (articles != null)
+{
+    foreach (var item in articles)
+    {
+        if (item.Covers.Any())
+        {
+            <li>
+                <a href="@Url.ArticleShortUrlFormat(item.No)" class="flex justify-content-between arti-content">
+                    <div>
+                        <p>@item.title</p>
+                        <span>@Html.ArticleListItemTimeFormat(item.time.GetValueOrDefault())</span>
+                    </div>
+                    <Environment names="development">
+                        <div class="arti-banner" style="background-image: url('@Url.ArticleCoverUrlFormat(item.Covers.FirstOrDefault(),false)');">
+                            <!--                        <img src="@ViewBag.StaticFile/imgs/talent-show/photo.jpg" alt="">-->
+                        </div>
+                    </Environment>
+                    <environment names="Staging,Production">
+                        <div class="arti-banner" style="background-image: url('@Url.ArticleCoverUrlFormat(item.Covers.FirstOrDefault(),true)');">
+                            <!--                        <img src="@ViewBag.StaticFile/imgs/talent-show/photo.jpg" alt="">-->
+                        </div>
+                    </environment>
+                </a>
+            </li>
+        }
+        else
+        {
+
+            <li>
+                <a href="@Url.ArticleShortUrlFormat(item.No)" class="flex justify-content-between arti-content">
+                    <div>
+                        <p class="not-img">@item.title</p>
+                        <span>@Html.ArticleListItemTimeFormat(item.time.GetValueOrDefault())</span>
+                    </div>
+                </a>
+            </li>
+        }
+    }
+}

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上学帮</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/follow-fwh/follow-fwh.css">
+</head>
+
+<body>
+
+    <div class="follow_fwh">
+        <img class="bg" src="@ViewBag.StaticFile/imgs/follow-fwh/bg.jpg" />
+        <div class="follow_fwh_content">
+            <span></span>
+            <div id="qrcode"></div>
+            <p>长按识别</p>
+        </div>
+    </div>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/qrcode.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script>
+        function queryString(keyword, query) {
+            query = query || location.search;
+            var reg = new RegExp('(^|\\?|&)(' + keyword + ')=([^&]*)', "im");
+            var res = query.match(reg);
+            return res ? res[res.length - 1] : '';
+        }
+        var url = decodeURIComponent(queryString('url'));
+        var title = decodeURIComponent(queryString('title'));
+
+        if (!title) {
+            title = '为了能更好提醒您收到的提问进度<br>请使用微信扫码关注 "上学帮服务号"'
+        }
+        title.replace("<script>", "");
+
+        console.log(url)
+
+        $("#qrcode").html('<img alt="扫码" src="' + url +'" />')
+        $(".follow_fwh_content span").html(title)
+        @*var qrcode = new QRCode("qrcode", {
+            text: "url",
+            correctLevel: QRCode.CorrectLevel.H
+        });*@
+        //console.log(qrcode, '--qrcode')
+    </script>
+</body>
+
+</html>

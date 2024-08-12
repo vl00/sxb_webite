@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>二维码跳转页面</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pc-skip.css">
+    @*<script type="text/javascript" src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>*@
+    <script type="text/javascript" src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/jquery.qrcode.min.js"></script>
+</head>
+<body>
+   @*<div style="text-align: center;padding-top:150px">
+        <div style="line-height:50px">
+            请使用手机扫码继续浏览
+        </div>
+        <div id="qrcode"></div>
+    </div>*@
+    <div class="skip-bg-box">
+        <div class="skip-mask">
+            <div class="index-btn">
+                <a href="/">前往上学帮首页</a>
+            </div>
+            <div class="skip-box">
+                <div class="qr-code"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function queryString(keyword, query) {
+            query = query || location.search;
+            var reg = new RegExp('(^|\\?|&)(' + keyword + ')=([^&]*)', "im");
+            var res = query.match(reg);
+            return res ? res[res.length - 1] : '';
+        }
+        var url = decodeURIComponent(queryString('url'));
+        console.log(url)
+        //jQuery('#qrcode').qrcode(url);
+        jQuery('.qr-code').qrcode({
+            text: url,
+            width: 166,
+            height:166
+        });
+    </script>
+</body>
+

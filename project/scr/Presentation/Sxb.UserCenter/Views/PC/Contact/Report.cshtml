@@ -1,0 +1,192 @@
+﻿@model PMS.UserManage.Application.ModelDto.ModelVo.Data
+@{
+    ViewData["Title"] = "举报";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/complaint.css" />
+}
+
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">举报</span>
+    <span></span>
+</header>
+<section class="mt">
+    <ul class="content-list">
+        @*文章*@
+        @if (ViewBag.Type == 0)
+        {
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">标题夸张</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">低俗色情</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">错别字多</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">旧闻重复</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">广告软文</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">内容不实</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+        }
+        else
+        {
+            @*评论/回复*@
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">淫秽色情</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">违法信息</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">营销广告</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+            <li class="flex justify-content-between">
+                <div><span class="reported">已举报</span><span class="reason">恶意攻击谩骂</span></div>
+                <a class="revoke">撤销</a>
+            </li>
+        }
+    </ul>
+    <ul class="other-select">
+        @*文章*@
+        @if (ViewBag.Type == 0)
+        {
+            <li data-type="plagiarize" class="reason">内容涉嫌抄袭<i class="arrow"></i></li>
+            <li class="reason">内容涉嫌侵犯名誉/商誉/肖像/隐私权<i class="arrow"></i></li>
+        }
+        <li class="reason">其它问题<i class="arrow"></i></li>
+    </ul>
+</section>
+<section class="other-content mt" style="display: none;">
+    <div class="other-content-list">
+        <div class="part-2">
+            @if (Model != null)
+            {
+                <div class="target flex">
+                    <div class="article-msg">
+                        <h5 class="article-title">@Model.title</h5>
+                        <div class="bottom-msg">
+                            <span>@Model.time</span>
+                            <span class="check-num"><i class="icon"></i>@Model.viewCount</span>
+                        </div>
+                    </div>
+                    @if (Model.covers.Length > 0)
+                    {
+                        <div class="img-box"><img src="@Model.covers[0]" alt="@Model.title"></div>
+                    }
+
+                </div>
+            }
+            <h5 class="title"><span>*</span>原创链接</h5>
+            <div class="link"><input id="evidenceURL" type="text" placeholder="输入对应原创内容链接"></div>
+        </div>
+        <div class="part-1">
+            <h5 class="title"><span>*</span>投诉描述</h5>
+            <div class="textarea">
+                <textarea id="description" cols="30" rows="7" placeholder="简单说明你遇到的问题" maxlength="300"></textarea>
+                <div class="text-num">
+                    <span class="now-length">0</span> / <span class="max-length">300</span>
+                </div>
+            </div>
+            <h5 class="title"><span>*</span>证明材料</h5>
+            <div class="upload-img">
+                <p class="upload-tips">请将您认为被抄袭的内容资料以照片方式上传</p>
+                <ul id="img-list" class="img-list flex">
+                    <li class="upload-btn text-center">
+                        <p><i class="icon"></i></p>
+                        <p>上传照片</p>
+                        <input type="file" name="image" accept="image/*">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<p class="tips">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+<div class="submit-btn text-center">
+    <a id="submit">提交</a>
+</div>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/complaint-content.js"></script>
+    <script type="text/javascript">
+        var or = '';
+        $('.other-select li').click(function () {
+            or = $(this).text();
+        });
+        $('.header').on('click','.arrow-open',function () {
+            or = '';
+            $('#description').val('');
+            $('#evidenceURL').val('');
+            $('#img-list>li').not('.upload-btn').remove();
+        });
+        $('#submit').click(function () {
+            var reason = [];
+            if (or != '') {
+                if ($('#description').val() == '') {
+                    $.prompt('请输入举报描述');
+                    return;
+                }
+                if (or.Contains('涉嫌抄袭') && $('#evidenceURL').val()=='') {
+                    $.prompt('请输入原创链接');
+                    return;
+                }
+                reason.push(or);
+            }
+            $('.content-list .active').each(function () {
+                reason.push($(this).find('.reason').text());
+            });
+            if (reason.length == 0) {
+                $.prompt('请选择举报原因');
+                return;
+            }
+            $.loading();
+            var formData = new FormData();
+            $('#img-list input:file').each(function () {
+                formData.append('images', $(this).get(0).files[0]);
+            });
+            formData.append('id', '@ViewBag.DataID');
+            formData.append('type', '@ViewBag.Type');
+            formData.append('reason', reason.join(';'));
+            formData.append('description', $('#description').val());
+            formData.append('evidenceURL', $('#evidenceURL').val());
+            $.ajax({
+                url: '@Url.Action("ReportSubmit")',
+                type:'post',
+                data: formData,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (json) {
+                    if (json.status == 0) {
+                        $.prompt('提交成功');
+                        $('.prompt-cancel').click(function () {
+                            $('.header .arrow').removeClass('arrow-open').click();
+                        });
+                    } else {
+                        $.prompt(json.errorDescription);
+                    }
+                },
+                complete: function () {
+                    $.loading('remove');
+                }
+            })
+        });
+    </script>
+}

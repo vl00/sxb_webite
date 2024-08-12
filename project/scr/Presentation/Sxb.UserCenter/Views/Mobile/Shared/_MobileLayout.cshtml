@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/common.css" />
+    <script type="text/javascript">
+        var designWidth = 750;
+        if (window.innerWidth < designWidth) {
+            document.getElementsByTagName('html').item(0).style.fontSize = parseInt(window.innerWidth / designWidth * 100, 10) + 'px';
+        }
+    </script>
+    @RenderSection("css", false)
+</head>
+<body class="@ViewBag.BodyClass">
+    @RenderBody()
+    <script src="@ViewBag.FileHost/js/lib/jquery.js"></script>
+    <script src="@ViewBag.FileHost_M/js/prompt.js"></script>
+    <script src="@ViewBag.FileHost_M/js/loading.js"></script>
+    <script src="@ViewBag.FileHost_M/js/layout-common.js"></script>
+    @RenderSection("js", false)
+</body>
+</html>

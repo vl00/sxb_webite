@@ -1,0 +1,7 @@
+﻿@model Sxb.PCWeb.ViewModels.School.SchoolQuestionCardViewModel;
+<li>
+    <a href="/question/school-@Model.ShortSchoolNo/" class="d-flex justify-content-between">
+        <h3 class="font-15"><i class="num">@ViewBag.Level</i>@Model.SchoolName</h3>
+        <div class="comment-num font-12">@(Model.QuestionTotal)条问答</div>
+    </a>
+</li>

@@ -1,0 +1,394 @@
+﻿@{
+    ViewData["Title"] = "幼儿园,小学,初中,高中，国际民办公办学校家长评价_怎么样-上学帮";
+    ViewData["keywords"] = "幼儿园评价,小学评价,初中评价,高中评价,国际民办公办学校评价";
+    ViewData["description"] = "上学帮给广大学生家长提供幼儿园,小学,初中,高中,国际民办公办学校提供真实评价，帮助家长为小孩挑选优质的平台";
+    ViewBag.ShareTimeLineTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareDesc = ViewBag.School.SchoolName;
+    //ViewBag.ShareLink = "/SchoolComment/Index?SchoolId=" + ViewBag.SchoolId.SchoolSectionId;
+
+    Layout = "~/Views/Layout/_layout.cshtml";
+}
+@using Sxb.Web.Common;
+
+
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-comment.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/viewer.min.css" />
+    <style>
+        .header .btn-list .header-icon.share1 {
+            margin-left: .3rem;
+            background-position: -.48rem .02rem;
+        }
+
+        .hot-comment .title, .new-comment .title, .reply .title h5, .all-comment .title h5 {
+            font-size: .38rem;
+            border-bottom: .01rem solid rgb(235, 235, 235);
+            padding-bottom: .24rem;
+            padding-top: .28rem;
+        }
+    </style>
+}
+<header class="header flex justify-content-between">
+    @*<a href="/CommentAndQustion/Index" class="arrow"></a>*@
+    <a class="arrow"></a>
+    <span class="header-title">学校点评</span>
+    <span></span>
+    <span class="btn-list flex">
+        <a style="display:none;" class="header-icon @(ViewBag.isCollected ? "collection" : "")"></a>
+        <a href="/Search/Index?Channel=1" class="header-icon search"></a>
+        @{
+            string schoolName = ViewBag.School.SchoolName;
+            schoolName = schoolName.Replace(" ", "");
+
+        }
+        <a class="header-icon share  checkLogin" data-title="@schoolName" data-content="@schoolName" data-url="@(ViewBag.ShareLink)" data-logo="@(ViewBag.ShareImgLink)"></a>
+        @*<a href="/Wechat?type=1&SchoolId=@ViewBag.SchoolId.Id" class="header-icon share"></a>*@
+    </span>
+</header>
+<section class="mt">
+    <a href="@Url.Action("Detail", "School",new { extId = ViewBag.SchoolId.SchoolSectionId, sid = ViewBag.School.SchoolId})">
+        <div class="school-msg flex" data-SchoolId="@ViewBag.SchoolId.SchoolSectionId" data-School="@ViewBag.School.SchoolId">
+            <div>
+                <div class="school-name">
+                    <h5>@ViewBag.School.SchoolName</h5>
+                </div>
+                <ul class="tag flex">
+                    @if (ViewBag.School.SchoolType == 3)
+                    {
+                        <li>国际</li>
+                    }
+                    else if (ViewBag.School.SchoolType == 2)
+                    {
+                        <li>民办</li>
+                    }
+                    else if (ViewBag.School.SchoolType == 1)
+                    {
+                        <li>公办</li>
+                    }
+
+
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.School.LodgingReason))
+                    {
+                        <li>@ViewBag.School.LodgingReason</li>
+                    }
+
+                    @if (ViewBag.School.IsAuth)
+                    {
+                        <li class="bcg-none"><i class="icon"></i></li>
+                    }
+                </ul>
+            </div>
+            <div class="school-grade text-center">
+                <div class="score">@ViewBag.School.StartTotal<span>星</span></div>
+                <ul class="star flex justify-content-between">
+
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (ViewBag.School.StartTotal >= i)
+                        {
+                            <li class="score-star"><i class="icon"></i></li>
+                        }
+                        else
+                        {
+                            <li><i class="icon"></i></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </a>
+
+    <div style="display:@(ViewBag.CommentTotal[0].Total>0?"block":"none");font-size: 0;">
+        <!-- 评论分类 -->
+        <ul class="comment-class flex text-center" style="height:@(ViewBag.SelectedTab != 1 ? "auto" : "");">
+            @{
+                int SelectedTab = ViewBag.SelectedTab;
+            }
+
+            @foreach (var item in ViewBag.CommentTotal)
+            {
+                if (item.SchoolSectionId != default(Guid))
+                {
+                    <li data-query="@(item.TotalTypeNumber)" data-SchoolSectionId="@item.SchoolSectionId" class="@(SelectedTab==item.TotalTypeNumber?"active":"")">@item.Name@("(" + item.Total + ")")</li>
+                }
+                else
+                {
+                    <li data-query="@(item.TotalTypeNumber)" class="@(SelectedTab==item.TotalTypeNumber?"active":"")">@item.TotalType@("(" + item.Total + ")")</li>
+                }
+            }
+            @*
+                <li data-query="1" class="@(SelectedTab==1?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=1">全部(@ViewBag.CommentTotal.Total)</a></li>
+                <li data-query="2" class="@(SelectedTab==2?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=2">精华(@ViewBag.CommentTotal.SelectedTotal)</a></li>
+                <li data-query="3" class="@(SelectedTab==3?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=3">过来人(@ViewBag.CommentTotal.ComeHereTotal)</a></li>
+                <li data-query="4" class="@(SelectedTab==4?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=4">学校辟谣(@ViewBag.CommentTotal.RefutingTotal)</a></li>
+                <li data-query="5" class="@(SelectedTab==5?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=5">好评(@ViewBag.CommentTotal.GoodTotal)</a></li>
+                <li data-query="6" class="@(SelectedTab==6?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=6">差评(@ViewBag.CommentTotal.BadTotal)</a></li>
+                <li data-query="7" class="@(SelectedTab==7?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=7">有图(@ViewBag.CommentTotal.ImageTotal)</a></li>
+                <li data-query="8" class="@(SelectedTab==8?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=8">高中部(@ViewBag.CommentTotal.HighSchoolTotal)</a></li>
+                <li data-query="9" class="@(SelectedTab==9?"active":"") "><a href="/SchoolComment/Index?SchoolId=@ViewBag.School.Id&query=9">国际部(@ViewBag.CommentTotal.InternationalTotal)</a></li>
+            *@
+        </ul>
+        @*<div class="text-center" style="padding: 2pt 0 10pt;"><i class="arrow @(ViewBag.SelectedTab != 1 ? "show":"")" style="transform:@(ViewBag.SelectedTab != 1 ? "rotate(-45deg)":"")"></i></div>*@
+        <div class="text-center"><i id="more" class="arrow @(ViewBag.SelectedTab != 1 ? "show":"")"></i></div>
+    </div>
+</section>
+<section class="banner" style="display: @(ViewBag.SelectedTab!=1?"none":"block");">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="test" style="width: 100%; height: 100px; background: rgba(0,0,0,.5)">
+                    <img src="/imgs/comment-and-qa/banner.jpg" />
+                </div>
+            </div>
+            @*<div class="swiper-slide">
+                    <div class="test" style="width: 100%; height: 100px; background: rgba(100,100,100,.5)"></div>
+                </div>*@
+        </div>
+        <div class="swiper-pagination point"></div>
+    </div>
+</section>
+<section class="content bcg-249">
+    @if (ViewBag.SelectedTab == 1)
+    {
+        <!-- 热门评论 -->
+        <section class="hot-comment" style="display:@(ViewBag.CommentTotal[0].Total>0?"block":"none")">
+            <h5 class="title">热门点评</h5>
+            <ul class="comment-list">
+                @foreach (var selectedComment in ViewBag.CommentExhibition)
+                {
+                    <li>
+                        <!-- 校方 -->
+                        <a href="/SchoolComment/CommentDetail?CommentId=@selectedComment.Id">
+                            <div class="list-header flex justify-content-between">
+                                <div class="user-msg flex">
+                                    <div class="head">
+                                        <div><img src="@selectedComment.UserHeadImage" alt=""></div>
+                                        @if (selectedComment.UserInfo.IsTalent)
+                                        {
+                                            if (selectedComment.UserInfo.Role.Contains(1))
+                                            {
+                                            <i class="icon"></i>
+                                            }
+                                            else if (selectedComment.UserInfo.Role.Contains(2))
+                                            {
+                                            <i class="icon talent"></i>
+                                            }
+                                         }
+                                         else if (selectedComment.UserInfo.IsSchool)
+                                         {
+                                            <i class="icon school"></i>
+                                         }
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <span class="name">
+                                                @(selectedComment.UserName)
+                                                @if (selectedComment.Score.IsAttend)
+                                                {
+                                                    <i class="identity">过来人</i>
+                                                }
+                                            </span>
+                                        </div>
+                                        <ul class="star flex">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (selectedComment.StartTotal >= i)
+                                                {
+                                                    <li class="score-star"><i class="icon"></i></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><i class="icon"></i></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="other flex">
+                                    @if (selectedComment.IsRumorRefuting)
+                                    {
+                                        <i class="icon"></i>
+                                    }
+                                    <div class="other-list-btn text-center" data-id="@selectedComment.Id" data-type="1">
+                                        <div class="flex">
+                                            <i class="round"></i>
+                                            <i class="round"></i>
+                                            <i class="round"></i>
+                                        </div>
+                                        @if (selectedComment.IsSelected)
+                                        {
+                                            <span>精华</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="content" data-commentId="@selectedComment.Id">@selectedComment?.Content</p>
+                            @if (selectedComment.Images.Count > 0)
+                            {
+                                <div class="img-list">
+                                    <ul class="flex justify-content-between">
+                                        @for (int i = 0; i < selectedComment.Images.Count; i++)
+                                        {
+                                            if (i >= 3)
+                                            {
+                                                break;
+                                            }
+                                            <li><img src="@selectedComment.Images[i]" alt=""></li>
+                                        }
+
+                                        @if (selectedComment.Images.Count < 3)
+                                        {
+                                            <li></li>
+                                        }
+                                    </ul>
+                                    @if (selectedComment.Images.Count > 3)
+                                    {
+                                        <span class="text-center"><i class="icon"></i>@selectedComment.Images?.Count</span>
+                                    }
+                                </div>
+                            }
+                        </a>
+                        <div class="comment-msg flex justify-content-between">
+                            <div>
+                                <span class="department">@(selectedComment.School.SchoolBranch)</span>
+
+                                <span class="time">@selectedComment.CreateTime</span>
+                            </div>
+                            <div class="ctr">
+                                <span class="comment"><i class="icon"></i>@selectedComment.ReplyCount</span>
+                                @if (selectedComment.IsLike)
+                                {
+                                    <span class="like click-like">
+                                        <i class="icon"></i>
+                                        <span>@selectedComment.LikeCount</span>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="like">
+                                        <i class="icon"></i>
+                                        <span>@selectedComment.LikeCount</span>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+
+    <!-- 最新评论 -->
+
+    @if (ViewBag.CommentTotal[0].Total > 0)
+    {
+        <section class="new-comment">
+            <h5 class="title">最新点评</h5>
+            <ul class="comment-list"></ul>
+        </section>
+    }
+
+    <!-- 如果没有评论 则显示出来 -->
+    <section id="CommentRepley" class="all-comment" style="display:none;">
+        <div class="title">
+            <h5>回复<span class="orderTitle">智能排序<i></i></span></h5>
+            <ul class="sort">
+                <li class="active" data-order="1"><span>智能排序</span><i></i></li>
+                <li data-order="2"><span>时间排序</span><i></i></li>
+            </ul>
+            <ul class="comment-list"></ul>
+            @*<div style="display:none;" class="load-more text-center">正在努力加载</div>
+                <div style="display:none;" class="not-more-data">没有更多数据</div>*@
+        </div>
+    </section>
+
+    <div class="load-more text-center">正在努力加载</div>
+    <div style="display:none;" class="not-more-data">没有更多数据</div>
+
+    <section class="all-comment noData" style="display:@(ViewBag.CommentExhibition != null ? "none":"block")">
+        <div class="title">
+            <h5>全部评论</h5>
+        </div>
+        <div class="not-comment  text-center">
+            <div><i class="icon"></i></div>
+            <p>暂无评论，快来抢沙发</p>
+            <a style="display:none" href="/Wechat?type=1&SchoolId=@ViewBag.SchoolId.SchoolSectionId" class="invite"><span><i class="arrow"></i></span>邀请大家来点评</a>
+        </div>
+    </section>
+</section>
+
+<!-- 点击分类后显示的评价内容 -->
+@*<section class="reply">
+        <div class="title">
+            <h5>回复<span>智能排序<i></i></span></h5>
+            <ul class="sort">
+                <li class="active"><span>家长</span><i></i></li>
+                <li><span>选校达人</span><i></i></li>
+                <li><span>校方代表</span><i></i></li>
+            </ul>
+        </div>
+        <ul class="comment-list"></ul>
+    </section>*@
+
+<section class="bottom-btn text-center flex justify-content-around">
+    <a href="/Wechat?type=1&SchoolId=@ViewBag.SchoolId.SchoolSectionId">邀请评论</a>
+    <a href="/CommentWriter/CommitCommentView?currentId=@ViewBag.SchoolId.SchoolSectionId&SchoolId=@ViewBag.SchoolId.SchoolId">写评论</a>
+</section>
+
+@*<section class="botton-reply-input">
+        <input type="text" placeholder="回复name:" />
+    </section>*@
+
+<section class="popup-box">
+    <ul class="text-center">
+        <li class="reply-btn"><a>回复</a></li>
+        <li class="complaint"><a href="/Report">举报</a></li>
+        <li class="cancel"><a>取消</a></li>
+    </ul>
+</section>
+<section class="reply-box">
+    <div class="flex justify-content-between btn-list">
+        <span class="cancel">取消</span>
+        <div>
+            @if (ViewBag.isSchoolRole)
+            {
+                <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+            }
+            else
+            {
+                <span id="Student" class="btn"><i class="round"></i>在读</span>
+            }
+            <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+            <span class="submit-reply">发布</span>
+        </div>
+    </div>
+    <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+</section>
+<div class="curtain"></div>
+<div class="WarningBox">
+    <i class="warning-i"></i>
+    <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+    <button class="btn">确认</button>
+</div>
+
+@section script
+{
+    <script type="text/javascript">
+        $(function () {
+            //将该地址写入点评出口位置
+            localStorage.setItem("CommentEntrance", document.location.href)
+        })
+    </script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/collection.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/school-comment.js"></script>
+    <script src="@ViewBag.StaticFile/js/viewer.min.js"></script>
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js?v=0.05325821"></script>
+}

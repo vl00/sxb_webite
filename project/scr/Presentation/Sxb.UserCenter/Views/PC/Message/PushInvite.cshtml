@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewData["Title"] = "邀请推送";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/push-record-list.css" />
+}
+
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">邀请推送</span>
+    <span class="btn">编辑</span>
+</header>
+
+@if (false)
+{
+    <section class="push-content">
+        <ul class="invite-list">
+            <li>
+                <a href="../comment-and-qa/qa-detail.html" class="flex">
+                    <div class="head-box">
+                        <div><img src="../../imgs/head-1.jpg" alt=""></div>
+                    </div>
+                    <div>
+                        <div class="user-msg flex justify-content-between">
+                            <div>
+                                <span class="user-name">小明</span>
+                                <span class="invite">邀请你回答：</span>
+                            </div>
+                            <span class="time-ago">6小时前</span>
+                        </div>
+                        <p class="content">学校的师资力量在全市能排到第几呀？</p>
+                        <div class="school">
+                            <h5 class="school-name">广东实验中学 - 国际部<span class="total-qa">共100个问题</span></h5>
+                            <ul class="tag-list flex">
+                                <li>国际</li>
+                                <li>寄宿</li>
+                                <li><i class="comment-icon"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="invite-comment">
+                <a href="../comment-and-qa/qa-detail.html" class="flex">
+                    <div class="head-box">
+                        <div><img src="../../imgs/head-1.jpg" alt=""></div>
+                    </div>
+                    <div>
+                        <div class="user-msg flex justify-content-between">
+                            <div>
+                                <span class="user-name">小明</span>
+                                <span class="invite">邀请你点评：</span>
+                            </div>
+                            <span class="time-ago">6小时前</span>
+                        </div>
+                        <div class="school flex justify-content-between">
+                            <div>
+                                <h5 class="school-name">广东实验中学 - 国际部</h5>
+                                <ul class="tag-list flex">
+                                    <li>国际</li>
+                                    <li>寄宿</li>
+                                    <li class="invite-icon"><i></i></li>
+                                </ul>
+                            </div>
+                            <div class="school-grade text-center">
+                                <div class="score">97<span>分</span></div>
+                                <ul class="star flex justify-content-between">
+                                    <li class="score-star"><i class="comment-icon"></i></li>
+                                    <li class="score-star"><i class="comment-icon"></i></li>
+                                    <li class="score-star"><i class="comment-icon"></i></li>
+                                    <li class="score-star"><i class="comment-icon"></i></li>
+                                    <li><i class="comment-icon"></i></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="bottom-btn text-center">
+        <ul class="flex">
+            <li class="all-select">一键清空</li>
+            <li class="delete">删除</li>
+        </ul>
+    </section>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}
+
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/push-record.js"></script>
+}

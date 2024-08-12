@@ -1,0 +1,357 @@
+﻿@using Sxb.Web.Models.Question;
+@using PMS.UserManage.Domain.Common;
+@{
+    ViewData["Title"] = $"{ViewBag.School.SchoolName}学校答疑_常见问题-上学帮";
+    ViewData["keywords"] = $"{ViewBag.School.SchoolName}学校答疑,{ViewBag.School.SchoolName}常见问题";
+    ViewData["description"] = "上学帮提供幼儿园,小学,初中,高中，国际民办公办学校常见问题解答资源，让家长更全面了解学校，给孩子选择一个好的学校。";
+
+    ViewBag.ShareTimeLineTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareTitle = ViewBag.School.SchoolName;
+    ViewBag.ShareDesc = ViewBag.School.SchoolName;
+    //ViewBag.ShareLink = "/Question/Index?SchoolId=" + ViewBag.School.Id;
+
+    Layout = "~/Views/Layout/_layout.cshtml";
+}
+
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.min.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-comment.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-list.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-qa.css">
+    <style>
+        .header .btn-list .header-icon.share1 {
+            margin-left: .3rem;
+            background-position: -.48rem .02rem;
+        }
+
+        /*.hot-comment .title, .new-comment .title, .reply .title h5, .all-comment .title h5 {
+            border-bottom: none;
+            padding-bottom: 0rem;
+            padding-top: .32rem;
+        }*/
+
+        .all-qa > .title > h5 {
+            font-size: .38rem;
+            border-bottom: .01rem solid rgb(235, 235, 235);
+            padding-bottom: .24rem;
+            /*padding-top: .28rem;*/
+        }
+    </style>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            localStorage.setItem("QuestionEntrance", document.location.href)
+        })
+    </script>
+}
+
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">学校问答</span>
+    <span></span>
+    <span class="btn-list flex">
+        <a style="display:none;" class="header-icon  @(ViewBag.isCollected ? "collection" : "")"></a>
+        @*<a href="/SchoolSearch/Index?isComment=false&BackSchoolId=@ViewBag.SchoolId.Id" class="header-icon search"></a>*@
+        <a href="/home-search/home-search.html" class="header-icon search"></a>
+        <a class="header-icon share checkLogin" data-title="@ViewBag.School.SchoolName" data-content="@ViewBag.School.SchoolName" data-url="@(ViewBag.ShareLink)" data-logo="@(ViewBag.ShareImgLink)"></a>
+        @*<a href="/Wechat?type=3&SchoolId=@ViewBag.SchoolId.Id" class="header-icon share"></a>*@
+    </span>
+</header>
+<section class="mt">
+    <a href="/school-@ViewBag.School.ShortSchoolNo/">
+        <div class="school-msg" data-schoolId="@ViewBag.School.Id" data-School="@ViewBag.School.SchoolId">
+            <h5 class="school-name">@ViewBag.School.SchoolName <span class="question-num">共@(ViewBag.QuestionTotal)个问题</span></h5>
+            <ul class="tag flex">
+                @if (ViewBag.School.SchoolType == 3)
+                {
+                    <li>国际</li>
+                }
+                else if (ViewBag.School.SchoolType == 4)
+                {
+                    <li>外籍</li>
+                }
+                else if (ViewBag.School.SchoolType == 2)
+                {
+                    <li>民办</li>
+                }
+                else if (ViewBag.School.SchoolType == 1)
+                {
+                    <li>公办</li>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.School.LodgingReason))
+                {
+                    <li>@ViewBag.School.LodgingReason</li>
+                }
+
+                @if (ViewBag.School.IsAuth)
+                {
+                    <li class="bcg-none"><i class="icon"></i></li>
+                }
+            </ul>
+        </div>
+    </a>
+    <div style="display:@(ViewBag.CommentTotal[0].Total > 0 ? "block" : "none");font-size: 0;">
+        <!-- 问答分类 -->
+        <ul class="comment-class flex text-center" style="height:@(ViewBag.SelectedTab != 1 ? "auto" : "")">
+            @{
+                int SelectedTab = ViewBag.SelectedTab;
+            }
+
+            @foreach (var item in ViewBag.CommentTotal)
+            {
+                if (item.SchoolSectionId != default(Guid))
+                {
+                    <li data-query="8" data-SchoolSectionId="@item.SchoolSectionId" class="@(SelectedTab==item.TotalTypeNumber?"active":"")">@item.Name@("(" + item.Total + ")")</li>
+                }
+                else
+                {
+                    <li data-query="@(item.TotalTypeNumber)" class="@(SelectedTab==item.TotalTypeNumber?"active":"")">@item.TotalType@("(" + item.Total + ")")</li>
+                }
+            }
+
+            @*<li data-query="2" class="@(SelectedTab==2?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=2&selectedQuestion=-1">学校辟谣(@ViewBag.CommentTotal.RumorreFuting)</a></li>
+                <li data-query="3" class="@(SelectedTab==3?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=3&selectedQuestion=-1">师资(@ViewBag.CommentTotal.TeachTotal)</a></li>
+                <li data-query="4" class="@(SelectedTab==4?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=4&selectedQuestion=-1">硬件(@ViewBag.CommentTotal.HardTotal )</a></li>
+                <li data-query="5" class="@(SelectedTab==5?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=5&selectedQuestion=-1">环境(@ViewBag.CommentTotal.EnvirTotal)</a></li>
+                <li data-query="6" class="@(SelectedTab==6?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=6&selectedQuestion=-1">校风(@ViewBag.CommentTotal.ManageTotal)</a></li>
+                <li data-query="7" class="@(SelectedTab==7?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=7&selectedQuestion=-1">活动(@ViewBag.CommentTotal.LifeTotal)</a></li>
+                <li data-query="8" class="@(SelectedTab==8?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=8&selectedQuestion=-1">高中部(@ViewBag.CommentTotal.HighSchoolTotal)</a></li>
+                <li data-query="9" class="@(SelectedTab==9?"active":"") "><a href="/Question/Index?SchoolId=@ViewBag.School.Id&queryQuestion=9&selectedQuestion=-1">国际部(@ViewBag.CommentTotal.InternationalTotal)</a></li>*@
+        </ul>
+        <div class="text-center"><i id="more" class="arrow @(ViewBag.SelectedTab != 1 ? "show":"")"></i></div>
+    </div>
+</section>
+<section class="banner" style="display:@(ViewBag.CommentTotal[0].Total > 0 ? "block" : "none")">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="test" style="width: 100%; height: 100px; background: rgba(0,0,0,.5)">
+                    <img src="/imgs/comment-and-qa/banner.jpg" />
+                </div>
+            </div>
+            @*<div class="swiper-slide">
+                    <div class="test" style="width: 100%; height: 100px; background: rgba(100,100,100,.5)"></div>
+                </div>*@
+        </div>
+        <div class="swiper-pagination point"></div>
+    </div>
+</section>
+<section class="content bcg-249">
+    @if (ViewBag.SelectedTab == 1)
+    {
+        <!-- 热门问答 -->
+        <section class="hot-qa" style="display:@(ViewBag.CommentTotal[0].Total > 0 ? "block" : "none")">
+            <h5 class="title">热门问答</h5>
+            <ul class="qa-list">
+                @if (ViewBag.QuestionHot != null)
+                {
+                    foreach (QuestionVo item in ViewBag.QuestionHot)
+                    {
+                        <li>
+                            <a href="/question/@(item.No).html">
+                                <div class="question flex">
+                                    <div class="q-icon"><span>问</span></div>
+                                    <div class="questionBox">
+                                        <h5 class="question-title"><p class="Qcontent">@item.QuestionContent</p></h5>
+                                        @if (item.Images.Count() > 0)
+                                        {
+                                            <div class="img-list">
+                                                <ul class="flex justify-content-between" id="imgList">
+                                                    @for (int i = 0; i < item.Images.Count(); i++)
+                                                    {
+                                                        if (i <= 2)
+                                                        {
+                                                            <li><img src="@item.Images[i]" alt="" /></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li style="display:none;"><img src="@item.Images[i]" alt="" /></li>
+                                                        }
+                                                    }
+                                                </ul>
+                                                @if (item.Images.Count() > 3)
+                                                {
+                                                    <span class="text-center"><i class="icon"></i>@item.Images.Count() </span>
+                                                }
+                                            </div>
+                                        }
+                                        <span class="department">@item.School.SchoolBranch</span>
+                                        <span class="time">@item.QuestionCreateTime</span>
+                                    </div>
+                                    <span class="other-list-btn flex round" data-isHot="1" data-id="@item.Id" data-type="3" data-report="2">
+                                        <i></i>
+                                        <i></i>
+                                        <i></i>
+                                    </span>
+                                </div>
+                            </a>
+                            @if (item.Answer.Count > 0)
+                            {
+
+                                <div class="answer flex">
+                                    <div class="a-icon"><span>答</span></div>
+                                    <div>
+                                        <a href="/ReplyDetail/Index?type=2&DatascoureId=@item.Answer[0].Id">
+                                            <div class="user-msg flex">
+                                                <div class="head  login-head">
+                                                    <div class="headimager"><img src="@item.Answer[0].UserInfo.HeadImager" alt=""></div>
+                                                    @if (item.Answer[0].UserInfo.IsTalent && item.Answer[0].UserInfo.IsSchool)
+                                                    {
+                                                        @if (item.Answer[0].UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                                        {
+                                                            <i class="icon"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="icon talent"></i>
+                                                        }
+                                                        <i class="icon school"></i>
+                                                    }
+                                                    else if (item.Answer[0].UserInfo.IsTalent)
+                                                    {
+                                                        @if (item.Answer[0].UserInfo.Role.Contains((int)UserRole.PersonTalent))
+                                                        {
+                                                            <i class="icon"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="icon talent"></i>
+                                                        }
+                                                    }
+                                                    else if (item.Answer[0].UserInfo.IsSchool)
+                                                    {
+                                                        <i class="icon school"></i>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <div class="name">@item.Answer[0].UserInfo.NickName<i></i></div>
+                                                    <div class="time">
+                                                        @(item.Answer.Count() > 0 ? item.Answer[0].AddTime : "")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="content">
+                                                @(item.Answer.Count() > 0 ? item.Answer[0].AnswerContent : "")
+                                            </p>
+                                        </a>
+                                        <div class="flex justify-content-between">
+                                            <span class="reply-num"><a href="/question/@(item.No).html"><span class="reply-num">共@(item.AnswerCount)条回复></span></a></span>
+                                            <span class="like @(item.Answer[0].IsLike?"click-like":"")" data-answerId="@item.Answer[0].Id">
+                                                <i class="icon"></i>
+                                                <span>@item.Answer[0].LikeCount</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </li>
+                    }
+                }
+
+
+            </ul>
+        </section>
+    }
+
+    <!-- 如果没有评论 则显示出来 -->
+    <section class="all-qa all-comment" id="answer" style="display:none;">
+        <div class="title">
+            <h5>全部问答<span class="orderTitle">智能排序<i></i></span></h5>
+            <ul class="sort">
+                <li class="active" data-order="0"><span>智能排序</span><i></i></li>
+                <li data-order="1"><span>时间排序</span><i></i></li>
+                <li data-order="3"><span>回复数</span><i></i></li>
+            </ul>
+            <ul class="qa-list"></ul>
+            <div style="display:none;" class="load-more text-center">正在努力加载</div>
+            <div style="display:none;" class="not-more-data">没有更多数据</div>
+        </div>
+    </section>
+
+    <!-- 最新问答 -->
+    <section class="new-qa" style="display:@(ViewBag.CommentTotal[0].Total > 0 ? "block" : "none")">
+        <h5 class="title">最新问答</h5>
+        <ul class="qa-list"></ul>
+        <div style="display:none;" class="load-more text-center">正在努力加载</div>
+        <div style="display:none;" class="not-more-data">没有更多数据</div>
+    </section>
+
+    <section class="all-comment noData" style="display:@(ViewBag.CommentTotal[0].Total == 0 ? "block" : "none")">
+        <div class="title">
+            <h5>全部问答</h5>
+        </div>
+
+        <div class="not-comment text-center">
+            <div><i class="icon"></i></div>
+            <p>暂无回复，快来抢沙发</p>
+            <a style="display:none" href="/Wechat?type=3&SchoolId=@ViewBag.School.Id" class="invite"><span><i class="arrow"></i></span>邀请朋友来提问</a>
+        </div>
+    </section>
+
+
+</section>
+<!-- 点击分类后显示的评价内容 -->
+@*<section class="reply">
+        <div class="title">
+            <h5>问答<span>智能排序<i></i></span></h5>
+            <ul class="sort">
+                <li class="active" data-order="0"><span>智能排序</span><i></i></li>
+                <li data-order="1"><span>时间排序</span><i></i></li>
+                <li data-order="3"><span>回复数</span><i></i></li>
+            </ul>
+        </div>
+        <ul class="qa-list"></ul>
+    </section>*@
+<section class="bottom-btn text-center flex justify-content-around">
+    <a href="/Wechat?type=3&SchoolId=@ViewBag.School.Id">邀请提问</a>
+    <a href="/question/write?eid=@ViewBag.School.Id">我要提问</a>
+</section>
+@*<section class="botton-reply-input">
+        <input type="text" placeholder="回复name:" />
+    </section>*@
+<section class="popup-box">
+    <ul class="text-center">
+        <li class="reply-btn"><a>回复</a></li>
+        <li class="complaint"><a href="./complaint.html">举报</a></li>
+        <li class="cancel"><a>取消</a></li>
+    </ul>
+</section>
+<section class="reply-box">
+    <div class="flex justify-content-between btn-list">
+        <span class="cancel">取消</span>
+        <div>
+            @if (ViewBag.isSchoolRole)
+            {
+                <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+            }
+            else
+            {
+                <span id="Student" class="btn"><i class="round"></i>在读</span>
+            }
+
+            <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+            <span class="submit-reply">发布</span>
+        </div>
+    </div>
+    <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+</section>
+<div class="curtain"></div>
+
+@section script
+{
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js?v=0.05325821"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/collection.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/school-qa.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            localStorage.setItem("QuestionEntrance", document.location.href)
+        })
+    </script>
+}

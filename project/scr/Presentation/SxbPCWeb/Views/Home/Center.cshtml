@@ -1,0 +1,74 @@
+﻿
+<html lang="zh">
+
+<head>
+    <title>帮助中心</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/principle/principle.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>帮助中心</span>
+            </div>
+        </div>
+    </header>
+    <section class="principle-content">
+        <div class="container">
+            <div class="rules">
+                <div class="d-flex rule-item">
+                    <p>平台规则</p>
+                    <ul class="clearfix">
+                        <li><a href="@Url.Action("principle","home",new { idx=0})" title="法律声明">法律声明</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=1})" title="上学帮产品规则">上学帮产品规则</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=2})" title="用户服务条款">用户服务条款</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=3})" title="免责声明">免责声明</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=4})" title="隐私政策">隐私政策</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=5})" title="知识产权声明">知识产权声明</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=6})" title="侵权投诉须知">侵权投诉须知</a></li>
+                        <li><a href="@Url.Action("principle","home",new { idx=7})" title="注销协议">注销协议</a></li>
+                    </ul>
+                </div>
+                <div class="d-flex rule-item">
+                    <p>客户服务</p>
+                    <ul class="clearfix">
+                        <li><a href="/home/help?idx=0" title="常见问题">常见问题</a></li>
+                        <li><a href="/home/help?idx=1" title="意见反馈">意见反馈</a></li>
+                        <li><a href="/home/help?idx=2" title="学校信息纠错">学校信息纠错</a></li>
+                        <li><a href="/home/help?idx=3" title="联系客服">联系客服</a></li>
+                    </ul>
+                </div>
+                <div class="d-flex rule-item">
+                    <p>联系我们</p>
+                    <ul class="clearfix">
+                        @*<li><a href="#" title="学校开放平台">学校开放平台</a></li>*@
+                        <li><a href="@Url.Action("hr","home")" title="意见反招贤纳士馈">招贤纳士</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="d-flex rule-item">
+                    <p>关于我们</p>
+                    <ul class="clearfix">
+                        <li><a href="@Url.Action("about","home")" title="公司介绍">公司介绍</a></li>
+                        <li><a href="https://m.sxkid.com/home/download" title="产品下载">产品下载</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    @await Html.PartialAsync("Right_bar")
+
+    @await Html.PartialAsync("Footer")
+
+</body>
+
+</html>

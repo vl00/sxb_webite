@@ -1,0 +1,704 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+
+        #SettlementTime {
+            height: calc(2.25rem + 2px);
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .SettlementType:hover {
+            cursor: pointer;
+        }
+
+        #title_group span {
+            padding: 0px 15px;
+            padding-bottom: 15px;
+        }
+
+            #title_group span:hover {
+                cursor: pointer;
+            }
+
+        .questionInfo {
+            cursor: pointer;
+        }
+
+        .CommetOperation{
+            cursor:pointer;
+            padding:0px 5px;
+        }
+
+        .look:hover {
+            cursor:pointer;
+        }
+
+        .questionInfo:hover {
+            cursor: pointer;
+        }
+
+        .comment:hover{
+           cursor:pointer;
+        }
+
+        .operation {
+            width:17%;
+        }
+
+        #statistics{
+            color:#8b939b;
+        }
+
+        #examinerTitle{
+            color:#fff !important;
+        }
+    </style>
+}
+
+    <div id="examinerBox">
+        @if (ViewBag.Examiner["role"] == 5)
+        {
+            <div id="adminExaminerSelectBox">
+                <div class="container breadcrumbs">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                            <div class="col-sm-12">
+                                                <h5 style="font-weight:bold;">数据概况</h5>
+                                                <span style="font-size:13px;color: gray;">显示当前系统统计的数据看板</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div>
+                                            <div class="col-sm-12">
+                                                <table style="text-align:center;" id="examiner" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>审核人数</td>
+                                                            <td>总审核点评数</td>
+                                                            <td>总审核问答数</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>@ViewBag.Examiner["TotalExaminerAdmin"]人</td>
+                                                            <td>@ViewBag.Examiner["ExaminerCommentTotal"]条</td>
+                                                            <td>@ViewBag.Examiner["ExaminerAnswerTotal"]条</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" container breadcrumbs">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                            <div class="col-sm-12">
+                                                <h5 style="font-weight:bold;">审核人员列表</h5>
+                                                <span>显示当前系统中的审核人员工作情况</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="col-sm-12">
+                                            <table id="AllExaminer" class="table"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="exmainerSelectBox">
+                <div class="container breadcrumbs">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                            <div class="col-sm-12">
+                                                <h5 style="font-weight:bold;">数据概况</h5>
+                                                <span style="font-size:13px;color: gray;">显示当前系统统计的数据概况</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div>
+                                            <div class="col-sm-12">
+                                                <table style="text-align:center;" id="examiner" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>总审核点评数</td>
+                                                            <td>总审核问答数</td>
+                                                            <td>待审核点评数</td>
+                                                            <td>待审核问答数</td>
+                                                            <td>审核通过点评数</td>
+                                                            <td>审核通过问答数</td>
+                                                            <td>通过率</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>@ViewBag.Examiner["ToatalComment"]条</td>
+                                                            <td>@ViewBag.Examiner["ToatalAnswer"]条</td>
+                                                            <td>@ViewBag.Examiner["NoExaminerComment"]条</td>
+                                                            <td>@ViewBag.Examiner["NoExaminerAnswer"]条</td>
+                                                            <td>@ViewBag.Examiner["ExaminerSelectedCommentTotal"]条</td>
+                                                            <td>@ViewBag.Examiner["ExaminerSelectedAnswerTotal"]条</td>
+                                                            <td>@ViewBag.Examiner["ExaminerSelectedTotal"]%</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" container breadcrumbs">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                                            <div class="col-sm-12">
+                                                <h5 style="font-weight:bold;">审核内容列表</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom:1px solid gray;padding-bottom: 15px;">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="col-sm-3" id="title_group">
+                                            <span data-check="true" data-query="1">点评</span>
+                                            <span data-check="" data-query="2">问答</span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="float-right">
+                                                <span>显示方式：</span>
+                                                <span>
+                                                    <select id="QueryExaminerType">
+                                                        <option data-Examstatus="0">未审核</option>
+                                                        <option data-Examstatus="1">已审核</option>
+                                                        <option  data-Examstatus="-1">已屏蔽用户</option>
+                                                    </select>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="float-right">
+                                                <span>结算方式：</span>
+                                                <span>
+                                                    <select id="SettlementType">
+                                                        <option data-SettlementType="0">All</option>
+                                                        <option data-SettlementType="1">现结</option>
+                                                        <option data-SettlementType="2">另结</option>
+                                                    </select>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="float-right">
+                                                <span>检索：</span>
+                                                <span><input style="width:100px;" type="text" id="phone" /></span>
+                                                <span><button id="searchPhone">搜索</button></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="card-body" style="padding:0px; margin-top:20px;">
+                                    <div id="bootstrap-data-table-export_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                        <div class="col-sm-12">
+                                            <div id="commentBox" style="display:none;">
+                                                <table id="comment" style="table-layout: fixed;" class="table"></table>
+                                            </div>
+                                            <div id="answerBox" style="display:none;">
+                                                <table id="answer" style="table-layout: fixed;"  class="table"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            $(".nav").find("li[class='active']").removeClass("active")
+            //$(".nav li:eq(2)").addClass("active")
+            var role = @ViewBag.Examiner["role"]
+            if (role == 5)
+            {
+                //管理员进入页面
+                LoadExaminAdmin()
+            }
+            else
+            {
+                //审核人员进入审核界面
+                Switch(1)
+            }
+            
+            $("#title_group span").click(function () {
+                var query = $(this).attr("data-query")
+                $("#title_group span").attr("data-check", "")
+                $(this).attr("data-check", "true")
+                Switch(query)
+            })
+
+            //注册查看点评、问答详情事件
+            $("#examinerBox").on("click", ".look", function () {
+                var jobId = $(this).attr("data-id")
+                layer.open({
+                    type: 2,
+                    area: [500 + 'px', 600 + 'px'],
+                    fix: true, //固定
+                    title: '详细 - 相关人员工作记录的详细情况',
+                    content: '/PartTimeJob/Statistics/GetCommentAndAnswerByJob?JobId=' + jobId + "&isExaminerAdmin=2",
+                    maxmin: true,
+                    btn: ["确定"]
+                })
+                $(".layui-layer-max").click();
+            })
+
+            //审核数据类型查询
+            $("#QueryExaminerType").change(function () {
+                var type = $(this).find("option:selected").attr("data-Examstatus")
+                var query = $("#title_group span[data-check='true']").attr("data-query")
+                Switch(query)
+            })
+
+            //结算方式
+            $("#SettlementType").change(function () {
+                var query = $("#title_group span[data-check='true']").attr("data-query")
+                Switch(query)
+            })
+
+            //查看点评详情
+            $("#comment").on("click", ".comment", function () {
+                var commentId = $(this).parent().parent().find("span[class='CommetOperation']:eq(0)").attr("data-id")
+
+                layer.open({
+                    type: 2,
+                    area: [770 + 'px', 600 + 'px'],
+                    fix: false,
+                    title: "点评详情",
+                    content: "/PartTimeJob/Statistics/CommentInfo?CommentId=" + commentId,
+                    btn:["确定"]
+                })
+            })
+
+            //查看问答详情
+            $("#examinerBox").on("click", ".questionInfo", function () {
+                //var name = $(this).parent().parent().find("td:eq(1)").find("span").attr("data-answerwrite");
+                //var question = $(this).parent().parent().find("td:eq(0)").text()
+                //var answer = $(this).parent().parent().find("td:eq(1)").text()
+                var questionId = $(this).parent().parent().find("span[class='CommetOperation']").attr("data-id")
+
+                layer.open({
+                    type: 2,
+                    area: [470 + 'px', 550 + 'px'],
+                    fix: false, //不固定
+                    title: '问答详情',
+                    content: '/PartTimeJob/Statistics/AnswerInfo?answerId=' + questionId,
+                    btn: ["确定"]
+                });
+            })
+
+            $("#searchPhone").click(function () {
+                var type = $(this).find("option:selected").attr("data-Examstatus")
+                var query = $("#title_group span[data-check='true']").attr("data-query")
+                Switch(query)
+            })
+
+            //审核状态
+            $("#examinerBox").on("click", ".CommetOperation", function () {
+                var status = $(this).attr("value")
+                var targetId = $(this).parent().find("span:eq(0)").attr("data-id")
+                var examinerType = $("#title_group span[data-check='true']").attr("data-query")
+
+                $.ajax({
+                    url: "/PartTimeJob/AdminExaminer/DataExaminer?examinerType=" + examinerType + "&targetId=" + targetId + "&status=" + status,
+                    type: "GET",
+                    success: function (data)
+                    {
+                        if (data.data)
+                        {
+                            layer.alert("审核成功")
+                            var query = $("#title_group span[data-check='true']").attr("data-query")
+                            //Switch(query)
+                            if (query == 1)
+                            {
+                                $("#comment").bootstrapTable("refresh", {
+                                    silent: true //静态刷新
+                                  });
+                            }
+                            else
+                            {
+                                $("#answer").bootstrapTable("refresh", {
+                                    silent: true //静态刷新
+                                  });
+                            }
+                            LoadCurrentTotal()
+                        }
+                        else
+                        {
+                            layer.alert("审核失败")
+                        }
+                    }
+                })
+            })
+        })
+
+        function LoadExaminAdmin()
+        {
+            $("#AllExaminer").bootstrapTable('destroy');
+            $('#AllExaminer').bootstrapTable({
+                method: 'get',
+                url: "/PartTimeJob/AdminExaminer/GetAllExaminerAdminInfo",//请求路径
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                cache: false,
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        limit: params.limit, // 每页显示数量
+                        offset: params.offset, // SQL语句起始索引
+                        page: (params.offset / params.limit) + 1, //当前页码
+
+                        Name: $('#search_name').val(),
+                        Tel: $('#search_tel').val()
+                    };
+                    return temp;
+                },
+                columns: [{
+                    title: '昵称',
+                    field: 'name'
+                }, {
+                    title: '手机号',
+                    field: 'phone',
+                }, {
+                    title: '结算方式',
+                        field: 'settlementType'
+                }, {
+                    title: '审核点评数',
+                        field: 'examinerCommentTotal'
+                }, {
+                    title: '审核问答数',
+                        field: 'examinerAnswerTotal'
+                }, {
+                    title: '操作',
+                    formatter: SelectAdminExaminerOperation
+                }]
+            })
+        }
+
+        //加载审核人员点评、问答审核数据
+        function Switch(query)
+        {
+            var jobId = $("#job").val();
+
+            //点评
+            if (query == 1)
+            {
+                $("#title_group span[data-query=1]").css({ "border-bottom": "2px solid black" })
+                $("#title_group span[data-query=2]").css({ "border-bottom": "none" })
+                $("#commentBox").show();
+                $("#answerBox").hide();
+                //删除表格上次保存的状态，如果不进行删除则无法进行再次初始化数据，启用每次都加载一次表格
+                $("#comment").bootstrapTable('destroy');
+                $('#comment').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/AdminExaminer/GetCurrentExaminerAdminComment",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    cache: false,
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            AdminId: "@ViewBag._admin.Id",
+                            type: $("#QueryExaminerType").find("option:selected").attr("data-Examstatus"),
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+                            Name: $('#search_name').val(),
+                            phone: $("#phone").val(),
+                            SettlementType: $("#SettlementType option:selected").attr("data-SettlementType")
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        title: '点评',
+                        field: 'commentCotent',
+                        width: '30%',
+                        //cellStyle:formatTableUnit,
+                        formatter: CommentMatter
+                    }, {
+                        title: '学校',
+                            field: 'school'
+                    }, {
+                        title: '手机号',
+                            field: 'phone',
+                    }, {
+                        title: '审核状态',
+                            field: 'status'
+                    }, {
+                        title: '审核人',
+                            field: 'examinerAdminNaem'
+                        }, {
+                            title: '时间',
+                            field: 'examinerTime'
+                        }, {
+                            title: '操作',
+                            class:"operation",
+                            formatter: operation
+                        }]
+                })
+
+
+                @*$('#comment').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/AdminExaminer/GetCurrentExaminerAdminComment",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    cache: false,
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            AdminId: "@ViewBag._admin.Id",
+                            type: $("#QueryExaminerType").find("option:selected").attr("data-Examstatus"),
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            Tel: $('#search_tel').val()
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        title: '点评',
+                        field: 'commentCotent',
+                        width: '60%',
+                        //cellStyle:formatTableUnit,
+                        formatter: CommentMatter
+                    }, {
+                        title: '学校',
+                            field: 'school'
+                    }, {
+                        title: '手机号',
+                            field: 'phone',
+                    }, {
+                            title: '操作',
+                            class:"operation",
+                            formatter: operation
+                        }]
+                })*@
+            }
+            else
+            {
+                $("#commentBox").hide();
+                $("#answerBox").show();
+                $("#title_group span[data-query=2]").css({ "border-bottom": "2px solid black" })
+                $("#title_group span[data-query=1]").css({ "border-bottom": "none" })
+                $("#answer").bootstrapTable('destroy');
+                $('#answer').bootstrapTable({
+                    method: 'get',
+                    url: "/PartTimeJob/AdminExaminer/GetCurrentExaminerAdminAnswer",//请求路径
+                    striped: true, //是否显示行间隔色
+                    pageNumber: 1, //初始化加载第一页
+                    pagination: true,//是否分页
+                    cache: false,
+                    sidePagination: 'server',//server:服务器端分页|client：前端分页
+                    pageSize: 5,//单页记录数
+                    pageList: [5, 10, 20, 30],//可选择单页记录数
+                    queryParams: function (params) {//上传服务器的参数
+                        var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                            AdminId: "@ViewBag._admin.Id",
+                            type: $("#QueryExaminerType").find("option:selected").attr("data-Examstatus"),
+                            limit: params.limit, // 每页显示数量
+                            offset: params.offset, // SQL语句起始索引
+                            page: (params.offset / params.limit) + 1, //当前页码
+
+                            Name: $('#search_name').val(),
+                            phone: $("#phone").val(),
+                            SettlementType: $("#SettlementType option:selected").attr("data-SettlementType")
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        title: '问题',
+                        field: 'question',
+                        width: '10%',
+                        formatter: QueryQuestion
+                    }, {
+                        title: '答复',
+                        field: 'answerCotent',
+                        width: '15%',
+                        //cellStyle:formatTableUnit,
+                        formatter: paramsMatter
+                    }, {
+                        title: '学校',
+                            field: 'school'
+                    }, {
+                        title: '手机号',
+                        field: 'phone',
+                    }, {
+                        title: '审核状态',
+                        field: 'status'
+                    }, {
+                        title: '审核人',
+                            field: 'examinerAdminNaem'
+                    }, {
+                        title: '时间',
+                            field: 'examinerTime'
+                    }, {
+                        title: '操作',
+                        class:"operation",
+                        formatter: operation
+                    }]
+                })
+            }
+        }
+
+        function LoadCurrentTotal()
+        {
+            $.ajax({
+                url: "/PartTimeJob/AdminExaminer/CurrentAdminExaminer", type: "GET", success: function (data) {
+                    //examiner
+                    $("#examiner tbody tr:eq(0)").find("td:eq(0)").text(data.data["ToatalComment"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(1)").text(data.data["ToatalAnswer"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(2)").text(data.data["NoExaminerComment"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(3)").text(data.data["NoExaminerAnswer"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(4)").text(data.data["ExaminerSelectedCommentTotal"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(5)").text(data.data["ExaminerSelectedAnswerTotal"])
+                    $("#examiner tbody tr:eq(0)").find("td:eq(6)").text(data.data["ExaminerSelectedTotal"])
+                }
+            })
+        }
+
+        function operation(value, row, index)
+        {
+            return "<span class='CommetOperation' value='2' data-id='" + row["id"] + "'>已阅</span><span class='CommetOperation' value='3'>精选</span><span class='CommetOperation' value='4'>屏蔽</span>";
+        }
+
+        function SelectAdminExaminerOperation(value, row, index) {
+            return "<span class='look' data-id='" + row["id"] + "'>查看</span>";
+        }
+
+
+        function QueryQuestion(value, row, index)
+        {
+            return "<span class='questionInfo'>" + row["question"] + "</span>"
+        }
+
+        function QueryComment(value, row, index)
+        {
+            return "<span class='comment'>" + row["commentCotent"] + "</span>"
+        }
+
+        function QuestionAnswer(value, row, index)
+        {
+            return "<span class='questionInfo' data-answerWrite='" + row["answerWriteName"] + "'>" + row["answerCotent"] + "</span>"
+        }
+
+        function CommentMatter(value, row, index)
+        {
+            var span = document.createElement('span');
+            span.setAttribute('title', value);
+            //debugger;
+            span.setAttribute("data-id", row.id)
+            span.setAttribute("class", "comment")
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+
+        function paramsMatter(value, row, index) {
+            var span = document.createElement('span');
+            
+            span.setAttribute("class", "questionInfo")
+            span.setAttribute("data-id", row["id"])
+            
+            span.setAttribute('title', value);
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+
+        function formatTableUnit(value, row, index) {
+            return {
+                css: {
+                    "overflow": 'hidden', "white-space": 'nowrap', "text-overflow": 'ellipsis'
+                }
+            }
+        }
+    </script>
+}

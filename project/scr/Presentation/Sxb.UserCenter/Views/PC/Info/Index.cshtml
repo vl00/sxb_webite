@@ -1,0 +1,165 @@
+﻿@model  PMS.UserManage.Application.ModelDto.Info.Index
+@{
+    ViewData["Title"] = "个人信息";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/mine-msg.css" />
+    <style type="text/css">
+        .follow input {position:absolute; left:-9999px;} 
+    </style>
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">个人信息</span>
+    <span class=""></span>
+</header>
+
+<section>
+    <ul class="msg-list">
+        <li>
+            <a id="headImgUploadHandler" class="flex justify-content-between">
+                <span>头像</span>
+                <div>
+                    <div class="img-box">
+                        <img id="headImg" src="@Model.UserInfo.HeadImgUrl" alt="@Model.UserInfo.NickName">
+                    </div>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+            <input type="file" id="headImgUpload" class="fileInput" />
+        </li>
+        <li>
+            <a id="updateNickname" class="flex justify-content-between">
+                <span>昵称</span>
+                <div>
+                    <span class="user-name" id="nickname">@Model.UserInfo.NickName</span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("BindMobile","Account")" class="flex justify-content-between">
+                <span>手机号</span>
+                <div>
+                    <span class="phone-num">@(!string.IsNullOrEmpty(Model.UserInfo.Mobile) ? Model.UserInfo.Mobile : "未绑定")</span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Verify")" class="flex justify-content-between">
+                <span>认证</span>
+                <div>
+                    <span class="authentication"></span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+    </ul>
+    <div class="follow">
+        <h5 class="title">关注学段</h5>
+        <form id="interestForm">
+            <ul class="flex text-center">
+                @foreach (var grade in Model.Interest.grade)
+                {
+                    <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                }
+            </ul>
+            <h5 class="title">关注学校类型</h5>
+            <ul class="flex text-center">
+                @foreach (var grade in Model.Interest.nature)
+                {
+                    <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                }
+            </ul>
+            <h5 class="title">关注学校住宿制度</h5>
+            <ul class="flex text-center">
+                @foreach (var grade in Model.Interest.lodging)
+                {
+                    <li><label><input type="checkbox" name="@grade.Key" @(grade.selected ? "checked" : "") />@grade.Value</label></li>
+                }
+            </ul>
+        </form>
+    </div>
+</section>
+@section js{ 
+<script type="text/javascript">
+    $('#headImgUploadHandler').click(function(){
+        $('#headImgUpload').click();
+    });
+    var allowExt = ['jpg','png','gif','jpeg'];
+    $('#headImgUpload').change(function () {
+        var ext = getExtension($(this).get(0).value.toLowerCase());
+        if (allowExt.indexOf(ext)==-1) {
+            alert('请选择图片格式的文件，谢谢');
+            return;
+        }
+        $.loading('上传中')
+        var data = new FormData();
+        data.append('upfile', $(this).get(0).files[0]);
+        $.ajax({
+            url: '@Url.Action("UploadHeadImg")',
+            type:'post',
+            processData: false,
+            contentType: false,
+            data: data,
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#headImg').attr('src', json.cdnUrl);
+                    $.prompt("上传成功");
+                } else {
+                    $.prompt(json.errorDescription);
+                }
+            },
+            complete: function () {
+                $.loading('remove');
+            }
+        })
+    });
+    $('#updateNickname').click(function () {
+        var newNickname = prompt('请输入新的昵称');
+        if ($.trim(newNickname) == '') {
+            return;
+        }
+        $.ajax({
+            url: '@Url.Action("UpdateNickname")',
+            type: 'post',
+            data: { nickname: newNickname },
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#nickname').text(newNickname);
+                    $.prompt("修改成功");
+                } else {
+                    $.prompt(json.errorDescription);
+                }
+            }
+        })
+    });
+    function getExtension(fileFullName) {
+        var pathSplitArr = fileFullName.split('.');
+        return pathSplitArr[pathSplitArr.length - 1];
+    }
+    var interestInit = false;
+    $('#interestForm input:checkbox').change(function () {
+        var li = $(this).parents('li').first();
+        li.toggleClass('active', $(this).is(':checked'));
+        if (interestInit) {
+            $.ajax({
+                url: '@Url.Action("SetUserInterest")',
+                type:'post',
+                data: $('#interestForm').serialize().replace(/\=on/g,'=true'),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status) {
+                        $.prompt(json.errorDescription);
+                    }
+                }
+            });
+        }
+    }).change();
+    interestInit = true;
+</script>
+}

@@ -1,0 +1,143 @@
+﻿@{ 
+    var auth = User.Identity as System.Security.Claims.ClaimsIdentity;
+    ViewBag.Nickname = auth.FindFirst(IdentityModel.JwtClaimTypes.Name)?.Value;
+    ViewBag.RequestUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path + Context.Request.QueryString;
+
+}
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    @RenderSection("css", false)
+</head>
+<body>
+    <header class="header">
+        <div>
+            <div class="header-bar font-12 container d-flex justify-content-between">
+                <nav class="header-nav">
+                    <ul class="d-flex">
+                        <li><a href="" title="首页">首页</a></li>
+                        <li><a href="" title="学校">学校</a></li>
+                        <li class="active"><a href="" title="点评">点评</a></li>
+                        <li><a href="" title="问答">问答</a></li>
+                        <li><a href="" title="排行">排行</a></li>
+                        <li><a href="" title="攻略">攻略</a></li>
+                    </ul>
+                </nav>
+                <div class="user-message">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a title="@ViewBag.Nickname" class="user-name">@ViewBag.Nickname</a>
+                        <a href="//user.sxkid.com/account/logout?redirect_uri=@ViewBag.RequestUrl" title="退出" class="logout" style="margin-right:0px">退出</a>
+                    }
+                    else
+                    {
+                        <a href="@ViewBag.UserUrl/login/login-pc.html?returnUrl=@ViewBag.RequestUrl" title="登录" class="user-name">登录</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="container d-flex header-content clearfix">
+            <div class="sxb-icon d-flex">
+                <img src="../../imgs/sxb.png" alt="上学帮">
+                <div class="select font-14">
+                    <i class="header-icon">广州</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            <li><a href="" title="广州">广州</a></li>
+                            <li><a href="" title="上海">上海</a></li>
+                            <li><a href="" title="北京">北京</a></li>
+                            <li><a href="" title="深圳">深圳</a></li>
+                            <li><a href="" title="深圳">深圳</a></li>
+                            <li><a href="" title="深圳">深圳</a></li>
+                        </ul>
+                        <a href="" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="search-bar-div">
+                <div class="search-bar d-flex">
+                    <input type="text" placeholder="请输入点评内容关键词搜索点评" class="input-keyword font-12">
+                    <a href="/SchoolComment/CommentList" class="font-14 @(ViewBag.IsComment ? "selected" : "")" id="selectReview"
+                       data-left-content="searchReview">搜点评</a>
+                    <a href="/SchoolComment/SchoolList" class="font-14 @(ViewBag.IsComment ? "" : "selected")" id="selectSchool" data-left-content="searchSchool">搜学校</a>
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <span>推荐搜索：</span>
+                    <ul class="keyword d-flex">
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                        <li><a href="#" title="推荐学校">广东省实验中学-高中部000</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    @RenderBody()
+
+    <section class="right-bar position-fixed">
+        <ul class="font-12">
+            <li><a href="" title="工具" class="d-block">工具</a></li>
+            <li><a href="" title="客服" class="d-block">客服</a></li>
+            <li><a href="" title="反馈" class="d-block">反馈</a></li>
+            <li><a href="" title="微信" class="d-block">微信</a></li>
+        </ul>
+        <div class="back-top position-absolute font-12 font-weight-bold">TOP</div>
+    </section>
+
+    <footer class="footer position-relative">
+        <div class="container d-flex justify-content-between clearfix">
+            <dl class="font-12">
+                <dt class="font-15">关于我们</dt>
+                <dd><a href="" title="公司介绍">公司介绍</a></dd>
+                <dd><a href="" title="产品下载">产品下载</a></dd>
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">联系我们</dt>
+                <dd><a href="" title="客服中心">客服中心</a></dd>
+                <dd><a href="" title="招贤纳士">招贤纳士</a></dd>
+                <dd><a href="" title="学校开放平台">学校开放平台</a></dd>
+                <dd><a href="" title="微信家长群">微信家长群</a></dd>
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">协议声明</dt>
+                <dd><a href="" title="隐私协议">隐私协议</a></dd>
+                <dd><a href="" title="免责声明">免责声明</a></dd>
+                <dd><a href="" title="服务条款">服务条款</a></dd>
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">网站地图</dt>
+            </dl>
+            <dl class="font-12">
+                <dt class="font-15">友情链接</dt>
+            </dl>
+        </div>
+        <a href="" title="广州市藏星网络科技有限公司 Copyright©. All Rights Reserved 粤ICP备13052028号"
+           class="d-block text-center font-12 position-absolute">
+            广州市藏星网络科技有限公司 Copyright©. All Rights Reserved
+            粤ICP备13052028号
+        </a>
+    </footer>
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/showPhoto.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    @RenderSection("script", false)
+</body>
+</html>

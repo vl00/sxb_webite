@@ -1,0 +1,62 @@
+﻿@model Sxb.PCWeb.ViewModels.Article.PaginationViewModel
+@{
+    int sideBasicNum = 2;  /*相邻基数*/
+    /*页码显示规则：第一页和最后一页总是显示出来，中间的页显示当前页的相邻基数页*/
+    List<int> displayPage = new List<int>() { };
+    displayPage.Add(1);
+    if (Model.TotalPage > 1)
+    {
+        for (int i = (Model.CurrentPage - sideBasicNum); i <= Model.CurrentPage; i++)
+        {
+            if (i > 1 && i < Model.TotalPage)
+            {
+                displayPage.Add(i);
+            }
+        }
+        for (int i = Model.CurrentPage + 1; i <= (Model.CurrentPage + sideBasicNum); i++)
+        {
+            if (i < Model.TotalPage)
+            {
+                displayPage.Add(i);
+            }
+        }
+
+        displayPage.Add(Model.TotalPage);
+
+    }
+}
+<ul class=" font-14 d-flex">
+    @if (Model.CurrentPage > 1)
+    {
+        <li class="prev position-relative"><a href="@Url.Action(Model.Action,Model.Controller,Model.OnCreatePrePageItemParams(Model))" title="上一页">上一页</a></li>
+    }
+    @{
+
+        int prenum = 1;
+    }
+
+    @foreach (var item in displayPage)
+    {
+        if (item - prenum > 1)
+        {
+            <li><span>...</span></li>
+        }
+        prenum = item;
+
+        if (Model.CurrentPage == item)
+        {
+
+            <li class="active"><a href="@Url.Action(Model.Action,Model.Controller,Model.OnCreatePageItemParams(item,Model))" title="1">@item</a></li>
+        }
+        else
+        {
+            <li><a href="@Url.Action(Model.Action,Model.Controller,Model.OnCreatePageItemParams(item,Model))" title="1">@item</a></li>
+
+        }
+    }
+
+    @if (Model.CurrentPage < Model.TotalPage)
+    {
+        <li class="next position-relative"><a href="@Url.Action(Model.Action,Model.Controller,Model.OnCreateNextPageItemParams(Model))" title="下一页">下一页</a></li>
+    }
+</ul>

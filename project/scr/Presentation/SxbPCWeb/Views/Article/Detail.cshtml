@@ -1,0 +1,261 @@
+﻿@model Sxb.PCWeb.ViewModels.Article.ArticleViewModel
+@{
+    var keywords = Model.Title;
+    if (Model.CorrelationTags?.Any() == true)
+    {
+        keywords = string.Join(',', Model.CorrelationTags.Select(p=>p.TagName));
+    }
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>@Model.Title-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@Model.Digest">
+    <meta name="applicable-device" content="pc">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/strategy/strategy.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/strategy/strategyCard.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/article-common.css">
+</head>
+<body>
+    <header class="header">
+
+        <div>
+            @await Html.PartialAsync("HeaderLogoPartial", 5)
+        </div>
+    </header>
+    <section class="strategy-list">
+        <div class="container">
+            <div class="content d-flex clearfix">
+                <!-- 左侧内容 -->
+                <div class="left-content d-block">
+                    <div class="strategy-details-content">
+                        <!--面包屑-->
+                        <div class="row font-14">
+                            <div class="span6">
+                                <ul class="breadcrumb">
+                                    <li>
+                                        <a href="/" title="首页">首页</a><span class="divider">></span>
+                                    </li>
+                                    <li>
+                                        <a href="/article/" title="攻略">攻略</a><span class="divider">></span>
+                                    </li>
+                                    <li class="active" title="@Model.Title">
+                                        @ProductManagement.Framework.Foundation.StringHelper.GetShortString(Model.Title, 50)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h1 class="color-333">@Model.Title</h1>
+                        <div class="arti-detail-date">
+                            <span>@Model.CNTime</span>
+                            <span>阅读：@Model.ViweCount</span>
+                        </div>
+                        <!--                    攻略文章-->
+                        <div class="arti-content">
+                            @Html.HtmlString(Model.Html)
+                        </div>
+                        <ul>
+                            @if (!Model.Author.Contains("上学帮"))
+                            {
+                                <li class="source">
+                                    <span>来源：@Model.Author</span>
+                                    <p>本文来源于@(Model.Author)，转载目的在于传递更多信息，并不代表上学帮赞同其观点和对其真实性负责。入涉及作品内容、版权和其它问题，请在30日内与上学帮联系，我们将第一时间删除内容</p>
+                                </li>
+                            }
+                            @if (Model.CorrelationGQRCode != null && Model.CorrelationGQRCode.Any())
+                            {
+                                <li class="strategy-qr-code">
+
+                                    @foreach (var item in Model.CorrelationGQRCode)
+                                    {
+                                        <div>
+                                            <img src="@(item.Url)" alt="二维码" class="qr-code-left">
+                                        </div>
+                                    }
+
+                                </li>
+                            }
+                            <li class="strategy-hot">
+                                @foreach (var item in Model.CorrelationTags)
+                                {
+                                    <a href="/articletag/@(item.TagName).html" title="@item.TagName">@item.TagName</a>
+                                }
+                            </li>
+                        </ul>
+                        <div class="strategyDetails">
+                            本文链接地址：
+                            <a class="strategyDetails-a" href="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" title="本文链接地址：@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")">@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")</a>
+                            <p class="strategyDetails-p2">
+                                @{
+                                    int articleNo = ViewBag.ArticleNo;
+                                    Dictionary<int, string> nearArticles = ViewBag.NearArticle;
+                                }
+                                <span>上一篇：</span>
+                                @if (nearArticles.Keys.Any(p => p < articleNo))
+                                {
+                                    <a href="/article/@(ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(nearArticles.First().Key).ToLower()).html" title="@nearArticles.First().Value">@nearArticles.First().Value</a>
+                                }
+                                else
+                                {
+                                    <span>没有了</span>
+                                }
+
+                            </p>
+                            <p class="strategyDetails-p2">
+                                <span>下一篇：</span>
+                                @if (nearArticles.Keys.Any(p => p > articleNo))
+                                {
+                                    <a href="/article/@(ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(nearArticles.Last().Key).ToLower()).html" title="@nearArticles.Last().Value">@nearArticles.Last().Value</a>
+                                }
+                                else
+                                {
+                                    <span>没有了</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    @if (Model.CorrelationSCMs != null && Model.CorrelationSCMs.Any())
+                    {
+                        <div class="parents-comments-list">
+                            <h2 class="font-20 color-333 font-weight-bold">学校点评</h2>
+                            <ul class='comments-list'>
+                                @foreach (var comment in Model.CorrelationSCMs)
+                                {
+                                    <li class="d-flex" data-Id="@comment.Id">
+                                        @await Html.PartialAsync("/Views/Comment/_CommentItem.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)comment)
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (Model.CorrelationSchoolExt != null && Model.CorrelationSchoolExt.Any())
+                    {
+                        <div class="related-school hot-week-scroll">
+                            <h2 class="font-20 color-333 font-weight-bold">相关学校</h2>
+                            <ul>
+                                @await Html.PartialAsync("~/Views/school/L_SchoolItem.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.School.SchoolExtListItemViewModel>)Model.CorrelationSchoolExt)
+                            </ul>
+                        </div>
+                    }
+                    @*<div class="school-detail-banner" style="display:none;">广告图</div>*@
+                    @if (Model.CorrelationArticle != null && Model.CorrelationArticle.Any())
+                    {
+                        <div class="strategy-search-list">
+                            <h2 class="font-20 font-weight-bold color-333 school-atlas-title">相关文章</h2>
+                            <ul class="article-list">
+                                @await Html.PartialAsync("./ListItems.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)Model.CorrelationArticle)
+                            </ul>
+                        </div>
+                    }
+                    <div class="you-like">
+                        <div class='you-like-top-btn'>
+                            <a class="selected" data-tab='0'>选校关键词</a>
+                            <a data-tab='1'>附近学校</a>
+                        </div>
+                        <div class='select-tab clearfix'>
+                            <div class="campus campus-0">
+
+                                @foreach (string keyWord in ViewBag.HotKeyWord)
+                                {
+
+                                    <a href="@("/article?search=" + Html.UrlEncoder.Encode(keyWord))" class="font-14">@keyWord</a>
+                                }
+                            </div>
+                            <div class="campus campus-1" id="nearBySchools">
+                                @*@foreach (PMS.School.Domain.Dtos.SchExtDto0 school in ViewBag.NearSchools)
+                    {
+                        <a class="font-14" href="@Url.Action("detail", "school", new { sid = school.Sid, extId = school.Eid })">@($"{school.SchName}-{school.ExtName}")</a>
+                    }*@
+                            </div>
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("QuickNavigation")
+                </div>
+                <!-- 右侧内容 -->
+                <div class="right-list">
+                    <!-- 广告开始 -->
+                    <div class="mkt-box">
+                        <div class="swiper-container swiper-mkt swiperSchoolAd" alt="28" id="swiperSchoolAd-28" style="height: 205px;">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination mkt-pagination"></div>
+                        </div>
+                    </div>      
+                    <!-- 广告结束 -->
+                    <div class="hot-article">
+                        <h2 class="font-18 font-weight-bold">热门攻略</h2>
+                        <ul class="article-list">
+                            @await Html.PartialAsync("./hotpointlistitem.cshtml", (IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>)ViewBag.HotPoint)
+                        </ul>
+                    </div>
+                    @*热门标签*@
+                    @if (((IEnumerable<dynamic>)ViewBag.HotTags)?.Any() == true)
+                    {
+                        @await Html.PartialAsync("./hottagitem.cshtml", (IEnumerable<PMS.OperationPlateform.Domain.DTOs.TagDto>)ViewBag.HotTags)
+                    }
+                    @*@await Component.InvokeAsync("HotComment", new { cityCode = ViewBag.LocalCityCode, userId = ViewBag.CQUserId })
+        @await Component.InvokeAsync("HotQuestion")*@
+                </div>
+            </div>
+        </div>
+    </section>
+    @await Html.PartialAsync("Right_bar")
+    @await Html.PartialAsync("Footer")
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    <!-- 举报框 -->
+    @await Html.PartialAsync("Report")
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <!--卡片所需要的js-->
+    @*<script src="https://file.sxkid.com/v4source/operationplateform/component/qacard/qacard.js"></script>
+        <script src="https://file.sxkid.com/v4source/operationplateform/component/rendercard/rendercard.js"></script>*@
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+    <script src="@ViewBag.StaticFile/js/home/home.js"></script>
+    <script src="@ViewBag.StaticFile/js/search.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/strategy/strategy.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/other/showAllArticle.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/question/questionCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/CommentQaCommon.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script>
+        $nearBySchools = $('#nearBySchools');
+        $(function () {
+            loadingNearbySchools();
+
+        });
+
+        function loadingNearbySchools() {
+            $.ajax({
+                url: '@Url.Action("GetNearBySchools","Article")',
+                type: 'get',
+                success: function (res) {
+                    //console.log(res);
+                    if (res.status == 1) {
+                        $nearBySchools.empty();
+                        $.each(res.data, function (idx, val) {
+                            $nearBySchools.append(' <a class="font-14" href="/school-' + val.shortSchoolNo + '/">' + val.schName + '-' + val.extName + '</a>');
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

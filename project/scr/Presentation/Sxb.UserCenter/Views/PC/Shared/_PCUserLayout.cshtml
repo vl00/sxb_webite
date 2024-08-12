@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "_PCUserLayout";
+    Layout = "~/Views/PC/Shared/_PCLayout.cshtml";
+}
+@section css{ 
+    <link rel="stylesheet" href="@ViewBag.FileHost_PC/css/swiper.css">
+    <link rel="stylesheet" href="@ViewBag.FileHost_PC/css/user/user-common.css">
+    @RenderSection("css", false)
+}
+
+<section class="mine-msg">
+    <div class="user-info-nav container d-flex">
+        <div class="head-box"><img src="@ViewBag.HeadImgUrl" alt="@ViewBag.Nickname"></div>
+        <div class="user-nav">
+            <p class="user-name">
+                <span class="font-weight-bold">@ViewBag.Nickname</span>
+                <a href="#" title="编辑资料" class="font-13">[编辑资料]</a>
+            </p>
+            <p class="certification font-13">
+                <span class="school-certification">校方用户</span>
+                <span class="higher-school-certification">升学达人</span>
+                <a href="/account/verify" title="认证" class='certification-btn'>[认证]</a>
+                <span class="certified">[已认证]</span>
+            </p>
+            <div class="user-nav-btn">
+                <ul class="d-flex text-center">
+                    <li class="active"><a href="/" title="首页">首页</a></li>
+                    <li><a href="/publish" title="发布">发布</a></li>
+                    <li><a href="/reply" title="回复">回复</a></li>
+                    <li><a href="/collection" title="关注">关注</a></li>
+                    <li><a href="/like" title="点赞">点赞</a></li>
+                    <li><a href="/history" title="足迹">足迹</a></li>
+                    <li><a href="/message" title="消息">消息</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+@RenderBody()
+@section js{ 
+    @RenderSection("js", false)
+}

@@ -1,0 +1,115 @@
+﻿@model Sxb.PCWeb.ViewModels.SchoolRank.SchoolRankViewModel
+@using Sxb.PCWeb.ViewModels
+@{
+    var headerBreadcrumb = HeaderBreadcrumb.Instance
+            .SetChild("排行榜", "/schoolrank/list/")
+            .SetChild(Model.RankName, "#")
+            .Head;
+    headerBreadcrumb.IsSmallBorder = true;
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>@(ViewBag.CityName)胡润学校_国际学校_民办学校_公办学校_排行榜_排名分类-上学帮</title>
+    <meta name="keywords" content="胡润学校区域排名分类,国际学校,民办学校,公办学校,排行榜,@(ViewBag.CityName)排名分类-上学帮">
+    <meta name="description" content="上学帮排行榜频道提供@(ViewBag.CityName)胡润学校_国际学校_民办学校_公办学校_排行榜_排名分类信息，方便家长为孩子选择优秀的名校。">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/rank/rank-detail.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 4)
+        </div>
+
+        <!-- 面包屑导航 - S -->
+        @await Html.PartialAsync("HeaderBreadcrumb", headerBreadcrumb)
+        <!-- 面包屑导航 - E -->
+
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="rank d-flex">
+                <div><img src="@Model.RankCoverUrl" alt=""></div>
+                <h1 class="font-16 font-weight-bold">
+                    <div>@Model.RankName</div>
+                    @if (!string.IsNullOrEmpty(Model.Intro))
+                    {
+                        <p class="tips">
+                            @Model.Intro
+                        </p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.DTSource))
+                    {
+                        <p>数据来源：@Model.DTSource</p>
+                    }
+                </h1>
+            </div>
+            <div class="search-bar d-flex position-relative">
+                <div class="search-div">
+                    <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0' data-path="rank-detail" data-url="@Url.Action("detail","schoolrank",new { base32No = Model.Base32No })?schExtid={schExtid}">
+                    <a></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="rank-detail">
+        <div class="container">
+            <div class="rank-detail-list">
+                <div class="d-flex justify-content-between font-13">
+                    <ul class="rank-school-list d-flex font-13 flex-wrap">
+                        @foreach (var item in Model.Schools)
+                        {
+                            @*<li class="active"><a href="@Url.Action("detail","school",new { id=item.ExtId})">@(item.Sort).<span>@item.Name</span><p>@item.Remark</p></a></li>*@
+
+                            <li @if (item.ExtId == ViewBag.SchExtId) { WriteLiteral("class='active'"); }>
+                                @*<a href="@Url.Action("detail", "school", new { id = item.ExtId })">*@
+                                <a href="/school-@if (item.SchoolNo > 0) {
+                                       WriteLiteral(ProductManagement.Framework.Foundation.UrlShortIdUtil.Long2Base32(item.SchoolNo).ToLower());
+                                    }/">
+                                    @(item.Sort).<span>@item.Name<p>@item.Remark</p></span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <nav class="page d-flex justify-content-end">
+                    @(await Html.PartialAsync("Pagination", new Sxb.PCWeb.ViewModels.Article.PaginationViewModel(
+                    $"Detail",
+                    "SchoolRank",
+                    (int)ViewBag.TotalPage,
+                    (int)ViewBag.PageCount,
+                    (int)ViewBag.CurrentPage,
+                    (_this) => { return new { base32No = Model.Base32No, pageIndex = _this.CurrentPage-1 }; },
+                    (_index, _this) => { return new { base32No = Model.Base32No, pageIndex = _index }; },
+                    (_this) => { return new { pageIndex = _this.CurrentPage + 1, base32No = Model.Base32No}; }
+                    )))
+
+                </nav>
+            </div>
+        </div>
+    </section>
+    @await Html.PartialAsync("Right_bar")
+    @await Html.PartialAsync("Footer")
+    <!-- 查询结果提示弹窗 -S -->
+    <div class="result-hint-mask">
+        <div class="result-hint-box">
+            <div class="result-hint--close-btn"></div>
+            <div class="result-hint--title">提示</div>
+            <div class="result-hint--msg">
+                您搜索的学校暂未上榜哦！<br>
+                查查其它学校试试呗~
+            </div>
+        </div>
+    </div>
+    <!-- 查询结果提示弹窗 -E -->
+    <script src="https://cdn.sxkid.com/js/lib/jquery.js"></script>
+    <script src="@ViewBag.StaticFile/js/search.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+    <script src="@ViewBag.StaticFile/js/rank/resultHint.js"></script>
+</body>
+</html>

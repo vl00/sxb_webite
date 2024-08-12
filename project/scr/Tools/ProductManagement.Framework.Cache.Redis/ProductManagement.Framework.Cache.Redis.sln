@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.Cache.Redis", "src\ProductManagement.Framework.Cache.Redis.csproj", "{7A8E218E-29D1-440A-8EF9-BEA4AE34730F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.Cache.Redis.Test", "tests\ProductManagement.Framework.Cache.Redis.Test.csproj", "{4900F271-2FFB-44B4-9211-11CB7885B9FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Framework.Cache.Redis.Web", "example\ProductManagement.Framework.Cache.Redis.Web\ProductManagement.Framework.Cache.Redis.Web.csproj", "{0AC5B97C-0806-4F91-8E48-19CCA4493126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Framework.Cache.RedisProfiler", "ProductManagement.Framework.Cache.RedisProfiler\ProductManagement.Framework.Cache.RedisProfiler.csproj", "{A2FEC805-9481-4AD6-9938-D20A12090C67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A8E218E-29D1-440A-8EF9-BEA4AE34730F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A8E218E-29D1-440A-8EF9-BEA4AE34730F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A8E218E-29D1-440A-8EF9-BEA4AE34730F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A8E218E-29D1-440A-8EF9-BEA4AE34730F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4900F271-2FFB-44B4-9211-11CB7885B9FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4900F271-2FFB-44B4-9211-11CB7885B9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4900F271-2FFB-44B4-9211-11CB7885B9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4900F271-2FFB-44B4-9211-11CB7885B9FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC5B97C-0806-4F91-8E48-19CCA4493126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC5B97C-0806-4F91-8E48-19CCA4493126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC5B97C-0806-4F91-8E48-19CCA4493126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC5B97C-0806-4F91-8E48-19CCA4493126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2FEC805-9481-4AD6-9938-D20A12090C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2FEC805-9481-4AD6-9938-D20A12090C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2FEC805-9481-4AD6-9938-D20A12090C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2FEC805-9481-4AD6-9938-D20A12090C67}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53A968AA-A449-42C5-8ACD-5F196B3BC8D4}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.0.0.238:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = src\\ProductManagement.Framework.Cache.Redis.csproj
+		SccProjectName1 = src
+		SccLocalPath1 = src
+		SccProjectUniqueName2 = example\\ProductManagement.Framework.Cache.Redis.Web\\ProductManagement.Framework.Cache.Redis.Web.csproj
+		SccProjectName2 = example/ProductManagement.Framework.Cache.Redis.Web
+		SccLocalPath2 = example\\ProductManagement.Framework.Cache.Redis.Web
+		SccProjectUniqueName3 = tests\\ProductManagement.Framework.Cache.Redis.Test.csproj
+		SccProjectName3 = tests
+		SccLocalPath3 = tests
+		SccProjectUniqueName4 = ProductManagement.Framework.Cache.RedisProfiler\\ProductManagement.Framework.Cache.RedisProfiler.csproj
+		SccProjectName4 = ProductManagement.Framework.Cache.RedisProfiler
+		SccLocalPath4 = ProductManagement.Framework.Cache.RedisProfiler
+	EndGlobalSection
+EndGlobal

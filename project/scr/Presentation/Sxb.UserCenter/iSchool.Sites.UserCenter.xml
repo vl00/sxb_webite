@@ -1,0 +1,1565 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>iSchool.Sites.UserCenter</name>
+  </assembly>
+  <members>
+    <member name="M:iSchool.Sites.UserCenter.Controllers.AccountController.BindMobile">
+      <summary>
+        修改手机号
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Controllers.AccountController.Conflict(System.String,System.String,System.Byte,System.Guid,System.Int16,System.Boolean)">
+      <summary>
+        账号冲突详情
+      </summary>
+      <param name="kid"></param>
+      <param name="data"></param>
+      <param name="rnd"></param>
+      <param name="dataType">0:手机号/1:微信/2:QQ</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Controllers.AccountController.Destroy">
+      <summary>
+        注销账号
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Controllers.AuthorizeAttribute.IsAjaxRequest(Microsoft.AspNetCore.Http.HttpRequest)">
+      <summary>
+        from https://stackoverflow.com/questions/29282190/where-is-request-isajaxrequest-in-asp-net-core-mvc
+      </summary>
+      <param name="request"></param>
+      <returns></returns>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Controllers.HomeController">
+      <summary>
+        首页控制器
+      </summary>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Controllers.HomeController.Index">
+      <summary>
+        首页
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.OldMobileMatch(System.Guid,System.Int16,System.String)">
+      <summary>
+        判断旧手机号是否正确
+      </summary>
+      <param name="userID"></param>
+      <param name="mobile"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.CheckMobileConflict(System.Int16,System.String)">
+      <summary>
+        检查手机号是否冲突
+      </summary>
+      <param name="nationCode"></param>
+      <param name="mobile"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.CheckWXConflict(System.String,System.Guid)">
+      <summary>
+        检查微信UnionID号是否冲突
+      </summary>
+      <param name="unionID"></param>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.CheckQQConflict(System.Guid)">
+      <summary>
+        检查QQUnionID号是否冲突
+      </summary>
+      <param name="unionID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.ListMobileConflict(System.Int16,System.String)">
+      <summary>
+        列出手机号码冲突账号
+      </summary>
+      <param name="nationCode"></param>
+      <param name="mobile"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.ListWXConflict(System.String)">
+      <summary>
+        列出微信冲突账号
+      </summary>
+      <param name="unionid"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.ListQQConflict(System.Guid,System.Guid)">
+      <summary>
+        列出QQ冲突账号
+      </summary>
+      <param name="unionid"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.BindMobile(System.Guid,System.Int16,System.String)">
+      <summary>
+        绑定手机号
+      </summary>
+      <param name="userID"></param>
+      <param name="nationCode"></param>
+      <param name="mobile"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.BindQQUnionID(System.Guid,System.Guid)">
+      <summary>
+        绑定QQUnionID
+      </summary>
+      <param name="unionID"></param>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.BindQQOpenID(System.Guid,System.Guid,System.String)">
+      <summary>
+        绑定QQOpenID
+      </summary>
+      <param name="openID"></param>
+      <param name="userID"></param>
+      <param name="appName"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.BindWXUnionID(System.String,System.Guid,System.String)">
+      <summary>
+        绑定微信UnionID
+      </summary>
+      <param name="unionID"></param>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.BindWXOpenID(System.String,System.Guid,System.String)">
+      <summary>
+        绑定微信OpenID
+      </summary>
+      <param name="openID"></param>
+      <param name="appName"></param>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.GetBindMobile(System.Guid)">
+      <summary>
+        获取绑定的手机号
+      </summary>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.GetBindWeixin(System.Guid)">
+      <summary>
+        获取绑定的微信UnionID
+      </summary>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.DAL.AccountDAL.GetBindQQ(System.Guid)">
+      <summary>
+        获取绑定的QQUnionID
+      </summary>
+      <param name="userID"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.HttpHelper.HttpPost(System.String,System.Object,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+      <summary>
+        发起POST同步请求
+
+      </summary>
+      <param name="url"></param>
+      <param name="postData"></param>
+      <param name="contentType">application/xml、application/json、application/text、application/x-www-form-urlencoded</param>
+      <param name="headers">填充消息头</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.HttpHelper.HttpPostAsync(System.String,System.String,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+      <summary>
+        发起POST异步请求
+      </summary>
+      <param name="url"></param>
+      <param name="postData"></param>
+      <param name="contentType">application/xml、application/json、application/text、application/x-www-form-urlencoded</param>
+      <param name="headers">填充消息头</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.HttpHelper.HttpGet(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+      <summary>
+        发起GET同步请求
+      </summary>
+      <param name="url"></param>
+      <param name="headers"></param>
+      <param name="contentType"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.HttpHelper.HttpGetAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+      <summary>
+        发起GET异步请求
+      </summary>
+      <param name="url"></param>
+      <param name="headers"></param>
+      <param name="contentType"></param>
+      <returns></returns>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif">
+      /// <summary>
+        表示参数的结构
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif.Id">
+      <summary>
+        数据的ID
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif.Type">
+      <summary>
+        数据类型
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif.Length">
+      <summary>
+        数据中值的字节长度
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif.Name">
+      <summary>
+        根据ID对应的中文名
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.Exif.Value">
+      <summary>
+        根据原字节解析的参数值
+      </summary>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.ToStrOfByte(System.Byte[])">
+      <summary>
+        将字节通过ASCII转换为字符串
+      </summary>
+      <param name="bt">原字节</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.ToUnInt16(System.Byte[])">
+      <summary>
+        将字节转换为int
+      </summary>
+      <param name="bt">原字节</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.ToUnInt32(System.Byte[],System.Boolean)">
+      <summary>
+        将原两组字节转换为uint
+      </summary>
+      <param name="bt">原字节</param>
+      <param name="isFirst">是否转第一个字节组</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.ExposureMode(System.Int32)">
+      <summary>
+        获取曝光模式
+      </summary>
+      <param name="value">曝光模式值</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.MeteringMode(System.Int32)">
+      <summary>
+        获取测光模式
+      </summary>
+      <param name="value">测光模式值</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.FlashMode(System.Int32)">
+      <summary>
+        获取闪光灯模式
+      </summary>
+      <param name="value">闪光灯值</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.WhiteBalance(System.Int32)">
+      <summary>
+        获取白平衡模式
+      </summary>
+      <param name="value">白平衡值</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.ImgPropertyHelper.InfoOfExif(System.Int32,System.Int32,System.Byte[])">
+      <summary>
+        通过Id获取Exif中关键名称和值
+      </summary>
+      <param name="pId">ID</param>
+      <param name="pType">类型</param>
+      <param name="pBytes">字节值</param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.QQUtil.GetQQAccessToken(System.String,System.String,System.String,System.String)">
+      <summary>
+        通过code获取access_token
+      </summary>
+      <param name="appId"></param>
+      <param name="appSecret"></param>
+      <param name="code"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.QQUtil.GetQQOpenID(System.String)">
+      <summary>
+        通过access_token获取openid及unionid
+      </summary>
+      <param name="accessToken"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.QQUtil.GetQQUserInfo(System.String,System.String,System.String)">
+      <summary>
+        拉取用户信息
+      </summary>
+      <param name="accessToken"></param>
+      <param name="openId"></param>
+      <returns></returns>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.QQRet.code">
+      <summary>
+        错误编号
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.QQRet.msg">
+      <summary>
+        错误提示消息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.QQOpenID.openid">
+      <summary>
+        授权用户唯一标识
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.QQOpenID.unionid">
+      <summary>
+        授权用户唯一联合标识
+      </summary>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.RSAHelper.GenerateRSAKeyPair">
+      <summary>
+        创建RSA密钥对
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.RSAHelper.RSAEncrypt(System.String,System.String)">
+      <summary>
+        RSA加密
+      </summary>
+      <param name="publickey"></param>
+      <param name="content"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.RSAHelper.RSADecrypt(System.String,System.String)">
+      <summary>
+        RSA解密
+      </summary>
+      <param name="privatekey"></param>
+      <param name="content"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.TXSMSHelper.Send(System.Int32,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String)">
+      普通单发短信接口，明确指定内容，如果有多个签名，请在内容中以【】的方式添加到信息内容中，否则系统将使用默认签名
+      @param type 短信类型，0 为普通短信，1 营销短信
+      @param nationCode 国家码，如 86 为中国
+      @param phoneNumber 不带国家码的手机号
+      @param msg 信息内容，必须与申请的模板格式一致，否则将返回错误
+      @param extend 扩展码，可填空
+      @param ext 服务端原样返回的参数，可填空
+      @return SmsSingleSenderResult
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.TXSMSHelper.SendWithParam(System.Int32,System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{System.String},System.String,System.String,System.String)">
+      指定模板单发
+      @param nationCode 国家码，如 86 为中国
+      @param phoneNumber 不带国家码的手机号
+      @param templId 模板 id
+      @param templParams 模板参数列表，如模板 {1}...{2}...{3}，那么需要带三个参数
+      @param extend 扩展码，可填空
+      @param ext 服务端原样返回的参数，可填空
+      @return SmsSingleSenderResult
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.TXSMSMultiSender.Send(System.Int32,System.String,System.Int32,System.String,System.Collections.Generic.List{System.String},System.String,System.String,System.String)">
+      普通群发短信接口，明确指定内容，如果有多个签名，请在内容中以【】的方式添加到信息内容中，否则系统将使用默认签名
+      【注意】海外短信无群发功能
+      @param type 短信类型，0 为普通短信，1 营销短信
+      @param nationCode 国家码，如 86 为中国
+      @param phoneNumbers 不带国家码的手机号列表
+      @param msg 信息内容，必须与申请的模板格式一致，否则将返回错误
+      @param extend 扩展码，可填空
+      @param ext 服务端原样返回的参数，可填空
+      @return SmsMultiSenderResult
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.TXSMSMultiSender.SendWithParam(System.Int32,System.String,System.String,System.Collections.Generic.List{System.String},System.Int32,System.Collections.Generic.List{System.String},System.String,System.String,System.String)">
+      指定模板群发
+      【注意】海外短信无群发功能
+      @param nationCode 国家码，如 86 为中国
+      @param phoneNumbers 不带国家码的手机号列表
+      @param templId 模板 id
+      @param params 模板参数列表
+      @param sign 签名，如果填空，系统会使用默认签名
+      @param extend 扩展码，可以填空
+      @param ext 服务端原样返回的参数，可以填空
+      @return SmsMultiSenderResult
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.VerifyCodeHelper.RndomStr(iSchool.Sites.UserCenter.Library.VerifyCodeHelper.VerifyCodeType,System.Int32)">
+      <summary>
+        生成指定长度的随机字符串
+      </summary>
+      <param name="codeLength">字符串的长度</param>
+      <returns>返回随机数字符串</returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.VerifyCodeHelper.Create(System.Guid@,System.String@,iSchool.Sites.UserCenter.Library.VerifyCodeHelper.VerifyCodeType,System.Int32)">
+      <summary>
+        将生成的字符串写入图像文件
+      </summary>
+      <param name="code">验证码字符串</param>
+      <param name="length">生成位数（默认4位）</param>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.WeixinUtil.GetWeiXinAccessToken(System.String,System.String,System.String)">
+      <summary>
+        通过code获取access_token
+      </summary>
+      <param name="appId"></param>
+      <param name="appSecret"></param>
+      <param name="code"></param>
+      <returns></returns>
+    </member>
+    <member name="M:iSchool.Sites.UserCenter.Library.WeixinUtil.GetWeiXinUserInfo(System.String,System.String)">
+      <summary>
+        拉取用户信息
+      </summary>
+      <param name="accessToken"></param>
+      <param name="openId"></param>
+      <returns></returns>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.access_token">
+      <summary>
+        接口调用凭证
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.expires_in">
+      <summary>
+        access_token接口调用凭证超时时间，单位（秒）
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.refresh_token">
+      <summary>
+        用户刷新access_token
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.openid">
+      <summary>
+        授权用户唯一标识
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.scope">
+      <summary>
+        用户授权的作用域，使用逗号（,）分隔
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.errcode">
+      <summary>
+        错误编号
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXAccessToken.errmsg">
+      <summary>
+        错误提示消息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.openid">
+      <summary>
+        授权用户唯一标识
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.scope">
+      <summary>
+        用户授权的作用域，使用逗号（,）分隔
+      </summary>
+    </member>
+    <!-- Badly formed XML comment ignored for member "P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.nickname" -->
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.sex">
+      <summary>
+        用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.province">
+      <summary>
+        用户个人资料填写的省份
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.city">
+      <summary>
+        普通用户个人资料填写的城市
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.country">
+      <summary>
+        国家，如中国为CN
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.headimgurl">
+      <summary>
+        用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.privilege">
+      <summary>
+        用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.errcode">
+      <summary>
+        错误编号
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Library.WXUserInfoResult.errmsg">
+      <summary>
+        错误提示消息
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType">
+      <summary>
+        学校类型
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.Public">
+      <summary>
+        公办
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.Private">
+      <summary>
+        民办
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.International">
+      <summary>
+        国际
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.ForeignNationality">
+      <summary>
+        外籍
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.SAR">
+      <summary>
+        港澳台
+      </summary>
+    </member>
+    <member name="F:iSchool.Sites.UserCenter.Models.EnumSet.SchoolType.Other">
+      <summary>
+        其它
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Account.Conflict.data">
+      <summary>
+        手机号
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Account.Conflict.dataType">
+      <summary>
+        0：手机号；1：微信，2：QQ
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.SchoolId">
+      <summary>
+        学校ID
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.SchoolSectionId">
+      <summary>
+        学校学部ID
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.UserId">
+      <summary>
+        评论者ID
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.Content">
+      <summary>
+        点评内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.ReplyCount">
+      <summary>
+        回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.RumorRefuting">
+      <summary>
+        是否辟谣
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.AddTime">
+      <summary>
+        写入日期
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.IsAttend">
+      <summary>
+        是否为过来人
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.IsEssence">
+      <summary>
+        是否为精华
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.Comment.UserInfoModel">
+      <summary>
+        用户信息
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel">
+      <summary>
+        点评回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.Id">
+      <summary>
+        回复id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.SchoolCommentId">
+      <summary>
+        点评id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.ReplyId">
+      <summary>
+        回复子级id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.UserId">
+      <summary>
+        用户id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.IsSchoolPublish">
+      <summary>
+        是否学校发布
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.IsAttend">
+      <summary>
+        是否就读
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.RumorRefuting">
+      <summary>
+        是否辟谣
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.Content">
+      <summary>
+        回复内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.IsTop">
+      <summary>
+        是否置顶
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.ReplyCount">
+      <summary>
+        回复总数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.CommentReplyModel.CreateTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.QuestionId">
+      <summary>
+        问题id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.QuestionContent">
+      <summary>
+        问题内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.CurrentQuestionAnswerTotal">
+      <summary>
+        问题回答总数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.SectionQuestionTotal">
+      <summary>
+        分部下总数量
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.CreateTime">
+      <summary>
+        问题写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.QA.AnswerModels">
+      <summary>
+        回答列表
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.AnswerModel">
+      <summary>
+        问答实体
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.AnswerModel.Id">
+      <summary>
+        问答id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.AnswerModel.AnswerContent">
+      <summary>
+        问答详情
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.ViewsModels.Collection.AnswerModel.UserName">
+      <summary>
+        用户昵称
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList">
+      <summary>
+        点评
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.UserId">
+      <summary>
+        写入点评的用户id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.UserName">
+      <summary>
+        用户昵称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.UserHeadImage">
+      <summary>
+        用户头像
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.Tags">
+      <summary>
+        点评标签
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.Images">
+      <summary>
+        图片
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolSectionId">
+      <summary>
+        分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.Content">
+      <summary>
+        点评内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsTop">
+      <summary>
+        是否置顶
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.Score">
+      <summary>
+        点评打分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CreateTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.ReplyCount">
+      <summary>
+        回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.StartTotal">
+      <summary>
+        点亮
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsLike">
+      <summary>
+        是否点赞
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsSelected">
+      <summary>
+        是否为精选
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsRumorRefuting">
+      <summary>
+        是否辟谣
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.IsUserSchool">
+      <summary>
+        是否为校方身份
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolInfo.IsAuth">
+      <summary>
+        是否上学帮认证
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolInfo.SchoolAvgScore">
+      <summary>
+        学校总平均分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolInfo.SchoolStars">
+      <summary>
+        前端展示星星
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolInfo.CommentTotal">
+      <summary>
+        学校总点评数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.SchoolInfo.IsExists">
+      <summary>
+        是否存在点评
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.IsAttend">
+      <summary>
+        是否就读
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.AggScore">
+      <summary>
+        总分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.TeachScore">
+      <summary>
+        师资力量分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.HardScore">
+      <summary>
+        硬件设施分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.EnvirScore">
+      <summary>
+        环境周边分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.ManageScore">
+      <summary>
+        学风管理分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentList.CommentScore.LifeScore">
+      <summary>
+        校园生活分
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel">
+      <summary>
+        点评的回复 + 点评的回复的回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.userInfoVo">
+      <summary>
+        发表者用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.replyUserInfoVo">
+      <summary>
+        回复者信息用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.Id">
+      <summary>
+        id   【点评id | 回复id】
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.ReplyId">
+      <summary>
+        回复id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.SchoolCommentId">
+      <summary>
+        点评id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.SchoolName">
+      <summary>
+        学校名称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.Content">
+      <summary>
+        内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.ReplyContent">
+      <summary>
+        回复内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.ReplyCount">
+      <summary>
+        点评回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.AddTime">
+      <summary>
+        点评写入时间 | 回复写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.ReplyAddTime">
+      <summary>
+        回复写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentReplyAndReplyModel.Type">
+      <summary>
+        0：点评的回复，1：回复的回复
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition">
+      <summary>
+        回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.ReplyUserId">
+      <summary>
+        写入者
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.SchoolCommentId">
+      <summary>
+        点评id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.IsLike">
+      <summary>
+        是否点赞
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.Content">
+      <summary>
+        回复内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.ReplayCount">
+      <summary>
+        回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.AddTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.User">
+      <summary>
+        写入用户
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.IsStudent">
+      <summary>
+        是否为学生
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.IsAnonymou">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.CommentVo.ReplayExhibition.IsAttend">
+      <summary>
+        是否就读
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel">
+      <summary>
+        点赞-点评：当前用户点赞的“点评”+当前用户点赞的“点评的回复”+当前用户点赞的“点评的回复”的回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.userInfoVo">
+      <summary>
+        发表者用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.replyUserInfoVo">
+      <summary>
+        回复者信息用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.Id">
+      <summary>
+        Id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.CommentId">
+      <summary>
+        点评id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.ParentReplyId">
+      <summary>
+        点评回复id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.SchoolName">
+      <summary>
+        学校名称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.Content">
+      <summary>
+        内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.ReplyContent">
+      <summary>
+        回复内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.ReplyCount">
+      <summary>
+        点评回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.ReplyId">
+      <summary>
+        点评回复的回复id（回复那条的id）
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.AddTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.ReplyAddTime">
+      <summary>
+        回复写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeCommentAndReplyModel.Type">
+      <summary>
+        0：点评，1：回复
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel">
+      <summary>
+        点赞-回答：当前用户点赞的“问题”+当前用户点赞的“回答”+当前用户点赞的“回答”的回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.userInfoVo">
+      <summary>
+        发表者用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.answerUserInfoVo">
+      <summary>
+        回复者信息用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.Id">
+      <summary>
+        问题id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.ParentAnswerId">
+      <summary>
+        回答id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.SchoolName">
+      <summary>
+        学校名称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.Content">
+      <summary>
+        内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.AnswerContent">
+      <summary>
+        回答的回复内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.AnswerCount">
+      <summary>
+        回答数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.AddTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.AnswerAddTime">
+      <summary>
+        回答写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.LikeVo.LikeQuestionAndAnswerModel.Type">
+      <summary>
+        0：回答，1：回复
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo">
+      <summary>
+        问答
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.ReplyCount">
+      <summary>
+        回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.IsLike">
+      <summary>
+        当前用户是否点赞
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.IsSelected">
+      <summary>
+        当前回复是否为精华
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.AnswerContent">
+      <summary>
+        回答内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.AddTime">
+      <summary>
+        写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.IsSchoolPublish">
+      <summary>
+        是否学校发布
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.IsAttend">
+      <summary>
+        是否就读
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.RumorRefuting">
+      <summary>
+        是否辟谣
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.QuestionId">
+      <summary>
+        问题id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.UserId">
+      <summary>
+        用户id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.ParentId">
+      <summary>
+        回复父级id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.AnswerInfoVo.ParentUserId">
+      <summary>
+        父级写入id
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel">
+      <summary>
+        问题的回答，回答的回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.userInfoVo">
+      <summary>
+        发表者用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.answerUserInfoVo">
+      <summary>
+        回复者信息用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.Id">
+      <summary>
+        id 【问题id | 回答id】
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.AnswerId">
+      <summary>
+        回答id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.SchoolName">
+      <summary>
+        学校名称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.Content">
+      <summary>
+        内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.AnswerContent">
+      <summary>
+        回答内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.AnswerCount">
+      <summary>
+        提问回答数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.LikeCount">
+      <summary>
+        点赞数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.IsAnony">
+      <summary>
+        是否匿名
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.AddTime">
+      <summary>
+        点评写入时间 | 回复写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.AnswerAddTime">
+      <summary>
+        回复写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionAnswerAndAnswerReplyModel.Type">
+      <summary>
+        0：提问的回答，1：回答的回复
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo">
+      <summary>
+        问题
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolId">
+      <summary>
+        学校id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolSectionId">
+      <summary>
+        学校分部id
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.UserId">
+      <summary>
+        写入者
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.QuestionContent">
+      <summary>
+        问题内容
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.LikeCount">
+      <summary>
+        点赞总数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.AnswerCount">
+      <summary>
+        回答总数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.IsLike">
+      <summary>
+        当前用户是否点赞
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.IsAnswer">
+      <summary>
+        当前用户是否回复
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.Images">
+      <summary>
+        问题图片
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.QuestionCreateTime">
+      <summary>
+        问题写入时间
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.UserInfo">
+      <summary>
+        提问者用户信息
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.Answer">
+      <summary>
+        当前问题的回答详情
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.School">
+      <summary>
+        学校总问题 / 回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.IsSelected">
+      <summary>
+        是否为精选
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.IsExists">
+      <summary>
+        是否存在问题
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.SchoolQuestionTotal">
+      <summary>
+        当前学校下的总问题数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.SchoolReplyTotal">
+      <summary>
+        学校总回复数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.SchoolName">
+      <summary>
+        学校名称
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.IsInternactioner">
+      <summary>
+        是否为国际
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.IsLoding">
+      <summary>
+        是否住校
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.QuestionVo.QuestionVo.SchoolInfo.IsAuth">
+      <summary>
+        是否认证
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.Discount">
+      <summary>
+        是否普惠
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.Diglossia">
+      <summary>
+        是否双语
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.Chinese">
+      <summary>
+        是否是中国人学校
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.Score">
+      <summary>
+        评分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.LodgingType">
+      <summary>
+        是否寄宿
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.CommentCount">
+      <summary>
+        评论数
+      </summary>
+      <value>The comment count.</value>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.QuestionCount">
+      <summary>
+        提问数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.SchoolAvgScore">
+      <summary>
+        学校总平均分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolModel.SchoolStars">
+      <summary>
+        前端展示星星
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.SchoolAvgScore">
+      <summary>
+        学校总平均分
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.SchoolStars">
+      <summary>
+        前端展示星星
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.CommentTotal">
+      <summary>
+        分部所在学校的评论数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.SectionCommentTotal">
+      <summary>
+        分部自身的评论数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.SectionQuestionTotal">
+      <summary>
+        分部下总提问数
+      </summary>
+    </member>
+    <member name="P:iSchool.Sites.UserCenter.Models.Vo.SchoolVo.SchoolScoreModel.IsAuth">
+      <summary>
+        是否上学帮认证
+      </summary>
+    </member>
+    <member name="T:iSchool.Sites.UserCenter.Models.Vo.UserInfoVo.UserInfoModel">
+      <summary>
+        用户信息
+      </summary>
+    </member>
+  </members>
+</doc>

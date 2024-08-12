@@ -1,0 +1,301 @@
+﻿<html lang="zh">
+@{
+    var keywords = "";
+    var description = "";
+    var title = "写点评";
+}
+<head>
+    <title>@(title)-上学帮</title>
+    <meta name="keywords" content="@keywords">
+    <meta name="description" content="@description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/review-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/review/school-write-comments.css">
+    <title>写点评</title>
+</head>
+
+<body>
+    <header class="header strategy-header-new">
+        <div class="container strategy-header">
+            @await Html.PartialAsync("HeaderLogoPartial", 2)
+        </div>
+    </header>
+    <section class="write-comments school-detail">
+        <div class="container d-flex">
+            <div class="left-content d-block">
+                <div class="write-comments-school-name d-flex justify-content-between position-relative">
+                    <h1 class="font-26 color-333 font-weight-bold">@ViewBag.SchoolInfo.SchoolName</h1>
+                    <a href="javascript:;" id="reviewSchool" title="点评其他学校" class="d-block font-14">点评其他学校</a>
+                    <div class="review-rest-school position-absolute">
+                        <input type="text" placeholder="请输入学校名称">
+                        <img src="@(ViewBag.StaticFile)/imgs/home/iconSearch.png" alt="" class="position-absolute">
+                        <ul class="font-13 color-333 scroll-y">
+                            @foreach (var item in ViewBag.AllSchoolBranch)
+                            {
+                                <li><a href="@Url.Action("Write", "Comment", new { eid =@item.SchoolSectionId })" title="@item.SchoolName">@item.SchoolName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <ul class="list-ul comment">
+                        <li>
+                            <p class="font-16 color-333 font-weight-bold">您或您的孩子读过该校吗？</p>
+                            <div class="font-12 enter-tab clearfix">
+                                <a href="javascript:;" title="已入读" class="selected" data-IsAttend="0">已入读</a>
+                                <a href="javascript:;" title="未入读" class="" data-IsAttend="1">未入读</a>
+                            </div>
+                        </li>
+                        <!--                        未入读-->
+                        <li class="no-attend">
+                            <div class="font-16 color-333 font-weight-bold click-score d-flex">
+                                您对该校的评价
+                                <ul class="d-flex">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                                <span class="font-12 font-weight-normal">点击星星评分</span>
+                            </div>
+                        </li>
+                        <!--                        已入读-->
+                        <li class="grade-list">
+                            <div class="font-16 color-333 font-weight-bold click-score d-flex">
+                                您对该校的评价
+                                <ul class="d-flex big-star-score">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="grade-list grade-list-score-list">
+                            <ul>
+                                <li class="d-flex teacher">
+                                    师资力量
+                                    <ul class="d-flex grade-list-score">
+                                        <li data-check="false" class="score-0"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                    </ul>
+                                    <span class="font-12 font-weight-normal">给师资力量打分</span>
+                                </li>
+                                <li class="d-flex facilities">
+                                    硬件设施
+                                    <ul class="d-flex grade-list-score">
+                                        <li data-check="false" class="score-0"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                    </ul>
+                                    <span class="font-12 font-weight-normal">给硬件设施打分</span>
+                                </li>
+                                <li class="d-flex environment">
+                                    周边环境
+                                    <ul class="d-flex grade-list-score">
+                                        <li data-check="false" class="score-0"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                    </ul>
+                                    <span class="font-12 font-weight-normal">给周边环境打分</span>
+                                </li>
+                                <li class="d-flex manage">
+                                    校风管理
+                                    <ul class="d-flex grade-list-score">
+                                        <li data-check="false" class="score-0"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                    </ul>
+                                    <span class="font-12 font-weight-normal">给校风管理打分</span>
+                                </li>
+                                <li class="d-flex life">
+                                    校园生活
+                                    <ul class="d-flex grade-list-score">
+                                        <li data-check="false" class="score-0"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                        <li data-check="false"></li>
+                                    </ul>
+                                    <span class="font-12 font-weight-normal">给校园生活打分</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="comment-content">
+                                <p class="font-16 color-333 font-weight-bold">评价内容</p>
+                                <textarea name="comment-content"
+                                          placeholder="亲，学校好不好？好在哪？孩子就读体验怎样？马上和更多家长分享您的见解，还可使用标签评价学校哦！" cols="1"
+                                          rows="1" id="textareaVal"></textarea>
+                                <span class="font-12">写30个字，有机会被采纳为精选点评哦！</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <p class="font-16 color-333 font-weight-bold">添加图片（最多9张）</p>
+                                <ul class="upload-img-list d-flex flex-wrap">
+                                    <li class="upload-btn text-center position-relative">
+                                        <p class="font-12">上传照片</p>
+                                        <input type="file" name="image" accept="image/*" class="position-absolute">
+                                    </li>
+                                </ul>
+                                <!-- <ul class="d-flex clearfix upload-ul">
+                                    <li class="upload-btn text-center upload-img-list">
+                                        <p>上传照片</p>
+                                        <input type="file" name="upload" id="" class="up-img-btn">
+                                    </li>
+                                </ul> -->
+                            </div>
+                        </li>
+                        <li>
+                            <p class="font-16 color-333 font-weight-bold">您对该校的印象</p>
+                            <div class="select-school-tab">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:;" title="生源好" data-tagId="E7814553-0FAA-4FEC-AD92-91E4AC0C847E" class="selected">生源好</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" title="交通便捷" data-tagId="E1DD9B42-56F8-4E7E-B91E-30FE1FB9D310">交通便捷</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" title="教学质量高" data-tagId="2DF16E8B-88B2-488F-8B4E-FF9C7066538A">教学质量高</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" title="学费高" data-tagId="8F057CA0-FC6E-48B2-98C0-CDDB99C111E0">学费高</a>
+
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" title="活动多" data-tagId="098FF19D-973C-4619-BB27-6033F4D4B2F9">活动多</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" title="校风良好" data-tagId="F9AB1C92-3311-4968-A836-4ECCEB20A52D">校风良好</a>
+                                    </li>
+                                </ul>
+                                @*<a href="javascript:;" class="add-school-tab">＋</a>*@
+                            </div>
+                        </li>
+                        @if (ViewBag.IsSchool)
+                        {
+                            <li>
+                                <p class="font-16 color-333 font-weight-bold">
+                                    学校辟谣
+                                    <i class="question-icon position-relative" id="rumor-refuting"></i>
+                                    <a href="" class="anonymous position-relative"></a>
+                                </p>
+                                <span class="font-12 select-tab-detail">选择学校辟谣后，学校将会在点评界面见到醒目的学校辟谣LOGO，并且该条点评自动置顶。</span>
+                            </li>
+                        }
+                        <li>
+                            <p class="font-16 color-333 font-weight-bold">
+                                匿名点评
+                                <i class="question-icon position-relative"></i>
+                                <a href="" class="anonymous position-relative" id="is-anony"></a>
+                            </p>
+                            <span class="font-12 select-tab-detail">选择匿名点评后，学校将无法获取你的个人信息以便进一步反馈。</span>
+                        </li>
+                    </ul>
+                    <!-- 未能保存请删除save -->
+                    <a href="javascript:;" title="提交点评" data-eid="@ViewBag.SchoolInfo.ExtId" data-sid="@ViewBag.SchoolInfo.Sid" class="submit">提交点评</a>
+                    <p class="font-12 sxb-score">点评和打分都将是其他家长的参考依据，并影响该学校评价。请发布真实、客观的本人意见或体验评价。</p>
+                </div>
+            </div>
+            <div class="right-list">
+                <!-- 广告开始 -->
+                <div class="mkt-box">
+                    <div class="swiper-container swiper-mkt swiperSchoolAd" alt="26" id="swiperSchoolAd-26" style="height: 205px;">
+                        <div class="swiper-wrapper">
+                        </div>
+                        <div class="swiper-pagination mkt-pagination"></div>
+                    </div>
+                </div>
+                <!-- 广告结束 -->
+                <div class="hot-school">
+                    <h2 class="font-18 font-weight-bold">热门点评</h2>
+                    <ul class="hot-comment">
+                        @foreach (var item in ViewBag.HottestComment)
+                        {
+                            @await Html.PartialAsync("_HottestComment.cshtml", (Sxb.PCWeb.ViewModels.Comment.CommentInfoViewModel)item);
+                        }
+                    </ul>
+                </div>
+                <div class="hot-comment-school">
+                    <h2 class="font-18 font-weight-bold">热评学校</h2>
+                    <ul class="school-list">
+                        @{
+                            var HotSchoolComment = (List<Sxb.PCWeb.ViewModels.School.SchoolCommentCardViewModel>)ViewBag.HottestSchoolView;
+                            for (int i = 0; i < HotSchoolComment.Count(); i++)
+                            {
+                                ViewBag.Level = i + 1;
+                                @await Html.PartialAsync("_HotSchoolComment.cshtml", HotSchoolComment[i]);
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+    @* 右侧条 *@
+    @await Html.PartialAsync("Right_bar")
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/review.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/user/user.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/review/commitComment.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/swiperAd.js"></script>
+    <script src='@(ViewBag.StaticFile)/js/swiper.js'></script>
+    <script>
+        $(function () {
+            var searchtime;
+
+            // 搜索内容
+            $(".review-rest-school input").bind('input propertychange', function () {
+                clearTimeout(searchtime);
+                var inputText = $(this).val();
+                searchtime = setTimeout(function () {
+                    $('.review-rest-school ul').empty();
+                    $.ajax({
+                        url: "/search/GetSuggestList",
+                        type: 'GET',
+                        dataType: 'json',
+                        traditional: true,
+                        jsonp: "callback",
+                        data: { 'keyWords': inputText, 'channel': 0 },
+                        success: function (data) {
+                            var json = data
+                            for (var i = 0; i < json.data.list[0].items.length; i++) {
+                                $('.review-rest-school ul').append("<li><a href='/comment/write?eid=" + json.data.list[0].items[i].value.id + "' title=" + json.data.list[0].items[i].keyWord + ">" + json.data.list[0].items[i].keyWord + "</a></li>");
+                            }
+                        }
+                    })
+                }, 500)
+            });
+        })
+
+
+    </script>
+</body>
+
+</html>

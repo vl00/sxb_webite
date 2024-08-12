@@ -1,0 +1,193 @@
+﻿@model PMS.UserManage.Application.ModelDto.Home.Index
+@{
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+    ViewData["Title"] = "我的";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/mine.css" />
+}
+<section class="head">
+    @*<div id="fileOutput">
+        @{foreach (var file in ViewBag.Files as string[])
+    {
+            <div>@file</div>
+    }
+        }
+    </div>*@
+    <div class="login-head">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Index","Info")" class="flex">
+                <div style="position: relative;">
+                    <div class="img-box">
+                        <img src="@Model.headImgUrl" alt="">
+                    </div>
+                    @foreach (var verify in Model.verify)
+                    {
+                        string iconClass = "";
+                        if (verify == 2) { iconClass = "school"; }
+                        <i class="icon @iconClass"></i>
+                    }
+                </div>
+                <div>
+                    <h5 class="user-name@(Model.verify.Count==0?" not-tag":"")">@Model.nickname</h5>
+                    @foreach (var verify in Model.verify)
+                    {
+                        string verifyName = "";
+                        if (verify == 1) { verifyName = "升学达人"; }
+                        else if (verify == 2) { verifyName = "校方认证"; }
+                        <span class="user-tag">@verifyName</span>
+                    }
+                </div>
+                <i class="arrow"></i>
+            </a>
+        }
+        else
+        {
+            <a href="@Url.Action("Index","Login")" class="flex">
+                <div class="img-box">
+                    <img src="@ViewBag.FileHost_M/imgs/mine/head.png" alt="">
+                </div>
+                <div>
+                    <h5 class="user-name">未登录</h5>
+                    <span class="login-or-register">登录/注册</span>
+                </div>
+                <i class="arrow"></i>
+            </a>
+        }
+    </div>
+    <ul class="login-msg text-center flex justify-content-between">
+        <li>
+            <a href="@Url.Action("Index","Publish")">
+                <p class="num">@Model.count.publish</p>
+                <span>发布</span>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Reply")">
+                <p class="num">@Model.count.reply</p>
+                <span>回复</span>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Collection")">
+                <p class="num">@Model.count.follow</p>
+                <span>关注</span>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Like")">
+                <p class="num">@Model.count.like</p>
+                <span>点赞</span>
+            </a>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <ul class="btn-list">
+        <li>
+            <a href="@Url.Action("Index","Message")">
+                <i class="icon"></i>
+                <span id="message" data-count="@Model.count.message">我的消息</span>
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","History")">
+                <i class="icon"></i>
+                <span>历史足迹</span>
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Setting")">
+                <i class="icon"></i>
+                <span>通用设置</span>
+                <i class="arrow"></i>
+            </a>
+        </li>
+        <li>
+            <a href="@(ViewBag.SiteHost_M)/home/Customer">
+                <i class="icon"></i>
+                <span>客服服务</span>
+                <i class="arrow"></i>
+            </a>
+        </li>
+        @*<li>
+            <a href="@Url.Action("Index","Contact")">
+                <i class="icon"></i>
+                <span>联系客服</span>
+                <i class="arrow"></i>
+            </a>
+        </li>*@
+        <li>
+            <a href="@Url.Action("Index","Agreement")">
+                <i class="icon"></i>
+                <span>协议及声明</span>
+                <i class="arrow"></i>
+            </a>
+        </li>
+        @*<li>
+            <a href="@Url.Action("Feedback","Contact")">
+                <i class="icon"></i>
+                <span>意见反馈</span>
+                <i class="arrow"></i>
+            </a>
+        </li>*@
+        @*<li>
+            <a href="@Url.Action("Index","Cooperation")">
+                <i class="icon"></i>
+                <span>我要合作</span>
+                <i class="arrow"></i>
+            </a>
+        </li>*@
+    </ul>
+</section>
+@if (!Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("ischool"))
+{
+<footer class="footer">
+    <ul class="flex text-center">
+        <li>
+            <a href="@ViewBag.SiteHost_M">
+                <p><i class="footer-icon"></i></p>
+                <div>首页</div>
+            </a>
+        </li>
+        <li>
+            <a href="@(ViewBag.SiteHost_M)/article/list">
+                <p><i class="footer-icon"></i></p>
+                <div>攻略</div>
+            </a>
+        </li>
+        @if (!Context.Request.Headers["User-Agent"][0].ToLower().Contains("miniprogram"))
+        {
+            <li>
+                <a href="@(ViewBag.SiteHost_M)/tools">
+                    <p><i class="footer-icon"></i></p>
+                    <div>工具</div>
+                </a>
+            </li>
+        }
+        <li class="active">
+            <a href="/">
+                <p><i class="footer-icon"></i></p>
+                <div>我的</div>
+            </a>
+        </li>
+    </ul>
+</footer>
+}
+@section  js{ 
+<script type="text/javascript">
+    var message = $('#message');
+    var messageCount = message.data('count');
+    var storageCount = localStorage.getItem('messageCount') || 0;
+    if (messageCount > 0 && messageCount > storageCount) {
+        message.addClass('new-msg');
+    }
+    message.parent().click(function () {
+        localStorage.setItem('messageCount', messageCount);
+    });
+</script>
+}

@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section styles{
+    <style>
+        .card {
+            border: none;
+        }
+    </style>
+}
+<div class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="row" style="border-bottom:1px solid black;padding-bottom: 15px;">
+                            <div class="col-sm-7">
+                                <h5 style="font-weight:bold;">账号管理</h5>
+                                <span style="font-size:13px;color: gray;">显示当前系统中的兼职人员账号信息</span>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <button class="float-right btn btn-dark" onclick="member_add('修改密码','/PartTimeJob/Manage/Index','400','500')">新建账号</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="admin" class="table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#admin').bootstrapTable({
+                method: 'get',
+                url: "",//请求路径
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'client',//server:服务器端分页|client：前端分页
+                pageSize: 4,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        limit: params.limit, // 每页显示数量
+                        offset: params.offset, // SQL语句起始索引
+                        //page : (params.offset / params.limit) + 1, //当前页码
+
+                        Name: $('#search_name').val(),
+                        Tel: $('#search_tel').val()
+                    };
+                    return temp;
+                },
+                columns: [{
+                    title: '昵称',
+                    field: 'loginName',
+                    sortable: true
+                }, {
+                    title: '手机号',
+                    field: 'name',
+                    sortable: true
+                }, {
+                    title: '身份角色',
+                    field: 'tel',
+                }, {
+                    title: '注册时间',
+                    field: 'sex'
+                },
+                {
+                    title: '操作',
+                    field: 'id',
+                    formatter: operation,//对资源进行操作
+                }]
+            })
+
+            //删除、编辑操作
+            function operation(value, row, index) {
+                var htm = "<button>删除</button><button>查看邀请码</button>"
+                return htm;
+            }
+        })
+    </script>
+}

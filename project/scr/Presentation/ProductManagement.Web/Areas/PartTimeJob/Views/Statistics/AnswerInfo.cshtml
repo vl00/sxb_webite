@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "AnswerInfo";
+    Layout = "~/Areas/PartTimeJob/Views/Shared/_LayoutLayer.cshtml";
+}
+
+@section styles
+    {
+
+    <style>
+        .table td, .table th {
+            border: none;
+        }
+
+    </style>
+}
+
+<div class="container breadcrumbs">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table">
+                                    <tr>
+                                        <td style="width:20%;">昵称：</td>
+                                        <td>@ViewBag.Answer["name"]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>问题：</td>
+                                        <td>@ViewBag.Answer["question"]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>答复：</td>
+                                        <td style="width:200px;display:inline-block;word-wrap:break-word;">@ViewBag.Answer["answer"]</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,322 @@
+﻿@using PMS.School.Application.ModelDto;
+@{
+    var auth = User.Identity as System.Security.Claims.ClaimsIdentity;
+    ViewBag.Nickname = auth.FindFirst(IdentityModel.JwtClaimTypes.Name)?.Value;
+    ViewBag.RequestUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path + Context.Request.QueryString;
+}
+<html lang="zh">
+
+<head>
+    <title>帮助中心</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/principle/principle.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container logo-nav">
+            <div class="sxb-icon">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <span>帮助中心</span>
+            </div>
+        </div>
+    </header>
+    <section class="principle-content">
+        <div class="container d-flex clearfix">
+            <div class="left-content">
+                <h4 class="font-16 ">客户服务</h4>
+                <ul>
+                    <li><a href="javascript:;" title="常见问题" data-classname="common-problems">常见问题</a></li>
+                    <li><a href="javascript:;" title="学校信息纠错" data-classname="error-correction">学校信息纠错</a></li>
+                    <li><a href="javascript:;" title="意见反馈" data-classname="terms">意见反馈</a></li>
+                    <li><a href="javascript:;" title="联系客服" data-classname="disclaimer">联系客服</a></li>
+                </ul>
+            </div>
+            <div class="right-content">
+                <!-- 常见问题 -->
+                <div class="common-problems sxb-principle">
+                    <h2 class="font-20 font-weight-bold color-333">常见问题</h2>
+                    <p>1：学校总评问题 </p>
+                    <span>Q：学校总评里各个项目的评分是如何得出的？</span>
+                    <span class="last-span">A：上学帮的学校总评模块是通过上学帮自有的大数据平台，获取全网的数据、资讯材料，再通过专利算法以统一公平的标准，为每一所学校进行评分。同时为家长提供全面客观的选校参考。</span>
+                    <p>2：账户信息/登录问题</p>
+                    <span>Q：为什么我的账号无法登录</span>
+                    <span>A：上学帮的账号无法登录有以下几种情况：</span>
+                    <span>1.账号名和密码不匹配，请注意填写的账户名和密码是否正确并相互匹配。如忘记密码，找回请点击“找回密码”。</span>
+                    <span>2.高风险账号（如账号被盗用等）请您点击“找回密码”，通过验证手机号找回。</span>
+                    <span>Q：如何修改绑定手机号？</span>
+                    <span class="last-span">A：如果当前账户绑定的手机号还在使用，请先登录账户，再进入“我的”-“通用设置”-“账号设置”中修改。如果当前账户绑定的手机号不再使用，请先通过密码登录账户，再进入“我的”-“通用设置”-“账号设置”中修改。</span>
+                    <p>3：身份认证问题</p>
+                    <span>Q：认证需要审核多久？</span>
+                    <span>A：上学帮的身份认证审核时间一般在48小时以内。如果是法定节假日期间，审核时间可能较慢，但不会遗漏，还请您耐心等待。</span>
+                </div>
+                <!-- 学校信息纠错 -->
+                <div class="error-correction sxb-principle">
+                    <h2 class="font-20 font-weight-bold color-333">学校信息纠错</h2>
+
+                    <p class="font-16">对象学校</p>
+                    <div class="school-name-box">
+                        <span class="school-name-title">学校名称</span>
+                        <span class="school-name-input">
+                            <input type="text" id="name" data-eid="@ViewBag.eid" value="@ViewBag.name" placeholder="请输入学校全称" />
+                            <i class="close-btn"></i>
+                        </span>
+                        <!-- select option -->
+                        <ul class="name-list">
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                            <li><a href="javascript:;">广州市天河区华阳小学-华阳校区</a></li>
+                        </ul>
+                    </div>
+
+                    <p class="font-16">纠错类型</p>
+                    <div class="error-btn">
+                        <a href="javascript:;" title="位置信息错误" class="selected" data-error-type="location">位置信息错误</a>
+                        <a href="javascript:;" title="学校名称错误" data-error-type="school-name">学校名称错误</a>
+                        <a href="javascript:;" title="学校类型错误" data-error-type="school-type">学校类型错误</a>
+                        <a href="javascript:;" title="其它" data-error-type="other">其它</a>
+                    </div>
+
+                    <!-- 位置信息错误 -->
+                    <div class="modify-information location">
+                        <p>位置信息</p>
+                        <div class="school-name-box">
+                            <span><i>*</i>地址</span>
+                            <span class="school-name-input">
+                                <input type="text" class="set-address" value="@ViewBag.addr" placeholder="请输入地址" />
+                                <i class="close-btn"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="" value="113.383318" class="lng d-none">
+                        <input type="text" name="" value="23.10347" class="lat d-none">
+                        <!-- 地图 -->
+                        <div id="error-information-map">
+                            <div class="map-mask"><a>更新地图位置</a></div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <!-- <li>
+                                <div class="text-center">
+                                <img src="../../imgs/sxb.png" />
+                                <i class="remove-img" style="display: none;"></i>
+                            </li> -->
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" class="submit" data-type="2">提交</a>
+                    </div>
+                    <!-- 学校名称错误 -->
+                    <div class="modify-information school-name">
+                        <p>名称信息</p>
+                        <div class="school-name-box">
+                            <!-- 用户修改的学校名称 -->
+                            <span><i>*</i>学校名称</span>
+                            <div class="school-name-input">
+                                <input type="text" class="schname" placeholder="请输入学校名称" />
+                                <i class="close-btn"></i>
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" class="submit" data-type="1">提交</a>
+                    </div>
+                    <!-- 学校类型错误 -->
+                    <div class="modify-information school-type">
+                        <p>类型信息</p>
+                        <div class="conditions-select">
+                            <span><i>*</i>学校类型</span>
+                            <div class="select-div">
+                                <!-- 学段选择 -->
+                                <a class="period font-12" title="学段">
+                                    <span>请选择</span>
+                                    <i class="down-icon"></i>
+                                </a>
+                                <div class="period-list ">
+                                    <ul>
+                                        @foreach (GradeTypeDto item in ViewBag.gradetype)
+                                        {
+                                            <li><a title="@item.GradeDesc" data-id="@item.GradeId">@item.GradeDesc</a></li>
+                                        }
+                                    </ul>
+                                </div>
+
+                                <!-- 类型选择 -->
+                                <a class="type-select font-12" title="类型">
+                                    <span>请选择</span>
+                                    <i class="down-icon"></i>
+                                </a>
+                                <div class="type-select-list">
+                                    <ul class="typedetaile">
+                                        @foreach (GradeTypeDto item in ViewBag.gradetype)
+                                        {
+                                            foreach (SchoolTypeDto type in item.Types)
+                                            {
+                                                <li><a title="@type.TypeName" data-id="@type.GradeId">@type.TypeName</a></li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" class="submit" data-type="3">提交</a>
+                    </div>
+                    <!-- 其他 -->
+                    <div class="modify-information other">
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <p>备注</p>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="300"
+                                      placeholder="请简单描述信息有误的内容"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">300</span>
+                            </div>
+                        </div>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" class="submit" data-type="4">提交</a>
+                    </div>
+                </div>
+                <!-- 意见反馈 -->
+                <div class="terms sxb-principle">
+                    <h2 class="font-20 font-weight-bold color-333">意见反馈</h2>
+                    <span><i>*</i>请选择反馈问题类型</span>
+                    <div class="error-btn">
+                        <a href="javascript:;" title="闪退/卡顿" class="selected" data-type="0" data-feedback-type="闪退/卡顿">闪退/卡顿</a>
+                        <a href="javascript:;" title="点评和问答" data-type="1" data-feedback-type="点评和问答">点评和问答</a>
+                        <a href="javascript:;" title="学校信息与服务" data-type="2" data-feedback-type="学校信息与服务">学校信息与服务</a>
+                        <a href="javascript:;" title="账户安全" data-type="3" data-feedback-type="账户安全">账户安全</a>
+                        <a href="javascript:;" title="搜索筛选建议" data-type="4" data-feedback-type="搜索筛选建议">搜索筛选建议</a>
+                        <a href="javascript:;" title="身份认证" data-type="5" data-feedback-type="身份认证">身份认证</a>
+                        <a href="javascript:;" title="其它" data-type="99" data-feedback-type="其它">其它</a>
+                    </div>
+                    <div class="feedback">
+                        <i>*</i><span class="feedback-type">问题类型: 闪退/卡顿</span>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="1000"
+                                      placeholder="请输入您的反馈意见（字数1000字以内）"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">1000</span>
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片/广告宣传图，否则上学君可能核实不到哦~</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" data-isfeedback="1" class="submit">提交</a>
+                    </div>
+                </div>
+                <!-- 联系客服 -->
+                <div class="disclaimer">
+                    <div class="contact-service">
+                        <h2 class="font-20 font-weight-bold color-333">联系客服</h2>
+                        <span class="title">删帖（文章）、注册、账号、学校信息纠错等问题可向一下渠道咨询</span>
+                        <div class="number">
+                            <span>上学帮客服热线</span>
+                            <span>
+                                <p>020-89623079</p><br>
+                                <p>020-89623090</p>
+                            </span>
+                        </div>
+                        <div class="email">
+                            <span>上学帮客服邮箱</span>
+                            <span>
+                                <p>service@sxkid.com</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="service-message">
+                        <h2 class="font-20 font-weight-bold color-333 service">客服留言</h2>
+                        <div class="textarea">
+                            <textarea f-name="remark" id="txt-remark" cols="30" rows="7" maxlength="1000"
+                                      placeholder="请输入您遇到的问题（字数1000字以内）"></textarea>
+                            <div class="textlength">
+                                <span class="now-length">0</span> / <span class="max-length">1000</span>
+                            </div>
+                        </div>
+                        <p>上传图片</p>
+                        <span class="up-img-title">提供清晰有效的图片，将有助快速定位问题</span>
+                        <ul class="upload-img-list d-flex flex-wrap">
+                            <li class="upload-btn text-center position-relative">
+                                <p class="font-12">上传照片</p>
+                                <input type="file" name="image" accept="image/*" class="position-absolute">
+                            </li>
+                        </ul>
+                        <span class="error-tip">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</span>
+                        <a href="#" title="提交" data-isfeedback="0" class="submit">提交</a>
+                    </div>
+                </div>
+            </div>
+    </section>
+    @{await Html.RenderPartialAsync("Right_bar");}
+
+    @{await Html.RenderPartialAsync("Footer"); }
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/principle/principle.js"></script>
+</body>
+
+</html>

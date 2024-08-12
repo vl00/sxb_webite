@@ -1,0 +1,303 @@
+﻿
+@{
+    Layout = null;
+    var schoolNos = ViewBag.SchoolNos as Dictionary<Guid, string>;
+}
+@using PMS.School.Domain.Common
+@using PMS.School.Domain.Dtos
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>上学帮_汇集全国学校_家长帮孩子选幼儿园,小学,中学_国际民办公办学校门户网站</title>
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿,亲子,家庭教育,孩子教育,小学教育,中学教育,高中教育,高校教育,中小学教育,学校探访,民办小学,公办小学,择校,名校,教育,小学,初中,择校,名师,中考,高考">
+    <meta name="description" content="上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/bootstrap.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/swiper.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home/home.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/home/hot-list.css">
+
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" title="上学帮" class="d-block">上学帮</a></h1>
+                <div class="select font-14">
+                    <i class="header-icon">@ViewBag.LocalCity</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("HotSchools","Home",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li><a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a></li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                    <li data-channel="0"><a title="找学校">找学校</a></li>
+                    <li data-channel="1"><a title="看点评">看点评</a></li>
+                    <li data-channel="2"><a title="搜问答">搜问答</a></li>
+                    <li data-channel="4"><a title="查攻略">查攻略</a></li>
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0'>
+                        <a></a>
+                    </div>
+                    <input type="button" value="搜索" class="btn-search font-14" id="serchBtn">
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <span>推荐搜索：</span>
+                    <ul class="keyword  keyword-0">
+                        @foreach (var item in (List<string>)ViewBag.HotSchoolWord)
+                        {
+                            <li><a href="@Url.Action("list", "School",new { KeyWords=item })">@item</a></li>
+                        }
+                    </ul>
+                    <ul class="keyword keyword-1">
+                        @foreach (var item in (List<string>)ViewBag.HotCommentWord)
+                        {
+                            <li><a href="@Url.Action("list", "Comment",new {search=item })">@item</a></li>
+                        }
+
+                    </ul>
+                    <ul class="keyword keyword-2">
+                        @foreach (var item in (List<string>)ViewBag.HotQuestionWord)
+                        {
+                            <li><a href="@Url.Action("list", "Question",new {search=item })">@item</a></li>
+                        }
+                    </ul>
+                    <ul class="keyword keyword-4">
+                        @foreach (var item in (List<string>)ViewBag.HotArticleWord)
+                        {
+                            <li><a href="@Url.Action("list", "article",new {search=item })">@item</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="hot-list">
+        <div class="container">
+            <div class="hot-nav">
+                <div class="title">
+                    <h2 class="title-name">热门推荐</h2>
+                    <span class="title-details font-12">为您在海量学校中甄选出最热最好学校</span>
+                </div>
+                <div class="hot-recommend-nva position-relative">
+                    <div class="hot-recommend-tab">
+                        @*<div class="locale" id='hotListLocale'>广州</div>*@
+                        <a href="javascript:;" title="幼" data-hot-recommend-target="0" onmouseover="hotScrollMouseover(this)">幼</a>
+                        <a href="javascript:;" class="selected" title="小" data-hot-recommend-target="1" onmouseover="hotScrollMouseover(this)">小</a>
+                        <a href="javascript:;" title="初" data-hot-recommend-target="2" onmouseover="hotScrollMouseover(this)">初</a>
+                        <a href="javascript:;" title="高" data-hot-recommend-target="3" onmouseover="hotScrollMouseover(this)">高</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hot-week-main hot-week-list-0">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[0] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[0]).Count() > 0)
+                {
+                    <div class="hot-school-list d-flex">
+                        <div class="hot-list-title">
+                            <h4>本周热度TOP</h4>
+                        </div>
+                        <ul>
+                            @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[0])
+                            {
+                                <li>
+                                    <a href="/school-@schoolNos[item.ExtId]/" title="@item.SchoolName">
+                                        @item.SchoolName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                }
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>总评评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[0])
+                        {
+                            <li> <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+                        }
+
+                    </ul>
+                </div>
+
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>口碑评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[0])
+                        {
+                            <li>
+                                <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">
+                                    @item.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="hot-week-main hot-week-list-1">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[1] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[1]).Count() > 0)
+                {
+                    <div class="hot-school-list d-flex">
+                        <div class="hot-list-title">
+                            <h4>本周热度TOP</h4>
+                        </div>
+                        <ul>
+                            @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[1])
+                            {
+                                <li><a href="/school-@schoolNos[item.ExtId]/" title="@item.SchoolName">@item.SchoolName</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>总评评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[1])
+                        {
+                            <li>
+                                <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>口碑评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[1])
+                        {
+                            <li> <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="hot-week-main hot-week-list-2">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[2] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[2]).Count() > 0)
+                {
+                    <div class="hot-school-list d-flex">
+                        <div class="hot-list-title">
+                            <h4>本周热度TOP</h4>
+                        </div>
+                        <ul>
+                            @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[2])
+                            {
+                                <li><a href="/school-@schoolNos[item.ExtId]/" title="@item.SchoolName">@item.SchoolName</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>总评评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[2])
+                        {
+                            <li>  <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+
+                        }
+                    </ul>
+                </div>
+
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>口碑评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[2])
+                        {
+                            <li> <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="hot-week-main hot-week-list-3">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[3] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[3]).Count() > 0)
+                {
+                    <div class="hot-school-list d-flex">
+                        <div class="hot-list-title">
+                            <h4>本周热度TOP</h4>
+                        </div>
+                        <ul>
+                            @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[3])
+                            {
+                                <li> <a href="/school-@schoolNos[item.ExtId]/" title="@item.SchoolName">@item.SchoolName</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>总评评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[3])
+                        {
+                            <li> <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="hot-school-list d-flex">
+                    <div class="hot-list-title">
+                        <h4>口碑评分TOP</h4>
+                    </div>
+                    <ul>
+                        @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[3])
+                        {
+                            <li>   <a href="/school-@schoolNos[item.ExtId]/" title="@item.Name">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    @await Html.PartialAsync("Right_bar")
+
+    @await Html.PartialAsync("Footer")
+
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/swiper.js"></script>
+    <script src="@ViewBag.StaticFile/js/common.js"></script>
+    <script src="@ViewBag.StaticFile/js/home/home.js"></script>
+    <script src="@ViewBag.StaticFile/js/search.js"></script>
+    <script src="@ViewBag.StaticFile/js/jquery.cookie.js"></script>
+</body>
+</html>

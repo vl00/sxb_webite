@@ -1,0 +1,30 @@
+﻿@page
+@{
+}
+
+<html>
+<body>
+
+<table border="1">
+  <tr>
+    <th>分部ID</th>
+    <th>学校名称</th>
+    <th>市</th>
+    <th>区</th>
+    <th>状态</th>
+  </tr>
+      @foreach (var item in ViewBag.Result)
+      {
+         <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+             <td>@item.City</td>
+            <td>@item.Area</td>
+             <td>@item.Status</td>
+         </tr>
+      }
+ 
+</table>
+
+</body>
+</html>

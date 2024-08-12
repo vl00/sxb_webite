@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NPOIHelper" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Application\PMS.CommentsManage.Application.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\TopicCircle\PMS.TopicCircle.Domain\PMS.TopicCircle.Domain.csproj" />
+    <ProjectReference Include="..\..\UserManage\PMS.UserManage.Application\PMS.UserManage.Application.csproj" />
+    <ProjectReference Include="..\..\UserManage\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\ISchool.Data.API\iSchool.Data.API.csproj" />
+    <ProjectReference Include="..\iSchool.Internal.API\iSchool.Internal.API.csproj" />
+    <ProjectReference Include="..\PMS.OperationPlateform.Domain\PMS.OperationPlateform.Domain.csproj" />
+    <ProjectReference Include="..\PMS.OperationPlateform.Mongo\PMS.OperationPlateform.Mongo.csproj" />
+  </ItemGroup>
+
+</Project>

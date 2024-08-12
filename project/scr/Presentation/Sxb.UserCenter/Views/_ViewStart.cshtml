@@ -1,0 +1,11 @@
+﻿@using Microsoft.Extensions.Configuration;
+@{
+    Layout = "_Layout";
+    var config = Context.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration;
+    var IsHost = config.GetSection("IsHost").Get<PMS.UserManage.Domain.Common.IsHost>();
+    ViewBag.SiteHost_M = IsHost.SiteHost_M;
+    ViewBag.SiteHost_PC = IsHost.SiteHost_PC;
+    ViewBag.FileHost = IsHost.FileHost;
+    ViewBag.FileHost_M = IsHost.FileHost_M;
+    ViewBag.FileHost_PC = IsHost.FileHost_PC;
+}

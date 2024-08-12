@@ -1,0 +1,20 @@
+﻿
+ 
+表的数量：1
+
+-生成UniversityActivity表
+	|_生成Id字段 类型int
+	|_生成Name字段 类型string
+	|_生成Type字段 类型int
+	|_生成Logo字段 类型string
+	|_生成ProvinceId字段 类型int
+	|_生成CityId字段 类型int
+	|_生成Intro字段 类型string
+	|_生成EnrollmentCode字段 类型string
+	|_生成EnrollmentIntro字段 类型string
+	|_生成UserId字段 类型Guid?
+	|_生成IsDeleted字段 类型bool
+	|_生成CreateTime字段 类型DateTime
+
+
+EndBlock（）是生成的文本模板

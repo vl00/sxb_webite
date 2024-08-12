@@ -1,0 +1,120 @@
+﻿@model PMS.UserManage.Application.ModelDto.Account.DestroyCondition
+@{
+    ViewData["Title"] = "注销账号";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/account-cancellation.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">注销协议</span>
+    <span></span>
+</header>
+
+<section class="mt">
+    <div class="content part-1" style="padding-bottom:3rem;">
+        <p>在你申请注销上学帮账号之前,请你认真阅读理解并同意《上学帮账号注销须知》(以下称“注销须知”)</p>
+        <p>
+            &emsp;&emsp;【特别提示】在此善意提醒你,注销上学帮账号为不可恢复的操作,注销账号后你将无法再使用本上学帮账号或找回你浏览、关注、添加、绑定的任何內容或信息(即使你使用相同的手机号码再次注册并使用上学帮)建议你在注销前自行备份上学帮账号相关的所有信息,并请确认与本上学帮账号相关的所有服务均已进行妥善处理。注销成功后,我们将删除你的个人信息,或对其进行匿名化处理。请你知悉并理解,根据相关法律法规规定相关日志记录上学帮将保留不少于6个月的时间。
+        </p>
+        <p>
+            1.我们对你注销上学帮账号的决定深表遗憾。如果你仍执意注销账号,你可致电客服电话020-89623090对此账号进行注销操作
+        </p>
+        <p>
+            2.在你的账号注销期间,如果你的账号涉及争议纠纷,包括但不限于
+        </p>
+        <p>
+            &emsp;&emsp;2.1投诉、举报、诉讼、仲裁、国家有权机关调查等,你知晓并理解上学帮有权自行决定是否终止本账号的注销而无需另行得到你的同意。
+        </p>
+        <p>
+            3.注销上学帮账号,你将无法再使用本上学帮账号,也将无法找回本上学帮账号中及与账号相关的任何内容或信息,包括但不限于
+        </p>
+        <p>
+            &emsp;&emsp;3.1本上学帮账号的个人资料和历史信息(包括但不限于头像、用户名、发布内容、浏览记录、关注、收藏等)都将无法找回;
+        </p>
+        <p>
+            &emsp;&emsp;3.2你将无法登录、使用本上学帮账号,你的粉丝将无法继续关注你或通过本账号与你互动;
+        </p>
+        <p>
+            &emsp;&emsp;3.3你通过本上学帮账号使用、授权登录或绑定上学帮账号后使用的上学帮或第三方服务的相关记录将无法找回。你将无法再登录、使用上述服务,你曾获得的虚拟权益等财产性利益视为你自动放弃,将无法继续使用。你理解并同意,上学帮无法协助你重新恢复上述服务。
+        </p>
+        <p>
+            4.注销本上学帮账号并不代表注销前的账号中的行为和相关责任得到豁免或减轻
+        </p>
+    </div>
+@*<div class="content part-1">
+        <h5 class="title">为保证你的账号安全，在你提交的注销申请生效前，需同时满足以下条件：</h5>
+        <h6>1.账号处于安全状态</h6>
+        <p>最近1个月内无绑定手机、修改手机号、找回密码、修改密码等操作。<br>账号为正常使用且1年内无任何账号被限制的记录</p>
+        <h6>2.账号服务已完成</h6>
+        <p>本账号及通过本账号接入的第三方中没有未完成或存在争议的服务</p>
+        <h6>3.账号最近无发布操作</h6>
+        <p>最近一周内无发布过点评、问答、评论等操作</p>
+        <h6>4.账号无任何纠纷，包括投诉举报</h6>
+        <p>当用户发表过的点评、问答、评论涉及纠纷时，系统将对其账号进行“封号”处理。期间用户无法对此账号进行注销操作</p>
+    </div>
+    <div class="content part-2">
+        <h5 class="title">需满足以下条件，才能注销当前帐号</h5>
+        <h6>1.账号处于安全状态<i class="satisfy"></i></h6>
+        <p>最近1个月内无绑定手机、修改手机号、找回密码、修改密码等操作。<br>账号为正常使用且1年内无任何账号被限制的记录</p>
+        <h6>2.账号服务已完成<i class="satisfy"></i></h6>
+        <p>本账号及通过本账号接入的第三方中没有未完成或存在争议的服务</p>
+        <h6>3.账号最近无发布操作<i class="not-satisfy"></i></h6>
+        <p>最近一周内无发布过点评、问答、评论等操作</p>
+        <h6>4.账号无任何纠纷，包括投诉举报<i class="satisfy"></i></h6>
+        <p>当用户发表过的点评、问答、评论涉及纠纷时，系统将对其账号进行“封号”处理。期间用户无法对此账号进行注销操作</p>
+    </div>
+    <div class="content part-3">
+        <p>该账号可直接注销，注销前请认真阅读以下提醒</p>
+        <h5 class="title">为防止误操作，请在此确认是否注销账号并确认注销后的影响。在此善意提醒，注销账号为不可恢复的操作民间一在最终确定注销前自行备份本账号的所有相关信息，并确认相关服务均已进行妥善处理。</h5>
+        <p>1.本上学帮账号的个人资料和历史信息(包括但不限于头像、用户名、发布内容、浏览记录、关注、收藏等)都将无法找回;</p>
+        <p>2.你将无法登录、使用本上学帮账号,你的粉丝将无法继续关注你或通过本账号与你互动;</p>
+        <p>3.你通过本上学帮账号使用、授权登录或绑定上学帮账号后使用的上学帮或第三方服务的相关记录将无法找回。你将无法再登录、使用上述服务,你曾获得的虚拟权益等财产性利益视为你自动放弃,将无法继续使用。你理解并同意,上学帮无法协助你重新恢复上述服务。</p>
+    </div>*@
+</section>
+
+<div class="bottom">
+    <p><span class="agree-box"><i></i></span>我已阅读并同意<i>“注销协议”</i></p>
+    <a class="text-center next-btn">马上注销</a>
+</div>
+
+@*<div class="last-btn text-center">
+    <div class="flex justify-content-between">
+        <a id="back">放弃</a>
+        <a id="submit" class="account-cancellatioin">确认注销</a>
+    </div>
+</div>*@
+
+@section js{
+    @*<script src="@ViewBag.FileHost_M/js/mine/account-cancellation.js"></script>*@
+<script type="text/javascript">
+    $(function () {
+    // 同意协议
+    $('.bottom p').on('click', function () {
+        var agreeBox = $(this).children('.agree-box');
+        if (agreeBox.hasClass('agreed')) {
+            agreeBox.removeClass('agreed');
+            $('.next-btn').removeClass('can-next');
+        }
+        else {
+            agreeBox.addClass('agreed');
+            $('.next-btn').addClass('can-next');
+        }
+    });
+    // 下一步
+    $('.next-btn').on('click', function (e) {
+        if (!$(this).hasClass('can-next')) {
+            e.preventDefault();
+            return;
+        }
+        if (navigator.userAgent.toLowerCase().indexOf('ischool') > -1) {
+            location.href = 'ischool://tel?number=02089623090';
+        } else {
+            location.href = 'tel:02089623090';
+        }
+    });
+ 
+});
+</script>
+}

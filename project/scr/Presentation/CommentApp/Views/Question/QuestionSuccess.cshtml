@@ -1,0 +1,213 @@
+﻿@{
+    ViewData["Title"] = "提问成功-上学帮";
+    ViewBag.ShareTimeLineTitle = ViewBag.ShareTitle;
+    ViewBag.ShareTitle = ViewBag.ShareTitle;
+    ViewBag.ShareDesc = ViewBag.ShareDesc;
+    ViewBag.ShareLink = ViewBag.ShareLink;
+
+    Layout = "~/Views/Layout/_layout.cshtml";
+}
+@section css
+{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/replyAlter.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/qa-success.css">
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/invite.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/comment/invite.css" />
+}
+
+<hesader class="header flex justify-content-between">
+    @*<a href="/Question/CommentQuestionView?currentId=@(ViewBag.SchoolId)&SchoolId=@(ViewBag.School)"><i class="arrow"></i></a>*@
+    <a class="arrow"></a>
+    <span class="header-title"></span>
+    @if (ViewBag.isSuccessQuestion)
+    {
+        <span class="success"><a id="back" href=""><span class="success">完成</span></a></span>
+    }
+    else
+    {
+        <span class="success"><a href=""></a></span>
+    }
+</hesader>
+
+@if (ViewBag.isSuccessQuestion)
+{
+    <section class="qa-success mt text-center">
+        <h5><span class="round"><i></i></span>成功提问</h5>
+        <div class="share-tips">你可以邀请下面的达人来更快获得回答</div>
+    </section>
+}
+
+    <div id="userList" class="@(ViewBag.isSuccessQuestion == true ? "" : "mt") content">
+        <section class="recommendType">
+            <ul class="flex text-center justify-content-between tab">
+                <li class="active" data-type="1">智囊团</li>
+                <li data-type="1">好友</li>
+            </ul>
+        </section>
+
+        <section class="invite-user-list" style="display:@(ViewBag.InviteSuccess.Count > 0 ? "block" : "none")">
+            <div class="flex justify-content-between text-center">
+                <div data-inviteTotal="@ViewBag.InviteSuccess.Count" class="user-num">已成功邀请<span></span>人</div>
+                <ul class="user-list flex">
+                    @if (ViewBag.InviteSuccess.Count > 0)
+                    {
+                        for (int i = 0; i < ViewBag.InviteSuccess.Count; i++)
+                        {
+                            if (i < 5)
+                            {
+                                <li><img src="@ViewBag.InviteSuccess[i]" /></li>
+                            }
+                        }
+
+                        if (ViewBag.InviteSuccess.Count > 5)
+                        {
+                            <li class="moreUser exceed">+<span>@(ViewBag.InviteSuccess.Count - 5)</span></li>
+                        }
+                        else
+                        {
+                            <li style="display:none;" class="moreUser exceed">+<span></span></li>
+                        }
+                    }
+                    else
+                    {
+                        <li style="display:none;" class="moreUser exceed">+<span></span></li>
+                    }
+                </ul>
+            </div>
+        </section>
+
+        <!-- 家长团显示内容 智囊团不显示 -->
+        <section class="invite text-center" style="display: none;">
+            <div>
+                <h5 class="title">- 邀请好友来回答 -</h5><!-- 点评、回复、提问、回答 -->
+                <ul class="icon-list flex justify-content-around">
+                    <li class="wechat"><a class="icon header-icon share" data-sharetype="0" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                    <li class="friends-circle"><a class="icon header-icon share"  data-sharetype="1"  data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                    <li class="qq"><a class="icon header-icon share" data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                    <li class="weibo"><a class="icon header-icon share"  data-sharetype="2"  data-title="@ViewBag.ShareTitle" data-content="@ViewBag.ShareDesc" data-url="@ViewBag.ShareLink" data-logo="@ViewBag.ShareImgLink"></a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="recommend">
+            <h5 class="title">推荐</h5>
+            <div class="recommend-list">
+                <!-- 智囊团显示内容 -->
+                <div>
+                    <ul class="recommendUserList text-center flex"></ul>
+                </div>
+
+                <!-- 家长群显示内容 -->
+                <ul class="userList invite-list" style="display: none;"></ul>
+
+                <div class="check-more text-center" style="display:none;">
+                    <a>查看更多></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="list">
+            <div class="title">
+                <h5>家长<span class="right-title">家长<i class="unactive"></i></span></h5>
+                <ul class="sort">
+                    <li data-role="1"><span>选校达人</span><i></i></li>
+                    <li data-role="2"><span>校方代表</span><i></i></li>
+                    <li data-role=""  class="active"><span>家长</span><i></i></li>
+                </ul>
+            </div>
+            <ul class="UserRoleList content"></ul>
+            <div class="check-more loadRoleUser text-center">
+                <a>查看更多></a>
+            </div>
+        </section>
+
+        <section class="other-recommend">
+            <h5 class="title">猜你想答</h5>
+            <ul class="question-list"></ul>
+        </section>
+    </div>
+
+    <section class="popup-box">
+        <ul class="text-center">
+            <li class="reply-btn"><a>回复</a></li>
+            <li class="complaint"><a href="/Report">举报</a></li>
+            <li class="cancel"><a>取消</a></li>
+        </ul>
+    </section>
+    <section class="reply-box">
+        <div class="flex justify-content-between btn-list">
+            <span id="reply-close" class="cancel">取消</span>
+            <div>
+                @if (ViewBag.isSchoolRole)
+                {
+                    <span id="Rumor" class="btn"><i class="round"></i>学校辟谣</span><!-- 其他用户则改成"在读" -->
+                }
+                else
+                {
+                    <span id="Student" class="btn"><i class="round"></i>在读</span>
+                }
+                <span id="anonymous" class="btn"><i class="round"></i>匿名</span>
+                <span class="submit-reply">发布</span>
+            </div>
+        </div>
+        <textarea name="" id="reply" cols="30" rows="8" placeholder="回复楼主:"></textarea>
+    </section>
+    <div class="curtain"></div>
+    <div class="mask">
+        <div class="parentBox">
+            <div style="height:260px"><img class="share_image" src="~/imgs/share/shareIndex.png" /></div>
+            <div class="share_content">请马上点击右上角分享给朋友</div>
+        </div>
+    </div>
+
+
+    @section script
+{
+        <script type="text/javascript" src="@ViewBag.StaticFile/js/layout-common.js"></script>
+        <script>
+        var currentSchoolSectionId = '@ViewBag.SchoolId'
+        var isQuestion = @(ViewBag.isSuccessQuestion == true ? 1 : 0)
+        var DataSource  = '@(ViewBag.dataId)'
+        var message = '@(ViewBag.content)'
+            var type = '@(ViewBag.Type)'
+         var dataType = '@(ViewBag.dataType)'
+        //var isSchool = "";
+
+        //        if ($.isAPP)
+        //        {
+        //            isSchool = "ischool://web?url=";
+        //        }
+
+        ////alert(isSchool+sessionStorage.getItem("QuestionEntrance"))
+        //if (localStorage.getItem("QuestionEntrance") != null)
+        //{
+        //   $("#back").attr("href", isSchool+encodeURIComponent(localStorage.getItem("QuestionEntrance")))
+        //}
+        //else
+        //{
+        //    $("#back").attr("href", isSchool+encodeURIComponent("https://m2019.sxkid.com/Question/Index?SchoolId="+currentSchoolSectionId))
+        //}
+
+        if (!$.isAPP) {
+            $(".success a").attr("href", localStorage.getItem("QuestionEntrance"))
+        }
+        else
+        {
+            $(".success a").removeAttr("href")
+        }
+
+        $(".success a").click(function () {
+            if ($.isAPP)
+            {
+                location.href='ischool://goback';
+            }
+        })
+        </script>
+        <script src="@ViewBag.StaticFile/js/common/recommend/recommend-user.js"></script>
+        <script src="@ViewBag.StaticFile/js/loading.js"></script>
+        <script src="@ViewBag.StaticFile/js/invite.js"></script>
+        <script src="@ViewBag.StaticFile/js/qa-success.js" charset="gbk"></script>
+        <script src="@ViewBag.StaticFile/js/wechat.js"></script>
+    }
+

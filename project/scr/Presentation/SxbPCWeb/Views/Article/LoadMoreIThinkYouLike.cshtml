@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>
+
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+</head>
+<body>
+    @foreach (var item in Model)
+    {
+        <a href="@Url.Action("detail","article",new { no = item.No})">@item.Title</a>
+    }
+    <a href="@Url.Action("loadmoreithinkyoulike","article",new {  offset =ViewBag.offset,limit = ViewBag.limit})">Welcome Spider - 上学帮</a>
+
+</body>
+
+</html>

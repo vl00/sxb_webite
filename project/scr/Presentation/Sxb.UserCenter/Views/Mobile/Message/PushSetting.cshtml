@@ -1,0 +1,47 @@
+﻿@model  PMS.UserManage.Domain.Entities.Push
+@{
+    ViewData["Title"] = "推送设置";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/push-setting.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">推送设置</span>
+    <span class=""></span>
+</header>
+
+<section class="mt">
+    <form id="form">
+        <ul class="push-setting-list">
+            <li>
+                <i class="icon"></i>
+                推荐攻略
+                <input type="checkbox" id="s1" name="article" @(Model.Article?"checked":"") />
+                <label for="s1"><em></em></label>
+            </li>
+            <li>
+                <i class="icon"></i>
+                学校动态
+                <input type="checkbox" id="s2" name="school" @(Model.School?"checked":"") />
+                <label for="s2"><em></em></label>
+            </li>
+            <li>
+                <i class="icon"></i>
+                邀请推送
+                <input type="checkbox" id="s3" name="invite" @(Model.Invite?"checked":"") />
+                <label for="s3"><em></em></label>
+            </li>
+            <li>
+                <i class="icon"></i>
+                回复推送
+                <input type="checkbox" id="s4" name="reply" @(Model.Reply?"checked":"") />
+                <label for="s4"><em></em></label>
+            </li>
+        </ul>
+    </form>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/push-setting.js"></script>
+}

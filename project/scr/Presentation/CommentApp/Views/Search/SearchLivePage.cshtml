@@ -1,0 +1,24 @@
+﻿@using ProductManagement.Framework.Foundation;
+@foreach (var item in (List<Sxb.Web.ViewModels.Live.LiveItemViewModel>)ViewBag.Data)
+{
+    <li class="live-item"  data-id="@item.Id" data-status="@((int)item.Status)"  data-time="@item.StartTime" data-userid="@item.UserId">
+        <div class="photo">
+            <a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.UserId">
+                <img src="@item.UserHeadImg" alt="">
+            </a>
+            <i class="@(item.IsCollection?"focused":"")">@(item.IsCollection ? "已关注" : "关注")</i>
+        </div>
+        <div class="live-right">
+            <p class="live-name"><a href="@(ViewBag.UserServiceUrl)/mine/mine-msg/?id=@item.UserId">@item.UserName</a></p>
+            <a href="/live/client/livedetail.html?showtype=1&contentid=@item.Id">
+                <img src="@item.CoverHome" alt="" class="live-bgi">
+            </a>
+            <div class="liveing">
+                <span class="@((int)item.Status==5?"playback":"")">
+                    @((int)item.Status < 4 ? "" : item.Status.Description())
+                </span>
+                <span>@(item.UserCount)人次收听</span>
+            </div>
+        </div>
+    </li>
+}

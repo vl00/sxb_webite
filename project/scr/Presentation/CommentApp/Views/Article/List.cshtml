@@ -1,0 +1,340 @@
+﻿@using PMS.OperationPlateform.Domain.Enums
+@using Sxb.Web.Utils
+
+@{
+    ViewBag.Title = " 幼儿园,小学,中学,国际民办公办学精选攻略-上学帮";
+    ViewBag.KeyWords = "精选攻略";
+    ViewBag.Description = "上学帮精选频道给家长提供孩子上幼儿园,小学,中学,国际,民办,公办学校精选升学攻略，选择优秀学校，赢在起跑线";
+    var subcribeInfo = (ViewBag.SubscribePerference as PMS.OperationPlateform.Domain.Entitys.Article_SubscribePreference);
+}
+
+@section Styles{
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/article/article-and-subscribe.css" />
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.min.css" />
+
+}
+
+
+<header class="search-bar flex justify-content-between">
+    <a class="arrow"></a>
+    @*@if (!ViewBag.isHomePage)
+        {
+            @if (Context.Request.GetClientType() == UA.Mobile)
+            {
+                <a class="arrow"></a>
+            }
+
+        }*@
+    <div>
+        <a href="/home-search/home-search.html">
+            <i class="filtrate-icon"></i>
+            <input type="text" readonly placeholder="请输入你想了解的内容" class="search">
+            <i class="filtrate-icon map"></i>
+        </a>
+    </div>
+</header>
+
+
+@*<div class="new-tab">
+        <a href="/live/client/livelist.html" style="@(ViewBag.UA == UA.Mobile?"display:none":"")">直播</a><i></i>
+        <a class="active arti">文章<i></i></a>
+        <div class='arti-class tab'>
+            <span class="selected" data-id="origin" data-idx="1">精品</span>
+            <span data-idx="2" data-id="subscribe" id="subscribeBtn">订阅</span>
+        </div>
+    </div>*@
+
+
+@*<ul class="tab flex justify-content-between text-center">
+        <li class="active" data-id="origin" data-idx="1">精选 </li>
+        <li data-idx="2" data-id="subscribe" id="subscribeBtn">订阅</li>
+    </ul>*@
+
+<section class="content">
+    <div class="og-list" data-offset="@(ViewBag.Offset + ViewBag.Limit)" data-limit="@ViewBag.Limit">
+        <ul class="article-list">
+            @await Html.PartialAsync("_Original.cshtml", (IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>)ViewBag.OGAData)
+        </ul>
+        <div class="load-more text-center  " data-nextpage="2">正在努力加载</div>
+        <div class="not-more-data" style="display:none">没有更多数据</div>
+    </div>
+
+    <div style="display:none;" class="subscribe-list" data-statu="0" data-offset="0" data-limit="20">
+        <div class="load-more text-center  " data-nextpage="2" style="display:none">正在努力加载</div>
+        <div class="not-more-data">没有更多数据</div>
+    </div>
+
+</section>
+
+<!-- 幕布 -->
+<div class="curtain"></div>
+<div class="curtain2"></div>
+
+
+
+@if (Context.Request.GetClientType() != UA.Mobile)
+{
+    @*<footer class="footer">
+            <ul class="flex text-center">
+                <li>
+                    <a href="/">
+                        <p><i class="footer-icon"></i></p>
+                        <div>首页</div>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/live/client/livelist.html">
+                        <p><i class="footer-icon"></i></p>
+                        <div>攻略</div>
+                    </a>
+                </li>
+                @if (!Context.Request.Headers["User-Agent"][0].ToLower().Contains("miniprogram"))
+                {
+                    <li>
+                        <a href="@Url.Action("index", "tools", new { })">
+                            <p><i class="footer-icon"></i></p>
+                            <div>工具</div>
+                        </a>
+                    </li>
+                }
+                <li>
+                    <a href="@(ViewBag.UserServiceUrl)/mine/mine.html">
+                        <p><i class="footer-icon"></i></p>
+                        <div>我的</div>
+                    </a>
+                </li>
+            </ul>
+        </footer>*@
+
+    <!-- 底部导航栏 -S -->
+    @*<div class="bottom-tab">
+            <ul>
+                <li>
+                    <a href="/">
+                        <i></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/live/client/livelist.html">
+                        <i></i>
+                        <span>直播</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/find/findIndex.html">
+                        <i></i>
+                        <span>发现</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@(ViewBag.UserServiceUrl)/mine/mine.html">
+                        <i></i>
+                        <div class="mes"></div>
+                        <span>我的</span>
+                    </a>
+                </li>
+            </ul>
+        </div>*@
+    <!-- 底部导航栏 -E -->
+}
+
+
+
+@section Scripts{
+    <script src="@(ViewBag.StaticFile)/js/swiper.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/picker.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/article/article-and-subscribe.js"></script>
+    <script src="@(ViewBag.StaticFile)/operationplateform/pullScroll/pullScroll.js"></script>
+    <script>
+            var $subscribe_list = $('.subscribe-list');
+            var $og_list = $('.og-list');
+            var _scroll_lock = 1;   //上拉锁
+
+            //加载订阅页面
+            function LoadSubscribeListPage() {
+                var offset = $subscribe_list.data('offset') || 0;
+                var limit = $subscribe_list.data('limit') || 20;
+                $.loading();
+                $.ajax({
+                    url: '/article/SubscribeList',
+                    type: 'get',
+                    data: { type: 0, offset: offset, limit:limit },
+                    success: function (res) {
+                        if (res.status == 402) {
+                            if ($.isAPP) {
+                                 window.location = res.data.loginUrl + generateTagIndex2Url();
+                            } else {
+
+                                window.location = res.data.loginUrl + generateTagIndex2Url();
+                            }
+
+                        } else {
+                            $subscribe_list.empty().append(res);
+                            $subscribe_list.data('statu', 1);
+                            $subscribe_list.data('offset', offset + limit);
+                        }
+                    },
+                    complete: function () {
+                         $.loading('remove');
+                    }
+                })
+            }
+
+            function LoadSubscribePartial(complete) {
+                var offset = $og_list.data('offset') || 0;
+                var limit = $og_list.data('limit') || 20;
+                $.loading();
+                $.ajax({
+                    url: '@Url.Action("SubscribeList","Article",new { })',
+                    type: 'get',
+                    data: { type: 1, offset: offset, limit:limit },
+                    success: function (res) {
+                        if (res.status && res.status == 402) {
+                            window.location = res.data.loginUrl + generateTagIndex2Url();
+                        } else if (res.statu) {
+                            if (res.statu == 2) {
+
+                                 //hideLoadMoreBtn($subscribe_list);
+                                 //$subscribe_list.find('.load-more').data('statu', '-1');
+                                hideLoadMoreBtn($og_list);
+                                $og_list.find('.load-more').data('statu', '-1');
+                            }
+                        } else {
+                            $('.article-list').append(res);
+                            //$subscribe_list.data('offset', offset + limit);
+                            //showLoadMoreBtn($subscribe_list);
+                            $og_list.data('offset', offset + limit);
+                            showLoadMoreBtn($og_list);
+                        }
+                    },
+                    complete: function () {
+                        if (complete) {
+                            complete();
+                        }
+                        $.loading('remove');
+                    }
+                })
+            }
+            function LoadOgPartial(complete) {
+
+            showLoadMoreBtn($og_list);
+                var offset = $og_list.data('offset') || 0;
+                var limit = $og_list.data('limit') || 20;
+                 $.ajax({
+                        url: '@Url.Action("list","article",new { })',
+                        type: 'get',
+                        data: { tabIndex: 0, offset: offset, limit:limit },
+                        success: function (res) {
+                        if (res.statu) {
+                             if (res.statu == 2) {
+                                 hideLoadMoreBtn($og_list);
+                                 $og_list.find('.load-more').data('statu', '-1');
+                             }
+                         } else {
+                             $og_list.find('.article-list').append(res)
+                            $og_list.data('offset', offset + limit);
+                            showLoadMoreBtn($og_list);
+                         }
+                     },
+                     complete:function() {
+                         if (complete) {
+                              complete();
+                         }
+                     }
+
+
+                    })
+            }
+
+            function generateTagIndex2Url() {
+                 var reg = /tabindex=[0-9]*/
+                 var search = '';
+                 if (reg.test(window.location.search)) {
+                     search = window.location.search.replace(reg, 'tabindex=1');
+                 } else {
+                     if (window.location.search) {
+                        search = window.location.search + '&tabindex=1';
+                     } else {
+
+                        search = "?tabindex=1";
+                     }
+                }
+                return window.location.origin + window.location.pathname + search;
+            }
+
+            function initTab() {
+                var initTabIndex = @(ViewBag.TabIndex==null?0:ViewBag.TabIndex);
+                var _initTab = $('.tab span').eq(initTabIndex);
+                $('#subscribeBtn').click(function () {  //为订阅挂点击事件
+                    if ($(this).hasClass('active') || $subscribe_list.data('statu') == 1) {
+                        return;
+                    }
+                    //window.location = '@(ViewBag.UserServiceUrl)';
+                    LoadSubscribeListPage();
+                });
+
+
+                _initTab.click();   //根据参数默认点击
+
+            }
+
+
+            $(function () {
+                //模拟点击arti tab
+                $('.new-tab .arti').click()
+
+                initTab();
+
+                pullScroll.listen(function () {
+                    if (_scroll_lock) {
+                          _scroll_lock = 0;   //锁上
+                        var actveTab = $('.tab span.selected').data('idx');
+                         if (actveTab == 1) {
+                             LoadOgPartial(() => {
+                                 _scroll_lock = 1;  //解锁
+                             });
+
+                         } else {
+                             LoadSubscribePartial(() => {
+                                 _scroll_lock = 1;  //解锁
+                             });
+
+                         }
+                    }
+
+                }, function () {
+                });
+
+                $subscribe_list.on('click', '.load-more', function () {
+                    console.log('加载更多订阅攻略')
+                    var statu = $(this).data('statu') || 1;
+                    if (statu == -1) {
+                        return;
+                    }
+                    LoadSubscribePartial();
+                });
+                $og_list.on('click', '.load-more', function () {
+                    console.log('加载更多原创攻略')
+                    var statu = $(this).data('statu') || 1;
+                    if (statu == -1) {
+                        return;
+                    }
+                    LoadOgPartial();
+                });
+            });
+
+
+            function showLoadMoreBtn(target) {
+                target.find('.load-more').show();
+                target.find('.not-more-data').hide();
+
+            }
+            function hideLoadMoreBtn(target) {
+                target.find('.load-more').hide();
+                target.find('.not-more-data').show();
+
+            }
+
+    </script>
+}

@@ -1,0 +1,146 @@
+﻿
+@{
+    Layout = null;
+}
+@model IEnumerable<PMS.School.Application.ModelDto.TagDto>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>上学帮_汇集全国学校_家长帮孩子选幼儿园,小学,中学_国际民办公办学校门户网站</title>
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿,亲子,家庭教育,孩子教育,小学教育,中学教育,高中教育,高校教育,中小学教育,学校探访,民办小学,公办小学,择校,名校,教育,小学,初中,择校,名师,中考,高考">
+    <meta name="description" content="上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/home.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" class="d-block">上学帮</a></h1>
+                <div class="select font-14" id="select-city">
+                    <i class="header-icon">@ViewBag.LocalCity</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                @*<li><a href="@Url.Action("Index","Home", new { City = item.AdCode, callback = Url.Action("Features") })" title="@item.AreaName">@item.AreaName</a></li>*@
+                                <li>
+                                    <a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a>
+                                </li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home",new { callback = Url.Action("features", "home") })" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                    <li data-channel="0"><a title="找学校">找学校</a></li>
+                    <li data-channel="1"><a title="看点评">看点评</a></li>
+                    <li data-channel="2"><a title="搜问答">搜问答</a></li>
+                    @*<li data-channel="3"><a title="排行榜">排行榜</a></li>*@
+                    <li data-channel="4"><a title="查攻略">查攻略</a></li>
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0'>
+                        <a></a>
+                    </div>
+                    <input type="button" value="搜索" class="btn-search font-14" id="serchBtn">
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0">
+                        <span style="@(((List<string>)ViewBag.HotSchoolWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotSchoolWord)
+                            {
+                                <li><a href="@Url.Action("list", "School",new { KeyWords=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="keyword-1">
+                        <span style="@(((List<string>)ViewBag.HotCommentWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotCommentWord)
+                            {
+                                <li><a href="@Url.Action("list", "Comment",new {search=item })">@item</a></li>
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="keyword-2">
+                        <span style="@(((List<string>)ViewBag.HotQuestionWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotQuestionWord)
+                            {
+                                <li><a href="@Url.Action("list", "Question",new {search=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="keyword-4">
+                        <span style="@(((List<string>)ViewBag.HotArticleWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotArticleWord)
+                            {
+                                <li><a href="@Url.Action("list", "article",new {search=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="features">
+        <div class="container">
+            <h2 class="title-name d-block">特色课程</h2>
+            <p class="text-center more-rank title-details font-12 rank-detail position-relative">
+                涵盖所有热门课程和项目分类
+                <!--            <a href="#" title="更多排行榜" class="float-right position-absolute font-12">更多排行榜></a>-->
+            </p>
+            <ul class="features-list">
+                @foreach (var item in Model)
+                {
+                    <li><a href="@Url.Action("ListExtSchool", "School", new { CharacIds = item.Id })" title="@item.Name">@item.Name</a></li>
+                }
+            </ul>
+        </div>
+
+    </section>
+
+    @await Html.PartialAsync("Right_bar")
+    @{await Html.RenderPartialAsync("Footer");}
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/home.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+    jQuery(function() {
+        jQuery(".btn-search").on("click", function() {
+            var keyword = jQuery(".input-keyword").val();
+            var channel = jQuery(".search-type .active").attr("data-channel");
+            if (channel == "0")
+            {
+                //学校筛选
+                window.location.href = '@(Url.Action("ListExtSchool", "School"))' + "?KeyWords=" + keyword;
+            }
+            else if (channel == "4")
+            {
+                //攻略筛选
+                window.location.href = "/article/list?search=" + keyword;
+            }
+        });
+    });
+    </script>
+</body>
+</html>

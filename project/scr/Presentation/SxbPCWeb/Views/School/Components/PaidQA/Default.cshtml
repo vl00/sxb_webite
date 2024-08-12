@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Sxb.PCWeb.ViewModels.ViewComponent.PaidQAViewModel>;
+
+@if (Model?.Any() == true)
+{
+    <!-- 升学顾问 start -->
+    <div class="college-counselor">
+        <div class="college-counselor-title clearfix">
+            <h2>升学顾问</h2>
+            <a class="more-counselor">
+                <span>查看更多></span>
+            </a>
+        </div>
+        <ul class="college-counselor-list">
+            @foreach (var item in Model)
+            {
+                <li class="clearfix">
+                    <div class="counselor-left">
+                        <img src="@item.HeadImgUrl"
+                             alt="">
+                    </div>
+                    <div class="counselor-right">
+                        <div class="counselor-info clearfix">
+                            <div class="info-left">
+                                <span class="nickname">@item.NickName</span>
+                                <div>
+                                    <span>刚刚回复了</span>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="info-right">
+                                <a class="counselor-service" data-id="@item.TalentUserID">向他咨询</a>
+                            </div>
+                        </div>
+                        <h3 class="counselor-qa">@item.Content</h3>
+                        <div class="counselor-tag">
+                            @if (item.RegionNames?.Any() == true)
+                            {
+                                foreach (var region in item.RegionNames)
+                                {
+                                    <span>@region</span>
+                                }
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- 升学顾问 end -->
+}

@@ -1,0 +1,84 @@
+﻿@model List<PMS.UserManage.Application.ModelDto.Message.MessageModel>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="msg-list">
+        @foreach (var message in Model)
+        {
+            if (message.Type == 5)
+            {
+                <li data-id="@message.Id" class="top">
+                    <a href="../article/article-detail.html" class="flex">
+                        <div class="head-box">
+                            <div><img src="@ViewBag.FileHost_M/imgs/mine/school-icon.png" alt="@message.SchoolModel.SchoolName"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.SchoolModel.SchoolName - @message.SchoolModel.ExtName</span>
+                                    <span class="invite">有新的攻略</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                        </div>
+                    </a>
+                </li>
+            }
+            else if (message.Type == 6)
+            {
+                <li data-id="@message.Id" class="invite-comment">
+                    <a href="../comment-and-qa/qa-detail.html" class="flex">
+                        <div class="head-box">
+                            <div><img src="@message.HeadImgUrl" alt="@message.Nickname"></div>
+                        </div>
+                        <div>
+                            <div class="user-msg flex justify-content-between">
+                                <div>
+                                    <span class="user-name">@message.Nickname</span>
+                                    <span class="invite">点评了你关注的学校</span>
+                                </div>
+                                <span class="time-ago">@message.Time</span>
+                            </div>
+                            <p class="list-content">@message.Content</p>
+                            <div class="school flex justify-content-between">
+                                <div>
+                                    <h5 class="school-name">@message.SchoolModel.SchoolName - @message.SchoolModel.ExtName</h5>
+                                    <ul class="tag-list flex">
+                                        @if (message.SchoolModel.Tags != null)
+                                        {
+                                            foreach (var tag in message.SchoolModel.Tags)
+                                            {
+                                                <li>@tag</li>
+                                            }
+                                        }
+                                        @*<li class="invite-icon"><i></i></li>*@
+                                    </ul>
+                                </div>
+                                <div class="school-grade text-center">
+                                    <div class="score">@message.SchoolModel.Score<span>分</span></div>
+                                    <ul class="star flex justify-content-between">
+                                        <li @if (message.SchoolModel.Score > 10) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.Score > 30) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.Score > 50) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.Score > 70) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                        <li @if (message.SchoolModel.Score > 90) { <text> class="score-star" </text> }><i class="comment-icon"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+else
+{
+    <div class="not-comment text-center">
+        <div><i class="comment-icon"></i></div>
+        <p>暂无记录</p>
+    </div>
+}

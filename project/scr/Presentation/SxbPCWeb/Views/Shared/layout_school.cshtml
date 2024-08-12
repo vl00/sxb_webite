@@ -1,0 +1,308 @@
+﻿@using iSchool;
+@using Microsoft.AspNetCore.Http.Extensions;
+@using Microsoft.AspNetCore.Routing;
+@*@using Microsoft.AspNetCore.WebUtilities;*@
+@using System.Text;
+@using System.Web;
+@using SchoolGrade = PMS.School.Domain.Common.SchoolGrade;
+@using SchoolType = PMS.School.Domain.Common.SchoolType;
+@using PMS.OperationPlateform.Domain.Enums;
+@using static ProductManagement.Framework.Foundation.EnumExtension;
+@{ var routes = Context.GetRouteData().Values;
+    var controller = routes["controller"]?.ToString();
+    var action = routes["action"]?.ToString();
+    var schoolNo = routes.ContainsKey("schoolNo") ? routes["schoolNo"] : "";
+
+    var schName0 = ViewBag.SchoolName0 as string;
+    var schFType = (SchFType0)ViewBag.SchFType;
+
+    //string enurl(string url)
+    //{
+    //    return HttpUtility.UrlEncode(Convert.ToBase64String(Encoding.UTF8.GetBytes(url)));
+    //}
+
+    IDictionary<string, T> CopyAndSet<T>(IDictionary<string, T> kvs, string k, T v)
+    {
+        var _kvs = new Dictionary<string, T>(kvs);
+        _kvs[k] = v;
+        return _kvs;
+    }
+
+    string Url_schoolDetail(object eid)
+    {
+        var id = eid is Guid g ? g.ToString("n") :
+            Guid.TryParse(eid?.ToString(), out g) ? g.ToString("n") :
+            throw new ArgumentException($"{eid} is not guid");
+        //return "/school/detail/" + id.ToLower();
+        return Url.Action("detail", "school", new { id }).ToLower();
+    }
+
+    string Url_gid(object gid)
+    {
+        var id = gid is Guid g ? g.ToString("n") : gid?.ToString().ToLower();
+        return id;
+    }
+
+    var auth = User.Identity as System.Security.Claims.ClaimsIdentity;
+    ViewBag.Nickname = auth.FindFirst(IdentityModel.JwtClaimTypes.Name)?.Value;
+    ViewBag.RequestUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path + Context.Request.QueryString; }
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>@(ViewBag.Title)</title>
+    <meta name="keywords" content="@(ViewBag.Page_keywords)">
+    <meta name="description" content="@(ViewBag.Page_Description)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @if (ViewBag.OtherHead != null)
+    {
+        WriteLiteral(ViewBag.OtherHead);
+    }
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-registration.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-profile.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/school-detail/school-detail-comments.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/leave-information/orderForm.css">
+    @RenderSection("css", false)
+</head>
+<body>
+    @* 头部 *@
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 1)
+        </div>
+        <div class="container d-flex header-content clearfix">
+            <div class="sxb-icon d-flex">
+                <a href="/" title="首页"><img src="/imgs/sxb.png" alt="上学帮"></a>
+                <div class="select font-14">
+                    <i class="header-icon">@(ViewBag.CityName?.ToString() ?? "全国")</i>
+                    <div class="city-list position-absolute">
+                        @if (true)
+                        {
+                            var areas = ViewBag.HotCity as List<PMS.Infrastructure.Application.ModelDto.AreaDto> ?? new List<PMS.Infrastructure.Application.ModelDto.AreaDto>();
+                            var d0 = Context.Request.Query.ToDictionary(kv => kv.Key, kv =>
+                            {
+                                var v = kv.Value.ToString();
+                                if (Guid.TryParse(v, out var gid)) return gid.ToString("n");
+                                return v;
+                            });
+                            d0.Remove("city");
+                            <text>
+                                <ul class="d-flex font-12 flex-wrap clearfix">
+                                    @foreach (var item in areas)
+                                    {
+                                        <text>
+                                        @*<li><a href="@Url.Action("Index", "Home", new { city = item.AdCode })" title="@item.AreaName" data-city="@(item.AdCode)">@item.AreaName</a></li>*@
+                                        <li>
+                                            <a href="/c-@item.AdCode/" title="@item.AreaName" data-city="@(item.AdCode)">@item.AreaName</a>
+                                            @*<a href="@($"/{controller}/{action}_extid-{ViewBag.ExtId?.ToString("n")}_{string.Join("_", CopyAndSet(d0, "city", item.AdCode.ToString()).Where(_ => !_.Key.EqualsIgnCase("id")).Select(_ => $"{_.Key}-{_.Value?.Replace("-", "")}"))}~".ToLower())" title="@item.AreaName" data-city="@(item.AdCode)">item.AreaName</a>*@
+                                        </li>
+                            </text>}
+                                </ul>
+                                @*<pre style="display:none;">@($"{Context.Request.Scheme}://{Context.Request.Host}" + Url.Action(action, controller, d0))</pre>*@
+                                @*<a href="@Url.Action("Select", "Home", new { backurl = enurl(Url.Action(action, controller, d0)) })" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>*@
+                                <a href="@Url.Action("Select", "Home")" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                                </text>}
+                    </div>
+                </div>
+            </div>
+            @*<ul class="select-school-period d-flex">
+                <li class="@(schFType.Grade == (byte)SchoolGrade.Kindergarten ? "active" : "")">
+                    <a href="@(Url.Action("List", "school", new { option=$"gr{(byte)SchoolGrade.Kindergarten}"}))/" title="幼儿园">幼儿园</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.PrimarySchool ? "active" : "")">
+                    <a href="@(Url.Action("List", "school", new { option=$"gr{(byte)SchoolGrade.PrimarySchool}"}))/" title="小学">小学</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.JuniorMiddleSchool ? "active" : "")">
+                    <a href="@(Url.Action("List", "school", new { option=$"gr{(byte)SchoolGrade.JuniorMiddleSchool}"}))/" title="初中">初中</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.SeniorMiddleSchool ? "active" : "")">
+                    <a href="@(Url.Action("List", "school", new { option=$"gr{(byte)SchoolGrade.SeniorMiddleSchool}"}))/" title="高中">高中</a>
+                </li>
+            </ul>*@
+            <ul class="select-school-period d-flex">
+                <li class="@(schFType.Grade == (byte)SchoolGrade.Kindergarten ? "active" : "")">
+                    <a href="/school/sh=1" title="幼儿园">幼儿园</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.PrimarySchool ? "active" : "")">
+                    <a href="/school/sh=2" title="小学">小学</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.JuniorMiddleSchool ? "active" : "")">
+                    <a href="/school/sh=3" title="初中">初中</a>
+                </li>
+                <li class="@(schFType.Grade == (byte)SchoolGrade.SeniorMiddleSchool ? "active" : "")">
+                    <a href="/school/sh=4" title="高中">高中</a>
+                </li>
+            </ul>
+            <div class="search-bar d-flex">
+                <div class="search-div">
+                    <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12">
+                    <a></a>
+                </div>
+                <input type="button" value="搜索" class="btn-search">
+                <div class="school-detail-search-recommend"></div>
+            </div>
+        </div>
+    </header>
+
+    @* 中间 *@
+    <section class="school-detail">
+        <div class="container">
+            <div class="content-tab position-relative">
+
+                <div class="school-detail-comments-navigation">
+                    <a href="/">首页</a>
+                    <span class="school-detail-comments-navigation-span">></span>
+                    @*<a href="/school/ci@(ViewBag.SchoolCityCode)_gr@(ViewBag.SchoolGrade)/">@ViewBag.SchoolCityName@(((SchoolGrade)ViewBag.SchoolGrade).GetDescription())</a>*@
+                    <a href="/school">学校列表</a>
+                    <span class="school-detail-comments-navigation-span">></span>
+                    <span class="school-detail-comments-navigation-span">@ViewBag.SchoolName</span>
+                    <span class="school-detail-comments-navigation-span">></span>
+                    <span>@ViewBag.ActionName</span>
+                </div>
+
+                <h1 class="school-name font-weight-bold">@(ViewBag.SchoolName)</h1>
+
+                <a href="/home/help?idx=1&eid=@ViewBag.ExtId" title="纠错" id="errorCorrection" rel="nofollow">纠错</a>
+
+                @* 检测是否可以进行留资 *@
+                @*@if (ViewBag.IsSignSchool)
+                    {
+                        <div class="regis-btn-box" style="display:none">
+                            <a href="#" id="consult" class="consult-btn">报名咨询</a>
+                            <a href="#" id="regis" class="regis-btn">马上报名</a>
+                        </div>
+                    }*@
+                <ul class="tab-list d-flex" id="nav">
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("data") ? "active" : "")">
+                        @*<a href="@("/school/data/" + Url_gid(ViewBag.ExtId))" title="总评及评价">总评及评价</a>*@
+                        <a href="@Url.Action("data", $"school-{schoolNo}")/" title="总评及评价">总评及评价</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && (action.EqualsIgnCase("Detail") || action.EqualsIgnCase("ExtAchievement")) ? "active" : "")">
+                        @*<a href="@Url_schoolDetail(ViewBag.ExtId)" title="学校概况">学校概况</a>*@
+                        <a href="@Url.Action(string.Empty, $"school-{schoolNo}")/" title="学校概况">学校概况</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("ExtMessage") ? "active" : "")">
+                        @*<a href="@("/school/extmessage/" + Url_gid(ViewBag.ExtId))" title="相关信息">相关信息</a>*@
+                        <a href="@Url.Action("extmessage", $"school-{schoolNo}")/" title="相关信息">相关信息</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("ExtRecruit") ? "active" : "")">
+                        @*<a href="@("/school/extrecruit/" + Url_gid(ViewBag.ExtId))" title="招生简章">招生简章</a>*@
+                        <a href="@Url.Action("extrecruit", $"school-{schoolNo}")/" title="招生简章">招生简章</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("Comment") ? "active" : "")">
+                        @*<a href="@("/school/comment/" + Url_gid(ViewBag.ExtId))" title="家长点评">家长点评</a>*@
+                        <a href="@Url.Action("comment", $"school-{schoolNo}")/" title="家长点评">家长点评</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("Question") ? "active" : "")">
+                        @*<a href="@("/school/question/" + Url_gid(ViewBag.ExtId))" title="学校问答">学校问答</a>*@
+                        <a href="@Url.Action("question", $"school-{schoolNo}")/" title="学校问答">学校问答</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("ExtAtlas") ? "active" : "")">
+                        @*<a href="@("/school/extatlas/" + Url_gid(ViewBag.ExtId))" title="学校图册">学校图册</a>*@
+                        <a href="@Url.Action("extatlas", $"school-{schoolNo}")/" title="学校图册">学校图册</a>
+                    </li>
+                    <li class="@(controller.EqualsIgnCase("School") && action.EqualsIgnCase("ExtStrategy") ? "active" : "")">
+                        @*<a href="@("/school/extstrategy/" + Url_gid(ViewBag.ExtId))" title="学校攻略">学校攻略</a>*@
+                        <a href="@Url.Action("extstrategy", $"school-{schoolNo}")/" title="学校攻略">学校攻略</a>
+                    </li>
+                </ul>
+                @*<div class="ctr-btn d-flex position-absolute font-14 font-weight-lighter">
+                        <a title="关注学校" class="attention-school">关注学校</a>
+                        <a title="分享学校" class="share-school">分享学校</a>
+                    </div>*@
+
+            </div>
+
+            @* banner广告 *@
+            @*await Component.InvokeAsync("BannerAdv")*@
+
+            <!-- banner广告开始 -->
+            <div class="mkt-box" id="topBanner">
+                <div class="swiper-container swiper-mkt swiperSchoolAd" alt="11" id="swiperSchoolAd-11">
+                    <div class="swiper-wrapper">
+                    </div>
+                    <div class="swiper-pagination mkt-pagination"></div>
+                </div>
+            </div>
+            <!-- 广告结束 -->
+            @* 左+右侧主体 *@
+            @if (Equals(ViewBag.vCustomContentDiv, true))
+            {
+                @RenderBody() }
+            else
+            {
+                <div class="content d-flex clearfix">
+                    @RenderBody()
+                </div>}
+
+        </div>
+    </section>
+
+    <div class="curtain" style="z-index: 6; display: none;"></div>
+
+    <input id="selectedSchool" value="@ViewBag.ExtId" type="hidden" />
+    <input id="signType" value="2" type="hidden" />
+    <input id="courseType" type="hidden" value="@ViewBag.ActiveCourseType" />
+    <input id="currentPostForm" value="0" type="hidden" />
+    @if (ViewBag.IsSignSchool)
+    {
+        @* 留资弹窗 *@ //await Html.RenderPartialAsync("PopupregisBox");
+    }
+
+    @* 最右边侧边栏 *@
+    @{ await Html.RenderPartialAsync("Right_bar"); }
+
+
+    @* 底部栏 *@
+    @{ await Html.RenderPartialAsync("Footer"); }
+
+    @* 敏感词浮层 *@
+    @await Html.PartialAsync("Mask")
+
+    @* 公共JS引用 *@
+    @*<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>*@
+    <script src="@(ViewBag.StaticFile)/js/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.sxkid.com/v4source/statistics.js?appid=1"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    @*<script src="@(ViewBag.StaticFile)/js/layout-common.js"></script>*@
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-registration/school-registration.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/leave-information/formValue.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/school-detail/schoolDetailProfile.js"></script>
+    <script>
+        $(function () {
+            @*//
+            //$('div.city-list ul a').on('click', function () {
+            //    var a = $(this);
+            //    $.cookie("localcity", a.data().city, { path: '/' });
+            //    window.location.replace(window.location.href);
+            //    return false;
+            //});
+            //$('a.more-city').on('click', function () {
+            //
+            //}); //*@
+
+            //搜索
+            $('.btn-search').on('click', function () {
+                var txt = $('.search-bar .input-keyword').val();
+                @*烈嘉曰：“搜索直接用长link seo唔会同你玩搜索啊”*@
+                window.location.href = '/school/kw=' + encodeURIComponent(txt);
+            });
+        });
+    </script>
+    @RenderSection("script", false)
+    @*@if (ViewBag.JsSections is List<string> js_sections)
+        {
+            @foreach (var js_section in js_sections)
+            {
+                @RenderSection(js_section, false)
+            }
+        }*@
+</body>
+</html>

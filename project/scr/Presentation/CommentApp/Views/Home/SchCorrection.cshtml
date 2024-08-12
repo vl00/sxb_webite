@@ -1,0 +1,119 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>学校纠错</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-correct.css" />
+</head>
+<body>
+    @*<header class="header flex justify-content-between">
+            <a class="arrow"></a>
+            <span class="header-title">学校纠错</span>
+            <span></span>
+        </header>*@
+
+    <input type="hidden" id="Latitude" value="@ViewBag.feedback.Lat" />
+    <input type="hidden" id="Longitude" value="@ViewBag.feedback.Lng" />
+
+    <section class="mt box">
+        <h5 class="title">请选择纠错类型</h5>
+        <ul class="correct-type flex">
+            <li data-id="2"><i class="checked"></i>位置信息错误</li>
+            <li data-id="1"><i></i>学校名称错误</li>
+            <li data-id="3"><i></i>学校类型错误</li>
+            <li data-id="4"><i></i>其它</li>
+        </ul>
+        <h5 class="title correct-content-title"><i>*</i>位置信息</h5>
+        <ul class="correct-content">
+            <li>
+                <div class="flex">
+                    <span>地址:</span>
+                    <textarea id="location" placeholder="请输入地址">@ViewBag.feedback.Address</textarea>
+                    <i class="reset-textarea"></i>
+                </div>
+                <div class="map">
+                    <div class="update-position text-center">
+                        <a>从地图上更新位置</a>
+                    </div>
+                    <div id="container"></div>
+                </div>
+            </li>
+            <li>
+                <div class="flex">
+                    <span>学校名称:</span>
+                    <input type="text" id="schname" value="@ViewBag.feedback.Name" placeholder="请输入学校名称" />
+                    <i class="reset-textarea"></i>
+                </div>
+            </li>
+            <li>
+                <div class="flex">
+                    <span>学校类型:</span>
+                    <a class="select-school-type" data-gradeId="@ViewBag.feedback.Grade">@ViewBag.feedback.GradeName<i class="arrow"></i></a>
+                </div>
+            </li>
+        </ul>
+        <h5 class="title">上传图片</h5>
+        <p class="upload-tips">提供有效举证图，将有助快速更新纠错。建议提供学校大门图或带有地址的名片、广告宣传图，否则上学君可能核实不到哦~</p>
+        <div class="upload-img flex">
+            <ul class="img-list flex">
+                <li class="upload-btn text-center">
+                    <p><i class="icon"></i></p>
+                    <p>上传照片</p>
+                    <input type="file" name="image" accept="image/*">
+                </li>
+            </ul>
+        </div>
+        <h5 class="title remark"><i style="display: none;">*</i>备注</h5>
+        <div class="textarea">
+            <textarea name="" id="remark" cols="30" rows="7" maxlength="300" placeholder="请简单描述信息有误的内容"></textarea>
+            <div class="textlength">
+                <span class="now-length">0</span> / <span class="max-length">300</span>
+            </div>
+        </div>
+
+        <div>
+            <p class="tips">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+            <div class="submit-btn text-center">
+                <a>提交</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="map-correct">
+        <div id="map2"></div>
+        <div class="bottom-btn flex justify-content-between">
+            <div class="map-address">@ViewBag.feedback.Address</div>
+            <a class="submit-address-btn">提交</a>
+        </div>
+    </div>
+
+    <div class="curtain"></div>
+    <div class="alert">
+        <span class="text">提交成功</span>
+        <a class="btn">确定</a>
+    </div>
+
+    <div class="school-type-list mt">
+        <ul class="tab flex justify-content-between text-center">
+        </ul>
+        <div class="type-content">
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <pre id="data_schtypes" style="display:none;">@ViewBag.GradeType</pre>
+    <input type="hidden" id="eid" value="@ViewBag.Eid" />
+
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=61ce686ba30069e6801cda4be2f719a2&plugin=AMap.Geocoder"></script>
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/school-correct.js"></script>
+    <script src="@ViewBag.StaticFile/js/loading.js"></script>
+    <script src="@ViewBag.StaticFile/js/prompt.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <meta name="keywords" content="@(ViewBag.keywords)"  />
+    <meta name="description" content="@(ViewBag.description)"/>
+    <title>@ViewBag.Title</title>
+    <!--公共JS引用-->
+    <script type="text/javascript" src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    @RenderSection("css", false)
+</head>
+<body style="font-size:16px;" class="container">
+    @RenderBody()
+
+    <div class="curtain"></div>
+
+    <div class="WarningBox">
+        <i class="warning-i"></i>
+        <span class="content">您发布的内容包含敏感词，<br>请重新编辑后再发布。</span>
+        <a class="btn">确认</a>
+        <a class="btn" style="display:none;" href="#">绑定手机</a>
+    </div>
+</body>
+</html>
+
+<!--微信分享-->
+<script type="text/javascript">
+    var appId = "@ViewBag.weixin_AppID", timestamp = '@ViewBag.timestamp', nonceStr = '@ViewBag.nonceStr', signature = '@ViewBag.signature', share_timeLineTitle = "@ViewBag.ShareTimeLineTitle", share_title = "@ViewBag.ShareTitle", share_link = '@ViewBag.ShareLink', share_desc = "@ViewBag.ShareDesc", share_imgUrl = '@ViewBag.ShareImgLink'
+    var user = "@ViewBag.UserServiceUrl"
+</script>
+
+@RenderSection("script", false)

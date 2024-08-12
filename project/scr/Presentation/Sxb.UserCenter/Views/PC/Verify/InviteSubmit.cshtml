@@ -1,0 +1,120 @@
+﻿@model (string authType, PMS.UserManage.Domain.Entities.UserInfo userInfo)
+@{
+    ViewData["Title"] = "升学达人进驻认证";
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/authentication/authentication.css">
+}
+<section class="authentication">
+    <div class="client-photo">
+        <input id="headImgUpload" type="file" name="image" accept="image/*" class="up-photo">
+        <img src="@Model.userInfo.HeadImgUrl" alt="头像" id="myPhoto">
+        <p class="upimg-tip">*点击上传或替换头像</p>
+    </div>
+    <form id="authForm">
+        @if (Model.authType == "Company")
+        {
+            <div class="company-authentication">
+                <ul>
+                    <li>
+                        <h2>公司全称</h2>
+                        <input type="text" name="companyName" placeholder="请输入您的公司全称">
+                    </li>
+                    <li>
+                        <h2>简介</h2>
+                        <input type="text" name="intro1" placeholder="请输入内容（8个字）">
+                    </li>
+                    <li>
+                        <h2>授权文章源平台</h2>
+                        <div class="platform">
+                            <a class="selected" data-platform="1">微信公众号</a><a data-platform="2">微博</a><a data-platform="99">其他</a>
+                            <input type="text" name="platform" class="other-platform" value="微信公众号" placeholder="请输入其它平台名称">
+                        </div>
+                    </li>
+                    <li>
+                        <h2>授权文章源账号名称</h2>
+                        <input type="text" name="account" placeholder="请输入账号名称">
+                    </li>
+                    <li>
+                        <h2>运营者姓名</h2>
+                        <input type="text" name="realName" placeholder="请输入您的名称">
+                    </li>
+                    <li><a id="submit" class="authentication-submit complete">提交</a></li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="company-authentication self-authentication">
+                <ul>
+                    <li>
+                        <h2>个人简介</h2>
+                        <input type="hidden" name="realName" value="邀请进驻" />
+                        <input type="text" name="intro1" placeholder="请输入内容（8个字）">
+                    </li>
+
+                    <li>
+                        <h2>授权文章源平台</h2>
+                        <div class="platform">
+                            <a class="selected" data-platform="0">无</a><a data-platform="1">微信公众号</a><a data-platform="2">微博</a><a data-platform="99">其他</a>
+                            <input type="text" name="platform" class="other-platform" placeholder="请输入其它平台名称">
+                        </div>
+                    </li>
+                    <li id="account" style="display:none;">
+                        <h2>授权文章源账号名称</h2>
+                        <input type="text" name="account" placeholder="请输入账号名称">
+                    </li>
+
+                    <li><a id="submit" class="authentication-submit complete">提交</a></li>
+                </ul>
+            </div>
+        }
+    </form>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/authentication/authentication.js"></script>
+    <script type="text/javascript">
+        $('#submit').click(function () {
+            $.loading('提交中')
+            if ($('#headImgUpload').val()) {
+                var data = new FormData();
+                data.append('upfile', $('#headImgUpload').get(0).files[0]);
+                $.ajax({
+                    url: '@Url.Action("UploadHeadImg", "Info")',
+                    type: 'post',
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            submitForm();
+                        } else {
+                            $.prompt(json.errorDescription);
+                        }
+                    }
+                })
+            } else {
+                submitForm();
+            }
+        });
+        function submitForm() {
+            $.ajax({
+                type: 'post',
+                data: $('#authForm').serialize(),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 0) {
+                        $.prompt('提交成功', null, "@Url.Action("Interest", "Info")");
+                    } else {
+                        $.prompt(json.errorDescription);
+                    }
+                },
+                complete: function () {
+                    $.loading('remove');
+                }
+            })
+        }
+    </script>
+}

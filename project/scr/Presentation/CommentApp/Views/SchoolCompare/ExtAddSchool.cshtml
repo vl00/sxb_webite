@@ -1,0 +1,485 @@
+﻿@using PMS.School.Domain.Common;
+@using PMS.School.Domain.Dtos;
+
+@model SchoolPKDto
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="applicable-device" content="mobile">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    
+    <title>添加学校</title>
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/common.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/pk-list.css" />
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/pk-list/add-school.css" />
+</head>
+<body>
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">添加学校</span>
+        <span class=""></span>
+    </header>
+
+    <section class="mt pk-list-content">
+        <div class="tab flex justify-content-between">
+            <div class="active" data-orderBy="1">推荐列表</div>
+            <div data-orderBy="2">浏览历史</div>
+            <div data-orderBy="3">关注列表</div>
+        </div>
+
+        <div class="not-school text-center" style="display: none;">暂无关注学校<br>看看更多学校呗~</div>
+
+        <div>
+            <!-- 推荐 -->
+            <ul class="school-list recommend">
+                @foreach (var item in Model.recommendSchools.List)
+                {
+                    <li data-extid="@item.ExtId" data-sid="@item.Sid">
+                        <div class="flex justify-content-between">
+                            <div class="flex">
+                                <span class="delete-select"><i></i></span>
+                                <div>
+                                    <h2 class="school-name">@item.Name</h2>
+                                    <div class="tag">
+                                        <span>
+                                            @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                        </span>
+                                        @{
+                                            var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                            var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                        {
+                                            <span>@lodgingDesc</span>
+                                        }
+
+                                        @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+                                    </div>
+                                    <div class="msg">
+                                        @if (item.Tuition != null)
+                                        {
+                                        <span class="price">
+                                            @(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年
+                                        </span>
+                                        }
+
+                                        @if (item.Distance != null)
+                                        {
+                                            <span>@(Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                                        }
+
+                                        <span>@item.City | @item.Area</span>
+                                    </div>
+                                    <ul class="type-list flex">
+                                        <li>
+                                            @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                        </li>
+                                        @foreach (var tag in item.Tags)
+                                        {
+                                            <li>@tag</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="score text-center">
+                                @if (item.Score != null)
+                                {
+                                    <h3>@(Math.Round((decimal)item.Score, 0))<span>分</span></h3>
+                                }
+                                else
+                                {
+                                    <span class="not-data">暂未评分</span>
+                                }
+                                <p>学校总评</p>
+                            </div>
+                        </div>
+                    </li>
+
+                }
+                @if ((int)ViewBag.PageSize > Model.recommendSchools.PageIndex)
+                {
+                    @*<div class="load-more text-center" onclick="LoadMore()">加载更多</div>*@
+                    <div class="load-more text-center">正在努力加载</div>
+                }
+                else
+                {
+                    <div class="not-more-data">没有更多数据</div>
+                }
+            </ul>
+            <!-- 历史 historySchoolList -->
+            <ul class="school-list history" style="display: none;">
+                @if (Model.historySchools.historySchoolList.Count == 0)
+                {
+                    <div class="not-school text-center">
+                        <div>暂无浏览学校</div>
+                        <a href="@Url.Action("ExtSchoolFilter","School")"><span><i class="arrow"></i></span>点击查看更多学校</a>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var item in Model.historySchools.historySchoolList)
+                    {
+                        <li data-extid="@item.ExtId" data-sid="@item.Sid">
+                            <div class="flex justify-content-between">
+                                <div class="flex">
+                                    <span class="delete-select"><i></i></span>
+                                    <div>
+                                        <h2 class="school-name">@item.Name</h2>
+                                        <div class="tag">
+                                            <span>
+                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                            </span>
+                                            @{
+                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                            {
+                                                <span>@lodgingDesc</span>
+                                            }
+                                            @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+                                        </div>
+                                        <div class="msg">
+                                            @if (item.Tuition != null)
+                                            {
+                                            <span class="price">
+                                                @(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年
+                                            </span>
+                                            }
+
+                                            @if (item.Distance != null)
+                                            {
+                                                <span>@(Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                                            }
+
+                                            <span>@item.CityName | @item.AreaName</span>
+                                        </div>
+                                        <ul class="type-list flex">
+                                            <li>
+                                                @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                            </li>
+                                            @foreach (var tag in item.Tags)
+                                            {
+                                                <li>@tag</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="score text-center">
+                                    @if (item.ExtPoint != null)
+                                    {
+                                        <h3>@(Math.Round((decimal)item.ExtPoint, 0))<span>分</span></h3>
+                                    }
+                                    else
+                                    {
+                                        <span class="not-data">暂未评分</span>
+                                    }
+                                    <p>学校总评</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    @if (Model.historySchools.PageSize > Model.historySchools.PageIndex)
+                    {
+                        @if (Model.historySchools.PageIndex > 1)
+                        {
+                            <div class="load-more text-center">正在努力加载</div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="not-more-data">没有更多数据</div>
+                    }
+                }
+
+            </ul>
+            <!-- 关注 CollectSchoolList -->
+            <ul class="school-list follow" style="display: none;">
+                @if (Model.CollectSchools.CollectSchoolList.Count == 0)
+                {
+                    <div class="not-school text-center">
+                        <div>暂无关注学校</div>
+                        <a href="@Url.Action("ExtSchoolFilter","School")"><span><i class="arrow"></i></span>点击查看更多学校</a>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var item in Model.CollectSchools.CollectSchoolList)
+                    {
+                        <li data-extid="@item.ExtId" data-sid="@item.Sid">
+                            <div class="flex justify-content-between">
+                                <div class="flex">
+                                    <span class="delete-select"><i></i></span>
+                                    <div>
+                                        <h2 class="school-name">@item.Name</h2>
+                                        <div class="tag">
+                                            <span>
+                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                            </span>
+                                            @{
+                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                            {
+                                                <span>@lodgingDesc</span>
+                                            }
+
+                                            @*<span class="list-icon"><img src="@ViewBag.StaticFile/imgs/pk-list/renzheng.png" alt=""></span>*@
+
+                                        </div>
+                                        <div class="msg">
+                                            @if (item.Tuition != null)
+                                            {
+                                            <span class="price">
+                                                @(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年
+                                            </span>
+                                            }
+
+                                            @if (item.Distance != null)
+                                            {
+                                                <span>@(Math.Round((decimal)(item.Distance / 1000), 2) + "km")</span>
+                                            }
+
+                                            <span>@item.CityName | @item.AreaName</span>
+                                        </div>
+                                        <ul class="type-list flex">
+                                            <li>
+                                                @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                            </li>
+                                            @if (item.Tags != null && item.Tags.Count > 0)
+                                            {
+                                                @foreach (var tag in item.Tags)
+                                                {
+                                                    <li>@tag</li>
+                                                }
+                                            }
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="score text-center">
+                                    @if (item.ExtPoint != null)
+                                    {
+                                        <h3>@(Math.Round((decimal)item.ExtPoint, 0))<span>分</span></h3>
+                                    }
+                                    else
+                                    {
+                                        <span class="not-data">暂未评分</span>
+                                    }
+                                    <p>学校总评</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (Model.CollectSchools.PageSize > Model.CollectSchools.PageIndex)
+                    {
+                        @if (Model.CollectSchools.PageIndex > 1)
+                        {
+                            <div class="load-more text-center">正在努力加载</div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="not-more-data">没有更多数据</div>
+                    }
+                }
+
+            </ul>
+        </div>
+    </section>
+    @*隐藏数据*@
+    @Html.HiddenFor(p => p.recommendSchools.PageIndex)
+    @Html.HiddenFor(p => p.recommendSchools.PageCount)
+    @Html.HiddenFor(p => p.historySchools.PageIndex)
+    @Html.HiddenFor(p => p.historySchools.PageCount)
+    @Html.HiddenFor(p => p.CollectSchools.PageIndex)
+    @Html.HiddenFor(p => p.CollectSchools.PageCount)
+<input type="hidden" name="PageSize" id="PageSize" value="@((int)ViewBag.PageSize)" />
+    <input type="hidden" name="Province" id="Province" value="@ViewBag.Province" />
+    <input type="hidden" name="City" id="City" value="@ViewBag.City" />
+    <input type="hidden" name="Area" id="Area" value="@ViewBag.Area" />
+    <input type="hidden" name="orderBy" id="orderBy" value="@ViewBag.OrderBy" />
+
+
+    <section class="bottom-btn">
+        <a href="@Url.Action(" ExtPKList","PK")" class="text-center can-pk">添加学校</a>
+    </section>
+
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pk-list/add-school.js"></script>
+    <script type="text/javascript">
+        // 判断是否滚动到页面底部 加载更多数据
+    var canLoad = true;
+        $(window).scroll(function () {
+        if (Math.round($(window).scrollTop() + $(window).height()) >= $(document).height()-20) {
+            if (canLoad == false) {
+                return;
+            }
+            LoadMore();
+        }
+    });
+    //加载更多点击
+    function LoadMore() {
+        console.log("加载更多点击");
+        canLoad = false;
+        var orderBy = jQuery(".mt .tab").find(".active").attr("data-orderBy");
+        LoadListHtml(orderBy, 2);
+    }
+
+            //加载列表数据
+        //1html 2append
+    function LoadListHtml(orderBy, type) {
+        var dataorderBy = jQuery(".mt .tab").find(".active").attr("data-orderBy");
+        var recommendindex = 1;
+        var historyindex = 1;
+        var Collectindex = 1;
+        if (dataorderBy == 1)
+        {
+            recommendindex = parseInt(jQuery("#recommendSchools_PageIndex").val()) + 1;
+        }
+        else if (dataorderBy == 2)
+        {
+            historyindex = parseInt(jQuery("#historySchools_PageIndex").val()) + 1;
+        }
+        else if (dataorderBy == 3)
+        {
+            Collectindex = parseInt(jQuery("#CollectSchools_PageIndex").val()) + 1;
+        }
+        if (type == 1) {
+            recommendindex = 1;
+            historyindex = 1;
+            Collectindex = 1;
+        }
+        var count = parseInt(jQuery("#PageSize").val());
+        var oldOrderBy = jQuery("#orderBy").val();
+        if (index >= count && oldOrderBy == orderBy) { return; }
+        var city = jQuery("#City").val();
+        var area = jQuery("#Area").val();
+        var province = jQuery("#Province").val();
+        var index = 0;
+        if (dataorderBy == 1)
+        {
+            index = recommendindex;
+            jQuery.get("@Url.Action("PKSchoolsRecommendAddPartial")",
+            {
+                "index": index,
+                "orderBy" : orderBy,
+                "province": province,
+                "city": city,
+                "area": area,
+                "distance": 0,
+                "size": 10 
+                },
+            function (data) {
+        //更新页码
+            //是否显示加载更多
+            console.log(data);//null
+            jQuery("#recommendSchools_PageIndex").val(index);
+        
+        jQuery("#orderBy").val(orderBy);
+            if (type == 1) {
+       
+            jQuery(".recommend").append(data);
+       
+            //滑动到顶部
+            jQuery("body,html").animate({ scrollTop: 0 }, 200);
+        }
+            else {
+                jQuery(".recommend").append(data);
+            }
+            //jQuery.loading("remove");
+            console.log("orderby:" + jQuery("#orderBy").val() + ";index:" +
+                jQuery("#recommendSchools_PageIndex").val() 
+           
+            );
+                canLoad = true;
+            });
+        }
+        else if (dataorderBy == 2)
+        {
+            index = historyindex;
+            jQuery.get("@Url.Action("PKSchoolsHistoryAddPartial")",
+            {
+                "index": index,
+                "orderBy" : orderBy,
+                "province": province,
+                "city": city,
+                "area": area,
+                "distance": 0,
+                "size": 10 
+                },
+            function (data) {
+        //更新页码
+            //是否显示加载更多
+            console.log(data);//null
+            jQuery("#historySchools_PageIndex").val(index);
+        
+        jQuery("#orderBy").val(orderBy);
+            if (type == 1) {
+       
+            jQuery(".history").append(data);
+       
+            //滑动到顶部
+            jQuery("body,html").animate({ scrollTop: 0 }, 200);
+        }
+            else {
+                jQuery(".history").append(data);
+            }
+            //jQuery.loading("remove");
+            console.log("orderby:" + jQuery("#orderBy").val() + ";index:" +
+                jQuery("#historySchools_PageIndex").val() 
+           
+            );
+                canLoad = true;
+            });
+        }
+        else if (dataorderBy == 3)
+        {
+            index = Collectindex;
+            jQuery.get("@Url.Action("PKSchoolsCollectAddPartial")",
+            {
+                "index": index,
+                "orderBy" : orderBy,
+                "province": province,
+                "city": city,
+                "area": area,
+                "distance": 0,
+                "size": 10 
+                },
+            function (data) {
+        //更新页码
+            //是否显示加载更多
+            console.log(data);//null
+            jQuery("#CollectSchools_PageIndex").val(index);
+        
+        jQuery("#orderBy").val(orderBy);
+            if (type == 1) {
+       
+            jQuery(".follow").append(data);
+       
+            //滑动到顶部
+            jQuery("body,html").animate({ scrollTop: 0 }, 200);
+        }
+            else {
+                jQuery(".follow").append(data);
+            }
+            //jQuery.loading("remove");
+            console.log("orderby:" + jQuery("#orderBy").val() + ";index:" +
+                jQuery("#CollectSchools_PageIndex").val() 
+           
+            );
+                canLoad = true;
+            });
+        }
+        
+        
+
+        }
+
+    </script>
+</body>
+</html>

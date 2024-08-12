@@ -1,0 +1,1579 @@
+﻿@{
+    Layout = null;
+    var schoolNos = ViewBag.SchoolNos as Dictionary<Guid, string>;
+}
+@using PMS.School.Domain.Common
+@using PMS.School.Domain.Dtos
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上学帮-家长帮孩子选学校专业平台_家庭教育_学位</title>
+    <meta name="keywords" content="上学帮,直升美国大学,上学,读书,幼升小,小升初,升学,学区,学位,育儿">
+    <meta name="description" content="上学帮是致力与帮助家长挑选最适合孩子的教育择校平台，不仅提供最专业的学校探访，学位，家庭教育，深度的名师对话，详实的择校信息，精准的民办教育、国际教育信息及专业的探校活动。实现学校的透明化，打通幼升小家校间的障碍">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="baidu-site-verification" content="xY3SEIcjrE" />
+    <meta name="msvalidate.01" content="339EC66038F3BCBC22DD9C14E894BDD3" />
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/bootstrap.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/common.css">
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/swiper.css">
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/idangerous.swiper2.7.6.css">
+    <![endif]-->
+    <link rel="stylesheet" href="@(ViewBag.StaticFile)/css/home/home.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            @await Html.PartialAsync("HeaderPartial", 0)
+        </div>
+
+        <div class="container d-flex header-content mt-0 mb-0 clearfix">
+            <div class="sxb-icon d-flex">
+                <h1 class="font-weight-bold"><a href="/" class="d-block">上学帮</a></h1>
+                <div class="select font-14" id="select-city">
+                    <i class="header-icon">@ViewBag.LocalCity</i>
+                    <div class="city-list position-absolute">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in (List<PMS.Infrastructure.Application.ModelDto.AreaDto>)ViewBag.HotCity)
+                            {
+                                <li>
+                                    @*<a href="@Url.Action("Index","Home",new {City=item.AdCode })" title="@item.AreaName">@item.AreaName</a>*@
+                                    <a href="/c-@item.AdCode/" title="@item.AreaName">@item.AreaName</a>
+                                </li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Select","Home")/" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="search-type d-flex font-14">
+                    <li data-channel="0"><a title="找学校">找学校</a></li>
+                    <li data-channel="1"><a title="看点评">看点评</a></li>
+                    <li data-channel="2"><a title="搜问答">搜问答</a></li>
+                    @*<li data-channel="3"><a title="排行榜">排行榜</a></li>*@
+                    <li data-channel="4"><a title="查攻略">查攻略</a></li>
+                </ul>
+                <div class="search-bar d-flex position-relative">
+                    <div class="search-div">
+                        <input type="text" placeholder="请输入学校名称、简称开始寻校" class="input-keyword font-12" data-channel='0'>
+                        <a></a>
+                    </div>
+                    <input type="button" value="搜索" class="btn-search font-14" id="serchBtn">
+                </div>
+                <div class="recommend-search d-flex font-12">
+                    <div class="keyword-0">
+                        <span style="@(((List<string>)ViewBag.HotSchoolWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotSchoolWord)
+                            {
+                                <li><a rel="nofollow" href="@Url.Action("list", "School",new { KeyWords=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="keyword-1">
+                        <span style="@(((List<string>)ViewBag.HotCommentWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotCommentWord)
+                            {
+                                <li><a rel="nofollow" href="@Url.Action("list", "Comment",new {search=item })">@item</a></li>
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="keyword-2">
+                        <span style="@(((List<string>)ViewBag.HotQuestionWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotQuestionWord)
+                            {
+                                <li><a rel="nofollow" href="@Url.Action("list", "Question",new {search=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="keyword-4">
+                        <span style="@(((List<string>)ViewBag.HotArticleWord).Any()?(""):("display:none"))">推荐搜索：</span>
+                        <ul class="keyword clearfix">
+                            @foreach (var item in (List<string>)ViewBag.HotArticleWord)
+                            {
+                                <li><a rel="nofollow" href="@Url.Action("list", "article",new {search=item })">@item</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="school-classify">
+        <!-- 分类 -->
+        <div class="top-line d-flex container">
+            <span class="font-14 font-weight-bold">学校分类</span>
+            <nav>
+                <ul class="d-flex font-16">
+                    <li class="active"><a href="/" title="首页">首页</a></li>
+                    <li><a href="@Url.Action("List","School")/" title="学校">学校</a></li>
+                    <li><a href="@Url.Action("List","Comment")/" title="点评">点评</a></li>
+                    <li><a href="@Url.Action("List","Question")/" title="问答">问答</a></li>
+                    <li><a href="@Url.Action("List","SchoolRank")/" title="排行">排行</a></li>
+                    <li><a href="@Url.Action("list","article")/" title="攻略">攻略</a></li>
+                    <li><a href="/svs" title="中职">中职</a></li>
+                    <li><a href="/org" title="机构">机构</a></li>
+                    <li><a href="/topic/home" title="话题圈">话题圈</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="school-classify-content">
+            <div class="container d-flex justify-content-between clearfix">
+                <ul class="classify-list">
+                    <li>
+                        <div class="classify-title h-icon d-inline-block font-14 font-weight-bold">高中</div>
+                        <dl class="d-flex font-12 font-weight-normal flex-wrap clearfix">
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx430" })/" title="外国人高中">外国人高中</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx432"})/" title="国际高中">国际高中</a></dd>
+                            @*<dd><a href="@Url.Action("List","School",new { option = "tylx431"})/" title="双语高中">双语高中</a></dd>*@
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx410"})/" title="公办高中">公办高中</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx420"})/" title="民办高中">普通民办高中</a></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <div class="classify-title h-icon d-inline-block font-14 font-weight-bold">初中</div>
+                        <dl class="d-flex font-12 font-weight-normal flex-wrap clearfix">
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx330"})/" title="外国人初中">外国人初中</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx331"})/" title="双语初中">双语初中</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx310"})/" title="公办初中">公办初中</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx320"})/" title="民办初中">普通民办初中</a></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <div class="classify-title h-icon d-inline-block font-14 font-weight-bold">小学</div>
+                        <dl class="d-flex font-12 font-weight-normal flex-wrap clearfix">
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx230"})/" title="外国人小学">外国人小学</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx231"})/" title="双语小学">双语小学</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx210"})/" title="公办小学">公办小学</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx220"})/" title="民办小学">普通民办小学</a></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <div class="classify-title h-icon d-inline-block font-14 font-weight-bold">幼儿园</div>
+                        <dl class="d-flex font-12 font-weight-normal flex-wrap clearfix">
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx130"})/" title="国际幼儿园">国际幼儿园</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx110"})/" title="公办幼儿园">公办幼儿园</a></dd>
+                            @*<dd><a href="@Url.Action("List","School",new { option = "tylx199"})/" title="幼托机构">幼托机构</a></dd>*@
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx121"})/" title="民办普惠幼儿园">民办普惠幼儿园</a></dd>
+                            <dd><a href="@Url.Action("List","School",new { option = "tylx120"})/" title="民办普通幼儿园">普通民办幼儿园</a></dd>
+                        </dl>
+                    </li>
+                    @*
+                        <li class="font-12 mb-0">
+                            <a href="" title="更多学校&gt;&gt;">更多学校&gt;&gt;</a>
+                        </li>
+                    *@
+                </ul>
+
+                <div class="banner text-center position-relative">
+                    <div id="swiperApm" class="swiper-container" style="height: 412px;">
+                        <div class="swiper-wrapper">
+                            @*<div class="swiper-slide"><a href="/" title="上学帮"><img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/banner1.png"))" alt="上学帮"></a></div>*@
+                        </div>
+                        <div class="swiper-pagination-b swiper-pagination"></div>
+                    </div>
+                    @*<div class="font-weight-bold position-absolute">覆盖全国42万+所学校</div>
+                        <p class="font-20 position-absolute"><span>网罗全网大数据</span>&nbsp;&nbsp;<span>全面分析学校概况</span></p>*@
+                </div>
+            </div>
+
+            @*<div class="container">
+                    <ul class="text-center d-flex justify-content-between other-list">
+                        <li>
+                            <a href="" title="学校口碑">
+                                <div class="font-weight-bold font-18">学校口碑</div>
+                                <p class="font-12">畅所欲言，点评学校<br>交流分享，解答疑难</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" title="排行榜">
+                                <div class="font-weight-bold font-18">排行榜</div>
+                                <p class="font-12">专业对比，多维度排名<br>助你快速定位学校</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" title="学校对比">
+                                <div class="font-weight-bold font-18">学校对比</div>
+                                <p class="font-12">业内专家采编分享，内幕消息<br>为你提供选校攻略</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" title="地图寻校">
+                                <div class="font-weight-bold font-18">地图寻校</div>
+                                <p class="font-12">精确定位周边配套<br>一览无余</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>*@
+        </div>
+    </section>
+    <section style="background-color:#F8F8F8;">
+        <div class="container">
+            <div id="swiper-aa" class="swiper-container swiper-div">
+                <div class="swiper-wrapper">
+                    <!--            广告2-->
+                </div>
+                <div class="swiper-pagination-bb swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hot-recommended">
+        <!-- 热门推荐 -->
+        <div class="container">
+            <div class="hot-nav">
+                <div class="title">
+                    <h2 class="title-name">热门推荐</h2>
+                    <span class="title-details font-12">为您在海量学校中甄选出热门学校</span>
+                </div>
+                <div class="hot-recommend-nva position-relative">
+                    <div class="hot-recommend-tab">
+                        <a href="javascript:;" title="幼" data-hot-recommend-target="0" onmouseover="hotScrollMouseover(this)">幼</a>
+                        <a href="javascript:;" class="selected" title="小" data-hot-recommend-target="1" onmouseover="hotScrollMouseover(this)">小</a>
+                        <a href="javascript:;" title="初" data-hot-recommend-target="2" onmouseover="hotScrollMouseover(this)">初</a>
+                        <a href="javascript:;" title="高" data-hot-recommend-target="3" onmouseover="hotScrollMouseover(this)">高</a>
+                    </div>
+                    <a href="@Url.Action("HotSchools","Home")/" title="查看更多&gt;" class="more-hot position-absolute font-12">查看更多&gt;</a>
+                </div>
+            </div>
+            <!--        幼-->
+            <div class="hot-week-main hot-week-list-0">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[0] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[0]).Count() > 0)
+                {
+                    <div class="hot-week-list">
+                        <h3 class="title font-weight-bold">本周热度TOP</h3>
+                        <div class="hot-week-scroll position-relative">
+                            <div class="scroll">
+                                <div class="swiper-container" id='hotWeekScroll-0'>
+                                    <div class="swiper-wrapper clearfix">
+                                        <!--                            循环swiper-slide-->
+                                        @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[0])
+                                        {
+                                            <div class="swiper-slide">
+                                                <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.SchoolName">
+                                                    <div class="hot-week-school-list">
+                                                        <div class="school-name-line clearfix">
+                                                            <span class="school-name float-left">@item.SchoolName</span>
+                                                            <div class="score float-right">
+                                                                @if (item.Score == null)
+                                                                {
+                                                                    <span class="no-score">暂未评分</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                                }                                                            <i class="font-12 d-block">学校总评</i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="certification">
+                                                            <div class="certification-left font-12 ">
+                                                                <span>
+                                                                    @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                                </span>
+                                                                @{
+                                                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+                                                                }
+                                                                @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                                {
+                                                                    <span>@lodgingDesc</span>
+                                                                }
+                                                                @*认证*@
+                                                                @*<span class="sxb-certification"></span>*@
+                                                                <p class="font-14">
+                                                                    @if (item.Tuition != null)
+                                                                    {
+                                                                        <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                    }
+                                                                    @*<span class="font-12">2.1km</span>*@
+                                                                    <i>@item.CityName | @item.AreaName</i>
+                                                                </p>
+                                                            </div>
+                                                            <div class="certification-right ">
+                                                                <ul class="clearfix">
+                                                                    <li>
+                                                                        @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                    </li>
+                                                                    @foreach (var tag in item.Tags ?? new List<string>())
+                                                                    {
+                                                                        <li>@tag</li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="comment-and-rank">
+                                                    @if (item.CommontId != null)
+                                                    {
+                                                        <a href="@Url.Action("detail","comment",new { No=item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                            <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                            <i>@(item.CommentCount)</i>
+                                                        </a>
+                                                    }
+                                                    @if (item.Ranks.Count > 0)
+                                                    {
+                                                        <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                            <span>榜</span>
+                                                            @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 如果需要导航按钮 -->
+                            <div class="swiper-button-prev hot-swiper-btn-prev"></div>
+                            <div class="swiper-button-next hot-swiper-btn-next"></div>
+
+                        </div>
+                    </div>
+                }
+
+
+                <div class="hot-week-list">
+                    <h3 class="title cost-performance font-weight-bold">总评评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='costPerformance-0'>
+                                <div class="swiper-wrapper clearfix">
+                                    <!--                            循环swiper-slide-->
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[0])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev1"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next1"></div>
+
+                    </div>
+                </div>
+                <div class="hot-week-list">
+                    <h3 class="title most-competitive font-weight-bold">口碑评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='mostCompetitive-0'>
+                                <div class="swiper-wrapper clearfix">
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[0])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }
+                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo})" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev2"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next2"></div>
+
+                    </div>
+                </div>
+            </div>
+            <!--        小-->
+            <div class="hot-week-main hot-week-list-1">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[1] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[1]).Count() > 0)
+                {
+                    <div class="hot-week-list">
+                        <h3 class="title font-weight-bold">本周热度TOP</h3>
+                        <div class="hot-week-scroll position-relative">
+                            <div class="scroll">
+                                <div class="swiper-container" id='hotWeekScroll-1'>
+                                    <div class="swiper-wrapper clearfix">
+                                        <!--                    循环swiper-slide-->
+                                        @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[1])
+                                        {
+                                            <div class="swiper-slide">
+                                                <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.SchoolName">
+                                                    <div class="hot-week-school-list">
+                                                        <div class="school-name-line clearfix">
+                                                            <span class="school-name float-left">@item.SchoolName</span>
+                                                            <div class="score float-right">
+                                                                @if (item.Score == null)
+                                                                {
+                                                                    <span class="no-score">暂未评分</span>
+                                                                }
+                                                                else
+                                                                {
+                                                            <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                                }                                                            <i class="font-12 d-block">学校总评</i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="certification">
+                                                            <div class="certification-left font-12 ">
+                                                                <span>
+                                                                    @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                                </span>
+                                                                @{
+                                                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+                                                                }
+                                                                @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                                {
+                                                                    <span>@lodgingDesc</span>
+                                                                }
+                                                                @*认证*@
+                                                                @*<span class="sxb-certification"></span>*@
+                                                                <p class="font-14">
+                                                                    @if (item.Tuition != null)
+                                                                    {
+                                                                        <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                    }
+                                                                    @*<span class="font-12">2.1km</span>*@
+                                                                    <i>@item.CityName | @item.AreaName</i>
+                                                                </p>
+                                                            </div>
+                                                            <div class="certification-right ">
+                                                                <ul class="clearfix">
+                                                                    <li>
+                                                                        @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                    </li>
+                                                                    @foreach (var tag in item.Tags ?? new List<string>())
+                                                                    {
+                                                                        <li>@tag</li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="comment-and-rank">
+                                                    @if (item.CommontId != null)
+                                                    {
+                                                        <a href="@Url.Action("detail", "comment", new { No = item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                            <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                            <i>@(item.CommentCount)</i>
+                                                        </a>
+                                                    }
+                                                    @if (item.Ranks.Count > 0)
+                                                    {
+                                                        <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                            <span>榜</span>
+                                                            @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 如果需要导航按钮 -->
+                            <div class="swiper-button-prev hot-swiper-btn-prev"></div>
+                            <div class="swiper-button-next hot-swiper-btn-next"></div>
+
+                        </div>
+                    </div>
+                }
+
+
+                <div class="hot-week-list">
+                    <h3 class="title cost-performance font-weight-bold">总评评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='costPerformance-1'>
+                                <div class="swiper-wrapper clearfix">
+                                    <!--                            循环swiper-slide-->
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[1])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev1"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next1"></div>
+
+                    </div>
+                </div>
+                <div class="hot-week-list">
+                    <h3 class="title most-competitive font-weight-bold">口碑评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='mostCompetitive-1'>
+                                <div class="swiper-wrapper clearfix">
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[1])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo})" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev2"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next2"></div>
+
+                    </div>
+                </div>
+            </div>
+            <!--        初-->
+            <div class="hot-week-main hot-week-list-2">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[2] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[2]).Count() > 0)
+                {
+                    <div class="hot-week-list">
+                        <h3 class="title font-weight-bold">本周热度TOP</h3>
+                        <div class="hot-week-scroll position-relative">
+                            <div class="scroll">
+                                <div class="swiper-container" id='hotWeekScroll-2'>
+                                    <div class="swiper-wrapper clearfix">
+                                        <!--                            循环swiper-slide-->
+                                        @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[2])
+                                        {
+                                            <div class="swiper-slide">
+                                                <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.SchoolName">
+                                                    <div class="hot-week-school-list">
+                                                        <div class="school-name-line clearfix">
+                                                            <span class="school-name float-left">@item.SchoolName</span>
+                                                            <div class="score float-right">
+                                                                @if (item.Score == null)
+                                                                {
+                                                                    <span class="no-score">暂未评分</span>
+                                                                }
+                                                                else
+                                                                {
+                                                            <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                                }                                                            <i class="font-12 d-block">学校总评</i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="certification">
+                                                            <div class="certification-left font-12 ">
+                                                                <span>
+                                                                    @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                                </span>
+                                                                @{
+                                                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+                                                                }
+                                                                @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                                {
+                                                                    <span>@lodgingDesc</span>
+                                                                }
+                                                                @*认证*@
+                                                                @*<span class="sxb-certification"></span>*@
+                                                                <p class="font-14">
+                                                                    @if (item.Tuition != null)
+                                                                    {
+                                                                        <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                    }
+                                                                    @*<span class="font-12">2.1km</span>*@
+                                                                    <i>@item.CityName | @item.AreaName</i>
+                                                                </p>
+                                                            </div>
+                                                            <div class="certification-right ">
+                                                                <ul class="clearfix">
+                                                                    <li>
+                                                                        @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                    </li>
+                                                                    @foreach (var tag in item.Tags ?? new List<string>())
+                                                                    {
+                                                                        <li>@tag</li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="comment-and-rank">
+                                                    @if (item.CommontId != null)
+                                                    {
+                                                        <a href="@Url.Action("detail", "comment", new { No = item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                            <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                            <i>@(item.CommentCount)</i>
+                                                        </a>
+                                                    }
+                                                    @if (item.Ranks.Count > 0)
+                                                    {
+                                                        <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                            <span>榜</span>
+                                                            @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 如果需要导航按钮 -->
+                            <div class="swiper-button-prev hot-swiper-btn-prev"></div>
+                            <div class="swiper-button-next hot-swiper-btn-next"></div>
+
+                        </div>
+                    </div>
+                }
+
+
+                <div class="hot-week-list ">
+                    <h3 class="title cost-performance font-weight-bold">总评评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='costPerformance-2'>
+                                <div class="swiper-wrapper clearfix">
+                                    <!--                            循环swiper-slide-->
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[2])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev1"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next1"></div>
+
+                    </div>
+                </div>
+                <div class="hot-week-list">
+                    <h3 class="title most-competitive font-weight-bold">口碑评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='mostCompetitive-2'>
+                                <div class="swiper-wrapper clearfix">
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[2])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev2"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next2"></div>
+
+                    </div>
+                </div>
+            </div>
+            <!--        高-->
+            <div class="hot-week-main hot-week-list-3">
+                @if ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[3] != null && ((List<SchoolCollectionDto>)ViewBag.PcHotSchool[3]).Count() > 0)
+                {
+                    <div class="hot-week-list">
+                        <h3 class="title font-weight-bold">本周热度TOP</h3>
+                        <div class="hot-week-scroll position-relative">
+                            <div class="scroll">
+                                <div class="swiper-container" id='hotWeekScroll-3'>
+                                    <div class="swiper-wrapper clearfix">
+                                        <!--                            循环swiper-slide-->
+                                        @foreach (var item in (List<SchoolCollectionDto>)ViewBag.PcHotSchool[3])
+                                        {
+                                            <div class="swiper-slide">
+                                                <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.SchoolName">
+                                                    <div class="hot-week-school-list">
+                                                        <div class="school-name-line clearfix">
+                                                            <span class="school-name float-left">@item.SchoolName</span>
+                                                            <div class="score float-right">
+                                                                @if (item.Score == null)
+                                                                {
+                                                                    <span class="no-score">暂未评分</span>
+                                                                }
+                                                                else
+                                                                {
+                                                            <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                                }
+                                                                <i class="font-12 d-block">学校总评</i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="certification">
+                                                            <div class="certification-left font-12 ">
+                                                                <span>
+                                                                    @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                                </span>
+                                                                @{
+                                                                    var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(item.LodgingType);
+                                                                }
+                                                                @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                                {
+                                                                    <span>@lodgingDesc</span>
+                                                                }
+                                                                @*认证*@
+                                                                @*<span class="sxb-certification"></span>*@
+                                                                <p class="font-14">
+                                                                    @if (item.Tuition != null)
+                                                                    {
+                                                                        <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                    }
+                                                                    @*<span class="font-12">2.1km</span>*@
+                                                                    <i>@item.CityName | @item.AreaName</i>
+                                                                </p>
+                                                            </div>
+                                                            <div class="certification-right ">
+                                                                <ul class="clearfix">
+                                                                    <li>
+                                                                        @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                    </li>
+                                                                    @foreach (var tag in item.Tags ?? new List<string>())
+                                                                    {
+                                                                        <li>@tag</li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="comment-and-rank">
+                                                    @if (item.CommontId != null)
+                                                    {
+                                                        <a href="@Url.Action("detail", "comment", new { No = item.CommontNo })" title="评论" class="comments-link d-block font-14">
+                                                            <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                            <i>@(item.CommentCount)</i>
+                                                        </a>
+                                                    }
+                                                    @if (item.Ranks.Count > 0)
+                                                    {
+                                                        <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                            <span>榜</span>
+                                                            @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 如果需要导航按钮 -->
+                            <div class="swiper-button-prev hot-swiper-btn-prev"></div>
+                            <div class="swiper-button-next hot-swiper-btn-next"></div>
+
+                        </div>
+                    </div>
+                }
+
+
+                <div class="hot-week-list ">
+                    <h3 class="title cost-performance font-weight-bold">总评评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='costPerformance-3'>
+                                <div class="swiper-wrapper clearfix">
+                                    <!--                            循环swiper-slide-->
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.SorceSchool[3])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                        <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }
+                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo})" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev1"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next1"></div>
+
+                    </div>
+                </div>
+                <div class="hot-week-list">
+                    <h3 class="title most-competitive font-weight-bold">口碑评分TOP</h3>
+                    <div class="hot-week-scroll position-relative">
+                        <div class="scroll">
+                            <div class="swiper-container" id='mostCompetitive-3'>
+                                <div class="swiper-wrapper clearfix">
+                                    @foreach (var item in (List<SchoolExtItemDto>)ViewBag.CommentSchool[3])
+                                    {
+                                        <div class="swiper-slide">
+                                            <a href="/school-@schoolNos[item.ExtId]?.ToLower()/" title="@item.Name">
+                                                <div class="hot-week-school-list">
+                                                    <div class="school-name-line clearfix">
+                                                        <span class="school-name float-left">@item.Name</span>
+                                                        <div class="score float-right">
+                                                            @if (item.Score == null)
+                                                            {
+                                                                <span class="no-score">暂未评分</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class='private-score-grading'>@(ProductManagement.Framework.Foundation.Codstring.GetScoreString(item.Score.Value))</span>
+                                                            }
+                                                            <i class="font-12 d-block">学校总评</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="certification">
+                                                        <div class="certification-left font-12 ">
+                                                            <span>
+                                                                @ProductManagement.Framework.Foundation.EnumExtension.Description((PMS.School.Domain.Common.SchoolType)item.Type)
+                                                            </span>
+                                                            @{
+                                                                var lodgingType = LodgingUtil.Reason(item.Lodging, item.Sdextern);
+                                                                var lodgingDesc = ProductManagement.Framework.Foundation.EnumExtension.Description(lodgingType);
+                                                            }
+                                                            @if (!string.IsNullOrWhiteSpace(lodgingDesc))
+                                                            {
+                                                                <span>@lodgingDesc</span>
+                                                            }
+                                                            @*认证*@
+                                                            @*<span class="sxb-certification"></span>*@
+                                                            <p class="font-14">
+                                                                @if (item.Tuition != null)
+                                                                {
+                                                                    <b>@(item.Tuition >= 10000 ? Math.Round((decimal)(item.Tuition / 10000), 2) + "万" : item.Tuition.ToString())元/年</b>
+                                                                }
+                                                                @*<span class="font-12">2.1km</span>*@
+                                                                <i>@item.City | @item.Area</i>
+                                                            </p>
+                                                        </div>
+                                                        <div class="certification-right ">
+                                                            <ul class="clearfix">
+                                                                <li>
+                                                                    @(new iSchool.SchFType0((byte)item.Grade, item.Type, item.Discount, item.Diglossia, item.Chinese).GetDesc())
+                                                                </li>
+                                                                @foreach (var tag in item.Tags ?? new List<string>())
+                                                                {
+                                                                    <li>@tag</li>
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="comment-and-rank">
+                                                @if (item.CommontId != null)
+                                                {
+                                                    <a href="@Url.Action("detail","comment",new {No=item.CommontNo})" title="评论" class="comments-link d-block font-14">
+                                                        <span>评</span><b class="comments-swiper">@(item.Comment)</b>
+                                                        <i>@(item.CommentCount)</i>
+                                                    </a>
+                                                }
+                                                @if (item.Ranks.Count > 0)
+                                                {
+                                                    <a href="@Url.Action("Detail", "SchoolRank", new { Base32No = item.Ranks.FirstOrDefault().Base32No })" title="排行" class="font-14 rank-link position-relative">
+                                                        <span>榜</span>
+                                                        @($"{item.Ranks.FirstOrDefault().Title}第{item.Ranks.FirstOrDefault().Ranking}名")<i></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- 如果需要导航按钮 -->
+                        <div class="swiper-button-prev hot-swiper-btn-prev2"></div>
+                        <div class="swiper-button-next hot-swiper-btn-next2"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section style="background-color: #F8F8F8;">
+        <div id="swiper-bb" class="swiper-container swiper-div">
+            <div class="swiper-wrapper">
+                <!--        广告3-->
+            </div>
+            <div class="swiper-pagination-bb swiper-pagination"></div>
+        </div>
+    </section>
+
+    <section class="strategy">
+        <!-- 最新攻略 -->
+        <div class="container">
+            <h2 class="title-name d-block font-weight-bold">最新攻略</h2>
+            <p class="text-center more-rank title-details font-12 rank-detail position-relative">
+                最新资讯，跟踪学校动态
+                <a href="/article/" title="最新资讯，跟踪学校动态" class="float-right position-absolute font-12">更多攻略></a>
+            </p>
+            <!-- 五个内容div的父级 -->
+            <div class="strategy-div">
+                @{
+                    var articles = ViewBag.Articles as List<Sxb.PCWeb.ViewModels.Article.ArticleListItemViewModel>;
+                }
+
+                @for (int i = 1; i <= articles.Count; i++)
+                {
+                    if (i % 6 == 1)
+                    {
+                        if (i == 1)
+                        {
+                            WriteLiteral("<div style=\"display:block; position:absolute;\"><ul>");
+                        }
+                        else
+                        {
+                            WriteLiteral("<div style=\"display:none; position:absolute;\"><ul>");
+                        }
+                    }
+
+                    <li @if (i % 2 != 0) { WriteLiteral("class=\"strategy-li\""); }>
+                        @if (articles[i - 1].Covers?.Count() > 0)
+                        {
+                            <img src="@articles[i-1].Covers?.FirstOrDefault()?.Replace("file", "cdn")" alt="">
+                        }
+                        <div @if (articles[i - 1].Covers == null || !articles[i - 1].Covers.Any()) { WriteLiteral("class=\"strategy-li-div\""); }>
+
+                            <h3><a href="@Url.Action("detail","article",new { no = articles[i-1].No})" title="@articles[i-1].Title">@articles[i - 1].ShortTitle</a></h3>
+                            <p>
+                                <span>@articles[i - 1].Time</span>
+                                <img src="@(ViewBag.StaticFile)/imgs/home/raiders_see@3x.png" alt="">
+                                <span>@articles[i - 1].ViewCount</span>
+                            </p>
+                        </div>
+                    </li>
+
+                    if (i % 6 == 0 || (i == articles.Count))
+                    {
+                        WriteLiteral("</ul></div>");
+                    }
+                }
+            </div>
+            <!-- 页面点击 -->
+            <div class="strategy-click">
+                <span class="strategy-click-span1 strategy-click-last">上一页</span>
+                <p class="strategy-p"><span class="strategy-p-span">1</span>/<span id="pages">@ViewBag.StrategyPageCount</span></p>
+                <span class="strategy-click-span2 strategy-click-active">下一页</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="rank">
+        <!-- 排行榜 -->
+        <div class='container'>
+            <h2 class="title-name d-block">排行榜</h2>
+            <p class="text-center more-rank title-details font-12 rank-detail position-relative">
+                精选榜单，给你权威的指引
+                <a href="@Url.Action("ListAll","SchoolRank")/" title="更多排行榜" class="float-right position-absolute font-12">更多排行榜></a>
+            </p>
+
+            <div class=" d-flex justify-content-between rank-content clearfix">
+                @foreach (var item in (List<Sxb.PCWeb.ViewModels.Rank.SchoolRankApiModel>)ViewBag.Rank)
+                {
+                    <div>
+                        <h3 class="font-20 font-weight-bold text-center">
+                            @item.RankName
+                        </h3>
+
+                        <ul class="font-15">
+                            @foreach (var rank in item.Items.Take(5).ToList())
+                            {
+                                <li class="rank-list">
+                                    @*<a href="@Url.Action("detail","school",new { id=rank.SchoolExtId.ToString("N")})">*@
+                                    <a href="/school-@(schoolNos[rank.SchoolExtId])/">
+                                        <i class="num">@rank.Sort</i>
+                                        @rank.SchoolName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        <a href="@Url.Action("Detail","SchoolRank",new {base32No = item.Base32No })" title="查看更多>" class="rank-list-more font-12">查看更多&gt;</a>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </section>
+    <section style="background-color: #F8F8F8;">
+        <div id="swiper-cc" class="swiper-container swiper-div">
+            <div class="swiper-wrapper">
+                <!--        广告4-->
+            </div>
+            <div class="swiper-pagination-e swiper-pagination"></div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="title-name d-block">特色课程</h2>
+            <p class="text-center more-rank title-details font-12 rank-detail position-relative">
+                涵盖所有热门课程和项目分类
+                <a href="@Url.Action("Features")/" title="更多分类" class="float-right position-absolute font-12">更多分类>></a>
+            </p>
+            <ul class="specialty-courses clearfix">
+                <li><a href="@Url.Action("List","School",new {option = "ch177" })" title="STEM" class="specialty-courses-solid specialty-courses-bottom-solid">STEM</a></li>
+                <li><a href="@Url.Action("List","School",new {option = "ch298" })" title="奥数" class="specialty-courses-solid specialty-courses-bottom-solid">奥数</a></li>
+                <li><a href="@Url.Action("List","School",new {option = "ch289" })" title="器乐类" class="specialty-courses-bottom-solid">器乐类</a></li>
+                <li><a href="@Url.Action("List","School",new {option = "ch233" })" title="英语" class="specialty-courses-solid">英语</a></li>
+                <li><a href="@Url.Action("List","School",new {option = "ch71" })" title="足球" class="specialty-courses-solid">足球</a></li>
+                <li><a href="@Url.Action("List","School",new {option = "ch297" })" title="艺术类">艺术类</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="list">
+        <div class="container">
+            <ul class="font-12 d-flex justify-content-between text-center clearfix">
+                <li>
+                    <div><img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/home/list-1.png"))" alt=""></div>
+                    <strong class="font-20">海量</strong>
+                    <p>数十万所学校信息 <br> 涵盖0-18岁全学段</p>
+                </li>
+                <li>
+                    <div><img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/home/list-2.png"))" alt=""></div>
+                    <strong class="font-20">真实</strong>
+                    <p>百万级真实家长点评 <br> 囊括学校教学教育和生活</p>
+                </li>
+                <li>
+                    <div><img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/home/list-3.png"))" alt=""></div>
+                    <strong class="font-20">专业</strong>
+                    <p>千万级数据定量评估 <br> 智能生成评分系统</p>
+                </li>
+                <li>
+                    <div><img src="@(Context.Request.Headers["User-Agent"].ToString().ToLower().Contains("spider")?"https://cdn.sxkid.com/images/logo_seo.jpg": (ViewBag.StaticFile+"/imgs/home/list-4.png"))" alt=""></div>
+                    <strong class="font-20">精准</strong>
+                    <p>基于用户标签数据库 <br> 精准分析和推荐学校</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    @await Html.PartialAsync("Right_bar")
+
+    @await Html.PartialAsync("HomeFooter")
+    <a href="/article/hdlst" style="display:none;">友情文章</a>
+
+    @*<script src="https://file.sxkid.com/js/lib/jquery.js"></script>*@
+    <script src="@ViewBag.StaticFile/js/jquery-3.4.0.min.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/jquery.cookie.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/swiper.js"></script>
+
+
+
+
+
+
+
+    <!--[if lt IE 9]>
+    <script src="@(ViewBag.StaticFile)/js/idangerous.swiper2.7.6.min.js"></script>
+    <![endif]-->
+    <script src="@(ViewBag.StaticFile)/js/common.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/home.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/search.js"></script>
+    <script src="@(ViewBag.StaticFile)/js/home/swiperDesign.js"></script>
+
+</body>
+</html>

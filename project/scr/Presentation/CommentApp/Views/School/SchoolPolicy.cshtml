@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Sxb.Web.ViewModels.Article.ArticleListItemViewModel>
+@{
+    Layout = "~/views/Shared/_op_layout.cshtml";
+    ViewBag.Title = "升学政策";
+}
+@section Styles{
+    <link rel="stylesheet" href=" @ViewBag.StaticFile/css/school-dynamic.css">
+}
+
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">升学政策</span>
+    <span class=""></span>
+</header>
+
+<section class="mt">
+    <ul class="content-list">
+        @foreach (var item in Model)
+        {
+            <li>
+                <a href="@Url.Action("detail","article",new { no = item.No})">
+                    <h5>@item.Title</h5>
+                    <div class="list-msg">
+                        <span>@item.Time</span>
+                        <span><i class="icon"></i>@item.ViweCount</span>
+                    </div>
+                </a>
+            </li>
+        }
+
+        @*<li class="not-more-data" id="no-more">没有更多数据</li>*@
+    </ul>
+</section>
+
+@section Scripts{
+    <script src="@ViewBag.StaticFile/js/layout-common.js"></script>
+    <script src="@ViewBag.StaticFile/js/pullScroll/pullScroll.js"></script>
+    <script>
+
+        var offset = @ViewBag.Offset;
+        var limit = @ViewBag.Limit;
+        var total = @ViewBag.Total;
+        var Type =  @ViewBag.Type;
+        var SchoolGrade = @ViewBag.SchoolGrade;
+        var Discount = @ViewBag.Discount;
+        var Diglossia = @ViewBag.Diglossia;
+        var Chinese = @ViewBag.Chinese;
+        var ProvinceId = @ViewBag.ProvinceId;
+        var CityId = @ViewBag.CityId;
+        var AreaId  = @ViewBag.AreaId;
+        var content_list = $('.content-list');
+        var noMore = $('#no-more');
+
+        window.ItemTemplate = function (item) {
+            var template = "";
+            template += ' <li> ';
+            template += '    <a href="/article/' + item.no + '.html"> ';
+            template += '        <h5>' + item.title + '</h5> ';
+            template += '        <div class="list-msg"> ';
+            template += '            <span>' + item.time + '</span> ';
+            template += '            <span><i class="icon"></i>' + item.viweCount + '</span> ';
+            template += '        </div> ';
+            template += '    </a> ';
+            template += '</li> ';
+            return template;
+        }
+
+        window.LoadDatas = function (params, success) {
+            //Guid schoolId, int offset = 0, int limit = 20
+            $.ajax({
+                url: '/article/ListCreersPolicy',
+                type: 'get',
+                data: params,
+                success: success
+            })
+        }
+
+        function pullUp() {
+
+            if (offset >= total) {
+                return; //已经到底了，不作任何处理
+            }
+            $.loading();
+            var offset_temp = offset + limit;
+            LoadDatas({
+                Type: Type,
+                SchoolGrade: SchoolGrade,
+                Chinese: Chinese,
+                Diglossia: Diglossia,
+                Discount: Discount,
+                ProvinceId: ProvinceId,
+                CityId: CityId,
+                AreaId: AreaId,
+                offset: offset_temp,
+                limit: limit
+            }, (res) => {
+                $.loading('remove');
+                if (res.status == 1) {
+
+                    var list = res.data.list;
+                    total = res.data.total; //更新总量
+                    offset = offset_temp;  //增加偏移量
+                    if (list.length > 0) {
+                        $.each(list, function (index, value) {
+                            var listItem = ItemTemplate(value);
+                            noMore.before(listItem);
+                        });
+                    } else {
+                        noMore.show();
+                    }
+
+                } else {
+                    alert(res.msg)
+                }
+            });
+
+        }
+
+        function pullDown() {
+
+        }
+
+        function init() {
+            if ((offset + limit) < total) {
+                noMore.hide();
+            } else {
+                noMore.show();
+            }
+        }
+
+        $(document).ready(function () {
+            init();
+            pullScroll.listen(pullUp, pullDown);
+            content_list.on('click', 'li', function () {
+                window.location = '/article/' + $(this).data('id')+'.html';
+            })
+        });
+    </script>
+
+}

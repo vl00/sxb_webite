@@ -1,0 +1,200 @@
+﻿@using PMS.OperationPlateform.Domain.Enums
+@model IEnumerable<Sxb.Web.ViewModels.SchoolRank.SchoolRankViewModel>
+@{
+    ViewBag.Title = "胡润学校_国际学校_民办学校_公办学校_排行榜_区域排名-上学帮";
+    ViewBag.KeyWords = "胡润学校排名,国际学校排名,民办学校排名,公办学校排名";
+    ViewBag.Description = "上学帮提供胡润学校、国际学校、民办学校、公办学校排行榜名单，让家长给孩子选择好的优秀国内、国际学校不同层次的学校，让孩子享受优质的教育资源。";
+}
+@section Styles{
+    <link rel="stylesheet" href="@ViewBag.StaticFile/css/school-rank.css?t=123" />
+}
+
+@*
+    <header class="header flex justify-content-between">
+        <a class="arrow"></a>
+        <span class="header-title">排行榜</span>
+        <span class=""></span>
+    </header>`
+*@
+
+<section class="rank mt">
+    <div class="search-bar">
+        <i class="search-icon"></i>
+        <input type="text" placeholder="寻找学校" id="searchInput">
+    </div>
+    <div class="search-bcg"></div>
+    <ul class="search-rank" id="searchBox">
+    </ul>
+    @if (ViewBag.SchoolId != null)
+    {
+
+        <!-- 上榜榜单为搜索结果显示 -->
+        @if (Model != null && Model.Any())
+        {
+            <h5 class="title">上榜榜单</h5>
+            <ul class="rank-list">
+                @foreach (var item in Model)
+                {
+                    <li class="flex">
+                        <a href="/schoolrank/detail/@(item.Base32No).html">
+                            <div class="img-box"><img src="@item.RankCoverUrl" alt="" /></div>
+                            <div class="school-name-list">
+                                <h6 class="rank-name">@item.RankName</h6>
+                                <ul>
+                                    @foreach (var sinfo in item.Schools)
+                                    {
+                                        if (ViewBag.SchoolId == sinfo.Id)
+                                        {
+                                            <li class="active"><i>@sinfo.Sort.</i>@sinfo.Name</li>
+                                        }
+                                        else
+                                        {
+                                            <li><i>@sinfo.Sort.</i>@sinfo.Name</li>
+                                        }
+
+                                    }
+                                </ul>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <!-- 没有结果 -->
+            <div class="not-result text-center">
+                <p>该学校暂未上榜</p>
+                <p>查查其它学校试试呗~~</p>
+            </div>
+        }
+    }
+
+
+
+</section>
+
+<section class="recommend-rank">
+    <div class="title">
+        <h5>推荐榜单</h5>
+    </div>
+    <ul class="flex justify-content-between text-center">
+        @foreach (Sxb.Web.ViewModels.SchoolRank.SchoolRankDetailViewModel item in ViewBag.CorrelationSchoolRanks)
+        {
+
+            <li>
+                <a href="/schoolrank/detail/@(item.Base32No).html">
+                    <img src="@item.Cover" alt="">
+                    <p>@item.Title</p>
+                </a>
+            </li>
+        }
+
+    </ul>
+</section>
+
+
+
+<section class="other-rank">
+    <div class="title">
+        <h5>榜单分类<a href="@Url.Action("ListAll","SchoolRank")" class="check-more">查看更多<i class="arrow"></i></a></h5>
+    </div>
+    <ul class="rank-list flex text-center justify-content-between">
+        <li>
+            <a href="/schoolrank/@SchoolGradePY.YouErYuan.ToString().ToLower()/">
+                <i class="rank-icon"></i>
+                <div class="rank-name">幼儿园</div>
+            </a>
+        </li>
+        <li>
+            <a href="/schoolrank/@SchoolGradePY.XiaoXue.ToString().ToLower()/">
+                <i class="rank-icon"></i>
+                <div class="rank-name">小学</div>
+            </a>
+        </li>
+        <li>
+            <a href="/schoolrank/@SchoolGradePY.ChuZhong.ToString().ToLower()/">
+                <i class="rank-icon"></i>
+                <div class="rank-name">初中</div>
+            </a>
+        </li>
+        <li>
+            <a href="/schoolrank/@SchoolGradePY.GaoZhong.ToString().ToLower()/">
+                <i class="rank-icon"></i>
+                <div class="rank-name">高中</div>
+            </a>
+        </li>
+    </ul>
+</section>
+
+
+<div class="curtain"></div>
+@section Scripts{
+    <script>
+        var $searchInput = $('#searchInput');
+        var $searchBox = $('#searchBox');
+        var $lock = true;
+        $(function () {
+            $('.search-bar input').on("input propertychange", function () {
+                if ($(this).val() != '') {
+                    $('body, html').css({ 'overflow': 'hidden', 'height': '100%', 'position': 'fixed', 'width': '100%' });
+                    $('.search-rank, .search-bcg').show();
+                    $('.curtain').fadeIn().css('z-index', 0);
+                }
+                else {
+                    $('body, html').css({ 'overflow': 'visible', 'height': 'unset', 'position': 'relative' });
+                    $('.search-rank, .search-bcg').hide();
+                    $('.curtain').fadeOut();
+                }
+            })
+            $searchInput.on("input propertychange", function () {
+                var _this = $(this);
+                if ($lock) {
+                    $lock = false;
+                    setTimeout(function () {
+                        var keyword = _this.val();
+                        var limit = 10;
+                        $.ajax({
+                            url: '@Url.Action("SearchSchools","SchoolRank")',
+                            type: 'get',
+                            data: {
+                                keyword: keyword,
+                                limit: limit
+                            },
+                            success: function (res) {
+                                $searchBox.empty();
+                                if (res.statu == 1) {
+                                    $.each(res.data.schools, (index, value) => {
+                                        var html = '';
+                                        html += '<li>'
+                                        html += '<a href="/SchoolRank/List?schoolId=' + value.id + '">'
+                                        html += '      <i class="search-rank-icon"></i>'
+                                        html += '      <span class="name">' + value.name + '</span>'
+                                        html += '      <!-- <span class="num">45条回答</span> -->'
+                                        html += '</a>'
+                                        html += ' </li>';
+                                        $searchBox.append(html);
+
+                                    })
+
+                                }
+
+                            }
+                        });
+                        $lock = true;
+                    }, 1000);
+                }
+
+            });
+
+            $('.curtain').on('click', function () {
+                $('body, html').css({ 'overflow': 'visible', 'height': 'unset', 'position': 'relative' });
+                $('.search-rank, .search-bcg').hide();
+                $('.curtain').fadeOut();
+                $('.search-bar input').val('');
+            });
+        })
+    </script>
+
+}

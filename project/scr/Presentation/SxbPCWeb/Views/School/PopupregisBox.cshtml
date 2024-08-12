@@ -1,0 +1,76 @@
+﻿@* 报名弹窗 *@
+@*<div class="popup-regis-box">
+    <span class="close-btn">+</span>
+    <form action="" class="data">
+        <h1 class="text-center title">国际学校招生报名中</h1>
+        <div class="group">
+            <input id="name" name="name" placeholder="您的称呼">
+        </div>
+        <div class="group">
+            <input id="phone" name="phone"  type="tel"  placeholder="您的电话">
+        </div>
+        <div class="group my-select">
+            <div class="set">
+                <span class="select-show-text" data-value="0">孩子学段</span>
+                <div class="triangle_border_down"></div>
+            </div>
+            <div class="option">
+                <a href="javascript:;" data-value="1">幼儿园</a>
+                <a href="javascript:;" data-value="2">小学</a>
+                <a href="javascript:;" data-value="3">初中</a>
+                <a href="javascript:;" data-value="4">高中</a>
+            </div>
+        </div>
+        <a href="javascript:;" class="submit-btn" data-signType="2">立即报名</a>
+    </form>
+</div>*@
+
+<div class="right-regis-box">
+    <form action="" class="data">
+        <span class="close-btn"></span>
+        <div class="content">
+            <div class="title">广东国际高中招生报名中</div>
+            <div class="group">
+                <input id="name" name="name" placeholder="您的称呼">
+            </div>
+            <div class="group">
+                <input id="phone" name="phone" placeholder="您的电话">
+            </div>
+            <div class="group">
+                <span class="mycheckbox"></span>
+                <span class="tips">同意上学帮为您推荐其他国际高中</span>
+            </div>
+            <button type="button" class="submit-btn" data-signType="2" data-currentpostform="0">马上报名</button>
+            <div class="bottom-span">
+                <a href="/home/principle?idx=4">隐私协议</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@* 报名成功 *@
+<div class="success-alert">
+    <span class="close-btn"></span>
+    <div class="content">
+        <div class="text">
+            <!-- <img src="../imgs/school-regis/3466.png"/> -->
+            <i class="success-i"></i>
+            <span>您已成功报名</span>
+        </div>
+        <div class="qrcode"></div>
+        <span>上学帮小助手</span>
+        <p>您可扫码添加上学帮小助手微信，或稍后通过上学帮小助手微信号的好友添加，在线咨询了解学校</p>
+        <a href="javascript:;">确定</a>
+    </div>
+</div>
+
+@* 报名失败 *@
+<div class="fail-alert">
+    <span class="close-btn"></span>
+    <div class="content">
+        <!-- <img src="../imgs/school-regis/3475.png"/> -->
+        <i class="fail-i"></i>
+        <div class="text">抱歉，信息提交失败<br>请再次尝试</div>
+        <a href="javascript:;">确定</a>
+    </div>
+</div>

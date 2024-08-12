@@ -1,0 +1,206 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="System.Data"  #>
+<#@	import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".txt" #>
+
+<# 
+	string dbconnectionStr = "Server=192.168.31.11;database=OperationPlatform;user id=sa;password=Sxb$2019;";
+	string dirName = "";
+	string _namespace = "PMS.OperationPlateform.Domain.Entitys";
+	string rootPath =  this.Host.ResolvePath("");
+	if(!Directory.Exists(rootPath+@"\"+ dirName))
+    {
+		Directory.CreateDirectory(rootPath+@"\"+ dirName);
+	}
+
+	
+	string filePath = rootPath+ @"\"+dirName+@"\{name}_partial.cs";
+
+	List<string> tables = GetTables(dbconnectionStr);
+	
+
+#> 
+表的数量：<#= tables.Count #>
+
+<# 
+    foreach (var t in tables) 
+    {
+		WriteLine("-生成{0}表",t);
+		string file = filePath.Replace("{name}",t);
+		var odic = GetFileds(t,dbconnectionStr);
+		StartNewFile(file,_namespace,t,odic);
+    }
+	
+	
+#>
+
+
+EndBlock（）是生成的文本模板
+<#+ 
+
+	public class MyFiled{
+        public string Name { get; set; }
+        public string Type { get; set; }	
+        public int IsPrimary { get; set; }	
+        public int IsIdentity { get; set; }
+	}
+	public List<string> GetTables(string connstr)
+	{
+		List<string> tables = new List<string>();
+		string sql = "	Select Name FROM SysObjects Where XType='U' or XType='V'  Order BY Name ";
+		using(SqlConnection con  = new SqlConnection(connstr))
+        {
+			con.Open();
+			SqlCommand cmd = new SqlCommand(sql,con);
+			 var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        string tableName = reader.GetString(0);
+						tables.Add(tableName);
+
+                    }
+                    reader.Close();
+                }
+		}
+		return tables;
+	}
+
+	public List<MyFiled> GetFileds(string tableName,string connstr)
+	{
+		List<MyFiled> result = new List<MyFiled>();
+		StringBuilder sql = new StringBuilder();
+		sql.AppendLine(" SELECT  sc.name,st.name,sc.length,sc.isnullable,");
+		sql.AppendLine(" isIdentity = COLUMNPROPERTY( sc.id,sc.name,'IsIdentity'),");
+		sql.AppendLine(" isPrimary =case   when   exists(SELECT   1   FROM   sysobjects   where   xtype='PK'   and   name   in   (     SELECT   name   FROM   sysindexes   WHERE   indid   in(     SELECT   indid   FROM   sysindexkeys   WHERE   id   =   sc.id   AND   colid=sc.colid     )))   then   1 else   0 end ");
+		sql.AppendLine("  FROM SysColumns sc");
+		sql.AppendLine(" join systypes st on sc.xusertype = st.xusertype ");
+		sql.AppendFormat("  where sc.id = object_id('{0}') ",tableName);
+
+		using(SqlConnection con  = new SqlConnection(connstr))
+        {
+			con.Open();
+			SqlCommand cmd = new SqlCommand(sql.ToString(),con);
+			 var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        string filedName = reader.GetString(0);
+						string typeName = reader.GetString(1);
+						int isnullable = (int)reader[3];
+						int isIdentity = (int)reader[4];
+					    int isPrimary = (int)reader[5];
+						
+						var filed = new MyFiled();
+						filed.Name = filedName;
+						filed.Type  = SqlServerDbTypeMapCSharp(typeName,isnullable);
+						filed.IsIdentity = isIdentity;
+						filed.IsPrimary = isPrimary;
+						result.Add(filed);
+
+                    }
+                    reader.Close();
+                }
+		}
+
+		return result;
+	}
+
+	public void StartNewFile(string filePath, string _namespace,string _class,List<MyFiled> fields)
+	{
+	
+		FileStream fs = new FileStream(filePath,FileMode.Create,FileAccess.Write);
+		var block = Encoding.UTF8.GetBytes(EndBlock(_namespace,_class,fields));
+		fs.Write(block,0,block.Length);
+		fs.Close();
+	}
+
+	public string EndBlock(string _namespace,string _class,List<MyFiled> fields )
+	{
+		StringBuilder currentBlock = new StringBuilder();
+		currentBlock.AppendLine("using System;");
+		currentBlock.AppendLine("using System.Collections.Generic;");
+		currentBlock.AppendLine("using Dapper.Contrib.Extensions;");
+		currentBlock.AppendLine();
+		currentBlock.AppendFormat("namespace {0}",_namespace);
+		currentBlock.AppendLine();
+		currentBlock.Append("{");
+		currentBlock.AppendLine();
+		currentBlock.AppendFormat("\tpublic partial class {0}",_class);
+		currentBlock.AppendLine();
+		currentBlock.Append("\t{");
+		currentBlock.AppendLine();
+
+		currentBlock.AppendLine();
+		currentBlock.Append("\t}");
+		currentBlock.AppendLine();
+		currentBlock.Append("}");
+		return currentBlock.ToString();
+	}
+	
+
+
+	public string KeyWordTran(string v)
+    {
+		string tv = v.Trim();
+		switch(tv){
+		case "checked":return "@checked";
+		default:return tv;
+		}
+	
+	}
+
+
+	public string SqlServerDbTypeMapCSharp(string dbtype,int isnullable)
+    {
+	  string csharpType = string.Empty;
+	
+
+	  switch (dbtype.ToLower())
+            {
+                case "bigint":  csharpType = isnullable == 1?"long?":"long"; break;
+                case "binary": csharpType = "byte[]"; break;
+                case "bit": csharpType = isnullable == 1?"bool?":"bool"; break;
+                case "char": csharpType = "string"; break;
+                case "date": 
+                case "datetime": 
+                case "datetime2":   csharpType = isnullable == 1?"DateTime?":"DateTime"; break;
+                case "datetimeoffset": csharpType = "DateTimeOffset"; break;
+                case "decimal": csharpType = "decimal"; break;
+                case "float": csharpType = "double"; break;
+                case "image": csharpType = "byte[]"; break;
+                case "int": csharpType = isnullable == 1?"int?":"int"; break;
+                case "money": csharpType = "decimal"; break;
+                case "nchar": csharpType = "string"; break;
+                case "ntext": csharpType = "string"; break;
+                case "numeric": csharpType = "decimal"; break;
+                case "nvarchar": csharpType = "string"; break;
+                case "real": csharpType = "Single"; break;
+                case "smalldatetime": csharpType = "DateTime"; break;
+                case "smallint": csharpType = "short"; break;
+                case "smallmoney": csharpType = "decimal"; break;
+                case "sql_variant": csharpType = "object"; break;
+                case "sysname": csharpType = "object"; break;
+                case "text": csharpType = "string"; break;
+                case "time": csharpType = "TimeSpan"; break;
+                case "timestamp": csharpType = "byte[]"; break;
+                case "tinyint": csharpType = "byte"; break;
+                case "uniqueidentifier": csharpType = isnullable == 1?"Guid?":"Guid"; break;
+                case "varbinary": csharpType = "byte[]"; break;
+                case "varchar": csharpType = "string"; break;
+                case "xml": csharpType = "string"; break;
+                default: csharpType = "object"; break;
+            }
+		return	csharpType;
+	}
+	
+
+
+#>

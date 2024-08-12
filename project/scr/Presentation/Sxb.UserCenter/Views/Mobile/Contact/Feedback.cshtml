@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewData["Title"] = "意见反馈";
+    Layout = "~/Views/Mobile/Shared/_MobileLayout.cshtml";
+    bool ServiceContact = false;
+    byte? initType = null;
+    if(byte.TryParse(Context.Request.Query["type"].ToString(), out byte _initType))
+    {
+        initType = _initType;
+        ServiceContact = initType == 100;
+    }
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/agreement.css" />
+    <link rel="stylesheet" href="@ViewBag.FileHost_M/css/mine/feedback-detail.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">@(ServiceContact? "客服留言" : "意见反馈")</span>
+    <span class=""></span>
+</header>
+
+<h5 class="mt title">请选择您要反馈的问题类型</h5>
+
+<section class="list">
+    <ul id="FeedBackType">
+        <li><a data-type="0">闪退/卡顿<i class="arrow"></i></a></li>
+        <li><a data-type="1">点评和问答<i class="arrow"></i></a></li>
+        <li><a data-type="2">学校信息与服务<i class="arrow"></i></a></li>
+        <li><a data-type="3">账户安全<i class="arrow"></i></a></li>
+        <li><a data-type="4">搜索筛选建议<i class="arrow"></i></a></li>
+        <li><a data-type="5">身份认证<i class="arrow"></i></a></li>
+        <li><a data-type="99">其它<i class="arrow"></i></a></li>
+        <li style="display:none;"><a data-type="100">客服留言<i class="arrow"></i></a></li>
+    </ul>
+</section>
+
+<section class="mt box" @{ if (initType!=null) {<text>style="right:0;"</text>}}>
+    <form id="form">
+        <div>
+            <h5 class="title">
+                @{if (ServiceContact)
+                    {<text>客服小姐姐时刻为您服务</text>}
+                else
+                    {<text>问题类型：<span>其它</span></text>}
+                }
+            </h5>
+            <div class="textarea">
+                <textarea id="text" cols="30" rows="10" placeholder="请输入您@(ServiceContact?"遇到的问题":"的反馈意见")（字数1000字以内）"></textarea>
+            </div>
+            <h5 class="title">请上传图片（选填）</h5>
+            <div class="upload-img flex">
+                <ul id="img-list" class="img-list flex">
+                    <li class="upload-btn text-center">
+                        <p><i class="icon"></i></p>
+                        <p>上传照片</p>
+                        <input type="file" name="image" accept="image/*">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <p class="tips">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+            <div>
+                <a id="submit" class="submit-btn text-center">提交</a>
+            </div>
+        </div>
+    </form>
+</section>
+@section js{
+    <script src="@ViewBag.FileHost_M/js/mine/feedback-detail.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (@((initType!=null).ToString().ToLower())) {
+                var initType = parseInt($.queryString('type'));
+                $('#FeedBackType a[data-type="' + initType + '"]').click();
+                $('.header .arrow').removeClass('arrow-open');
+            }
+            $('#submit').click(function () {
+                if ($('#text').val() == '') {
+                    $.prompt('请输入反馈意见');
+                    return;
+                }
+                $.loading();
+                var formData = new FormData();
+                $('#img-list input:file').each(function () {
+                    formData.append('images', $(this).get(0).files[0]);
+                });
+                formData.append('text', $('#text').val());
+                formData.append('type', $('#submit').data('type'));
+                $.ajax({
+                    url: '@Url.Action("FeedbackSubmit")',
+                    type: 'post',
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (json) {
+                        if (json.status == 0) {
+                            $.prompt('提交成功');
+                            $('.prompt-cancel').click(function () {
+                                $('.header .arrow').removeClass('arrow-open').click();
+                            });
+                        } else {
+                            $.prompt(json.errorDescription);
+                        }
+                    },
+                    complete: function () {
+                        $.loading('remove');
+                    }
+                })
+            });
+        });
+    </script>
+}
+

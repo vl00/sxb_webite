@@ -1,0 +1,35 @@
+﻿@model int
+@{ 
+    var auth = User.Identity as System.Security.Claims.ClaimsIdentity;
+    ViewBag.Nickname = auth.FindFirst(IdentityModel.JwtClaimTypes.Name)?.Value;
+    ViewBag.RequestUrl = Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path + Context.Request.QueryString;
+}
+<div class="header-bar font-12 container d-flex justify-content-between">
+    <nav class="header-nav clearfix">
+        <a href="/" class="sxb-logo float-left" title="logo"></a>
+        <ul class="d-flex strategy-tab float-left">
+            <li class="@(Model ==0 ?"active": "")"><a href="@Url.Action("index","Home")" title="首页">首页</a></li>
+            <li class="@(Model ==1 ?"active": "")"><a href="@Url.Action("list","school")" title="学校">学校</a></li>
+            <li class="@(Model ==2 ?"active": "")"><a href="@Url.Action("List","Comment")" title="点评">点评</a></li>
+            <li class="@(Model ==3 ?"active": "")"><a href="@Url.Action("List","Question")" title="问答">问答</a></li>
+            <li class="@(Model ==4 ?"active": "")"><a href="@Url.Action("list","schoolrank")" title="排行">排行</a></li>
+            <li class="@(Model ==5 ?"active": "")"><a href="@Url.Action("list","article")" title="攻略">攻略</a></li>
+            <li class=""><a href="/svs" title="中职">中职</a></li>
+            <li class=""><a href="/topic/home" title="话题圈">话题圈</a></li>
+            <li class=""><a href="/org" title="机构">机构</a></li>
+            <li class="strategy-tab-theme"><a href="/theme" title="主题商城"><img src="https://cos.sxkid.com/images/miniprogram/theme_pc/theme-shop.svg" alt="主题商城" class="strategy-tab-icon" />主题商城</a></li>
+        </ul>
+    </nav>
+    <div class="user-message">
+        <a href="@Url.Action("Center","Home")" title="帮助中心" class="help-center">帮助中心</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+        <a title="@ViewBag.Nickname" class="user-name">@ViewBag.Nickname</a>
+            <a href="//user.sxkid.com/account/logout?redirect_uri=@ViewBag.RequestUrl" title="退出" class="logout" style="margin-right:0px">退出</a>
+        }
+        else
+        {
+            <a href="@ViewBag.UserUrl/login/login-pc.html?returnUrl=@ViewBag.RequestUrl" title="登录" class="user-name" rel="nofollow">登录</a>
+        }
+    </div>
+</div>

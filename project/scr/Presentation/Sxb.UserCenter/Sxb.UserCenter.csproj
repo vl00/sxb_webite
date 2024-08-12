@@ -1,0 +1,259 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>39e326c4-89fd-4b32-bb3a-e58f8cb91562</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Labbor' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <ApplicationURL>https://userinfo.sxkid.com:5100</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Production' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+    </EnvironmentVariables>
+    <ApplicationURL>https://userinfo.sxkid.com:5000</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Lonlykids' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <EnvironmentVariables>
+      <Variable name="Programer" value="Lonlykids" />
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+    </EnvironmentVariables>
+    <LaunchBrowser></LaunchBrowser>
+    <ApplicationURL>https://0.0.0.0:5001</ApplicationURL>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Dev' " />
+  <ItemGroup>
+    <Compile Remove="wwwroot\.idea\**" />
+    <Compile Remove="wwwroot\imgs\**" />
+    <Compile Remove="wwwroot\js\article\**" />
+    <Compile Remove="wwwroot\js\authentication\**" />
+    <Compile Remove="wwwroot\js\circle-default\**" />
+    <Compile Remove="wwwroot\js\comment\**" />
+    <Compile Remove="wwwroot\js\common\**" />
+    <Compile Remove="wwwroot\js\filtrate\**" />
+    <Compile Remove="wwwroot\js\founded-ring\**" />
+    <Compile Remove="wwwroot\js\lib\**" />
+    <Compile Remove="wwwroot\js\login\**" />
+    <Compile Remove="wwwroot\js\mine\**" />
+    <Compile Remove="wwwroot\js\pk-list\**" />
+    <Compile Remove="wwwroot\js\plugin\**" />
+    <Compile Remove="wwwroot\js\posting\**" />
+    <Compile Remove="wwwroot\js\recorderSrc\**" />
+    <Compile Remove="wwwroot\js\school-pk\**" />
+    <Compile Remove="wwwroot\js\share-pops\**" />
+    <Compile Remove="wwwroot\js\subject-circle\**" />
+    <Compile Remove="wwwroot\js\subject-details\**" />
+    <Compile Remove="wwwroot\js\subject-more\**" />
+    <Compile Remove="wwwroot\js\subject-poster\**" />
+    <Compile Remove="wwwroot\js\subject-search\**" />
+    <Compile Remove="wwwroot\js\subject\**" />
+    <Compile Remove="wwwroot\js\visit-school\**" />
+    <Compile Remove="wwwroot\js\weike\**" />
+    <Compile Remove="wwwroot\operationplateform\**" />
+    <Compile Remove="wwwroot\src\**" />
+    <Content Remove="wwwroot\.idea\**" />
+    <Content Remove="wwwroot\imgs\**" />
+    <Content Remove="wwwroot\js\article\**" />
+    <Content Remove="wwwroot\js\authentication\**" />
+    <Content Remove="wwwroot\js\circle-default\**" />
+    <Content Remove="wwwroot\js\comment\**" />
+    <Content Remove="wwwroot\js\common\**" />
+    <Content Remove="wwwroot\js\filtrate\**" />
+    <Content Remove="wwwroot\js\founded-ring\**" />
+    <Content Remove="wwwroot\js\lib\**" />
+    <Content Remove="wwwroot\js\login\**" />
+    <Content Remove="wwwroot\js\mine\**" />
+    <Content Remove="wwwroot\js\pk-list\**" />
+    <Content Remove="wwwroot\js\plugin\**" />
+    <Content Remove="wwwroot\js\posting\**" />
+    <Content Remove="wwwroot\js\recorderSrc\**" />
+    <Content Remove="wwwroot\js\school-pk\**" />
+    <Content Remove="wwwroot\js\share-pops\**" />
+    <Content Remove="wwwroot\js\subject-circle\**" />
+    <Content Remove="wwwroot\js\subject-details\**" />
+    <Content Remove="wwwroot\js\subject-more\**" />
+    <Content Remove="wwwroot\js\subject-poster\**" />
+    <Content Remove="wwwroot\js\subject-search\**" />
+    <Content Remove="wwwroot\js\subject\**" />
+    <Content Remove="wwwroot\js\visit-school\**" />
+    <Content Remove="wwwroot\js\weike\**" />
+    <Content Remove="wwwroot\operationplateform\**" />
+    <Content Remove="wwwroot\src\**" />
+    <EmbeddedResource Remove="wwwroot\.idea\**" />
+    <EmbeddedResource Remove="wwwroot\imgs\**" />
+    <EmbeddedResource Remove="wwwroot\js\article\**" />
+    <EmbeddedResource Remove="wwwroot\js\authentication\**" />
+    <EmbeddedResource Remove="wwwroot\js\circle-default\**" />
+    <EmbeddedResource Remove="wwwroot\js\comment\**" />
+    <EmbeddedResource Remove="wwwroot\js\common\**" />
+    <EmbeddedResource Remove="wwwroot\js\filtrate\**" />
+    <EmbeddedResource Remove="wwwroot\js\founded-ring\**" />
+    <EmbeddedResource Remove="wwwroot\js\lib\**" />
+    <EmbeddedResource Remove="wwwroot\js\login\**" />
+    <EmbeddedResource Remove="wwwroot\js\mine\**" />
+    <EmbeddedResource Remove="wwwroot\js\pk-list\**" />
+    <EmbeddedResource Remove="wwwroot\js\plugin\**" />
+    <EmbeddedResource Remove="wwwroot\js\posting\**" />
+    <EmbeddedResource Remove="wwwroot\js\recorderSrc\**" />
+    <EmbeddedResource Remove="wwwroot\js\school-pk\**" />
+    <EmbeddedResource Remove="wwwroot\js\share-pops\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject-circle\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject-details\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject-more\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject-poster\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject-search\**" />
+    <EmbeddedResource Remove="wwwroot\js\subject\**" />
+    <EmbeddedResource Remove="wwwroot\js\visit-school\**" />
+    <EmbeddedResource Remove="wwwroot\js\weike\**" />
+    <EmbeddedResource Remove="wwwroot\operationplateform\**" />
+    <EmbeddedResource Remove="wwwroot\src\**" />
+    <None Remove="wwwroot\.idea\**" />
+    <None Remove="wwwroot\imgs\**" />
+    <None Remove="wwwroot\js\article\**" />
+    <None Remove="wwwroot\js\authentication\**" />
+    <None Remove="wwwroot\js\circle-default\**" />
+    <None Remove="wwwroot\js\comment\**" />
+    <None Remove="wwwroot\js\common\**" />
+    <None Remove="wwwroot\js\filtrate\**" />
+    <None Remove="wwwroot\js\founded-ring\**" />
+    <None Remove="wwwroot\js\lib\**" />
+    <None Remove="wwwroot\js\login\**" />
+    <None Remove="wwwroot\js\mine\**" />
+    <None Remove="wwwroot\js\pk-list\**" />
+    <None Remove="wwwroot\js\plugin\**" />
+    <None Remove="wwwroot\js\posting\**" />
+    <None Remove="wwwroot\js\recorderSrc\**" />
+    <None Remove="wwwroot\js\school-pk\**" />
+    <None Remove="wwwroot\js\share-pops\**" />
+    <None Remove="wwwroot\js\subject-circle\**" />
+    <None Remove="wwwroot\js\subject-details\**" />
+    <None Remove="wwwroot\js\subject-more\**" />
+    <None Remove="wwwroot\js\subject-poster\**" />
+    <None Remove="wwwroot\js\subject-search\**" />
+    <None Remove="wwwroot\js\subject\**" />
+    <None Remove="wwwroot\js\visit-school\**" />
+    <None Remove="wwwroot\js\weike\**" />
+    <None Remove="wwwroot\operationplateform\**" />
+    <None Remove="wwwroot\src\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\ApiLoginController.old.cs" />
+    <Compile Remove="Controllers\MessageController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
+    <PackageReference Include="IdentityModel" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" ExcludeAssets="All" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Application\PMS.CommentsManage.Application.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\CommentManage\PMS.CommentManage.Repository\PMS.CommentsManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Application\PMS.Infrastructure.Application.csproj" />
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Domain\PMS.Infrastructure.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\Infrastructure\PMS.Infrastructure.Repository\PMS.Infrastructure.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\MqManage\PMS.RabbitMQ.Handle\PMS.RabbitMQ.Handle.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Application\PMS.OperationPlateform.Application.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Domain\PMS.OperationPlateform.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\OperationPlateform\PMS.OperationPlateform.Repository\PMS.OperationPlateform.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Application\PMS.School.Application.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Domain\PMS.School.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Infrastructure\PMS.School.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Mongo\PMS.School.Mongo.csproj" />
+    <ProjectReference Include="..\..\Services\School\PMS.School.Repository\PMS.School.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\Search\PMS.Search.Application\PMS.Search.Application.csproj" />
+    <ProjectReference Include="..\..\Services\Search\PMS.Search.Domain\PMS.Search.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\Search\PMS.Search.Elasticsearch\PMS.Search.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\Services\TopicCircle\PMS.TopicCircle.Application\PMS.TopicCircle.Application.csproj" />
+    <ProjectReference Include="..\..\Services\TopicCircle\PMS.TopicCircle.Domain\PMS.TopicCircle.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\TopicCircle\PMS.TopicCircle.Repository\PMS.TopicCircle.Repository.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Application\PMS.UserManage.Application.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\..\Services\UserManage\PMS.UserManage.Repository\PMS.UserManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.API.Amap\ProductManagement.API.Amap.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.API.SMS\ProductManagement.API.SMS.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.AspNetCoreHelper\ProductManagement.Framework.AspNetCoreHelper.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Cache.Redis\ProductManagement.Framework.Cache.RedisProfiler\ProductManagement.Framework.Cache.RedisProfiler.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.MongoDb\ProductManagement.Framework.MongoDb.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.MSSQLAccessor\src\ProductManagement.Framework.MSSQLAccessor.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.RabbitMQ.Di\ProductManagement.Framework.RabbitMQ.Di.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.RabbitMQ\ProductManagement.Framework.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.RabbitMQ\src\ProductManagement.Framework.Serialize.Json\ProductManagement.Framework.Serialize.Json.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Framework.SearchAccessor\ProductManagement.Framework.SearchAccessor.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\Tools\ProductManagement.UserCenter.BaiduCommon\ProductManagement.UserCenter.BaiduCommon.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\ProductManagement.UserCenter.Wx\ProductManagement.UserCenter.TencentCommon.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\StatisticsViewModel\" />
+    <Folder Include="Request\Login\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="shared-auth-ticket-keys\key-704ddf0d-753b-4ea8-a7b7-735fbb9dad3d.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\PC\Home\Error.cshtml" />
+    <Content Remove="Views\Mobile\Home\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\comment\.project" />
+    <None Include="wwwroot\css\font\PingFangSC-Regular.woff2" />
+    <None Include="wwwroot\css\font\sxb-post.svg" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+    <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+    <None Include="wwwroot\lib\jquery-validation\LICENSE.md" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

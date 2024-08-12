@@ -1,0 +1,396 @@
+﻿@model Sxb.PCWeb.ViewModels.School.SchoolExtOptionViewModel
+@using System.Linq;
+@using Sxb.PCWeb.ViewModels.School;
+
+<div class="filter position-relative select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">类型</span>
+        <div class="filter-content font-12">
+            <ul class="type-tab-list d-flex clearfix">
+                @foreach (var grade in Model.TypeOption)
+                {
+                    <li @("data-" + grade.OptionName)="@grade.OptionCode" class="@(grade.Active?"checked":"") @(Model.GradeSelect!=null&&Model.GradeSelect.ToString()==grade.OptionCode?"active":"") ">
+                        <a @(Model.GradeSelect != null && Model.GradeSelect.ToString() == grade.OptionCode ? "" : "href=" + @grade.Href) data-removeurl="@grade.RemoveHref" title="@grade.Title">@grade.Title</a>
+                    </li>
+}
+            </ul>
+            <div class="type-content-list" style="@(Model.TypeOption.Where(q=>q.Active).Any()?"":"display: none;")">
+                @foreach (var grade in Model.TypeOption)
+                {
+                    <div @("data-" + grade.OptionName)="@grade.OptionCode" style="@(Model.GradeSelect!=null&&Model.GradeSelect.ToString()==grade.OptionCode?"":"display: none;")">
+                        <ul class="d-flex clearfix">
+                            @foreach (var type in grade.List)
+                            {
+                                <li class="@(type.Active?"active":"")"><a href="@type.Href" title="@type.Title" @("data-" + type.OptionName)="@type.OptionCode">@type.Title</a></li>
+}
+                        </ul>
+                    </div>}
+            </div>
+            <!-- 选择的内容 -->
+            <div class="select-keyword" style="@(Model.TypeOption.Where(q=>q.Active).Any()?"":"display: none;")">
+                <div class="d-flex flex-wrap">
+                    <div class="select-keyword-list">
+                        <ul class="d-flex flex-wrap clearfix">
+                            @foreach (var grade in Model.TypeOption)
+                            {
+                                @if (grade.Active)
+                                {
+                                    <li class="d-flex" @("data-" + grade.OptionName)="@grade.OptionCode">
+                                        @if (grade.List.Where(q => q.Active).Any())
+                                        {
+                                            <a title="@grade.Title" class="type">@grade.Title</a> }
+                                        else
+                                        {
+                                            <a href="@grade.RemoveHref" title="@grade.Title" class="type all-select">@grade.Title</a>}
+                                        <ul class="keyword font-weight-light d-flex clearfix">
+                                            @foreach (var type in grade.List)
+                                            {
+                                                @if (type.Active)
+                                                {
+                                                    <li><a href="@type.Href" title="@type.Title" @("data-" + type.OptionName)="@type.OptionCode">@type.Title</a></li>
+}}
+                                        </ul>
+                                    </li>
+}}
+                        </ul>
+                    </div>
+                    <a href="@Model.ClearGrade.Href" title="@Model.ClearGrade.Title" class="clear-keyword">@Model.ClearGrade.Title</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="tips position-absolute font-10">*不同的学校类型对应的筛选项将有所不同</p>
+</div>
+
+<div class="area select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">区域</span>
+        <div class="area-content font-12">
+            <ul class="area-tab-list d-flex clearfix">
+                <li class="@(Model.SelectCitys.Any() && Model.AreaSelect==1?"active":"")"><a title="城区">城区</a></li>
+                <li class="@(Model.SelectCitys.Any() && Model.AreaSelect==2?"active":"")"><a title="地铁">地铁</a></li>
+                @*<li class="@(Model.AreaSelect==3?"active":"")"><a  title="附近">附近</a></li>*@
+                <li class="position-relative">
+                    <div class="selected-city" style="@(Model.SelectCitys.Any() ?"display: block;":"display: none;")">
+                        <div class="d-flex">
+                            @foreach (var item in Model.SelectCitys.Where(q => q.OptionCode == Model.SelectCity.ToString()))
+                            {
+                                <div class="locale" data-adcode="@item.OptionCode">@item.Title</div>}
+                            <a href="" title="切换城市" class="change-city">切换城市</a>
+                        </div>
+                    </div>
+                    <div class="not-select-city" style="@(Model.SelectCitys.Any() ?"display: none;":"display: block;")">
+                        <div class="d-flex">
+                            <a class="font-12 change-city">选择城市</a><span class="font-10">*请先选择定位城市</span>
+                        </div>
+                    </div>
+
+                    <div class="city-list position-absolute" style="display: none;">
+                        <ul class="d-flex font-12 flex-wrap clearfix">
+                            @foreach (var item in ViewBag.SelectCity)
+                            {
+                                <li><a data-href="@(item.Href)" title="@item.Title" data-adcode="@(item.OptionCode)">@item.Title</a></li>
+}
+                        </ul>
+                        <a href="@Url.Action("Select","Home",new { filter = true})" title="更多城市&gt;" class="more-city font-12">更多城市&gt;</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="select-content clearfix">
+                <li style="@(Model.AreaSelect==1?"display: list-item;":"display: none;")">
+                    <ul class="area-content-list d-flex clearfix">
+                        @foreach (var area in Model.Areas)
+                        {
+                            <li class="@(area.Active?"active":"")"><a data-href="@area.Href" title="@area.Title" @("data-" + area.OptionName)="@area.OptionCode">@area.Title</a></li>
+}
+                    </ul>
+
+                </li>
+                <li style="@(Model.AreaSelect==2?"display: list-item;":"display: none;")">
+                    <ul class="metro-line d-flex clearfix">
+                        @foreach (var metro in Model.Metros)
+                        {
+                            <li class="@(metro.Active?"checked":"") @(Model.MetroSelect!=null&&Model.MetroSelect.ToString()==metro.OptionCode?"active":"")">
+                                <a @(Model.MetroSelect != null && Model.MetroSelect.ToString() == metro.OptionCode ? "" : "data-href=" + @metro.Href + "") title="@metro.Title" data-removeurl="@metro.RemoveHref" @("data-" + metro.OptionName)="@metro.OptionCode">@metro.Title</a>
+                            </li>
+}
+                    </ul>
+                    <div class="station-list">
+                        @foreach (var metro in Model.Metros)
+                        {
+                            <div style="@(Model.MetroSelect!=null&&Model.MetroSelect.ToString()==metro.OptionCode?"":"display: none;")">
+                                <ul class="d-flex font-12 flex-wrap station clearfix" @("data-" + metro.OptionName)="@metro.OptionCode">
+                                    @foreach (var station in metro.List)
+                                    {
+                    <li class="@(station.Active?"active":"")">
+                        <a data-href="@station.Href" title="@station.Title" @("data-" + station.OptionName)="@station.OptionCode">@station.Title</a>
+                    </li>
+}
+                                </ul>
+                            </div>}
+                    </div>
+                </li>
+                @*<li style="@(Model.AreaSelect==3?"display: list-item;":"display: none;")">
+                        <ul class="distance d-flex clearfix">
+                            @foreach(var range in Model.Ranges){
+                                <li class="@(range.Active?"active":"")">
+                                    <a href="@range.Href" title="@(range.Title)" @("data-"+range.OptionName)="@range.OptionCode" >@(range.Title)</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>*@
+            </ul>
+            <div class="d-flex">
+                @if (Model.AreaSelect == 1)
+                {
+                    <div class="select-keyword" style="@(Model.SelectCitys.Any() ?"":"display: none;")">
+                        <div class="d-flex flex-wrap">
+                            <div class="select-keyword-list">
+                                <ul class="d-flex flex-wrap clearfix">
+                                    @foreach (var sc in Model.SelectCitys)
+                                    {
+                                        <li class="d-flex" data-adcode="@sc.OptionCode">
+                                            @if (sc.List.Where(q => q.Active).Any())
+                                            {
+                                                <a title="@sc.OptionName" class="city">@sc.Title</a> }
+                                            else
+                                            {
+                                                <a href="@sc.Href" title="@sc.OptionName" class="city all-select">@sc.Title</a>}
+
+                                            <ul class="keyword font-weight-light d-flex clearfix">
+                                                @foreach (var area in sc.List)
+                                                {
+                                                    @if (area.Active)
+                                                    {
+                                                        <li><a href="@area.Href" title="@area.Title" @("data-" + area.OptionName)="@area.OptionCode">@area.Title</a></li>
+}}
+                                            </ul>
+                                        </li>
+}
+                                </ul>
+                            </div>
+                            @if (Model.SelectCitys.Any())
+                            {
+                                <a href="@Model.ClearArea.Href" title="@Model.ClearArea.Title" class="clear-keyword">@Model.ClearArea.Title</a>}
+                        </div>
+                    </div> }
+                else
+                {
+                    <div class="select-keyword" style="@(Model.SelectCitys.Any() ?"":"display: none;")">
+                        <div class="d-flex flex-wrap">
+                            <div class="select-keyword-list">
+                                <ul class="d-flex flex-wrap clearfix">
+                                    @foreach (var metro in Model.Metros)
+                                    {
+                                        if (metro.Active)
+                                        {
+                                            <li class="d-flex" @("data-" + metro.OptionName)="@metro.OptionCode">
+                                                @if (metro.List.Where(q => q.Active).Any())
+                                                {
+                                                    <a title="@metro.Title" class="type ">@metro.Title</a> }
+                                                else
+                                                {
+                                                    <a href="@metro.RemoveHref" title="@metro.Title" class="type all-select">@metro.Title</a>}
+                                                <ul class="keyword font-weight-light d-flex clearfix">
+                                                    @foreach (var station in metro.List)
+                                                    {
+                                                        @if (station.Active)
+                                                        {
+                                                            <li><a href="@station.Href" title="@station.Title" @("data-" + station.OptionName)="@station.OptionCode">@station.Title</a></li>
+}}
+                                                </ul>
+                                            </li>
+}
+                                    }
+
+                                </ul>
+                            </div>
+                            @if (Model.SelectCitys.Any())
+                            {
+                                <a href="@Model.ClearArea.Href" title="@Model.ClearArea.Title" class="clear-keyword">@Model.ClearArea.Title</a>}
+                        </div>
+                    </div>  }
+            </div>
+        </div>
+    </div>
+</div>
+
+@*统计*@
+<div class="cost select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">费用</span>
+        <div class="range">
+            <ul class="d-flex cost-list font-12 clearfix">
+                @foreach (var costs in Model.Costs)
+                {
+                    <li class="@(costs.Active?"active":"")"><a href="@costs.Href" title="@costs.Title" @("data-" + costs.OptionName)="@costs.OptionCode">@costs.Title</a></li>
+}
+                <li class="custom"><a href="">自定义</a></li>
+            </ul>
+            <div class="range-content position-relative">
+                <ul class="range-list clearfix">
+                </ul>
+                <div class="position-absolute range-list-active">
+                    <ul class="position-relative clearfix">
+                    </ul>
+                </div>
+                <div class="slider">
+                    <input type="hidden" id="screen-slider" value="@(ViewBag.SelectStat.MinCost==null?0:ViewBag.SelectStat.MinCost), @(ViewBag.SelectStat.MaxCost==null?100000:ViewBag.SelectStat.MaxCost)" />
+                </div>
+            </div>
+            <div class="d-flex cost-message font-12">
+                <span>拖动按钮选择学费区间</span>
+                <div>
+                    <input type="number" placeholder="最低价格" class="text-center min-cost" value="@(ViewBag.SelectStat.MinCost==null?"":ViewBag.SelectStat.MinCost)">
+                    <i>—</i>
+                    <input type="number" placeholder="最高价格" class="text-center max-cost" value="@(ViewBag.SelectStat.MaxCost==null?"":ViewBag.SelectStat.MaxCost)">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="student-num select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">学生人数</span>
+        <div>
+            <ul class="d-flex student-num-list font-12 clearfix">
+                @foreach (var student in Model.Students)
+                {
+                    <li class="@(student.Active?"active":"")"><a href="@student.Href" title="@student.Title" @("data-" + student.OptionName)="@student.OptionCode">@student.Title</a></li>
+}
+                <li class="custom"><a href="">自定义</a></li>
+            </ul>
+            <div class="font-12">
+                <input type="number" placeholder="最少人数" class="text-center min-student" value="@(ViewBag.SelectStat.MinStudent==null?"":ViewBag.SelectStat.MinStudent)">
+                <i>—</i>
+                <input type="number" placeholder="最多人数" class="text-center max-student" value="@(ViewBag.SelectStat.MaxStudent==null?"":ViewBag.SelectStat.MaxStudent)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="teacher-num select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">教师人数</span>
+        <div>
+            <ul class="d-flex teacher-num-list font-12 clearfix">
+                @foreach (var teacher in Model.Teachers)
+                {
+                    <li class="@(teacher.Active?"active":"")"><a href="@teacher.Href" title="@teacher.Title" @("data-" + teacher.OptionName)="@teacher.OptionCode">@teacher.Title</a></li>
+}
+                <li class="custom"><a href="">自定义</a></li>
+            </ul>
+            <div class="font-12">
+                <input type="number" placeholder="最少人数" class="text-center min-teacher" value="@(ViewBag.SelectStat.MinTeacher==null?"":ViewBag.SelectStat.MinTeacher)">
+                <i>—</i>
+                <input type="number" placeholder="最多人数" class="text-center max-teacher" value="@(ViewBag.SelectStat.MaxTeacher==null?"":ViewBag.SelectStat.MaxTeacher)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="school-score select-type">
+    <div class="d-flex">
+        <span class="title font-12 font-weight-bold">学校评分</span>
+
+        <div class="school-score-content">
+            <div class="">
+                <ul class="d-flex school-score-select font-12">
+                    <li><a data-score='0' class="active">不限</a></li>
+                    <li><a data-score='1'>A+</a></li>
+                    <li><a data-score='2'>A</a></li>
+                    <li><a data-score='3'>B</a></li>
+                    <li><a data-score='4'>C</a></li>
+                    <li><a data-score='5'>D</a></li>
+                </ul>
+            </div>
+            <input type="number" placeholder="最低分数" class="text-center min-score" style="display:none">
+            <input type="number" placeholder="最高分数" class="text-center max-score" style="display:none">
+        </div>
+    </div>
+</div>
+
+
+<div class="is-dormitory select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">走读/寄读</span>
+        <ul class="d-flex clearfix">
+            @foreach (var lodging in Model.Lodging)
+            {
+                <li class="@(lodging.Active?"active":"")"><a href="@lodging.Href" title="@lodging.Title" @("data-" + lodging.OptionName)="@lodging.OptionCode">@lodging.Title</a></li>
+}
+        </ul>
+    </div>
+</div>
+
+<div class="is-canteen select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">有无饭堂</span>
+        <ul class="d-flex clearfix">
+            @foreach (var canteen in Model.Canteen)
+            {
+                <li class="@(canteen.Active?"active":"")"><a href="@canteen.Href" title="@canteen.Title" @("data-" + canteen.OptionName)="@canteen.OptionCode">@canteen.Title</a></li>
+}
+        </ul>
+    </div>
+</div>
+
+<div class="curriculum select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">特色课程</span>
+        <div class="d-flex justify-content-between curriculum-content">
+            <ul class="d-flex flex-wrap clearfix">
+                @foreach (var item in Model.CharacIds)
+                {
+                    <li class="@(item.Active?"active":"")"><a data-href="@item.Href" title="@item.Title" @("data-" + item.OptionName)="@item.OptionCode">@item.Title</a></li>
+}
+            </ul>
+            <a href="javascript:;" class="open-more position-relative">展开全部</a>
+        </div>
+    </div>
+</div>
+<div class="attestation select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">学校认证</span>
+        <div class="d-flex justify-content-between attestation-content">
+            <ul class="d-flex flex-wrap clearfix">
+                @foreach (var item in Model.AuthIds)
+                {
+                    <li class="@(item.Active?"active":"")"><a data-href="@item.Href" title="@item.Title" @("data-" + item.OptionName)="@item.OptionCode">@item.Title</a></li>
+}
+            </ul>
+            <a href="javascript:;" class="open-more position-relative">展开全部</a>
+        </div>
+    </div>
+</div>
+<div class="direction select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">出国方向</span>
+        <div class="d-flex justify-content-between direction-content">
+            <ul class="d-flex flex-wrap clearfix">
+                @foreach (var item in Model.AbroadIds)
+                {
+                    <li class="@(item.Active?"active":"")"><a data-href="@item.Href" title="@item.Title" @("data-" + item.OptionName)="@item.OptionCode">@item.Title</a></li>
+}
+            </ul>
+            <!-- <a href="" class="open-more position-relative">展开全部</a> -->
+        </div>
+    </div>
+</div>
+<div class="curriculum-setting select-type">
+    <div class="d-flex font-12">
+        <span class="title font-weight-bold">课程设置</span>
+        <div class="d-flex justify-content-between curriculum-setting-content">
+            <ul class="d-flex flex-wrap clearfix">
+                @foreach (var item in Model.CourseIds)
+                {
+                    <li class="@(item.Active?"active":"")"><a data-href="@item.Href" title="@item.Title" @("data-" + item.OptionName)="@item.OptionCode">@item.Title</a></li>
+}
+            </ul>
+            <a href="javascript:;" class="open-more position-relative">展开全部</a>
+        </div>
+    </div>
+</div>
+
+<div class="more-select font-12 text-center d-flex justify-content-between"><a href="" class="position-relative">更多选项</a></div>

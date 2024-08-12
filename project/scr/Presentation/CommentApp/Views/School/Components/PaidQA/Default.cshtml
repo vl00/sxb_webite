@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Sxb.Web.ViewModels.ViewComponent.PaidQAViewModel>;
+@if (ViewBag.HasPaidTalent)
+{
+    var item = Model.First();
+    <div class="consult-online">
+        <h2>在线咨询</h2>
+        <a href="/ask/expert/detail?talentId=@item.TalentUserID">
+            <div class="consult-talent-box">
+
+
+                <div class="talent-user-img">
+                    <img src="@item.HeadImgUrl" alt="">
+                    <span></span>
+                </div>
+
+                <div class="talent-user-info">
+                    <h3>@item.NickName</h3>
+                    <div class="talent-desc">
+                        <i class="blue-talent-icon"></i>
+                        <span>@item.AuthName</span>
+                    </div>
+                    <div class="talent-tags">
+                        @if (item.RegionNames?.Any() == true)
+                        {
+                            foreach (var region in item.RegionNames)
+                            {
+                                <span>@region</span>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="talent-user-btn">
+                    向他咨询
+                </div>
+
+            </div>
+        </a>
+    </div>
+}
+else
+{
+    if (Model?.Any() == true)
+    {
+        <!-- 升学顾问 start -->
+        <div class="college-counselor">
+            <div class="college-counselor-title">
+                <h2>升学顾问</h2>
+                <a class="more-counselor" href="/ask/expert/list/">
+                    <span>更多顾问</span>
+                    <i class="arrow"></i>
+                </a>
+            </div>
+            <ul class="college-counselor-list">
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <div class="counselor-left">
+                            <img src="@item.HeadImgUrl" alt="">
+                        </div>
+                        <div class="counselor-right">
+                            <div class="counselor-info">
+                                <div class="info-left">
+                                    <span class="nickname">@item.NickName</span>
+                                    <div>
+                                        <span>刚刚回复了</span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <div class="info-right">
+                                    <a href="/ask/expert/detail?talentId=@item.TalentUserID">向他咨询</a>
+                                </div>
+                            </div>
+                            <h3 class="counselor-qa">@item.Content</h3>
+
+                            <div class="counselor-tag">
+                                @if (item.RegionNames?.Any() == true)
+                                {
+                                    foreach (var region in item.RegionNames)
+                                    {
+                                        <span>@region</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <!-- 升学顾问 end -->
+    }
+}

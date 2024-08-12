@@ -1,0 +1,275 @@
+﻿@model PMS.UserManage.Application.ModelDto.Home.Index
+@{
+    Layout = "~/Views/PC/Shared/_PCUserLayout.cshtml";
+    ViewData["Title"] = "我的";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.FileHost_PC/css/user/user-home.css">
+}
+
+<section class="section">
+    <div class="container d-flex justify-content-between">
+        <div class="content">
+            <div class="comment d-flex">
+                <h3 class="title font-20 font-weight-bold text-center">点评</h3>
+                <div class="comment-content">
+                    <div class="write-comment position-relative">
+                        <div class="d-flex">
+                            <div class="guess-school-name-list">
+                                <ul class="font-16 d-flex position-relative">
+                                    <li class="guess-school-name">广东实验中学-高中部</li>
+                                    <li class="guess-school-name">广东实验中学-高中部111</li>
+                                    <li class="guess-school-name">广东实验中学-高中部111222</li>
+                                </ul>
+                            </div>
+                            <span class="guess font-12">（猜你感兴趣）</span>
+                            <i class="prev" data-code=".comment"></i>
+                            <i class="next" data-code=".comment"></i>
+                        </div>
+                        <div class="d-flex font-14 textarea">
+                            <span class="write-comment-title" style="display: none;">内容：</span>
+                            <div>
+                                <textarea name="" cols="30" rows="10" placeholder="还记得这所学校吗？写点评分享体验呗。" class="font-14"></textarea>
+                                <div class="in-or-notin" style="display: none;">
+                                    <div class="d-flex font-12 text-center">
+                                        <a class="select">已入读</a>
+                                        <a>未入读</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hide">
+                            <div class="d-flex font-14 write-score">
+                                <span class="write-comment-title">打分：</span>
+                                <div class="score-list">
+                                    <ul class="d-flex flex-wrap">
+                                        <li class="d-flex">师资<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></li>
+                                        <li class="d-flex">硬件<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></li>
+                                        <li class="d-flex">环境<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></li>
+                                        <li class="d-flex">校风<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></li>
+                                        <li class="d-flex">活动<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></li>
+                                    </ul>
+                                </div>
+                                <div class="overall-appraisal" style="display: none;">
+                                    <div class="d-flex">总体评价<ul class="star-list d-flex"><li></li><li></li><li></li><li></li><li></li></ul></div>
+                                </div>
+                            </div>
+                            <div class="d-flex font-14 upload">
+                                <span class="write-comment-title">图片：</span>
+                                <ul class="upload-img-list d-flex flex-wrap">
+                                    <li class="upload-btn text-center position-relative">
+                                        <p class="font-12">上传照片</p>
+                                        <input type="file" name="image" accept="image/*" class="position-absolute">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex font-14 write-tag">
+                                <span class="write-comment-title">印象：</span>
+                                <ul class="tag-list d-flex flex-wrap text-center">
+                                    <li><a href="">生源好</a></li>
+                                    <li><a href="">交通便捷</a></li>
+                                    <li><a href="">成绩优秀</a></li>
+                                    <li><a href="">活动多</a></li>
+                                    <li><a href="">校风良好</a></li>
+                                    <li class="add">
+                                        <a>+</a>
+                                        <input type="text" style="display: none;">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex font-14 justify-content-end btn-list font-12">
+                                <a href="" class="school-refuting position-relative active">学校辟谣</a>
+                                <a href="" class="anonymous position-relative">匿名发布</a>
+                                <a href="" class="submit text-center">发布</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="comment-list">
+                        <li>
+                            <h4 class="school-name grade-five font-16">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                    </div>
+                                    <div class="swiper-prev"></div>
+                                    <div class="swiper-next"></div>
+                                </div>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow followed">已关注</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-one">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow">关注</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-two">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                        <div class="swiper-slide"><img src="../../imgs/test.png" alt=""></div>
+                                    </div>
+                                    <div class="swiper-prev"></div>
+                                    <div class="swiper-next"></div>
+                                </div>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow">关注</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-three">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow">关注</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-four">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow">关注</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-five">华南师范大学附属中学-高中部</h4>
+                            <div class="comment-text">
+                                <p class="font-15">学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="comment-time">2019-07-31</span>
+                                    <a href="" class="follow">关注</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bottom-btn d-flex justify-content-between">
+                        <a href="" class="all-comment font-12">全部点评&gt;&gt;</a>
+                        <a href="" class="write-comment-btn font-14 text-center">写点评</a>
+                    </div>
+                </div>
+            </div>
+            <div class="qa d-flex">
+                <h3 class="title font-20 font-weight-bold text-center">点评</h3>
+                <div class="qa-content">
+                    <div class="write-qa position-relative">
+                        <div class="d-flex">
+                            <div class="guess-school-name-list">
+                                <ul class="font-16 d-flex position-relative">
+                                    <li class="guess-school-name">广东实验中学-高中部</li>
+                                    <li class="guess-school-name">广东实验中学-高中部111</li>
+                                    <li class="guess-school-name">广东实验中学-高中部111222</li>
+                                </ul>
+                            </div>
+                            <span class="guess font-12">（猜你感兴趣）</span>
+                            <i class="prev" data-code=".qa"></i>
+                            <i class="next" data-code=".qa"></i>
+                        </div>
+                        <div class="d-flex font-14 textarea qa-textarea">
+                            <span class="write-qa-title" style="display: none;">内容：</span>
+                            <div>
+                                <textarea name="" cols="30" rows="10" placeholder="还记得这所学校吗？写点评分享体验呗。" class="font-14"></textarea>
+                            </div>
+                        </div>
+                        <div class="hide">
+                            <div class="d-flex font-14 upload">
+                                <span class="write-qa-title">图片：</span>
+                                <ul class="upload-img-list d-flex flex-wrap">
+                                    <li class="upload-btn text-center position-relative">
+                                        <p class="font-12">上传照片</p>
+                                        <input type="file" name="image" accept="image/*" class="position-absolute">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex font-14 justify-content-end btn-list font-12">
+                                <a href="" class="anonymous position-relative">匿名发布</a>
+                                <a href="" class="submit text-center">发布</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="qa-list">
+                        <li>
+                            <h4 class="school-name grade-five font-16">华南师范大学附属中学-高中部</h4>
+                            <div class="qa-text">
+                                <p class="font-16"><span class="question text-center font-12">问</span>学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="qa-time">2019-07-31</span>
+                                    <div>
+                                        <a href="" class="comment-num">4</a>
+                                        <a href="" class="follow followed">已关注</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <h4 class="school-name grade-five font-16 star-one">华南师范大学附属中学-高中部</h4>
+                            <div class="qa-text">
+                                <p class="font-16"><span class="question text-center font-12">问</span>学校的师资力量在全市能排到第几呀？</p>
+                                <div class="d-flex justify-content-between font-12">
+                                    <span class="qa-time">2019-07-31</span>
+                                    <div>
+                                        <a href="" class="comment-num">4</a>
+                                        <a href="" class="follow followed">已关注</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bottom-btn d-flex justify-content-between">
+                        <a href="" class="all-qa font-12">全部提问&gt;&gt;</a>
+                        <a href="" class="write-qa-btn font-14 text-center">提问</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="other-msg">
+            <p class="regtime font-14">注册时间：@Model.regTime</p>
+            <div class="message-content">
+                <h3 class="title font-18 font-weight-bold">最近动态</h3>
+                <ul class="message-list font-12">
+                    <li>
+                        <div class="d-flex">
+                            <span>添加了</span>
+                            <a href="" class="message-school-name">广东实验中学-高中部的点评</a>
+                        </div>
+                        <p class="message-time">2019-07-31<span>12:00</span></p>
+                    </li>
+                </ul>
+                <a href="" class="more-message text-center">更多动态</a>
+            </div>
+        </div>
+    </div>
+</section>

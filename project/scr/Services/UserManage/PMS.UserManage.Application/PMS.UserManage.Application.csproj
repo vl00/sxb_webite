@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Cache.Redis\src\ProductManagement.Framework.Cache.Redis.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Framework.Foundation\ProductManagement.Framework.Foundation.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Http\ProductManagement.API.Http.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.Tool.WeChat\ProductManagement.Tool.WeChat.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.UserCenter.Wx\ProductManagement.UserCenter.TencentCommon.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Application\PMS.CommentsManage.Application.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Domain\PMS.CommentsManage.Domain.csproj" />
+    <ProjectReference Include="..\..\CommentManage\PMS.CommentManage.Repository\PMS.CommentsManage.Repository.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\PMS.Infrastructure.Application\PMS.Infrastructure.Application.csproj" />
+    <ProjectReference Include="..\..\MediatRManage\PMS.MediatR.Request\PMS.MediatR.Request.csproj" />
+    <ProjectReference Include="..\..\OperationPlateform\ISchool.Data.API\iSchool.Data.API.csproj" />
+    <ProjectReference Include="..\..\OperationPlateform\PMS.OperationPlateform.Repository\PMS.OperationPlateform.Repository.csproj" />
+    <ProjectReference Include="..\..\School\PMS.School.Repository\PMS.School.Repository.csproj" />
+    <ProjectReference Include="..\..\Search\PMS.Search.Domain\PMS.Search.Domain.csproj" />
+    <ProjectReference Include="..\PMS.UserManage.Domain\PMS.UserManage.Domain.csproj" />
+    <ProjectReference Include="..\PMS.UserManage.Repository\PMS.UserManage.Repository.csproj" />
+    <ProjectReference Include="..\..\..\Tools\ProductManagement.UserCenter.BaiduCommon\ProductManagement.UserCenter.BaiduCommon.csproj" />
+  </ItemGroup>
+</Project>
